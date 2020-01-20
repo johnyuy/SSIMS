@@ -13,5 +13,13 @@ namespace SSIMS.Models
         string phoneNumber;
         string faxNumber;
         string email;
+
+        public Person(string name, string phonenumber, string faxnumber, string email)
+        {
+            this.name = name;
+            phoneNumber = phonenumber;
+            faxNumber = faxnumber;
+            this.email = email;
+        }
     }
 }
