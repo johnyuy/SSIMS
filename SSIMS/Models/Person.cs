@@ -8,10 +8,14 @@ namespace SSIMS.Models
 {
     public class Person
     {
-        
-        string name;
-        string phoneNumber;
-        string faxNumber;
-        string email;
+        public string name { get; set; }
+
+        public string phoneNumber { get; set; }
+
+        public string faxNumber { get; set; }
+
+        public string email { get; set; }
     }
+
 }
+
