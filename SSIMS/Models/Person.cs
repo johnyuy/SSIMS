@@ -5,8 +5,9 @@ using System.Web;
 
 namespace SSIMS.Models
 {
-    public abstract class Person
+    public class Person
     {
+        public int PersonID { get; set; }
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
         public string FaxNumber { get; set; }

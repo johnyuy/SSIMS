@@ -16,9 +16,8 @@ namespace SSIMS.Models
         {
         }
 
-        public UserAccount(int userID, string userName, string password, int accessType)
+        public UserAccount(string userName, string password, int accessType)
         {
-            UserID = userID;
             UserName = userName;
             Password = password;
             AccessType = accessType;

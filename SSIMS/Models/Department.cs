@@ -2,29 +2,36 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SSIMS.Models
 {
     public class Department
     {
         public int DeptID { get; set; }
+        public int DeptRepID { get; set; }
+        public int DeptHeadID { get; set; }
         public string DeptCode { get; set; }
         public string DeptName { get; set; }
-        public virtual Staff DeptRep { get; set; }
-        public virtual Staff DeptHead { get; set; }
-        public virtual CollectionPoint CollectionPoint { get; set; }
+
+        [ForeignKey("DeptRepID")]
+        public Staff DeptRep { get; set; }
+
+        [ForeignKey("DeptHeadID")]
+        public Staff DeptHead { get; set; }
+        
+        public CollectionPoint CollectionPoint { get; set; }
 
         public Department()
         {
         }
 
-        public Department(string deptID, string deptName, Staff deptRep, Staff deptHead,CollectionPoint collectionPoint)
+        public Department(int deptRepID, int deptHeadID, string deptCode, string deptName)
         {
-            DeptID = deptID;
+            DeptRepID = deptRepID;
+            DeptHeadID = deptHeadID;
+            DeptCode = deptCode;
             DeptName = deptName;
-            DeptRep = deptRep;
-            DeptHead = deptHead;
-            CollectionPoint = collectionPoint;
         }
     }
 }
