@@ -8,22 +8,23 @@ namespace SSIMS.Models
     public class ItemTransaction
     {
         public int TransactionID;
+        public int ItemID;
         public int HandOverQty;
         public int TakeOverQty;
         public string Reason;
+
         public Item Item;
 
         public ItemTransaction()
         {
         }
 
-        public ItemTransaction(int transactionID, int handOverQty, int takeOverQty, string reason, Item item)
+        public ItemTransaction(int handOverQty, int takeOverQty, string reason, int itemID)
         {
-            TransactionID = transactionID;
             HandOverQty = handOverQty;
             TakeOverQty = takeOverQty;
             Reason = reason;
-            Item = item;
+            ItemID = itemID;
         }
     }
 }
