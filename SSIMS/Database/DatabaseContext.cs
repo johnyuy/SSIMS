@@ -7,7 +7,7 @@ namespace SSIMS.Database
     public class DatabaseContext : DbContext
     {
 
-        public static string connectionString = Data.connectionString;
+        public static string connectionString = ServerConnection.connectionString;
         public DatabaseContext() : base(connectionString)
         {
 
