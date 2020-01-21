@@ -7,6 +7,7 @@ using System.Data.Entity;
 namespace SSIMS.Models
 {
 
+
     public class Document
     {
         public int DocumentID { get; set; }
