@@ -9,7 +9,7 @@ namespace SSIMS.Models
     {
         public int DepartmentID { get; set; }
 
-        public virtual ICollection<ItemTransaction> ItemTransactions { get; set; }
+        public virtual ICollection<ItemTransaction> ItemTransactionList { get; set; }
 
         public Department Department { get; set; }
 

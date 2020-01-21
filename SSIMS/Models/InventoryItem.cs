@@ -5,7 +5,7 @@ using System.Web;
 
 namespace SSIMS.Models
 {
-    public class InventoryItem : Item
+    public class InventoryItem
     {
         public string InventoryItemID { get; set; }
         public int ItemID { get; set; }
@@ -31,7 +31,7 @@ namespace SSIMS.Models
             ReorderLvl = reorderLvl;
             ReorderQty = reorderQty;
             StockCheck = stockCheck;
-            ItemTenders = new Tender[2];
+            Tenders = new Tender[2];
         }
     }
 }

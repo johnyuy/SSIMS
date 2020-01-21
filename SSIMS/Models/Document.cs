@@ -15,18 +15,20 @@ namespace SSIMS.Models
     public abstract class Document
     {
         public int DocumentID { get; set; }
-        public int CreatorID { get; set; }
-        public int ResponderID { get; set; }
+        
+        
         public string Comments { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime ResponseDate { get; set; }
         public Status Status { get; set; }
 
         [ForeignKey("CreatorID")]
-        public Staff Creator { get; set; }
+        public virtual Staff Creator { get; set; }
+        public int? CreatorID { get; set; }
 
         [ForeignKey("ResponderID")]
-        public Staff Responder { get; set; }
+        public virtual Staff Responder { get; set; }
+        public int? ResponderID { get; set; }
 
         public Document()
         {

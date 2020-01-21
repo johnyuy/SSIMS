@@ -19,7 +19,7 @@ namespace SSIMS
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             DatabaseContext db = new DatabaseContext();
-            
+            db.Database.Initialize(force: true);
             
         }
     }

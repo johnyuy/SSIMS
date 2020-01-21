@@ -12,9 +12,20 @@ namespace SSIMS.Database
         {
 
             //Seed data
-            
+            InitCollectionPoints(context);
             context.SaveChanges();
             base.Seed(context);
+        }
+
+        static void InitCollectionPoints(DatabaseContext context)
+        {
+            List<CollectionPoint> collectionPoints = new List<CollectionPoint>
+            {
+                new CollectionPoint("Stationery Store", DateTime.Parse("9:30 AM"))
+            };
+            Console.WriteLine(DateTime.Now.ToString("T"));
+            foreach (CollectionPoint cp in collectionPoints)
+                context.CollectionPoints.Add(cp);
         }
     }
 }

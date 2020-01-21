@@ -7,13 +7,14 @@ namespace SSIMS.Models
 {
     public class ItemTransaction
     {
-        public int TransactionID;
-        public int ItemID;
-        public int HandOverQty;
-        public int TakeOverQty;
-        public string Reason;
+        public int ItemTransactionId { get; set; }
+        public int HandOverQty{ get; set; }
+        public int TakeOverQty{ get; set; }
+        public string Reason{ get; set; }
 
-        public Item Item;
+
+        public Item Item { get; set; }
+        public int ItemID { get; set; }
 
         public ItemTransaction()
         {

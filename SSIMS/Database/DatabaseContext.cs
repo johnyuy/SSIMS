@@ -7,7 +7,7 @@ namespace SSIMS.Database
     public class DatabaseContext : DbContext
     {
 
-        public static string connectionString = ServerConnection.connectionString;
+        public static string connectionString = ServerConnection.ConnectionString;
         public DatabaseContext() : base(connectionString)
         {
 
@@ -15,10 +15,12 @@ namespace SSIMS.Database
 
         }
 
+
         public DbSet<AdjustmentVoucher> AdjustmentVouchers { get; set; }
         public DbSet<CollectionPoint> CollectionPoints { get; set; }
         public DbSet<DeliveryOrder> DeliveryOrders { get; set; }
         public DbSet<Department> Departments { get; set; }
+    
 
     }
 }

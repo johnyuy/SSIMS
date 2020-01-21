@@ -8,7 +8,7 @@ namespace SSIMS.Models
     public class Staff: Person
     {
         public int StaffID { get; set; }
-        public int DepartmentID { get; set; }
+        public int? DepartmentID { get; set; }
         public int UserAccountID { get; set; }
         public string StaffRole { get; set; }
 

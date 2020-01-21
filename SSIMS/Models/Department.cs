@@ -8,19 +8,20 @@ namespace SSIMS.Models
 {
     public class Department
     {
-        public int DeptID { get; set; }
-        public int DeptRepID { get; set; }
-        public int DeptHeadID { get; set; }
+        public int DepartmentID { get; set; }
+        
         public int CollectionPointID { get; set; }
         public int DeptHeadAutorizationID { get; set; }
         public string DeptCode { get; set; }
         public string DeptName { get; set; }
 
         [ForeignKey("DeptRepID")]
-        public Staff DeptRep { get; set; }
-
+        public virtual Staff DeptRep { get; set; }
+        public int? DeptRepID { get; set; }
+        
         [ForeignKey("DeptHeadID")]
-        public Staff DeptHead { get; set; }
+        public virtual Staff DeptHead { get; set; }
+        public int? DeptHeadID { get; set; }
 
         public CollectionPoint CollectionPoint { get; set; }
         public DeptHeadAuthorization GetDeptHeadAuthorization { get; set; }
