@@ -6,7 +6,10 @@ using System.Data.Entity;
 
 namespace SSIMS.Models
 {
-
+    public enum Status
+    {
+        Pending , Approved, Cancelled, Rejected, Completed 
+    }
 
     public class Document
     {
@@ -15,6 +18,7 @@ namespace SSIMS.Models
         public int ResponderID { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime ResponseDate { get; set; }
+        public Status Status { get; set; }
 
         [ForeignKey("CreatorID")]
         public Staff Creator { get; set; }

@@ -206,6 +206,7 @@
     </Compile>
     <Compile Include="Models\Document.cs" />
     <Compile Include="Models\InventoryItem.cs" />
+    <Compile Include="Models\RequisitionForm.cs" />
     <Compile Include="Models\Tender.cs" />
     <Compile Include="Models\Test1.cs" />
     <Compile Include="Models\Test2.cs" />
