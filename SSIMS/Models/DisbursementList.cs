@@ -7,10 +7,10 @@ namespace SSIMS.Models
 {
     public class DisbursementList : Document
     {
-        public int DepartmentID { get; set; }
+        public int? DepartmentID { get; set; }
         public virtual ICollection<ItemTransaction> ItemTransactionList { get; set; }
 
-        public Department Department { get; set; }
+        public virtual Department Department { get; set; }
 
         public DisbursementList(int creatorID, int responderID, DateTime createdDate, DateTime responseDate, Status status, int departmentID) : base(creatorID, responderID, createdDate, responseDate, status)
         {
