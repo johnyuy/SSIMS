@@ -8,13 +8,16 @@ namespace SSIMS.Models
     public class InventoryItem : Item
     {
         public string InventoryItemID { get; set; }
+        public int ItemID { get; set; }
         public int InStoreQty { get; set; }
         public int InTransitQty { get; set; }
         public int ReorderLvl { get; set; }
         public int ReorderQty { get; set; }
         public int StockCheck { get; set; }
 
-        public ICollection<Tender> Tenders { get; set; }
+        public Item Item { get; set; }
+
+        public virtual ICollection<Tender> Tenders { get; set; }
 
         public InventoryItem()
         {

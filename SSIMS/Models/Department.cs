@@ -11,6 +11,8 @@ namespace SSIMS.Models
         public int DeptID { get; set; }
         public int DeptRepID { get; set; }
         public int DeptHeadID { get; set; }
+        public int CollectionPointID { get; set; }
+        public int DeptHeadAutorizationID { get; set; }
         public string DeptCode { get; set; }
         public string DeptName { get; set; }
 
@@ -19,8 +21,9 @@ namespace SSIMS.Models
 
         [ForeignKey("DeptHeadID")]
         public Staff DeptHead { get; set; }
-        
+
         public CollectionPoint CollectionPoint { get; set; }
+        public DeptHeadAuthorization GetDeptHeadAuthorization { get; set; }
 
         public Department()
         {

@@ -218,6 +218,7 @@
     <Compile Include="Models\PurchaseOrder.cs" />
     <Compile Include="Models\RequisitionForm.cs" />
     <Compile Include="Models\RetrievalList.cs" />
+    <Compile Include="Models\StockCardEntry.cs" />
     <Compile Include="Models\Tender.cs" />
     <Compile Include="Models\CollectionPoint.cs" />
     <Compile Include="Models\Department.cs" />

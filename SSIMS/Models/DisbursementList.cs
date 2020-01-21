@@ -16,5 +16,11 @@ namespace SSIMS.Models
         {
             DepartmentID = departmentID;
         }
+
+        public Boolean UpdateInventoryItem()
+        {
+            Console.WriteLine("UpdateInventoryItem()");
+            return true;
+        }
     }
 }
