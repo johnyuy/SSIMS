@@ -13,7 +13,7 @@ namespace SSIMS.Models
         public string PhoneNumber { get; set; }
         public string GstReg { get; set; }
         public int PersonID { get; set; }
-        public virtual Person Person { get; set; }
+        public virtual Person Person { get; set; }  
 
         public Supplier()
         {

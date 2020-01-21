@@ -5,9 +5,9 @@ using System.Web;
 
 namespace SSIMS.Models
 {
-    public class InventoryItem : Item
+    public class InventoryItem 
     {
-        public string InventoryItemID { get; set; }
+        public int InventoryItemID { get; set; }
         public int ItemID { get; set; }
         public int InStoreQty { get; set; }
         public int InTransitQty { get; set; }
@@ -23,15 +23,14 @@ namespace SSIMS.Models
         {
         }
 
-        public InventoryItem(string inventoryItemID, int inStoreQty, int inTransitQty, int reorderLvl, int reorderQty, int stockCheck)
+        public InventoryItem( int inStoreQty, int inTransitQty, int reorderLvl, int reorderQty, int stockCheck)
         {
-            InventoryItemID = inventoryItemID;
             InStoreQty = inStoreQty;
             InTransitQty = inTransitQty;
             ReorderLvl = reorderLvl;
             ReorderQty = reorderQty;
             StockCheck = stockCheck;
-            ItemTenders = new Tender[2];
+            Tenders = new List<Tender>();
         }
     }
 }

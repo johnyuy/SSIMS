@@ -7,7 +7,7 @@ namespace SSIMS.Models
 {
     public class StockCardEntry
     {
-        public int StockCardEntryId { get; set; }
+        public int StockCardEntryID { get; set; }
         public int ItemID { get; set; }
         public int DocumentID { get; set; }
         public int Qty { get; set; }

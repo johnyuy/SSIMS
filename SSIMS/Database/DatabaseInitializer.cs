@@ -6,7 +6,7 @@ using SSIMS.Models;
 
 namespace SSIMS.Database
 {
-    public class DatabaseInitializer<T> : CreateDatabaseIfNotExists<DatabaseContext>
+    public class DatabaseInitializer<T> : DropCreateDatabaseAlways<DatabaseContext>
     {
         protected override void Seed(DatabaseContext context)
         {

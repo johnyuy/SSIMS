@@ -7,7 +7,7 @@ namespace SSIMS.Models
 {
     public class CollectionPoint
     {
-        public int CollectionID { get; set; }
+        public int CollectionPointID { get; set; }
         public string Location { get; set; }
         public DateTime Time { get; set; }
 

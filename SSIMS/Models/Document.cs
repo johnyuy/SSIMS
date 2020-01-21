@@ -15,8 +15,8 @@ namespace SSIMS.Models
     public abstract class Document
     {
         public int DocumentID { get; set; }
-        public int CreatorID { get; set; }
-        public int ResponderID { get; set; }
+        public int? CreatorID { get; set; }
+        public int? ResponderID { get; set; }
         public string Comments { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime ResponseDate { get; set; }
