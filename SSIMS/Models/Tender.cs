@@ -14,5 +14,17 @@ namespace SSIMS.Models
 
         public Item Item { get; set; }
         public Supplier Supplier { get; set; }
+
+        public Tender()
+        {
+        }
+
+        public Tender(int itemID, int supplierID, double price)
+        {
+            ItemID = itemID;
+            SupplierID = supplierID;
+            Price = price;
+        }
     }
+
 }

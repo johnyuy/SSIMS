@@ -13,6 +13,10 @@ namespace SSIMS.Models
  
         public Tender Tender { get; set; }
 
+        public PurchaseItem()
+        {
+        }
+
         public PurchaseItem(int purchaseItemId, int tenderID, int qty)
         {
             PurchaseItemId = purchaseItemId;

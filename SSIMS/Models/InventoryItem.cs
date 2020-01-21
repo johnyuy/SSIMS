@@ -13,7 +13,8 @@ namespace SSIMS.Models
         public int ReorderLvl { get; set; }
         public int ReorderQty { get; set; }
         public int StockCheck { get; set; }
-        public Tender[] ItemTenders;
+
+        public ICollection<Tender> Tenders { get; set; }
 
         public InventoryItem()
         {

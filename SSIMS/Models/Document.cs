@@ -9,7 +9,7 @@ namespace SSIMS.Models
 {
     public enum Status
     {
-        Pending , Approved, Cancelled, Rejected, Completed 
+        Pending, Approved, Cancelled, Rejected, Completed, InProgress
     }
 
     public abstract class Document

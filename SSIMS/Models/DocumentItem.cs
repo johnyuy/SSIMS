@@ -12,8 +12,12 @@ namespace SSIMS.Models
         public int DocumentID { get; set; }
         public int Qty { get; set; }
 
-        public virtual Item Item { get; set; }
-        public virtual Document Document { get; set; }
+        public Item Item { get; set; }
+        public Document Document { get; set; }
+
+        public DocumentItem()
+        {
+        }
 
         public DocumentItem(int itemID, int documentID, int qty, Item item, Document document)
         {
@@ -22,10 +26,6 @@ namespace SSIMS.Models
             Qty = qty;
             Item = item;
             Document = document;
-        }
-
-        public DocumentItem()
-        {
         }
     }
 }
