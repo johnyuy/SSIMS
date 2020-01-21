@@ -7,8 +7,16 @@ namespace SSIMS.Models
 {
     public class RequisitionForm : Document
     {
-        public Dictionary<ItemID, int> RequisitionItemMap {get;set;}
-        public string Comment { get; set; }
+        public virtual ICollection<DocumentItem> DocumentItems { get; set; }
 
+        public RequisitionForm(int creatorID, int responderID, DateTime createdDate, DateTime responseDate, Status status) : base(creatorID, responderID, createdDate, responseDate, status)
+        {
+        }
+
+        public Boolean UpdateRetrivalList()
+        {
+            Console.WriteLine("UpdateRetrivalList()");
+            return true;
+        }
     }
 }
