@@ -18,13 +18,13 @@ namespace SSIMS.Models
         {
         }
 
-        public Department(string DeptId, string DeptName, Staff DeptRep, Staff DeptHead)
+        public Department(string deptID, string deptName, Staff deptRep, Staff deptHead,CollectionPoint collectionPoint)
         {
-            deptId = DeptId;
-            deptName = DeptName;
-            deptRep = DeptRep;
-            deptHead = DeptHead;
-            collectionPoint = CollectionPoint;
+            DeptID = deptID;
+            DeptName = deptName;
+            DeptRep = deptRep;
+            DeptHead = deptHead;
+            CollectionPoint = collectionPoint;
         }
     }
 }

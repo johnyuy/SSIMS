@@ -14,10 +14,10 @@ namespace SSIMS.Models
         {
         }
 
-        public CollectionPoint(string Location, DateTime Time)
+        public CollectionPoint(string location, DateTime time)
         {
-            location = Location;
-            time = Time;
+            Location = location;
+            Time = time;
         }
     }
 }
