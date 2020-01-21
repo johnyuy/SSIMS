@@ -5,23 +5,27 @@ using System.Web;
 
 namespace SSIMS.Models
 {
-    public class Staff:Person
+    public class Supplier
     {
-        public string StaffId { get; set; }
-        public virtual Department Department { get; set; }
-        public virtual UserAccount UserAccount { get; set; }
-        public string StaffRole { get; set; }
+        public string SupplierID { get; set; }
+        public string SupplierName { get; set; }
+        public string Address { get; set; }
+        public string PhoneNumber { get; set; }
+        public string GstReg { get; set; }
+        public virtual Person ContactPerson { get; set; }
 
-        public Staff()
+        public Supplier()
         {
         }
 
-        public Staff(string StaffId, Department Department,UserAccount UserAccount,string StaffRole)
+        public Supplier(string SupplierId, string SupplierName, string Address, string PhoneNumber, string GstReg, Person ContactPerson)
         {
-            staffId = StaffId;
-            department = Department;
-            userAccount = UserAccount;
-            staffRole = StaffRole;
+            supplierId = SupplierId;
+            supplierName = SupplierName;
+            address = Address;
+            phoneNumber = PhoneNumber;
+            gstReg = GstReg;
+            contactPerson = ContactPerson;
         }
     }
 }

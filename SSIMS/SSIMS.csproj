@@ -204,11 +204,16 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\CollectionPoint.cs" />
+    <Compile Include="Models\Department.cs" />
     <Compile Include="Models\Document.cs" />
     <Compile Include="Models\InventoryItem.cs" />
+    <Compile Include="Models\Staff.cs" />
+    <Compile Include="Models\Supplier.cs" />
     <Compile Include="Models\Tender.cs" />
     <Compile Include="Models\Test1.cs" />
     <Compile Include="Models\Test2.cs" />
+    <Compile Include="Models\UserAccount.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
