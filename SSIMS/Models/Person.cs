@@ -16,12 +16,12 @@ namespace SSIMS.Models
         {
         }
 
-        public Person(string Name, string PhoneNumber, string FaxNumber, string Email)
+        public Person(string name, string phoneNumber, string faxNumber, string email)
         {
-            name = Name;
-            phoneNumber = PhoneNumber;
-            faxNumber = FaxNumber;
-            email = Email;
+            Name = name ;
+            PhoneNumber = phoneNumber;
+            FaxNumber = faxNumber;
+            Email = email;
         }
     }
 }

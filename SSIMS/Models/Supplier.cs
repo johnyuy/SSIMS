@@ -18,14 +18,14 @@ namespace SSIMS.Models
         {
         }
 
-        public Supplier(string SupplierId, string SupplierName, string Address, string PhoneNumber, string GstReg, Person ContactPerson)
+        public Supplier(string supplierID, string supplierName, string address, string phoneNumber, string gstReg, Person contactPerson)
         {
-            supplierId = SupplierId;
-            supplierName = SupplierName;
-            address = Address;
-            phoneNumber = PhoneNumber;
-            gstReg = GstReg;
-            contactPerson = ContactPerson;
+            SupplierID = supplierID;
+            SupplierName = supplierName;
+            Address = address;
+            PhoneNumber = phoneNumber;
+            GstReg = gstReg;
+            ContactPerson = contactPerson;
         }
     }
 }
