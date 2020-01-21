@@ -11,7 +11,7 @@ namespace SSIMS.Models
         Pending , Approved, Cancelled, Rejected, Completed 
     }
 
-    public class Document
+    public abstract class Document
     {
         public int DocumentID { get; set; }
         public int CreatorID { get; set; }
