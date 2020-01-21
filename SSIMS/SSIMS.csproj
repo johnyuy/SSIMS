@@ -207,6 +207,7 @@
     <Compile Include="Models\Document.cs" />
     <Compile Include="Models\InventoryItem.cs" />
     <Compile Include="Models\Tender.cs" />
+    <Compile Include="Models\Test2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
