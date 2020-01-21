@@ -221,8 +221,6 @@
     <Compile Include="Models\Staff.cs" />
     <Compile Include="Models\Supplier.cs" />
     <Compile Include="Models\UserAccount.cs" />
-    <Compile Include="Models\Test1.cs" />
-    <Compile Include="Models\Test2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
