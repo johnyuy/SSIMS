@@ -8,7 +8,11 @@ namespace SSIMS.Models
     public class Tender
     {
         public int TenderID { get; set; }
-        public Item TenderItem { get; set; }
+        public int ItemID { get; set; }
+        public int SupplierID { get; set; }
         public double Price { get; set; }
+
+        public Item Item { get; set; }
+        public Supplier Supplier { get; set; }
     }
 }
