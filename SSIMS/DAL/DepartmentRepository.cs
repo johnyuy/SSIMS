@@ -7,21 +7,19 @@ using SSIMS.Database;
 
 namespace SSIMS.DAL
 {
-    public class ItemRepository : GenericRepository<Item>
+    public class DepartmentRepository : GenericRepository<Department>
     {
-        public ItemRepository(DatabaseContext context)
-            : base(context)
+        public DepartmentRepository(DatabaseContext context) : base(context)
         {
         }
 
         // you can add methods specific to the class here 
 
-        public int UpdateItemFullStock(int id)
+        public int AdditionalMethod(int id)
         {
-            Console.WriteLine("UpdateItemFullStock");
+            Console.WriteLine("AdditionalMethod");
             return 1;
             //return context.Database.ExecuteSqlCommand("UPDATE Course SET Credits = Credits * {0}", multiplier);
         }
-
     }
 }

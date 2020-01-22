@@ -7,8 +7,37 @@ namespace SSIMS.DAL
     public class UnitOfWork : IDisposable
     {
         private DatabaseContext context = new DatabaseContext();
+        private CollectionPointRepository collectionPointRepository;
         private ItemRepository itemRepository;
+        private DepartmentRepository departmentRepository;
         private GenericRepository<InventoryItem> inventoryItemRepository;
+
+
+        public CollectionPointRepository CollectionPointRepository
+        {
+            get
+            {
+
+                if (this.collectionPointRepository == null)
+                {
+                    this.collectionPointRepository = new CollectionPointRepository(context);
+                }
+                return collectionPointRepository;
+            }
+        }
+
+        public DepartmentRepository DepartmentRepository
+        {
+            get
+            {
+
+                if (this.departmentRepository == null)
+                {
+                    this.departmentRepository = new DepartmentRepository(context);
+                }
+                return departmentRepository;
+            }
+        }
 
         public ItemRepository ItemRepository
         {
