@@ -21,6 +21,8 @@ namespace SSIMS.Models
 
         [ForeignKey("DeptHeadID")]
         public Staff DeptHead { get; set; }
+        public string PhoneNumber { get; set; }
+        public string FaxNumber { get; set; }
 
         public CollectionPoint CollectionPoint { get; set; }
         public DeptHeadAuthorization DeptHeadAuthorization { get; set; }

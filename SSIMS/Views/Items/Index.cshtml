@@ -1,0 +1,58 @@
+﻿@model IEnumerable<SSIMS.Models.Item>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+@using (Html.BeginForm())
+{
+    <p>
+        Find Items: @Html.TextBox("SearchString")
+        <input type="submit" value="Search" />
+    </p>
+}
+<table class="table">
+    <tr>
+        <th>
+            @*@Html.DisplayNameFor(model => model.Category)*@
+            @Html.ActionLink("Category", "Index", new { sortOrder = ViewBag.CategorySortParm })
+
+        </th>
+        <th>
+            @*@Html.DisplayNameFor(model => model.Description)*@
+            @Html.ActionLink("Item Description", "Index", new { sortOrder = ViewBag.ItemDescriptionSortParm })
+
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UnitOfMeasure)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UnitOfMeasure)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.ItemID }) |
+                @Html.ActionLink("Details", "Details", new { id = item.ItemID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.ItemID })
+            </td>
+        </tr>
+    }
+
+</table>

@@ -25,7 +25,6 @@ namespace SSIMS.Database
         public DbSet<DocumentItem> DocumentItems { get; set; }
         public DbSet<InventoryItem> InventoryItems { get; set; }
         public DbSet<Item> Items { get; set; }
-        public DbSet<Person> Person { get; set; }
         public DbSet<PurchaseItem> PurchaseItems { get; set; }
         public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
         public DbSet<RequisitionForm> RequisitionForms { get; set; }
