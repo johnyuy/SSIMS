@@ -197,8 +197,11 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\CollectionPointsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ItemsController.cs" />
+    <Compile Include="DAL\CollectionPointRepository.cs" />
+    <Compile Include="DAL\DepartmentRepository.cs" />
     <Compile Include="DAL\ItemRepository.cs" />
     <Compile Include="DAL\UnitOfWork.cs" />
     <Compile Include="Database\DatabaseContext.cs" />
@@ -273,6 +276,11 @@
     <Content Include="Views\Items\Details.cshtml" />
     <Content Include="Views\Items\Edit.cshtml" />
     <Content Include="Views\Items\Index.cshtml" />
+    <Content Include="Views\CollectionPoints\Create.cshtml" />
+    <Content Include="Views\CollectionPoints\Delete.cshtml" />
+    <Content Include="Views\CollectionPoints\Details.cshtml" />
+    <Content Include="Views\CollectionPoints\Edit.cshtml" />
+    <Content Include="Views\CollectionPoints\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

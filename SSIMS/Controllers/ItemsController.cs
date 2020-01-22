@@ -17,29 +17,36 @@ namespace SSIMS.Controllers
         private UnitOfWork unitOfWork = new UnitOfWork();
 
         // GET: Items
-        public ActionResult Index(string sortOrder)
+        public ActionResult Index(string sortOrder, string searchString)
         {
-/*            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "Name_desc" : "";
-            ViewBag.DateSortParm = sortOrder == "Date" ? "Date_desc" : "Date";
-            var students = from s in db.Students
-                           select s;
+            //ViewBag.ItemDescriptionSortParm = String.IsNullOrEmpty(sortOrder) ? "Item_desc" : "";
+            ViewBag.ItemDescriptionSortParm = String.IsNullOrEmpty(sortOrder) ? "Item_desc" : "";
+            ViewBag.CategorySortParm = sortOrder == "Category" ? "Category_desc" : "Category";
+            var items = unitOfWork.ItemRepository.Get();
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                items = items.Where(i => i.Description.ToUpper().Contains(searchString.ToUpper())
+                                       || i.Category.ToUpper().Contains(searchString.ToUpper()) 
+                                       || i.Category.ToUpper().Contains(searchString.ToUpper()));
+            }
+
             switch (sortOrder)
             {
-                case "Name_desc":
-                    students = students.OrderByDescending(s => s.LastName);
+                case "Item_desc":
+                    items = items.OrderByDescending(i => i.Description);
                     break;
-                case "Date":
-                    students = students.OrderBy(s => s.EnrollmentDate);
+                case "Category":
+                    items = items.OrderBy(i => i.Category);
                     break;
-                case "Date_desc":
-                    students = students.OrderByDescending(s => s.EnrollmentDate);
+                case "Category_desc":
+                    items = items.OrderByDescending(i => i.Category);
                     break;
                 default:
-                    students = students.OrderBy(s => s.LastName);
+                    items = items.OrderBy(i => i.Description);
                     break;
             }
-*/
-            var items = unitOfWork.ItemRepository.Get();
+
             return View(items.ToList());
         }
 
