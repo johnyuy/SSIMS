@@ -15,6 +15,7 @@ namespace SSIMS.Database
             InitCollectionPoints(context);
             InitDepartments(context);
             InitItems(context);
+            InitSuppliers(context);
 
             context.SaveChanges();
             //other initializations copy:    static void Init (DatabaseContext context)
@@ -156,6 +157,11 @@ namespace SSIMS.Database
             foreach (Item item in items)
                 context.Items.Add(item);
             context.SaveChanges();
+        }
+
+        static void InitSuppliers(DatabaseContext context)
+        {
+            //List<Supplier> suppliers = 
         }
     }
 }

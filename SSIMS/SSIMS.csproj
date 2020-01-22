@@ -208,6 +208,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\StaffMigration.cs" />
     <Compile Include="Models\AdjustmentVoucher.cs" />
     <Compile Include="Models\DeliveryOrder.cs" />
     <Compile Include="Models\DeptHeadAuthorization.cs" />
