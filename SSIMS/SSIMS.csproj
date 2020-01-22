@@ -208,6 +208,7 @@
     <Compile Include="Database\DatabaseCustomizer.cs" />
     <Compile Include="Database\DatabaseInitializer.cs" />
     <Compile Include="DAL\GenericRepository.cs" />
+    <Compile Include="Database\Populator.cs" />
     <Compile Include="Database\ServerConnection.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
