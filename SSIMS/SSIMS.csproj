@@ -205,13 +205,13 @@
     <Compile Include="DAL\ItemRepository.cs" />
     <Compile Include="DAL\UnitOfWork.cs" />
     <Compile Include="Database\DatabaseContext.cs" />
+    <Compile Include="Database\DatabaseCustomizer.cs" />
     <Compile Include="Database\DatabaseInitializer.cs" />
     <Compile Include="DAL\GenericRepository.cs" />
     <Compile Include="Database\ServerConnection.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\StaffMigration.cs" />
     <Compile Include="Models\AdjustmentVoucher.cs" />
     <Compile Include="Models\DeliveryOrder.cs" />
     <Compile Include="Models\DeptHeadAuthorization.cs" />

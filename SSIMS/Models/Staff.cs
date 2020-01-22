@@ -6,7 +6,7 @@ using System.Data.Entity.Migrations;
 
 namespace SSIMS.Models
 {
-    public class Staff : DbMigration
+    public class Staff
     {
         public int StaffID { get; set; }
         public int? DepartmentID { get; set; }
@@ -33,20 +33,5 @@ namespace SSIMS.Models
             StaffRole = staffRole;
         }
 
-        public override void Up()
-        {
-            CreateTable(
-               "dbo.Staffs",
-               c => new
-               {
-                   StaffID = c.Int(nullable: false, identity: true),
-                   DepartmentID = c.Int(nullable: true, identity: true),
-                   UserAccountID = c.Int(nullable: true, identity: true),
-                   StaffRole = c.String(nullable: false),
-
-               })
-               .PrimaryKey(t => t.StaffID);
-            Sql("DBCC CHECKIDENT ('Staffs', RESEED, 10000);");
-        }
     }
 }

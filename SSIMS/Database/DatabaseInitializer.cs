@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using SSIMS.Models;
 
+
 namespace SSIMS.Database
 {
     public class DatabaseInitializer<T> : DropCreateDatabaseAlways<DatabaseContext>
@@ -16,13 +17,17 @@ namespace SSIMS.Database
             InitDepartments(context);
             InitItems(context);
             InitSuppliers(context);
-            context.Staffs.Add(new Staff("Frank Liu","98765432","frank@ocbc.com",1,"dept head"));
-            context.Database.ExecuteSqlCommand(" SetIdentitySeed Staffs,10001 ");
+            
+            //staff1.StaffID = 10001;
+            DatabaseCustomizer.SetDefaultID(context);
+            Staff staff1 = new Staff("Frank Liu", "98765432", "frank@ocbc.com", 1, "dept head");
+            context.Staffs.Add(staff1);
             context.SaveChanges();
             //other initializations copy:    static void Init (DatabaseContext context)
-
+            
             base.Seed(context);
         }
+
 
         static void InitCollectionPoints(DatabaseContext context)
         {
@@ -164,5 +169,7 @@ namespace SSIMS.Database
         {
             //List<Supplier> suppliers = 
         }
+
+        
     }
 }
