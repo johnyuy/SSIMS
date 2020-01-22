@@ -23,7 +23,7 @@ namespace SSIMS.Models
         public Staff DeptHead { get; set; }
 
         public CollectionPoint CollectionPoint { get; set; }
-        public DeptHeadAuthorization GetDeptHeadAuthorization { get; set; }
+        public DeptHeadAuthorization DeptHeadAuthorization { get; set; }
 
         public Department()
         {
@@ -33,6 +33,12 @@ namespace SSIMS.Models
         {
             DeptRepID = deptRepID;
             DeptHeadID = deptHeadID;
+            DeptCode = deptCode;
+            DeptName = deptName;
+        }
+
+        public Department(string deptCode, string deptName)
+        {
             DeptCode = deptCode;
             DeptName = deptName;
         }
