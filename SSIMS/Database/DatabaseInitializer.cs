@@ -16,7 +16,8 @@ namespace SSIMS.Database
             InitDepartments(context);
             InitItems(context);
             InitSuppliers(context);
-
+            context.Staffs.Add(new Staff("Frank Liu","98765432","frank@ocbc.com",1,"dept head"));
+            context.Database.ExecuteSqlCommand(" SetIdentitySeed Staffs,10001 ");
             context.SaveChanges();
             //other initializations copy:    static void Init (DatabaseContext context)
 
