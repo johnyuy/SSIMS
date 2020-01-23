@@ -19,6 +19,8 @@ namespace SSIMS.Database
             InitSuppliers(context);
             InitStaffs(context);
             InitUserAccounts(context);
+            InitInventoryItems(context);
+
             //other initializations copy:    static void Init (DatabaseContext context)
             context.SaveChanges();
             base.Seed(context);
@@ -293,7 +295,7 @@ namespace SSIMS.Database
         
         static void InitUserAccounts(DatabaseContext context)
         {
-            //Init store accounts
+            Debug.WriteLine("\tAdding store accounts");
             List<UserAccount> accounts = new List<UserAccount>
             {
                 new UserAccount("storemanager","manager",3,0),
@@ -304,18 +306,66 @@ namespace SSIMS.Database
             };
             StaffRepository StaffRepo = new StaffRepository(context);
             List<List<string>> namelist =  StaffRepo.GetStaffAccountNames();
-            Debug.WriteLine("\tAdding staff accounts");
+            Debug.WriteLine("\tAdding department staff accounts");
             foreach (string name in namelist[0])
                 accounts.Add(new UserAccount(name, "password", 0, 1));
             Debug.WriteLine("\tAdding department rep accounts");
             foreach (string name in namelist[1])
                 accounts.Add(new UserAccount(name, "password", 0, 2));
-            Debug.WriteLine("\tAdding department rep accounts");
+            Debug.WriteLine("\tAdding department head accounts");
             foreach (string name in namelist[2])
                 accounts.Add(new UserAccount(name, "password", 0, 3));
 
             foreach (UserAccount account in accounts)
                 context.UserAccounts.Add(account);
+            context.SaveChanges();
+        }
+
+        static void InitInventoryItems(DatabaseContext context){
+            //setting for how much initial store balance = restock level * multiplier
+            int stockLevelMultiplier = 3;
+
+            ItemRepository itemRepo = new ItemRepository(context);
+            List<Item> items = (List<Item>)itemRepo.Get();
+            List<InventoryItem> inv = new List<InventoryItem>();
+            
+            foreach(Item item in items)
+            {
+                int reorderLvl=0, reorderQty=0;
+                if (item.ItemID.Contains("C00")){reorderLvl = 50; reorderQty = 30;}
+                else if (item.ItemID.Contains("E00")){reorderLvl = 600; reorderQty = 400;}
+                else if(item.ItemID.Contains("E02")){reorderLvl = 50; reorderQty = 20;}
+                else if(item.ItemID.Contains("E03")){reorderLvl = 100; reorderQty = 50;}
+                else if(item.ItemID.Contains("F02")){
+                    if (item.ItemID == "F020") {reorderLvl = 100; reorderQty = 50;}
+                    else if (item.ItemID == "F021") { reorderLvl = 200; reorderQty = 100;}
+                    else if (item.ItemID == "F022") { reorderLvl = 200; reorderQty = 100; }
+                    else { reorderLvl = 200; reorderQty = 150; }
+                }
+                else if (item.ItemID.Contains("F03")) {reorderLvl = 200; reorderQty = 150;}
+                else if (item.ItemID.Contains("H01")) {reorderLvl = 100; reorderQty = 80;}
+                else if (item.ItemID.Contains("H03")) {reorderLvl = 50; reorderQty = 20;}
+                else if (item.ItemID.Contains("P01")) {reorderLvl = 100; reorderQty = 60;}
+                else if (item.ItemID.Contains("P02")) {reorderLvl = 500; reorderQty = 500;}
+                else if (item.ItemID.Contains("P03")) {reorderLvl = 100; reorderQty = 50;}
+                else if (item.ItemID.Contains("P04")) {reorderLvl = 100; reorderQty = 50;}
+                else if (item.ItemID.Contains("R00")) {reorderLvl = 50; reorderQty = 20;}
+                else if (item.ItemID.Contains("S01")) {reorderLvl = 100; reorderQty = 80;}
+                else if (item.ItemID.Contains("S02")) {reorderLvl = 50; reorderQty = 20;}
+                else if (item.ItemID.Contains("S04")) {reorderLvl = 50; reorderQty = 20;}
+                else if (item.ItemID.Contains("S10")) {reorderLvl = 50; reorderQty = 20;}
+                else if (item.ItemID.Contains("T00")) {reorderLvl = 10; reorderQty = 10;}
+                else if (item.ItemID.Contains("T02"))
+                {
+                    if (item.ItemID == "T021" ) { reorderLvl = 500; reorderQty = 400; }
+                    else if (item.ItemID == "T025") { reorderLvl = 500; reorderQty = 400; }
+                    else { reorderLvl = 100; reorderQty = 200; }
+                }
+                else if (item.ItemID.Contains("T10")) { reorderLvl = 20; reorderQty = 10; }
+                inv.Add(new InventoryItem(reorderLvl * stockLevelMultiplier, 0, reorderLvl, reorderQty, 0, item));
+            }
+            foreach(InventoryItem inventoryItem in inv)
+                context.InventoryItems.Add(inventoryItem);
             context.SaveChanges();
         }
     }

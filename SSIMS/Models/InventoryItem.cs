@@ -8,7 +8,7 @@ namespace SSIMS.Models
     public class InventoryItem 
     {
         public int InventoryItemID { get; set; }
-        public int ItemID { get; set; }
+        public string ItemID { get; set; }
         public int InStoreQty { get; set; }
         public int InTransitQty { get; set; }
         public int ReorderLvl { get; set; }
@@ -23,14 +23,14 @@ namespace SSIMS.Models
         {
         }
 
-        public InventoryItem( int inStoreQty, int inTransitQty, int reorderLvl, int reorderQty, int stockCheck)
+        public InventoryItem( int inStoreQty, int inTransitQty, int reorderLvl, int reorderQty, int stockCheck, Item item)
         {
             InStoreQty = inStoreQty;
             InTransitQty = inTransitQty;
             ReorderLvl = reorderLvl;
             ReorderQty = reorderQty;
             StockCheck = stockCheck;
-            Tenders = new List<Tender>();
+            Item = item;
         }
     }
 }
