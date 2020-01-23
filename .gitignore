@@ -3,6 +3,8 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+#IGNORED CLASSES
+*.ServerConnection.cs
 
 # User-specific files
 *.rsuser
@@ -10,7 +12,6 @@
 *.user
 *.userosscache
 *.sln.docstates
-*.ServerConnection.class
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
