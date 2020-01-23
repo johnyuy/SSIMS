@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Data.Entity;
 using SSIMS.Models;
-
+using Microsoft.EntityFrameworkCore;
+using SSIMS.DAL;
 
 namespace SSIMS.Database
 {
@@ -15,7 +16,7 @@ namespace SSIMS.Database
             InitCollectionPoints(context);
             InitDepartments(context);
             InitItems(context);
-            //InitSuppliers(context);
+            InitSuppliers(context);
             InitStaffs(context);
             
             //other initializations copy:    static void Init (DatabaseContext context)
@@ -46,16 +47,16 @@ namespace SSIMS.Database
             Debug.WriteLine("Initializing Departments");
             List<Department> departments = new List<Department>
             {
-                new Department("ARCH", "Architecture"),
-                new Department("ARTS", "Arts"),
-                new Department("COMM", "Commerce"),
-                new Department("CPSC", "Computer Science"),
-                new Department("ENGG", "Engineering"),
-                new Department("ENGL", "English"),
-                new Department("MEDI", "Medicine"),
-                new Department("REGR", "Registrar"),
-                new Department("SCIE", "Science"),
-                new Department("ZOOL", "Zoology"),
+                new Department("ARCH", "Architecture","68901257","68921001"),
+                new Department("ARTS", "Arts","68901226", "68921011"),
+                new Department("COMM", "Commerce","68741284","68921256"),
+                new Department("CPSC", "Computer Science","68901235","68921457"),
+                new Department("ENGG", "Engineering","68901776","68922395"),
+                new Department("ENGL", "English","68742234","68921456"),
+                new Department("MEDI", "Medicine","67848808","68928106"),
+                new Department("REGR", "Registrar","68901266","68921465"),
+                new Department("SCIE", "Science","68907191","68921992"),
+                new Department("ZOOL", "Zoology","68901266","68921465"),
             };
             foreach (Department dept in departments)
                 context.Departments.Add(dept);
@@ -165,6 +166,28 @@ namespace SSIMS.Database
         static void InitSuppliers(DatabaseContext context)
         {
             Debug.WriteLine("Initializing Suppliers");
+            Supplier supplier1 = new Supplier(
+                "ALPHA Office Supplies", "ALPA",
+                "Blk 1128, Ang Mo Kio Industrial Park #02-1108 Ang Mo Kio Street 62 Singapore 622262",
+                "64619928","64612238","MR-8500440-2","Ms Irene Tan");
+            Supplier supplier2 = new Supplier(
+                "BANES Shop", "BANE",
+                "Blk 124, Alexandra Road #03-04 Banes Building",
+                "64781234", "64792434", "MR-8200420-2", "Mr Loh Ah Pek");
+            Supplier supplier3 = new Supplier(
+                "Cheap Stationer", "CHEP",
+                "Blk 34, Clementi Road #07-02 Ban Ban Soh Building Singapore 110525",
+                "63543234", "64742434", "nil", "Mr Soh Kway Koh");
+            Supplier supplier4 = new Supplier(
+                "OMEGA Stationery Supplier", "OMEG",
+                "Blk 11, Hillview Avenue #03-04 Singapore 679036",
+                "67671233", "67671234", "MR-8555330-1", "Mr Ronnie Ho");
+
+            context.Suppliers.Add(supplier1);
+            context.Suppliers.Add(supplier2);
+            context.Suppliers.Add(supplier3);
+            context.Suppliers.Add(supplier4);
+            context.SaveChanges();
         }
 
         static void InitStaffs(DatabaseContext context)

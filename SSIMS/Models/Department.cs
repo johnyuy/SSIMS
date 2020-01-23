@@ -39,10 +39,12 @@ namespace SSIMS.Models
             DeptName = deptName;
         }
 
-        public Department(string deptCode, string deptName)
+        public Department(string deptCode, string deptName, string phoneNumber, string faxNumber)
         {
             DeptCode = deptCode;
             DeptName = deptName;
+            PhoneNumber = phoneNumber;
+            FaxNumber = faxNumber;
         }
     }
 }

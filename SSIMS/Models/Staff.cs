@@ -33,5 +33,15 @@ namespace SSIMS.Models
             StaffRole = staffRole;
         }
 
+        public Staff(string name, string phoneNumber,
+            string email, Department department, string staffRole)
+        {
+            Name = name;
+            PhoneNumber = phoneNumber;
+            Email = email;
+            Department = department;
+            StaffRole = staffRole;
+        }
+
     }
 }
