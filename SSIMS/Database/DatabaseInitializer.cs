@@ -293,7 +293,30 @@ namespace SSIMS.Database
         
         static void InitUserAccounts(DatabaseContext context)
         {
+            //Init store accounts
+            List<UserAccount> accounts = new List<UserAccount>
+            {
+                new UserAccount("storemanager","manager",3,0),
+                new UserAccount("storesupervisor","supervisor",2,0),
+                new UserAccount("storeclerk1","clerk1",1,0),
+                new UserAccount("storeclerk2","clerk2",1,0),
+                new UserAccount("storeclerk3","clerk3",1,0),
+            };
+            StaffRepository StaffRepo = new StaffRepository(context);
+            List<List<string>> namelist =  StaffRepo.GetStaffAccountNames();
+            Debug.WriteLine("\tAdding staff accounts");
+            foreach (string name in namelist[0])
+                accounts.Add(new UserAccount(name, "password", 0, 1));
+            Debug.WriteLine("\tAdding department rep accounts");
+            foreach (string name in namelist[1])
+                accounts.Add(new UserAccount(name, "password", 0, 2));
+            Debug.WriteLine("\tAdding department rep accounts");
+            foreach (string name in namelist[2])
+                accounts.Add(new UserAccount(name, "password", 0, 3));
 
+            foreach (UserAccount account in accounts)
+                context.UserAccounts.Add(account);
+            context.SaveChanges();
         }
     }
 }

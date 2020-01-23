@@ -203,12 +203,13 @@
     <Compile Include="DAL\CollectionPointRepository.cs" />
     <Compile Include="DAL\DepartmentRepository.cs" />
     <Compile Include="DAL\ItemRepository.cs" />
+    <Compile Include="DAL\StaffRepository.cs" />
     <Compile Include="DAL\UnitOfWork.cs" />
     <Compile Include="Database\DatabaseContext.cs" />
     <Compile Include="Database\DatabaseCustomizer.cs" />
     <Compile Include="Database\DatabaseInitializer.cs" />
     <Compile Include="DAL\GenericRepository.cs" />
-    <Compile Include="Database\Populator.cs" />
+    <Compile Include="Database\ServerConnection.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

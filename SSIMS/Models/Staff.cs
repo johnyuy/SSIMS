@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Data.Entity.Migrations;
+using System.ComponentModel.DataAnnotations;
 
 namespace SSIMS.Models
 {
@@ -13,6 +14,9 @@ namespace SSIMS.Models
         public int? UserAccountID { get; set; }
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
+        [Required]
+        [DataType(DataType.EmailAddress)]
+        [EmailAddress]
         public string Email { get; set; }
         public string StaffRole { get; set; }
 
