@@ -1,0 +1,66 @@
+﻿@model SSIMS.Models.DisbursementList
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>DisbursementList</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedByStaff.UserAccountID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedByStaff.UserAccountID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RepliedByStaff.UserAccountID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RepliedByStaff.UserAccountID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Comments)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Comments)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ResponseDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ResponseDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

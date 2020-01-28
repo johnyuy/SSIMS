@@ -200,8 +200,10 @@
     <Compile Include="Controllers\AnalyticsController.cs" />
     <Compile Include="Controllers\CollectionPointsController.cs" />
     <Compile Include="Controllers\DisbursementController.cs" />
+    <Compile Include="Controllers\DisbursementListsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ItemsController.cs" />
+    <Compile Include="Controllers\StaffsController.cs" />
     <Compile Include="DAL\CollectionPointRepository.cs" />
     <Compile Include="DAL\DepartmentRepository.cs" />
     <Compile Include="DAL\ItemRepository.cs" />
@@ -283,6 +285,16 @@
     <Content Include="Views\CollectionPoints\Details.cshtml" />
     <Content Include="Views\CollectionPoints\Edit.cshtml" />
     <Content Include="Views\CollectionPoints\Index.cshtml" />
+    <Content Include="Views\Staffs\Create.cshtml" />
+    <Content Include="Views\Staffs\Delete.cshtml" />
+    <Content Include="Views\Staffs\Details.cshtml" />
+    <Content Include="Views\Staffs\Edit.cshtml" />
+    <Content Include="Views\Staffs\Index.cshtml" />
+    <Content Include="Views\DisbursementLists\Create.cshtml" />
+    <Content Include="Views\DisbursementLists\Delete.cshtml" />
+    <Content Include="Views\DisbursementLists\Details.cshtml" />
+    <Content Include="Views\DisbursementLists\Edit.cshtml" />
+    <Content Include="Views\DisbursementLists\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
