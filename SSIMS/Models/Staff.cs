@@ -23,6 +23,7 @@ namespace SSIMS.Models
         public virtual Department Department { get; set; }
         public virtual UserAccount UserAccount { get; set; }
 
+
         public Staff()
         {
         }

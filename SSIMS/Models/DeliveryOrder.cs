@@ -9,7 +9,7 @@ namespace SSIMS.Models
     {
         public virtual ICollection<DocumentItem> DocumentItems { get; set; }
 
-        public DeliveryOrder(int creatorID, int responderID, DateTime createdDate, DateTime responseDate, Status status) : base(creatorID, responderID, createdDate, responseDate, status)
+        public DeliveryOrder(Staff creator) : base(creator)
         {
         }
 

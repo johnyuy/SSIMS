@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -7,14 +9,18 @@ namespace SSIMS.Models
 {
     public class DocumentItem
     {
-        public int DocumentItemID {get; set;}
-        public int ItemID { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
+        public Guid DocumentItemID {get; set;}
+
         public int DocumentID { get; set; }
+        public int ItemID { get; set; }
+
         public int Qty { get; set; }
 
-        public Item Item { get; set; }
         public Document Document { get; set; }
-
+        public Item Item { get; set; }
+        
         public DocumentItem()
         {
         }
@@ -26,6 +32,12 @@ namespace SSIMS.Models
             Qty = qty;
             Item = item;
             Document = document;
+        }
+
+        public DocumentItem(Item item, int qty)
+        {
+            Item = item;
+            Qty = qty;
         }
     }
 }

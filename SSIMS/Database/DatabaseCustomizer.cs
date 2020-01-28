@@ -35,7 +35,6 @@ namespace SSIMS.Database
             
             for(int i = 0; i < attibuteList.Count; i++)
             {
-                Debug.WriteLine("atr= " +attibuteList[i]);
                 if (i < attibuteList.Count)
                     sql += ", ";
                 sql += attibuteList[i];

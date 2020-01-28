@@ -13,9 +13,9 @@ namespace SSIMS.Models
 
         public Department Department { get; set; }
 
-        public DisbursementList(int creatorID, int responderID, DateTime createdDate, DateTime responseDate, Status status, int departmentID) : base(creatorID, responderID, createdDate, responseDate, status)
+        public DisbursementList(Staff creator, Department department) : base(creator)
         {
-            DepartmentID = departmentID;
+            Department = department;
         }
 
         public Boolean UpdateInventoryItem()

@@ -9,7 +9,7 @@ namespace SSIMS.Models
     {
         public virtual ICollection<DocumentItem> DocumentItems { get; set; }
 
-        public AdjustmentVoucher(int creatorID, int responderID, DateTime createdDate, DateTime responseDate, Status status) : base(creatorID, responderID, createdDate, responseDate, status)
+        public AdjustmentVoucher(Staff creator) : base(creator)
         {
         }
 

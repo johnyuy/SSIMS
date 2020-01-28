@@ -10,8 +10,17 @@ namespace SSIMS.Database
 {
     public class DatabaseInitializer<T> : DropCreateDatabaseAlways<DatabaseContext>
     {
+        static StaffRepository StaffRepository;
+        static ItemRepository ItemRepository;
+        static DepartmentRepository DepartmentRepository;
+        static CollectionPointRepository CollectionPointRepository;
+
         protected override void Seed(DatabaseContext context)
         {
+            StaffRepository = new StaffRepository(context);
+            ItemRepository = new ItemRepository(context);
+            DepartmentRepository = new DepartmentRepository(context);
+            CollectionPointRepository = new CollectionPointRepository(context);
             //Seed data
             InitCollectionPoints(context);
             InitDepartments(context);
@@ -20,6 +29,7 @@ namespace SSIMS.Database
             InitStaffs(context);
             InitUserAccounts(context);
             InitInventoryItems(context);
+            InitTest(context);
 
             //other initializations copy:    static void Init (DatabaseContext context)
             context.SaveChanges();
@@ -306,8 +316,7 @@ namespace SSIMS.Database
                 new UserAccount("storeclerk2","clerk2",1,0),
                 new UserAccount("storeclerk3","clerk3",1,0),
             };
-            StaffRepository StaffRepo = new StaffRepository(context);
-            List<List<string>> namelist =  StaffRepo.GetStaffAccountNames();
+            List<List<string>> namelist =  StaffRepository.GetStaffAccountNames();
             Debug.WriteLine("\tAdding department staff accounts");
             foreach (string name in namelist[0])
                 accounts.Add(new UserAccount(name, "password", 0, 1));
@@ -368,6 +377,21 @@ namespace SSIMS.Database
             }
             foreach(InventoryItem inventoryItem in inv)
                 context.InventoryItems.Add(inventoryItem);
+            context.SaveChanges();
+        }
+
+        static void InitTest(DatabaseContext context)
+        {
+            Staff staff1 = StaffRepository.GetByID(100000);
+            
+            RequisitionOrder reqform = new RequisitionOrder(staff1);
+            List<DocumentItem> documentItems = new List<DocumentItem>{
+                new DocumentItem(ItemRepository.GetByID("C001"),2),
+                new DocumentItem(ItemRepository.GetByID("E031"),5),
+                new DocumentItem(ItemRepository.GetByID("P039"),7),
+            };
+            reqform.DocumentItems = documentItems;
+            context.RequisitionForms.Add(reqform);
             context.SaveChanges();
         }
     }
