@@ -17,7 +17,7 @@ namespace SSIMS.Database
 
         protected override void Seed(DatabaseContext context)
         {
-            Debug.WriteLine("\nSEEDING DATABASE: ");
+            Debug.WriteLine("\nSEEDING DATABASE...");
             StaffRepository = new StaffRepository(context);
             ItemRepository = new ItemRepository(context);
             DepartmentRepository = new DepartmentRepository(context);
@@ -316,6 +316,7 @@ namespace SSIMS.Database
         
         static void InitUserAccounts(DatabaseContext context)
         {
+            Debug.WriteLine("\tInitializing UserAccounts");
             Debug.WriteLine("\t\tAdding system admin account");
             context.UserAccounts.Add(new UserAccount("ssims", "admin", 3, 3));
             Debug.WriteLine("\t\tAdding store accounts");
@@ -343,11 +344,11 @@ namespace SSIMS.Database
         }
 
         static void InitInventoryItems(DatabaseContext context){
+            Debug.WriteLine("\tInitializing InventoryItems");
             //setting for how much initial store balance = restock level * multiplier
             int stockLevelMultiplier = 3;
 
-            ItemRepository itemRepo = new ItemRepository(context);
-            List<Item> items = (List<Item>)itemRepo.Get();
+            List<Item> items = (List<Item>)ItemRepository.Get();
             List<InventoryItem> inv = new List<InventoryItem>();
             
             foreach(Item item in items)
