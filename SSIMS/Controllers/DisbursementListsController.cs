@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -132,6 +133,28 @@ namespace SSIMS.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        
+        public ICollection<TransactionItem> GenerateRetrievalList(List<RequisitionOrder> requisitionOrders)
+        {
+            ArrayList transItemList = new ArrayList();
+            ArrayList docItemsArray = new ArrayList();
+            foreach(RequisitionOrder requisition in requisitionOrders)
+            {
+                docItemsArray.Add(requisition.DocumentItems.ToArray());
+            }
+
+            foreach (DocumentItem doc in docItemsArray)
+            {
+                Item item = doc.Item;
+                int qty = doc.Qty;
+                TransactionItem transactionItem = new TransactionItem(qty, qty, null, item);
+                transItemList.Add(transactionItem);
+            }
+
+
+            return null;
         }
     }
 }
