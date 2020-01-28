@@ -343,36 +343,36 @@ namespace SSIMS.Database
             foreach(Item item in items)
             {
                 int reorderLvl=0, reorderQty=0;
-                if (item.ItemID.Contains("C00")){reorderLvl = 50; reorderQty = 30;}
-                else if (item.ItemID.Contains("E00")){reorderLvl = 600; reorderQty = 400;}
-                else if(item.ItemID.Contains("E02")){reorderLvl = 50; reorderQty = 20;}
-                else if(item.ItemID.Contains("E03")){reorderLvl = 100; reorderQty = 50;}
-                else if(item.ItemID.Contains("F02")){
-                    if (item.ItemID == "F020") {reorderLvl = 100; reorderQty = 50;}
-                    else if (item.ItemID == "F021") { reorderLvl = 200; reorderQty = 100;}
-                    else if (item.ItemID == "F022") { reorderLvl = 200; reorderQty = 100; }
+                if (item.ID.Contains("C00")){reorderLvl = 50; reorderQty = 30;}
+                else if (item.ID.Contains("E00")){reorderLvl = 600; reorderQty = 400;}
+                else if(item.ID.Contains("E02")){reorderLvl = 50; reorderQty = 20;}
+                else if(item.ID.Contains("E03")){reorderLvl = 100; reorderQty = 50;}
+                else if(item.ID.Contains("F02")){
+                    if (item.ID == "F020") {reorderLvl = 100; reorderQty = 50;}
+                    else if (item.ID == "F021") { reorderLvl = 200; reorderQty = 100;}
+                    else if (item.ID == "F022") { reorderLvl = 200; reorderQty = 100; }
                     else { reorderLvl = 200; reorderQty = 150; }
                 }
-                else if (item.ItemID.Contains("F03")) {reorderLvl = 200; reorderQty = 150;}
-                else if (item.ItemID.Contains("H01")) {reorderLvl = 100; reorderQty = 80;}
-                else if (item.ItemID.Contains("H03")) {reorderLvl = 50; reorderQty = 20;}
-                else if (item.ItemID.Contains("P01")) {reorderLvl = 100; reorderQty = 60;}
-                else if (item.ItemID.Contains("P02")) {reorderLvl = 500; reorderQty = 500;}
-                else if (item.ItemID.Contains("P03")) {reorderLvl = 100; reorderQty = 50;}
-                else if (item.ItemID.Contains("P04")) {reorderLvl = 100; reorderQty = 50;}
-                else if (item.ItemID.Contains("R00")) {reorderLvl = 50; reorderQty = 20;}
-                else if (item.ItemID.Contains("S01")) {reorderLvl = 100; reorderQty = 80;}
-                else if (item.ItemID.Contains("S02")) {reorderLvl = 50; reorderQty = 20;}
-                else if (item.ItemID.Contains("S04")) {reorderLvl = 50; reorderQty = 20;}
-                else if (item.ItemID.Contains("S10")) {reorderLvl = 50; reorderQty = 20;}
-                else if (item.ItemID.Contains("T00")) {reorderLvl = 10; reorderQty = 10;}
-                else if (item.ItemID.Contains("T02"))
+                else if (item.ID.Contains("F03")) {reorderLvl = 200; reorderQty = 150;}
+                else if (item.ID.Contains("H01")) {reorderLvl = 100; reorderQty = 80;}
+                else if (item.ID.Contains("H03")) {reorderLvl = 50; reorderQty = 20;}
+                else if (item.ID.Contains("P01")) {reorderLvl = 100; reorderQty = 60;}
+                else if (item.ID.Contains("P02")) {reorderLvl = 500; reorderQty = 500;}
+                else if (item.ID.Contains("P03")) {reorderLvl = 100; reorderQty = 50;}
+                else if (item.ID.Contains("P04")) {reorderLvl = 100; reorderQty = 50;}
+                else if (item.ID.Contains("R00")) {reorderLvl = 50; reorderQty = 20;}
+                else if (item.ID.Contains("S01")) {reorderLvl = 100; reorderQty = 80;}
+                else if (item.ID.Contains("S02")) {reorderLvl = 50; reorderQty = 20;}
+                else if (item.ID.Contains("S04")) {reorderLvl = 50; reorderQty = 20;}
+                else if (item.ID.Contains("S10")) {reorderLvl = 50; reorderQty = 20;}
+                else if (item.ID.Contains("T00")) {reorderLvl = 10; reorderQty = 10;}
+                else if (item.ID.Contains("T02"))
                 {
-                    if (item.ItemID == "T021" ) { reorderLvl = 500; reorderQty = 400; }
-                    else if (item.ItemID == "T025") { reorderLvl = 500; reorderQty = 400; }
+                    if (item.ID == "T021" ) { reorderLvl = 500; reorderQty = 400; }
+                    else if (item.ID == "T025") { reorderLvl = 500; reorderQty = 400; }
                     else { reorderLvl = 100; reorderQty = 200; }
                 }
-                else if (item.ItemID.Contains("T10")) { reorderLvl = 20; reorderQty = 10; }
+                else if (item.ID.Contains("T10")) { reorderLvl = 20; reorderQty = 10; }
                 inv.Add(new InventoryItem(reorderLvl * stockLevelMultiplier, 0, reorderLvl, reorderQty, 0, item));
             }
             foreach(InventoryItem inventoryItem in inv)
@@ -382,8 +382,7 @@ namespace SSIMS.Database
 
         static void InitTest(DatabaseContext context)
         {
-            Staff staff1 = StaffRepository.GetByID(100000);
-            
+            Staff staff1 = StaffRepository.GetByID(100003);
             RequisitionOrder reqform = new RequisitionOrder(staff1);
             List<DocumentItem> documentItems = new List<DocumentItem>{
                 new DocumentItem(ItemRepository.GetByID("C001"),2),

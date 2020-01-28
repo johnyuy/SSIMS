@@ -17,7 +17,7 @@ namespace SSIMS.Models
     public abstract class Document
     {
         [Key]
-        public int DocumentID { get; set; }
+        public int ID { get; set; }
 
         [ForeignKey("CreatedByStaff")]
         public int? CreatedByStaffID { get; set; }
@@ -40,5 +40,6 @@ namespace SSIMS.Models
             ResponseDate = null;
             Status = 0;
         }
+        public Document() { }
     }
 }

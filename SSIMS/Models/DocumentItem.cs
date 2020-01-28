@@ -13,22 +13,21 @@ namespace SSIMS.Models
         [Key]
         public Guid DocumentItemID {get; set;}
 
-        public int DocumentID { get; set; }
-        public int ItemID { get; set; }
-
-        public int Qty { get; set; }
+        //public int DocumentID { get; set; } //removed to view by document type in db
 
         public Document Document { get; set; }
         public Item Item { get; set; }
-        
+
+        public int Qty { get; set; }
+
         public DocumentItem()
         {
         }
 
         public DocumentItem(int itemID, int documentID, int qty, Item item, Document document)
         {
-            ItemID = itemID;
-            DocumentID = documentID;
+            //ItemID = itemID;
+            //DocumentID = documentID;
             Qty = qty;
             Item = item;
             Document = document;
