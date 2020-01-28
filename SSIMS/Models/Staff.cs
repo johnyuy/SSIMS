@@ -10,8 +10,8 @@ namespace SSIMS.Models
     public class Staff
     {
         public int StaffID { get; set; }
-        public string DepartmentID { get; set; }
-        public int? UserAccountID { get; set; }
+        //public string DepartmentID { get; set; }
+        public string UserAccountID { get; set; }
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
         [Required]
@@ -21,20 +21,18 @@ namespace SSIMS.Models
         public string StaffRole { get; set; }
 
         public virtual Department Department { get; set; }
-        public virtual UserAccount UserAccount { get; set; }
-
 
         public Staff()
         {
         }
 
         public Staff(string name, string phoneNumber, 
-            string email, string departmentID, string staffRole)     
+            string email, string staffRole)     
         {
             Name = name;
             PhoneNumber = phoneNumber;
             Email = email;
-            DepartmentID = departmentID;
+            UserAccountID = Email.Split('@')[0];
             StaffRole = staffRole;
         }
 
@@ -44,6 +42,7 @@ namespace SSIMS.Models
             Name = name;
             PhoneNumber = phoneNumber;
             Email = email;
+            UserAccountID = Email.Split('@')[0];
             Department = department;
             StaffRole = staffRole;
         }

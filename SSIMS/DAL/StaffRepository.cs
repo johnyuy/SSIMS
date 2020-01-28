@@ -26,6 +26,10 @@ namespace SSIMS.DAL
             List<string> stafflist = new List<string>();
             List<string> replist = new List<string>();
             List<string> headlist = new List<string>();
+            List<string> clerklist = new List<string>();
+            List<string> supervisorlist = new List<string>();
+            List<string> managerlist = new List<string>();
+
             foreach(Staff staff in staffs)
             {
                 switch (staff.StaffRole)
@@ -34,7 +38,13 @@ namespace SSIMS.DAL
                         headlist.Add(staff.Email.Split('@')[0]); break;
                     case "DeptRep":
                         replist.Add(staff.Email.Split('@')[0]); break;
-                    default:
+                    case "Manager":
+                        managerlist.Add(staff.Email.Split('@')[0]); break;                    
+                    case "Supervisor":
+                        supervisorlist.Add(staff.Email.Split('@')[0]); break;
+                    case "Clerk":
+                        clerklist.Add(staff.Email.Split('@')[0]); break;
+                    case "Staff":
                         stafflist.Add(staff.Email.Split('@')[0]); break;
                 }
                 
@@ -42,6 +52,10 @@ namespace SSIMS.DAL
             namelists.Add(stafflist);
             namelists.Add(replist);
             namelists.Add(headlist);
+            namelists.Add(clerklist);
+            namelists.Add(supervisorlist);
+            namelists.Add(managerlist);
+
             return namelists;
         }
     }

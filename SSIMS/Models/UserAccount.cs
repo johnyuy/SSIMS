@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -7,8 +8,8 @@ namespace SSIMS.Models
 {
     public class UserAccount
     {
-        public int UserAccountID { get; set; }
-        public string Username { get; set; }
+        [Key]
+        public string ID { get; set; }
         public string Password { get; set; }
         public int StoreAccess { get; set; }
         public int DeptAccess { get; set; }
@@ -19,7 +20,7 @@ namespace SSIMS.Models
 
         public UserAccount(string userName, string password, int storeAccess, int deptAccess)
         {
-            Username = userName;
+            ID = userName;
             Password = password;
             StoreAccess = storeAccess;
             DeptAccess = deptAccess;

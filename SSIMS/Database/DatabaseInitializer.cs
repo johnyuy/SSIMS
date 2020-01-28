@@ -69,6 +69,7 @@ namespace SSIMS.Database
                 new Department("REGR", "Registrar","68901266","68921465"),
                 new Department("SCIE", "Science","68907191","68921992"),
                 new Department("ZOOL", "Zoology","68901266","68921465"),
+                new Department("STOR", "Store","","")
             };
             foreach (Department dept in departments)
                 context.Departments.Add(dept);
@@ -204,98 +205,106 @@ namespace SSIMS.Database
 
         static void InitStaffs(DatabaseContext context)
         {
-            Debug.WriteLine("Initializing Staffs");
-            DatabaseCustomizer.SetDefaultID(new Staff("Prof. Kian Bong Kee", "81210001", "kianbongkee@u.logic.edu", "ARCH", "DeptHead"), nameof(Staff.StaffID), 100001, context);
+            Debug.WriteLine("\tInitializing Staffs");
+            DatabaseCustomizer.SetDefaultID(new Staff("System Admin","", "ssims@u.logic.edu", "SystemAdmin"), nameof(Staff.StaffID), 10000, context);
             List<Staff> staffs = new List<Staff>
             {
+                //Store Department
+                new Staff("Store Manager","", "storemanager@u.logic.edu", DepartmentRepository.GetByID("STOR"), "Manager"),
+                new Staff("Store Supervisor", "", "storesupervisor@u.logic.edu", DepartmentRepository.GetByID("STOR"), "Supervisor"),
+                new Staff("Store Clerk 1", "", "storeclerk1@u.logic.edu", DepartmentRepository.GetByID("STOR"), "Clerk"),
+                new Staff("Store Clerk 2", "", "storeclerk2@u.logic.edu", DepartmentRepository.GetByID("STOR"), "Clerk"),
+                new Staff("Store Clerk 3", "", "storeclerk3@u.logic.edu", DepartmentRepository.GetByID("STOR"), "Clerk"),
+
                 //Architecture Department Dept 1
-                new Staff("Mr. Wan Lau En", "91211002","wanlauen@u.logic.edu","ARCH","DeptRep"),
-                new Staff("Mr. Timmy Ting","81213003","timmyting@u.logic.edu","ARCH","Staff"),
-                new Staff("Mr. Patrick Coy","81215005","patrickcoy@u.logic.edu","ARCH","Staff"),
-                new Staff("Mr. Ye Yint Hein", "91214004","yeyinthein@u.logic.edu","ARCH","Staff"),
-                new Staff("Ms. Amanda Ceb","81210601","amandaceb@u.logic.edu","ARCH","Staff"),
-                new Staff("Ms. Sakura Shinji", "91210009","sakurashinji@u.logic.edu","ARCH","Staff"),
+                new Staff("Prof. Kian Bong Kee", "81210001", "kianbongkee@u.logic.edu", DepartmentRepository.GetByID("ARCH"), "DeptHead"),
+                new Staff("Mr. Wan Lau En", "91211002","wanlauen@u.logic.edu",DepartmentRepository.GetByID("ARCH"),"DeptRep"),
+                new Staff("Mr. Timmy Ting","81213003","timmyting@u.logic.edu",DepartmentRepository.GetByID("ARCH"),"Staff"),
+                new Staff("Mr. Patrick Coy","81215005","patrickcoy@u.logic.edu",DepartmentRepository.GetByID("ARCH"),"Staff"),
+                new Staff("Mr. Ye Yint Hein", "91214004","yeyinthein@u.logic.edu",DepartmentRepository.GetByID("ARCH"),"Staff"),
+                new Staff("Ms. Amanda Ceb","81210601","amandaceb@u.logic.edu",DepartmentRepository.GetByID("ARCH"),"Staff"),
+                new Staff("Ms. Sakura Shinji", "91210009","sakurashinji@u.logic.edu",DepartmentRepository.GetByID("ARCH"),"Staff"),
 
                 //Arts Department Dept 2
-                new Staff("Prof. Su Myat Mon", "91710001","sumyatmon@u.logic.edu","ARTS","DeptHead"),
-                new Staff("Ms. Sumi Ko","81711002","sumiko@u.logic.edu","ARTS","DeptRep"),
-                new Staff("Mr. Kendrik Carlo", "91713003","kendricarlo@u.logic.edu","ARTS","Staff"),
-                new Staff("Mr. Kenny Tim","81715005","timkenny@u.logic.edu","ARTS","Staff"),
-                new Staff("Mr. Timmy Pong", "91714004","timmypong@u.logic.edu","ARTS","Staff"),
-                new Staff("Ms. Yod Pornpattrison","81710601","yodpattrison@u.logic.edu","ARTS","Staff"),
-                new Staff("Ms. Kabuto Sumiya", "91710009","sumiyakabuto@u.logic.edu","ARTS","Staff"),
+                new Staff("Prof. Su Myat Mon", "91710001","sumyatmon@u.logic.edu",DepartmentRepository.GetByID("ARTS"),"DeptHead"),
+                new Staff("Ms. Sumi Ko","81711002","sumiko@u.logic.edu",DepartmentRepository.GetByID("ARTS"),"DeptRep"),
+                new Staff("Mr. Kendrik Carlo", "91713003","kendricarlo@u.logic.edu",DepartmentRepository.GetByID("ARTS"),"Staff"),
+                new Staff("Mr. Kenny Tim","81715005","timkenny@u.logic.edu",DepartmentRepository.GetByID("ARTS"),"Staff"),
+                new Staff("Mr. Timmy Pong", "91714004","timmypong@u.logic.edu",DepartmentRepository.GetByID("ARTS"),"Staff"),
+                new Staff("Ms. Yod Pornpattrison","81710601","yodpattrison@u.logic.edu",DepartmentRepository.GetByID("ARTS"),"Staff"),
+                new Staff("Ms. Kabuto Sumiya", "91710009","sumiyakabuto@u.logic.edu",DepartmentRepository.GetByID("ARTS"),"Staff"),
 
                 //Commerce Department Dept 3
-                new Staff("Dr. Chiah Leow Bee", "98910001","chiahleowbee@u.logic.edu","COMM","DeptHead"),
-                new Staff("Mr. Mohd Azman","88911002","mohdazman@u.logic.edu","COMM","DeptRep"),
-                new Staff("Ms. Tammy Berth", "98913003","tammyberth@u.logic.edu","COMM","Staff"),
-                new Staff("Ms. Summer Tran", "88915005","summertran@u.logic.edu","COMM","Staff"),
-                new Staff("Mr. John Tang", "98914004","johntang@u.logic.edu","COMM","Staff"),
-                new Staff("Mr. Jones Fong", "88910601","jonesfong@u.logic.edu","COMM","Staff"),
-                new Staff("Ms. Rebecca Hong", "98910009","rebeccahong@u.logic.edu","COMM","Staff"),
+                new Staff("Dr. Chiah Leow Bee", "98910001","chiahleowbee@u.logic.edu",DepartmentRepository.GetByID("COMM"),"DeptHead"),
+                new Staff("Mr. Mohd Azman","88911002","mohdazman@u.logic.edu",DepartmentRepository.GetByID("COMM"),"DeptRep"),
+                new Staff("Ms. Tammy Berth", "98913003","tammyberth@u.logic.edu",DepartmentRepository.GetByID("COMM"),"Staff"),
+                new Staff("Ms. Summer Tran", "88915005","summertran@u.logic.edu",DepartmentRepository.GetByID("COMM"),"Staff"),
+                new Staff("Mr. John Tang", "98914004","johntang@u.logic.edu",DepartmentRepository.GetByID("COMM"),"Staff"),
+                new Staff("Mr. Jones Fong", "88910601","jonesfong@u.logic.edu",DepartmentRepository.GetByID("COMM"),"Staff"),
+                new Staff("Ms. Rebecca Hong", "98910009","rebeccahong@u.logic.edu",DepartmentRepository.GetByID("COMM"),"Staff"),
 
                 //Computer Science Department Dept 4
-                new Staff("Dr. Soh Kian Wee", "89010001","sohkianwee@u.logic.edu","CPSC","DeptHead"),
-                new Staff("Mr. Week Kian Fatt", "99011002","weekianfat@u.logic.edu","CPSC","DeptRep"),
-                new Staff("Mr. Dan Shiok", "99013003","danshiok@u.logic.edu","CPSC","Staff"),
-                new Staff("Mr. Andrew Lee","89015005","andrewlee@u.logic.edu","CPSC","Staff"),
-                new Staff("Mr. Kaung Kyaw", "99014004","kaungkyaw@u.logic.edu","CPSC","Staff"),
-                new Staff("Ms. Lina Lim", "89010601","linalim@u.logic.edu","CPSC","Staff"),
-                new Staff("Ms. Temari Ang", "99010009","temariang@u.logic.edu","CPSC","Staff"),
+                new Staff("Dr. Soh Kian Wee", "89010001","sohkianwee@u.logic.edu",DepartmentRepository.GetByID("CPSC"),"DeptHead"),
+                new Staff("Mr. Week Kian Fatt", "99011002","weekianfat@u.logic.edu",DepartmentRepository.GetByID("CPSC"),"DeptRep"),
+                new Staff("Mr. Dan Shiok", "99013003","danshiok@u.logic.edu",DepartmentRepository.GetByID("CPSC"),"Staff"),
+                new Staff("Mr. Andrew Lee","89015005","andrewlee@u.logic.edu",DepartmentRepository.GetByID("CPSC"),"Staff"),
+                new Staff("Mr. Kaung Kyaw", "99014004","kaungkyaw@u.logic.edu",DepartmentRepository.GetByID("CPSC"),"Staff"),
+                new Staff("Ms. Lina Lim", "89010601","linalim@u.logic.edu",DepartmentRepository.GetByID("CPSC"),"Staff"),
+                new Staff("Ms. Temari Ang", "99010009","temariang@u.logic.edu",DepartmentRepository.GetByID("CPSC"),"Staff"),
 
                 //Engineering Department Dept 5
-                new Staff("Prof. Lucas Liang Tan", "98110001","lucasliangtan@u.logic.edu","ENGG","DeptHead"),
-                new Staff("Mr. Yoshi Nori","88111002","yoshinori@u.logic.edu","ENGG","DeptRep"),
-                new Staff("Mr. Ron Kent", "98113003","ronkent@u.logic.edu","ENGG","Staff"),
-                new Staff("Mr. Kim Jung Ho", "98115005","kimjungho@u.logic.edu","ENGG","Staff"),
-                new Staff("Mr. Michael Angelo","88114004","michaelangelo@u.logic.edu","ENGG","Staff"),
-                new Staff("Ms. Sandra Cooper","88110601","sandracooper@u.logic.edu","ENGG","Staff"),
-                new Staff("Ms. Jennifer Bullock", "98110009","jenniferbullock@u.logic.edu","ENGG","Staff"),
+                new Staff("Prof. Lucas Liang Tan", "98110001","lucasliangtan@u.logic.edu",DepartmentRepository.GetByID("ENGG"),"DeptHead"),
+                new Staff("Mr. Yoshi Nori","88111002","yoshinori@u.logic.edu",DepartmentRepository.GetByID("ENGG"),"DeptRep"),
+                new Staff("Mr. Ron Kent", "98113003","ronkent@u.logic.edu",DepartmentRepository.GetByID("ENGG"),"Staff"),
+                new Staff("Mr. Kim Jung Ho", "98115005","kimjungho@u.logic.edu",DepartmentRepository.GetByID("ENGG"),"Staff"),
+                new Staff("Mr. Michael Angelo","88114004","michaelangelo@u.logic.edu",DepartmentRepository.GetByID("ENGG"),"Staff"),
+                new Staff("Ms. Sandra Cooper","88110601","sandracooper@u.logic.edu",DepartmentRepository.GetByID("ENGG"),"Staff"),
+                new Staff("Ms. Jennifer Bullock", "98110009","jenniferbullock@u.logic.edu",DepartmentRepository.GetByID("ENGG"),"Staff"),
 
                 //English Department Dept 6
-                new Staff("Prof. Ezra Pound", "90010001","ezrapound@u.logic.edu","ENGL","DeptHead"),
-                new Staff("Ms. Pamela Kow","80011002","pamelakow@u.logic.edu","ENGL","DeptRep"),
-                new Staff("Mr. Jacob Duke", "90013003","jacobduke@u.logic.edu","ENGL","Staff"),
-                new Staff("Ms. Andrea Linux","80015005","andrelinux@u.logic.edu","ENGL","Staff"),
-                new Staff("Ms. Anne Low", "90014004","annelow@u.logic.edu","ENGL","Staff"),
-                new Staff("Ms. May Tan","82010601","maytan@u.logic.edu","ENGL","Staff"),
-                new Staff("Ms. June Nguyen", "91010009","junenguyen@u.logic.edu","ENGL","Staff"),
+                new Staff("Prof. Ezra Pound", "90010001","ezrapound@u.logic.edu",DepartmentRepository.GetByID("ENGL"),"DeptHead"),
+                new Staff("Ms. Pamela Kow","80011002","pamelakow@u.logic.edu",DepartmentRepository.GetByID("ENGL"),"DeptRep"),
+                new Staff("Mr. Jacob Duke", "90013003","jacobduke@u.logic.edu",DepartmentRepository.GetByID("ENGL"),"Staff"),
+                new Staff("Ms. Andrea Linux","80015005","andrelinux@u.logic.edu",DepartmentRepository.GetByID("ENGL"),"Staff"),
+                new Staff("Ms. Anne Low", "90014004","annelow@u.logic.edu",DepartmentRepository.GetByID("ENGL"),"Staff"),
+                new Staff("Ms. May Tan","82010601","maytan@u.logic.edu",DepartmentRepository.GetByID("ENGL"),"Staff"),
+                new Staff("Ms. June Nguyen", "91010009","junenguyen@u.logic.edu",DepartmentRepository.GetByID("ENGL"),"Staff"),
 
                 //Medicine Department Dept 7
-                new Staff("Prof. Russel Jones","81110001","russeljones@u.logic.edu","MEDI","DeptHead"),
-                new Staff("Ms. Kim Chia Lin","81111002","kimchialin@u.logic.edu","MEDI","DeptRep"),
-                new Staff("Mr. Duke Joneson","81113003","dukejoneson@u.logic.edu","MEDI","Staff"),
-                new Staff("Ms. Andrea Hei", "91115005","andreahei@u.logic.edu","MEDI","Staff"),
-                new Staff("Ms. Wendy Loo", "91114004","wendyloo@u.logic.edu","MEDI","Staff"),
-                new Staff("Ms. July Moh", "91110601","julymoh@u.logic.edu","MEDI","Staff"),
-                new Staff("Mr. Augustus Robinson", "91110009","augustusrobinson@u.logic.edu","MEDI","Staff"),
+                new Staff("Prof. Russel Jones","81110001","russeljones@u.logic.edu",DepartmentRepository.GetByID("MEDI"),"DeptHead"),
+                new Staff("Ms. Kim Chia Lin","81111002","kimchialin@u.logic.edu",DepartmentRepository.GetByID("MEDI"),"DeptRep"),
+                new Staff("Mr. Duke Joneson","81113003","dukejoneson@u.logic.edu",DepartmentRepository.GetByID("MEDI"),"Staff"),
+                new Staff("Ms. Andrea Hei", "91115005","andreahei@u.logic.edu",DepartmentRepository.GetByID("MEDI"),"Staff"),
+                new Staff("Ms. Wendy Loo", "91114004","wendyloo@u.logic.edu",DepartmentRepository.GetByID("MEDI"),"Staff"),
+                new Staff("Ms. July Moh", "91110601","julymoh@u.logic.edu",DepartmentRepository.GetByID("MEDI"),"Staff"),
+                new Staff("Mr. Augustus Robinson", "91110009","augustusrobinson@u.logic.edu",DepartmentRepository.GetByID("MEDI"),"Staff"),
 
                 //Registrar Department Dept 8
-                new Staff("Ms. Low Kway Boo", "95610001","lowkwayboo@u.logic.edu","REGR","DeptHead"),
-                new Staff("Ms. Helen Ho", "95611002","helenho@u.logic.edu","REGR","DeptRep"),
-                new Staff("Mr. Ngoc Thuy", "95613003","ngocthuy@u.logic.edu","REGR","Staff"),
-                new Staff("Ms. Chan Chen Ni", "95615005","chanchenni@u.logic.edu","REGR","Staff"),
-                new Staff("Mr. Tommy Lee Johnson","85614004","tomleejohnson@u.logic.edu","REGR","Staff"),
-                new Staff("Mr. Toni Than","85610601","tonithan@u.logic.edu","REGR","Staff"),
-                new Staff("Ms. Tra Xiang","85610009","traxiang@u.logic.edu","REGR","Staff"),
+                new Staff("Ms. Low Kway Boo", "95610001","lowkwayboo@u.logic.edu",DepartmentRepository.GetByID("REGR"),"DeptHead"),
+                new Staff("Ms. Helen Ho", "95611002","helenho@u.logic.edu",DepartmentRepository.GetByID("REGR"),"DeptRep"),
+                new Staff("Mr. Ngoc Thuy", "95613003","ngocthuy@u.logic.edu",DepartmentRepository.GetByID("REGR"),"Staff"),
+                new Staff("Ms. Chan Chen Ni", "95615005","chanchenni@u.logic.edu",DepartmentRepository.GetByID("REGR"),"Staff"),
+                new Staff("Mr. Tommy Lee Johnson","85614004","tomleejohnson@u.logic.edu",DepartmentRepository.GetByID("REGR"),"Staff"),
+                new Staff("Mr. Toni Than","85610601","tonithan@u.logic.edu",DepartmentRepository.GetByID("REGR"),"Staff"),
+                new Staff("Ms. Tra Xiang","85610009","traxiang@u.logic.edu",DepartmentRepository.GetByID("REGR"),"Staff"),
 
                 //Science Department Dept 9
-                new Staff("Ms. Polly Timberland", "95890001","pollytimberland@u.logic.edu","SCIE","DeptHead"),
-                new Staff("Ms. Penny Shelby", "95891002","pennyshelby@u.logic.edu","SCIE","DeptRep"),
-                new Staff("Mr. Thomas Thompson", "956893003","thomasthompson@u.logic.edu","SCIE","Staff"),
-                new Staff("Ms. Alice Yu", "95895005","aliceyu@u.logic.edu","SCIE","Staff"),
-                new Staff("Mr. Victor Tun", "95894004","victortun@u.logic.edu","SCIE","Staff"),
-                new Staff("Mr. Stanley Presley", "95890601","stanleypresley@u.logic.edu","SCIE","Staff"),
-                new Staff("Ms. Pamela Tan", "95890009","pamelatan@u.logic.edu","SCIE","Staff"),
+                new Staff("Ms. Polly Timberland", "95890001","pollytimberland@u.logic.edu",DepartmentRepository.GetByID("SCIE"),"DeptHead"),
+                new Staff("Ms. Penny Shelby", "95891002","pennyshelby@u.logic.edu",DepartmentRepository.GetByID("SCIE"),"DeptRep"),
+                new Staff("Mr. Thomas Thompson", "956893003","thomasthompson@u.logic.edu",DepartmentRepository.GetByID("SCIE"),"Staff"),
+                new Staff("Ms. Alice Yu", "95895005","aliceyu@u.logic.edu",DepartmentRepository.GetByID("SCIE"),"Staff"),
+                new Staff("Mr. Victor Tun", "95894004","victortun@u.logic.edu",DepartmentRepository.GetByID("SCIE"),"Staff"),
+                new Staff("Mr. Stanley Presley", "95890601","stanleypresley@u.logic.edu",DepartmentRepository.GetByID("SCIE"),"Staff"),
+                new Staff("Ms. Pamela Tan", "95890009","pamelatan@u.logic.edu",DepartmentRepository.GetByID("SCIE"),"Staff"),
 
                 //Zoology Department Dept 10
-                new Staff("Prof. Tan", "94810001","proftan@u.logic.edu","ZOOL","DeptHead"),
-                new Staff("Mr. Peter Tan Ah Meng", "94811002","petertan@u.logic.edu","ZOOL","DeptRep"),
-                new Staff("Ms. Ching Chen", "94813003","chingchen@u.logic.edu","ZOOL","Staff"),
-                new Staff("Ms. Natalie Noel", "94815005","noelnatalie@u.logic.edu","ZOOL","Staff"),
-                new Staff("Mr. Donald Rumsfield", "94814004","donaldrumsfield@u.logic.edu","ZOOL","Staff"),
-                new Staff("Mr. Lee Ming Xiang", "94810601","leemingxiang@u.logic.edu","ZOOL","Staff"),
-                new Staff("Ms. Jiang Huang", "94810009","jianghuang@u.logic.edu","ZOOL","Staff"),
+                new Staff("Prof. Tan", "94810001","proftan@u.logic.edu",DepartmentRepository.GetByID("ZOOL"),"DeptHead"),
+                new Staff("Mr. Peter Tan Ah Meng", "94811002","petertan@u.logic.edu",DepartmentRepository.GetByID("ZOOL"),"DeptRep"),
+                new Staff("Ms. Ching Chen", "94813003","chingchen@u.logic.edu",DepartmentRepository.GetByID("ZOOL"),"Staff"),
+                new Staff("Ms. Natalie Noel", "94815005","noelnatalie@u.logic.edu",DepartmentRepository.GetByID("ZOOL"),"Staff"),
+                new Staff("Mr. Donald Rumsfield", "94814004","donaldrumsfield@u.logic.edu",DepartmentRepository.GetByID("ZOOL"),"Staff"),
+                new Staff("Mr. Lee Ming Xiang", "94810601","leemingxiang@u.logic.edu",DepartmentRepository.GetByID("ZOOL"),"Staff"),
+                new Staff("Ms. Jiang Huang", "94810009","jianghuang@u.logic.edu",DepartmentRepository.GetByID("ZOOL"),"Staff"),
 
             };
             foreach (Staff staff in staffs)
@@ -305,25 +314,24 @@ namespace SSIMS.Database
         
         static void InitUserAccounts(DatabaseContext context)
         {
-            Debug.WriteLine("\tAdding system admin account");
-            DatabaseCustomizer.SetDefaultID(new UserAccount("admin", "admin", 3, 3), nameof(UserAccount.UserAccountID), 1000, context);
-            Debug.WriteLine("\tAdding store accounts");
-            List<UserAccount> accounts = new List<UserAccount>
-            {
-                new UserAccount("storemanager","manager",3,0),
-                new UserAccount("storesupervisor","supervisor",2,0),
-                new UserAccount("storeclerk1","clerk1",1,0),
-                new UserAccount("storeclerk2","clerk2",1,0),
-                new UserAccount("storeclerk3","clerk3",1,0),
-            };
+            Debug.WriteLine("\t\tAdding system admin account");
+            context.UserAccounts.Add(new UserAccount("ssims", "admin", 3, 3));
+            Debug.WriteLine("\t\tAdding store accounts");
+            List<UserAccount> accounts = new List<UserAccount>();
             List<List<string>> namelist =  StaffRepository.GetStaffAccountNames();
-            Debug.WriteLine("\tAdding department staff accounts");
+            foreach (string name in namelist[3])
+                accounts.Add(new UserAccount(name, "clerk", 1, 0));
+            foreach (string name in namelist[4])
+                accounts.Add(new UserAccount(name, "supervisor", 2, 0));
+            foreach (string name in namelist[5])
+                accounts.Add(new UserAccount(name, "manager", 3, 0));
+            Debug.WriteLine("\t\tAdding department staff accounts");
             foreach (string name in namelist[0])
                 accounts.Add(new UserAccount(name, "password", 0, 1));
-            Debug.WriteLine("\tAdding department rep accounts");
+            Debug.WriteLine("\t\tAdding department rep accounts");
             foreach (string name in namelist[1])
                 accounts.Add(new UserAccount(name, "password", 0, 2));
-            Debug.WriteLine("\tAdding department head accounts");
+            Debug.WriteLine("\t\tAdding department head accounts");
             foreach (string name in namelist[2])
                 accounts.Add(new UserAccount(name, "password", 0, 3));
 
