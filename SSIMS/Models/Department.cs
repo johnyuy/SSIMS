@@ -8,12 +8,11 @@ namespace SSIMS.Models
 {
     public class Department
     {
-        public int DepartmentID { get; set; }
+        public string DepartmentID { get; set; }
         public int? DeptRepID { get; set; }
         public int? DeptHeadID { get; set; }
         public int? CollectionPointID { get; set; }
         public int? DeptHeadAutorizationID { get; set; }
-        public string DeptCode { get; set; }
         public string DeptName { get; set; }
 
         [ForeignKey("DeptRepID")]
@@ -31,17 +30,9 @@ namespace SSIMS.Models
         {
         }
 
-        public Department(int deptRepID, int deptHeadID, string deptCode, string deptName)
+        public Department(string deptId, string deptName, string phoneNumber, string faxNumber)
         {
-            DeptRepID = deptRepID;
-            DeptHeadID = deptHeadID;
-            DeptCode = deptCode;
-            DeptName = deptName;
-        }
-
-        public Department(string deptCode, string deptName, string phoneNumber, string faxNumber)
-        {
-            DeptCode = deptCode;
+            DepartmentID = deptId;
             DeptName = deptName;
             PhoneNumber = phoneNumber;
             FaxNumber = faxNumber;

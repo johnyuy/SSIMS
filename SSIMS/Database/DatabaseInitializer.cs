@@ -195,97 +195,97 @@ namespace SSIMS.Database
         static void InitStaffs(DatabaseContext context)
         {
             Debug.WriteLine("Initializing Staffs");
-            DatabaseCustomizer.SetDefaultID(new Staff("Prof. Kian Bong Kee", "81210001", "kianbongkee@u.logic.edu", 1, "DeptHead"), nameof(Staff.StaffID), 100001, context);
+            DatabaseCustomizer.SetDefaultID(new Staff("Prof. Kian Bong Kee", "81210001", "kianbongkee@u.logic.edu", "ARCH", "DeptHead"), nameof(Staff.StaffID), 100001, context);
             List<Staff> staffs = new List<Staff>
             {
                 //Architecture Department Dept 1
-                new Staff("Mr. Wan Lau En", "91211002","wanlauen@u.logic.edu",1,"DeptRep"),
-                new Staff("Mr. Timmy Ting","81213003","timmyting@u.logic.edu",1,"Staff"),
-                new Staff("Mr. Patrick Coy","81215005","patrickcoy@u.logic.edu",1,"Staff"),
-                new Staff("Mr. Ye Yint Hein", "91214004","yeyinthein@u.logic.edu",1,"Staff"),
-                new Staff("Ms. Amanda Ceb","81210601","amandaceb@u.logic.edu",1,"Staff"),
-                new Staff("Ms. Sakura Shinji", "91210009","sakurashinji@u.logic.edu",1,"Staff"),
+                new Staff("Mr. Wan Lau En", "91211002","wanlauen@u.logic.edu","ARCH","DeptRep"),
+                new Staff("Mr. Timmy Ting","81213003","timmyting@u.logic.edu","ARCH","Staff"),
+                new Staff("Mr. Patrick Coy","81215005","patrickcoy@u.logic.edu","ARCH","Staff"),
+                new Staff("Mr. Ye Yint Hein", "91214004","yeyinthein@u.logic.edu","ARCH","Staff"),
+                new Staff("Ms. Amanda Ceb","81210601","amandaceb@u.logic.edu","ARCH","Staff"),
+                new Staff("Ms. Sakura Shinji", "91210009","sakurashinji@u.logic.edu","ARCH","Staff"),
 
                 //Arts Department Dept 2
-                new Staff("Prof. Su Myat Mon", "91710001","sumyatmon@u.logic.edu",2,"DeptHead"),
-                new Staff("Ms. Sumi Ko","81711002","sumiko@u.logic.edu",2,"DeptRep"),
-                new Staff("Mr. Kendrik Carlo", "91713003","kendricarlo@u.logic.edu",2,"Staff"),
-                new Staff("Mr. Kenny Tim","81715005","timkenny@u.logic.edu",2,"Staff"),
-                new Staff("Mr. Timmy Pong", "91714004","timmypong@u.logic.edu",2,"Staff"),
-                new Staff("Ms. Yod Pornpattrison","81710601","yodpattrison@u.logic.edu",2,"Staff"),
-                new Staff("Ms. Kabuto Sumiya", "91710009","sumiyakabuto@u.logic.edu",2,"Staff"),
+                new Staff("Prof. Su Myat Mon", "91710001","sumyatmon@u.logic.edu","ARTS","DeptHead"),
+                new Staff("Ms. Sumi Ko","81711002","sumiko@u.logic.edu","ARTS","DeptRep"),
+                new Staff("Mr. Kendrik Carlo", "91713003","kendricarlo@u.logic.edu","ARTS","Staff"),
+                new Staff("Mr. Kenny Tim","81715005","timkenny@u.logic.edu","ARTS","Staff"),
+                new Staff("Mr. Timmy Pong", "91714004","timmypong@u.logic.edu","ARTS","Staff"),
+                new Staff("Ms. Yod Pornpattrison","81710601","yodpattrison@u.logic.edu","ARTS","Staff"),
+                new Staff("Ms. Kabuto Sumiya", "91710009","sumiyakabuto@u.logic.edu","ARTS","Staff"),
 
                 //Commerce Department Dept 3
-                new Staff("Dr. Chiah Leow Bee", "98910001","chiahleowbee@u.logic.edu",3,"DeptHead"),
-                new Staff("Mr. Mohd Azman","88911002","mohdazman@u.logic.edu",3,"DeptRep"),
-                new Staff("Ms. Tammy Berth", "98913003","tammyberth@u.logic.edu",3,"Staff"),
-                new Staff("Ms. Summer Tran", "88915005","summertran@u.logic.edu",3,"Staff"),
-                new Staff("Mr. John Tang", "98914004","johntang@u.logic.edu",3,"Staff"),
-                new Staff("Mr. Jones Fong", "88910601","jonesfong@u.logic.edu",3,"Staff"),
-                new Staff("Ms. Rebecca Hong", "98910009","rebeccahong@u.logic.edu",3,"Staff"),
+                new Staff("Dr. Chiah Leow Bee", "98910001","chiahleowbee@u.logic.edu","COMM","DeptHead"),
+                new Staff("Mr. Mohd Azman","88911002","mohdazman@u.logic.edu","COMM","DeptRep"),
+                new Staff("Ms. Tammy Berth", "98913003","tammyberth@u.logic.edu","COMM","Staff"),
+                new Staff("Ms. Summer Tran", "88915005","summertran@u.logic.edu","COMM","Staff"),
+                new Staff("Mr. John Tang", "98914004","johntang@u.logic.edu","COMM","Staff"),
+                new Staff("Mr. Jones Fong", "88910601","jonesfong@u.logic.edu","COMM","Staff"),
+                new Staff("Ms. Rebecca Hong", "98910009","rebeccahong@u.logic.edu","COMM","Staff"),
 
                 //Computer Science Department Dept 4
-                new Staff("Dr. Soh Kian Wee", "89010001","sohkianwee@u.logic.edu",4,"DeptHead"),
-                new Staff("Mr. Week Kian Fatt", "99011002","weekianfat@u.logic.edu",4,"DeptRep"),
-                new Staff("Mr. Dan Shiok", "99013003","danshiok@u.logic.edu",4,"Staff"),
-                new Staff("Mr. Andrew Lee","89015005","andrewlee@u.logic.edu",4,"Staff"),
-                new Staff("Mr. Kaung Kyaw", "99014004","kaungkyaw@u.logic.edu",4,"Staff"),
-                new Staff("Ms. Lina Lim", "89010601","linalim@u.logic.edu",4,"Staff"),
-                new Staff("Ms. Temari Ang", "99010009","temariang@u.logic.edu",4,"Staff"),
+                new Staff("Dr. Soh Kian Wee", "89010001","sohkianwee@u.logic.edu","CPSC","DeptHead"),
+                new Staff("Mr. Week Kian Fatt", "99011002","weekianfat@u.logic.edu","CPSC","DeptRep"),
+                new Staff("Mr. Dan Shiok", "99013003","danshiok@u.logic.edu","CPSC","Staff"),
+                new Staff("Mr. Andrew Lee","89015005","andrewlee@u.logic.edu","CPSC","Staff"),
+                new Staff("Mr. Kaung Kyaw", "99014004","kaungkyaw@u.logic.edu","CPSC","Staff"),
+                new Staff("Ms. Lina Lim", "89010601","linalim@u.logic.edu","CPSC","Staff"),
+                new Staff("Ms. Temari Ang", "99010009","temariang@u.logic.edu","CPSC","Staff"),
 
                 //Engineering Department Dept 5
-                new Staff("Prof. Lucas Liang Tan", "98110001","lucasliangtan@u.logic.edu",5,"DeptHead"),
-                new Staff("Mr. Yoshi Nori","88111002","yoshinori@u.logic.edu",5,"DeptRep"),
-                new Staff("Mr. Ron Kent", "98113003","ronkent@u.logic.edu",5,"Staff"),
-                new Staff("Mr. Kim Jung Ho", "98115005","kimjungho@u.logic.edu",5,"Staff"),
-                new Staff("Mr. Michael Angelo","88114004","michaelangelo@u.logic.edu",5,"Staff"),
-                new Staff("Ms. Sandra Cooper","88110601","sandracooper@u.logic.edu",5,"Staff"),
-                new Staff("Ms. Jennifer Bullock", "98110009","jenniferbullock@u.logic.edu",5,"Staff"),
+                new Staff("Prof. Lucas Liang Tan", "98110001","lucasliangtan@u.logic.edu","ENGG","DeptHead"),
+                new Staff("Mr. Yoshi Nori","88111002","yoshinori@u.logic.edu","ENGG","DeptRep"),
+                new Staff("Mr. Ron Kent", "98113003","ronkent@u.logic.edu","ENGG","Staff"),
+                new Staff("Mr. Kim Jung Ho", "98115005","kimjungho@u.logic.edu","ENGG","Staff"),
+                new Staff("Mr. Michael Angelo","88114004","michaelangelo@u.logic.edu","ENGG","Staff"),
+                new Staff("Ms. Sandra Cooper","88110601","sandracooper@u.logic.edu","ENGG","Staff"),
+                new Staff("Ms. Jennifer Bullock", "98110009","jenniferbullock@u.logic.edu","ENGG","Staff"),
 
                 //English Department Dept 6
-                new Staff("Prof. Ezra Pound", "90010001","ezrapound@u.logic.edu",6,"DeptHead"),
-                new Staff("Ms. Pamela Kow","80011002","pamelakow@u.logic.edu",6,"DeptRep"),
-                new Staff("Mr. Jacob Duke", "90013003","jacobduke@u.logic.edu",6,"Staff"),
-                new Staff("Ms. Andrea Linux","80015005","andrelinux@u.logic.edu",6,"Staff"),
-                new Staff("Ms. Anne Low", "90014004","annelow@u.logic.edu",6,"Staff"),
-                new Staff("Ms. May Tan","82010601","maytan@u.logic.edu",6,"Staff"),
-                new Staff("Ms. June Nguyen", "91010009","junenguyen@u.logic.edu",6,"Staff"),
+                new Staff("Prof. Ezra Pound", "90010001","ezrapound@u.logic.edu","ENGL","DeptHead"),
+                new Staff("Ms. Pamela Kow","80011002","pamelakow@u.logic.edu","ENGL","DeptRep"),
+                new Staff("Mr. Jacob Duke", "90013003","jacobduke@u.logic.edu","ENGL","Staff"),
+                new Staff("Ms. Andrea Linux","80015005","andrelinux@u.logic.edu","ENGL","Staff"),
+                new Staff("Ms. Anne Low", "90014004","annelow@u.logic.edu","ENGL","Staff"),
+                new Staff("Ms. May Tan","82010601","maytan@u.logic.edu","ENGL","Staff"),
+                new Staff("Ms. June Nguyen", "91010009","junenguyen@u.logic.edu","ENGL","Staff"),
 
                 //Medicine Department Dept 7
-                new Staff("Prof. Russel Jones","81110001","russeljones@u.logic.edu",7,"DeptHead"),
-                new Staff("Ms. Kim Chia Lin","81111002","kimchialin@u.logic.edu",7,"DeptRep"),
-                new Staff("Mr. Duke Joneson","81113003","dukejoneson@u.logic.edu",7,"Staff"),
-                new Staff("Ms. Andrea Hei", "91115005","andreahei@u.logic.edu",7,"Staff"),
-                new Staff("Ms. Wendy Loo", "91114004","wendyloo@u.logic.edu",7,"Staff"),
-                new Staff("Ms. July Moh", "91110601","julymoh@u.logic.edu",7,"Staff"),
-                new Staff("Mr. Augustus Robinson", "91110009","augustusrobinson@u.logic.edu",7,"Staff"),
+                new Staff("Prof. Russel Jones","81110001","russeljones@u.logic.edu","MEDI","DeptHead"),
+                new Staff("Ms. Kim Chia Lin","81111002","kimchialin@u.logic.edu","MEDI","DeptRep"),
+                new Staff("Mr. Duke Joneson","81113003","dukejoneson@u.logic.edu","MEDI","Staff"),
+                new Staff("Ms. Andrea Hei", "91115005","andreahei@u.logic.edu","MEDI","Staff"),
+                new Staff("Ms. Wendy Loo", "91114004","wendyloo@u.logic.edu","MEDI","Staff"),
+                new Staff("Ms. July Moh", "91110601","julymoh@u.logic.edu","MEDI","Staff"),
+                new Staff("Mr. Augustus Robinson", "91110009","augustusrobinson@u.logic.edu","MEDI","Staff"),
 
                 //Registrar Department Dept 8
-                new Staff("Ms. Low Kway Boo", "95610001","lowkwayboo@u.logic.edu",8,"DeptHead"),
-                new Staff("Ms. Helen Ho", "95611002","helenho@u.logic.edu",8,"DeptRep"),
-                new Staff("Mr. Ngoc Thuy", "95613003","ngocthuy@u.logic.edu",8,"Staff"),
-                new Staff("Ms. Chan Chen Ni", "95615005","chanchenni@u.logic.edu",8,"Staff"),
-                new Staff("Mr. Tommy Lee Johnson","85614004","tomleejohnson@u.logic.edu",8,"Staff"),
-                new Staff("Mr. Toni Than","85610601","tonithan@u.logic.edu",8,"Staff"),
-                new Staff("Ms. Tra Xiang","85610009","traxiang@u.logic.edu",8,"Staff"),
+                new Staff("Ms. Low Kway Boo", "95610001","lowkwayboo@u.logic.edu","REGR","DeptHead"),
+                new Staff("Ms. Helen Ho", "95611002","helenho@u.logic.edu","REGR","DeptRep"),
+                new Staff("Mr. Ngoc Thuy", "95613003","ngocthuy@u.logic.edu","REGR","Staff"),
+                new Staff("Ms. Chan Chen Ni", "95615005","chanchenni@u.logic.edu","REGR","Staff"),
+                new Staff("Mr. Tommy Lee Johnson","85614004","tomleejohnson@u.logic.edu","REGR","Staff"),
+                new Staff("Mr. Toni Than","85610601","tonithan@u.logic.edu","REGR","Staff"),
+                new Staff("Ms. Tra Xiang","85610009","traxiang@u.logic.edu","REGR","Staff"),
 
                 //Science Department Dept 9
-                new Staff("Ms. Polly Timberland", "95890001","pollytimberland@u.logic.edu",9,"DeptHead"),
-                new Staff("Ms. Penny Shelby", "95891002","pennyshelby@u.logic.edu",9,"DeptRep"),
-                new Staff("Mr. Thomas Thompson", "956893003","thomasthompson@u.logic.edu",9,"Staff"),
-                new Staff("Ms. Alice Yu", "95895005","aliceyu@u.logic.edu",9,"Staff"),
-                new Staff("Mr. Victor Tun", "95894004","victortun@u.logic.edu",9,"Staff"),
-                new Staff("Mr. Stanley Presley", "95890601","stanleypresley@u.logic.edu",9,"Staff"),
-                new Staff("Ms. Pamela Tan", "95890009","pamelatan@u.logic.edu",9,"Staff"),
+                new Staff("Ms. Polly Timberland", "95890001","pollytimberland@u.logic.edu","SCIE","DeptHead"),
+                new Staff("Ms. Penny Shelby", "95891002","pennyshelby@u.logic.edu","SCIE","DeptRep"),
+                new Staff("Mr. Thomas Thompson", "956893003","thomasthompson@u.logic.edu","SCIE","Staff"),
+                new Staff("Ms. Alice Yu", "95895005","aliceyu@u.logic.edu","SCIE","Staff"),
+                new Staff("Mr. Victor Tun", "95894004","victortun@u.logic.edu","SCIE","Staff"),
+                new Staff("Mr. Stanley Presley", "95890601","stanleypresley@u.logic.edu","SCIE","Staff"),
+                new Staff("Ms. Pamela Tan", "95890009","pamelatan@u.logic.edu","SCIE","Staff"),
 
                 //Zoology Department Dept 10
-                new Staff("Prof. Tan", "94810001","proftan@u.logic.edu",10,"DeptHead"),
-                new Staff("Mr. Peter Tan Ah Meng", "94811002","petertan@u.logic.edu",10,"DeptRep"),
-                new Staff("Ms. Ching Chen", "94813003","chingchen@u.logic.edu",10,"Staff"),
-                new Staff("Ms. Natalie Noel", "94815005","noelnatalie@u.logic.edu",10,"Staff"),
-                new Staff("Mr. Donald Rumsfield", "94814004","donaldrumsfield@u.logic.edu",10,"Staff"),
-                new Staff("Mr. Lee Ming Xiang", "94810601","leemingxiang@u.logic.edu",10,"Staff"),
-                new Staff("Ms. Jiang Huang", "94810009","jianghuang@u.logic.edu",10,"Staff"),
+                new Staff("Prof. Tan", "94810001","proftan@u.logic.edu","ZOOL","DeptHead"),
+                new Staff("Mr. Peter Tan Ah Meng", "94811002","petertan@u.logic.edu","ZOOL","DeptRep"),
+                new Staff("Ms. Ching Chen", "94813003","chingchen@u.logic.edu","ZOOL","Staff"),
+                new Staff("Ms. Natalie Noel", "94815005","noelnatalie@u.logic.edu","ZOOL","Staff"),
+                new Staff("Mr. Donald Rumsfield", "94814004","donaldrumsfield@u.logic.edu","ZOOL","Staff"),
+                new Staff("Mr. Lee Ming Xiang", "94810601","leemingxiang@u.logic.edu","ZOOL","Staff"),
+                new Staff("Ms. Jiang Huang", "94810009","jianghuang@u.logic.edu","ZOOL","Staff"),
 
             };
             foreach (Staff staff in staffs)
@@ -295,6 +295,8 @@ namespace SSIMS.Database
         
         static void InitUserAccounts(DatabaseContext context)
         {
+            Debug.WriteLine("\tAdding system admin account");
+            DatabaseCustomizer.SetDefaultID(new UserAccount("admin", "admin", 3, 3), nameof(UserAccount.UserAccountID), 1000, context);
             Debug.WriteLine("\tAdding store accounts");
             List<UserAccount> accounts = new List<UserAccount>
             {

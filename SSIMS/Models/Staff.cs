@@ -10,7 +10,7 @@ namespace SSIMS.Models
     public class Staff
     {
         public int StaffID { get; set; }
-        public int? DepartmentID { get; set; }
+        public string DepartmentID { get; set; }
         public int? UserAccountID { get; set; }
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
@@ -28,7 +28,7 @@ namespace SSIMS.Models
         }
 
         public Staff(string name, string phoneNumber, 
-            string email, int departmentID, string staffRole)     
+            string email, string departmentID, string staffRole)     
         {
             Name = name;
             PhoneNumber = phoneNumber;
