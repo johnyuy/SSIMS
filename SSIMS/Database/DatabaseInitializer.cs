@@ -17,6 +17,7 @@ namespace SSIMS.Database
 
         protected override void Seed(DatabaseContext context)
         {
+            Debug.WriteLine("\nSEEDING DATABASE: ");
             StaffRepository = new StaffRepository(context);
             ItemRepository = new ItemRepository(context);
             DepartmentRepository = new DepartmentRepository(context);
@@ -29,16 +30,17 @@ namespace SSIMS.Database
             InitStaffs(context);
             InitUserAccounts(context);
             InitInventoryItems(context);
-            InitTest(context);
+            InitDocuments(context);
 
             //other initializations copy:    static void Init (DatabaseContext context)
             context.SaveChanges();
             base.Seed(context);
+            Debug.WriteLine("SEEDING COMPLETED!");
         }
 
         static void InitCollectionPoints(DatabaseContext context)
         {
-            Debug.WriteLine("Initializing CollectionPoints");
+            Debug.WriteLine("\tInitializing CollectionPoints");
             List<CollectionPoint> collectionPoints = new List<CollectionPoint>
             {
                 new CollectionPoint("Stationery Store", DateTime.Parse("9:30 AM")),
@@ -56,7 +58,7 @@ namespace SSIMS.Database
 
         static void InitDepartments(DatabaseContext context)
         {
-            Debug.WriteLine("Initializing Departments");
+            Debug.WriteLine("\tInitializing Departments");
             List<Department> departments = new List<Department>
             {
                 new Department("ARCH", "Architecture","68901257","68921001"),
@@ -78,7 +80,7 @@ namespace SSIMS.Database
         
         static void InitItems(DatabaseContext context)
         {
-            Debug.WriteLine("Initializing Items");
+            Debug.WriteLine("\tInitializing Items");
             List<Item> items = new List<Item>
             {
                 new Item("C001","Clip","Clips Double 1\"","Dozen"),
@@ -178,7 +180,7 @@ namespace SSIMS.Database
 
         static void InitSuppliers(DatabaseContext context)
         {
-            Debug.WriteLine("Initializing Suppliers");
+            Debug.WriteLine("\tInitializing Suppliers");
             Supplier supplier1 = new Supplier(
                 "ALPHA Office Supplies", "ALPA",
                 "Blk 1128, Ang Mo Kio Industrial Park #02-1108 Ang Mo Kio Street 62 Singapore 622262",
@@ -206,7 +208,7 @@ namespace SSIMS.Database
         static void InitStaffs(DatabaseContext context)
         {
             Debug.WriteLine("\tInitializing Staffs");
-            DatabaseCustomizer.SetDefaultID(new Staff("System Admin","", "ssims@u.logic.edu", "SystemAdmin"), nameof(Staff.StaffID), 10000, context);
+            DatabaseCustomizer.SetDefaultID(new Staff("System Admin","", "ssims@u.logic.edu", "SystemAdmin"), nameof(Staff.ID), 10000, context);
             List<Staff> staffs = new List<Staff>
             {
                 //Store Department
@@ -388,10 +390,12 @@ namespace SSIMS.Database
             context.SaveChanges();
         }
 
-        static void InitTest(DatabaseContext context)
+        static void InitDocuments(DatabaseContext context)
         {
-            Staff staff1 = StaffRepository.GetByID(100003);
+            Debug.WriteLine("\tInitializing Documents");
+            Staff staff1 = StaffRepository.GetByID(10000);
             RequisitionOrder reqform = new RequisitionOrder(staff1);
+            reqform.RepliedByStaff = staff1;
             List<DocumentItem> documentItems = new List<DocumentItem>{
                 new DocumentItem(ItemRepository.GetByID("C001"),2),
                 new DocumentItem(ItemRepository.GetByID("E031"),5),
@@ -399,6 +403,27 @@ namespace SSIMS.Database
             };
             reqform.DocumentItems = documentItems;
             context.RequisitionForms.Add(reqform);
+
+            RetrievalList retrievalList = new RetrievalList(staff1, DepartmentRepository.GetByID("ARTS"));
+            List<TransactionItem> transactionItems = new List<TransactionItem>
+            {
+                new TransactionItem(2,2,"Retrieval",ItemRepository.GetByID("C001")),
+                new TransactionItem(5,5,"Retrieval",ItemRepository.GetByID("E031")),
+                new TransactionItem(7,7,"Retrieval",ItemRepository.GetByID("P039")),
+            };
+            retrievalList.ItemTransactions = transactionItems;
+            context.RetrievalLists.Add(retrievalList);
+
+            DisbursementList disbursementList = new DisbursementList(staff1, DepartmentRepository.GetByID("ARTS"));
+            disbursementList.RepliedByStaff = StaffRepository.GetByID(10014);
+            List<TransactionItem> disbursedItems = new List<TransactionItem>
+            {
+                new TransactionItem(2,2,"Disbursement",ItemRepository.GetByID("C001")),
+                new TransactionItem(5,5,"Disbursement",ItemRepository.GetByID("E031")),
+                new TransactionItem(7,7,"Disbursement",ItemRepository.GetByID("P039")),
+            };
+            disbursementList.ItemTransactions = disbursedItems;
+            context.DisbursementLists.Add(disbursementList);
             context.SaveChanges();
         }
     }

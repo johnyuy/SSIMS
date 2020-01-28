@@ -7,7 +7,7 @@ namespace SSIMS.Models
 {
     public class DeptHeadAuthorization
     {
-        public int DeptHeadAuthorizationID { get; set; }
+        public int ID { get; set; }
         public int StaffID { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }

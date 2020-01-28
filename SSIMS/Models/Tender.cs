@@ -7,7 +7,7 @@ namespace SSIMS.Models
 {
     public class Tender
     {
-        public int TenderID { get; set; }
+        public int ID { get; set; }
         public int ItemID { get; set; }
         public int SupplierID { get; set; }
         public double Price { get; set; }

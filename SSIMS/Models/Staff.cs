@@ -9,7 +9,7 @@ namespace SSIMS.Models
 {
     public class Staff
     {
-        public int StaffID { get; set; }
+        public int ID { get; set; }
         //public string DepartmentID { get; set; }
         public string UserAccountID { get; set; }
         public string Name { get; set; }

@@ -7,7 +7,7 @@ namespace SSIMS.Models
 {
     public class InventoryItem 
     {
-        public int InventoryItemID { get; set; }
+        public int ID { get; set; }
         public string ItemID { get; set; }
         public int InStoreQty { get; set; }
         public int InTransitQty { get; set; }

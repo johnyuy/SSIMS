@@ -11,9 +11,7 @@ namespace SSIMS.Models
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
-        public Guid DocumentItemID {get; set;}
-
-        //public int DocumentID { get; set; } //removed to view by document type in db
+        public Guid ID {get; set;}
 
         public Document Document { get; set; }
         public Item Item { get; set; }

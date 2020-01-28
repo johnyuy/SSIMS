@@ -8,7 +8,7 @@ namespace SSIMS.Models
 {
     public class Department
     {
-        public string DepartmentID { get; set; }
+        public string ID { get; set; }
         public int? DeptRepID { get; set; }
         public int? DeptHeadID { get; set; }
         public int? CollectionPointID { get; set; }
@@ -32,7 +32,7 @@ namespace SSIMS.Models
 
         public Department(string deptId, string deptName, string phoneNumber, string faxNumber)
         {
-            DepartmentID = deptId;
+            ID = deptId;
             DeptName = deptName;
             PhoneNumber = phoneNumber;
             FaxNumber = faxNumber;

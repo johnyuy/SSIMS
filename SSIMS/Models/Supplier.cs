@@ -7,7 +7,7 @@ namespace SSIMS.Models
 {
     public class Supplier
     {
-        public string SupplierID { get; set; } //supplier code
+        public string ID { get; set; } //supplier code
         public string SupplierName { get; set; }
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
@@ -22,7 +22,7 @@ namespace SSIMS.Models
         public Supplier(string supplierName, string supplierid, string address, string phoneNumber, string faxNumber, string gstReg, string contactName)
         {
             SupplierName = supplierName;
-            SupplierID = supplierid;
+            ID = supplierid;
             Address = address;
             PhoneNumber = phoneNumber;
             FaxNumber = faxNumber;

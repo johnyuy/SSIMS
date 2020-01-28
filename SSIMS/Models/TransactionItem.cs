@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -8,8 +10,9 @@ namespace SSIMS.Models
 {
     public class TransactionItem
     {
-        public int TransactionItemID { get; set; }
-        public int ItemID { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
+        public Guid ID { get; set; }
         public int HandOverQty { get; set; }
         public int TakeOverQty { get; set; }
         public string Reason { get; set; }
@@ -20,12 +23,12 @@ namespace SSIMS.Models
         {
         }
 
-        public TransactionItem(int handOverQty, int takeOverQty, string reason, int itemID)
+        public TransactionItem(int handOverQty, int takeOverQty, string reason, Item item)
         {
             HandOverQty = handOverQty;
             TakeOverQty = takeOverQty;
             Reason = reason;
-            ItemID = itemID;
+            Item = item;
         }
     }
 }
