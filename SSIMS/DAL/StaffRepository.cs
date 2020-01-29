@@ -59,5 +59,35 @@ namespace SSIMS.DAL
 
             return namelists;
         }
+
+        public List<string> GetDeptHeadList()
+        {
+            var DepartmentHeads = Get(filter: x => x.StaffRole == "DeptHead");
+            List<string> deptHeads = new List<string>();
+            if (DepartmentHeads != null)
+            {
+                foreach(Staff s in DepartmentHeads)
+                {
+                    deptHeads.Add(s.Name);
+                }
+                return deptHeads;
+            }
+            return null;
+        }
+
+        public List<string> GetDeptRepList()
+        {
+            var DepartmentReps = Get(filter: x => x.StaffRole == "DeptRep");
+            List<string> deptReps = new List<string>();
+            if (DepartmentReps != null)
+            {
+                foreach (Staff s in DepartmentReps)
+                {
+                    deptReps.Add(s.Name);
+                }
+                return deptReps;
+            }
+            return null;
+        }
     }
 }

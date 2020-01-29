@@ -1,7 +1,12 @@
-﻿@model IEnumerable<SSIMS.Models.Department>
+﻿@using SSIMS.Models
 
 @{
     ViewBag.Title = "Index";
+    List<Department> departments = ViewBag.Departments;
+    List<string> heads = ViewBag.HeadList;
+    List<string> reps = ViewBag.RepList;
+    List<string> auths = ViewBag.Auth;
+    int count = ViewBag.DeptCount;
 }
 
 <h2>Index</h2>
@@ -12,56 +17,56 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.CollectionPoint.Location)
+            Collection Point
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.DeptHead.UserAccountID)
+            Dept Head
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.DeptRep.UserAccountID)
+            Dept Rep
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.DeptHeadAuthorization.ID)
+            Authorized Head
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.DeptName)
+            Dept Name
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.PhoneNumber)
+           Phone
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.FaxNumber)
+           Fax
         </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
+@for (int i=0; i < count-1;i++) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.CollectionPoint.Location)
+           @departments[i].DeptName
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.DeptHead.UserAccountID)
+            @heads[i]
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.DeptRep.UserAccountID)
+            @reps[i]
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.DeptHeadAuthorization.ID)
+            @auths[i]
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.DeptName)
+            @departments[i].ID
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.PhoneNumber)
+            @departments[i].PhoneNumber
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.FaxNumber)
+            @departments[i].FaxNumber
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+            @Html.ActionLink("Edit", "Edit", new { id=departments[i].ID }) |
+            @Html.ActionLink("Details", "Details", new { id=departments[i].ID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=departments[i].ID })
         </td>
     </tr>
 }

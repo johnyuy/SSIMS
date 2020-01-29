@@ -21,12 +21,14 @@ namespace SSIMS.ViewModels
         [Required]
         [Display(Name = "Category")]
         public string SelectedCategory { get; set; }
-        public IEnumerable<SelectListItem> Categories { get; set; }
+        public IEnumerable<SelectListItem>
+    Categories { get; set; }
 
-        [Required]
-        [Display(Name = "Description")]
-        public string SelectedDescription { get; set; }
-        public IEnumerable<SelectListItem> Descriptions { get; set; }
+    [Required]
+    [Display(Name = "Description")]
+    public string SelectedDescription { get; set; }
+    public IEnumerable<SelectListItem>
+        Descriptions { get; set; }
 
-    }
-}
+        }
+        }
