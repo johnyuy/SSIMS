@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace SSIMS.Controllers
+namespace SSIMS.Views.Requisition
 {
-    public class DisbursementController
+    public class Create
     {
-
-
     }
 }

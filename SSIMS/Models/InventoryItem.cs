@@ -17,7 +17,7 @@ namespace SSIMS.Models
 
         public Item Item { get; set; }
 
-        public virtual ICollection<Tender> Tenders { get; set; }
+        //public virtual ICollection<Tender> Tenders { get; set; }
 
         public InventoryItem()
         {

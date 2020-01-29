@@ -14,14 +14,19 @@ namespace SSIMS.Database
         static ItemRepository ItemRepository;
         static DepartmentRepository DepartmentRepository;
         static CollectionPointRepository CollectionPointRepository;
+        static RequisitionOrderRepository RequisitionOrderRepository;
+        static DocumentItemRepository DocumentItemRepository;
 
         protected override void Seed(DatabaseContext context)
         {
-            Debug.WriteLine("\nSEEDING DATABASE: ");
+            Debug.WriteLine("\nSEEDING DATABASE...");
             StaffRepository = new StaffRepository(context);
             ItemRepository = new ItemRepository(context);
             DepartmentRepository = new DepartmentRepository(context);
             CollectionPointRepository = new CollectionPointRepository(context);
+            RequisitionOrderRepository = new RequisitionOrderRepository(context);
+            DocumentItemRepository = new DocumentItemRepository(context);
+
             //Seed data
             InitCollectionPoints(context);
             InitDepartments(context);
@@ -31,7 +36,7 @@ namespace SSIMS.Database
             InitUserAccounts(context);
             InitInventoryItems(context);
             InitDocuments(context);
-
+           
             //other initializations copy:    static void Init (DatabaseContext context)
             context.SaveChanges();
             base.Seed(context);
@@ -77,7 +82,7 @@ namespace SSIMS.Database
                 context.Departments.Add(dept);
             context.SaveChanges();
         }
-        
+
         static void InitItems(DatabaseContext context)
         {
             Debug.WriteLine("\tInitializing Items");
@@ -184,7 +189,7 @@ namespace SSIMS.Database
             Supplier supplier1 = new Supplier(
                 "ALPHA Office Supplies", "ALPA",
                 "Blk 1128, Ang Mo Kio Industrial Park #02-1108 Ang Mo Kio Street 62 Singapore 622262",
-                "64619928","64612238","MR-8500440-2","Ms Irene Tan");
+                "64619928", "64612238", "MR-8500440-2", "Ms Irene Tan");
             Supplier supplier2 = new Supplier(
                 "BANES Shop", "BANE",
                 "Blk 124, Alexandra Road #03-04 Banes Building",
@@ -208,7 +213,7 @@ namespace SSIMS.Database
         static void InitStaffs(DatabaseContext context)
         {
             Debug.WriteLine("\tInitializing Staffs");
-            DatabaseCustomizer.SetDefaultID(new Staff("System Admin","", "ssims@u.logic.edu", "SystemAdmin"), nameof(Staff.ID), 10000, context);
+            DatabaseCustomizer.SetDefaultID(new Staff("System Admin", "", "ssims@u.logic.edu", "SystemAdmin"), nameof(Staff.ID), 10000, context);
             List<Staff> staffs = new List<Staff>
             {
                 //Store Department
@@ -313,14 +318,15 @@ namespace SSIMS.Database
                 context.Staffs.Add(staff);
             context.SaveChanges();
         }
-        
+
         static void InitUserAccounts(DatabaseContext context)
         {
+            Debug.WriteLine("\tInitializing UserAccounts");
             Debug.WriteLine("\t\tAdding system admin account");
             context.UserAccounts.Add(new UserAccount("ssims", "admin", 3, 3));
             Debug.WriteLine("\t\tAdding store accounts");
             List<UserAccount> accounts = new List<UserAccount>();
-            List<List<string>> namelist =  StaffRepository.GetStaffAccountNames();
+            List<List<string>> namelist = StaffRepository.GetStaffAccountNames();
             foreach (string name in namelist[3])
                 accounts.Add(new UserAccount(name, "clerk", 1, 0));
             foreach (string name in namelist[4])
@@ -342,50 +348,52 @@ namespace SSIMS.Database
             context.SaveChanges();
         }
 
-        static void InitInventoryItems(DatabaseContext context){
+        static void InitInventoryItems(DatabaseContext context)
+        {
+            Debug.WriteLine("\tInitializing InventoryItems");
             //setting for how much initial store balance = restock level * multiplier
             int stockLevelMultiplier = 3;
 
-            ItemRepository itemRepo = new ItemRepository(context);
-            List<Item> items = (List<Item>)itemRepo.Get();
+            List<Item> items = (List<Item>)ItemRepository.Get();
             List<InventoryItem> inv = new List<InventoryItem>();
-            
-            foreach(Item item in items)
+
+            foreach (Item item in items)
             {
-                int reorderLvl=0, reorderQty=0;
-                if (item.ID.Contains("C00")){reorderLvl = 50; reorderQty = 30;}
-                else if (item.ID.Contains("E00")){reorderLvl = 600; reorderQty = 400;}
-                else if(item.ID.Contains("E02")){reorderLvl = 50; reorderQty = 20;}
-                else if(item.ID.Contains("E03")){reorderLvl = 100; reorderQty = 50;}
-                else if(item.ID.Contains("F02")){
-                    if (item.ID == "F020") {reorderLvl = 100; reorderQty = 50;}
-                    else if (item.ID == "F021") { reorderLvl = 200; reorderQty = 100;}
+                int reorderLvl = 0, reorderQty = 0;
+                if (item.ID.Contains("C00")) { reorderLvl = 50; reorderQty = 30; }
+                else if (item.ID.Contains("E00")) { reorderLvl = 600; reorderQty = 400; }
+                else if (item.ID.Contains("E02")) { reorderLvl = 50; reorderQty = 20; }
+                else if (item.ID.Contains("E03")) { reorderLvl = 100; reorderQty = 50; }
+                else if (item.ID.Contains("F02"))
+                {
+                    if (item.ID == "F020") { reorderLvl = 100; reorderQty = 50; }
+                    else if (item.ID == "F021") { reorderLvl = 200; reorderQty = 100; }
                     else if (item.ID == "F022") { reorderLvl = 200; reorderQty = 100; }
                     else { reorderLvl = 200; reorderQty = 150; }
                 }
-                else if (item.ID.Contains("F03")) {reorderLvl = 200; reorderQty = 150;}
-                else if (item.ID.Contains("H01")) {reorderLvl = 100; reorderQty = 80;}
-                else if (item.ID.Contains("H03")) {reorderLvl = 50; reorderQty = 20;}
-                else if (item.ID.Contains("P01")) {reorderLvl = 100; reorderQty = 60;}
-                else if (item.ID.Contains("P02")) {reorderLvl = 500; reorderQty = 500;}
-                else if (item.ID.Contains("P03")) {reorderLvl = 100; reorderQty = 50;}
-                else if (item.ID.Contains("P04")) {reorderLvl = 100; reorderQty = 50;}
-                else if (item.ID.Contains("R00")) {reorderLvl = 50; reorderQty = 20;}
-                else if (item.ID.Contains("S01")) {reorderLvl = 100; reorderQty = 80;}
-                else if (item.ID.Contains("S02")) {reorderLvl = 50; reorderQty = 20;}
-                else if (item.ID.Contains("S04")) {reorderLvl = 50; reorderQty = 20;}
-                else if (item.ID.Contains("S10")) {reorderLvl = 50; reorderQty = 20;}
-                else if (item.ID.Contains("T00")) {reorderLvl = 10; reorderQty = 10;}
+                else if (item.ID.Contains("F03")) { reorderLvl = 200; reorderQty = 150; }
+                else if (item.ID.Contains("H01")) { reorderLvl = 100; reorderQty = 80; }
+                else if (item.ID.Contains("H03")) { reorderLvl = 50; reorderQty = 20; }
+                else if (item.ID.Contains("P01")) { reorderLvl = 100; reorderQty = 60; }
+                else if (item.ID.Contains("P02")) { reorderLvl = 500; reorderQty = 500; }
+                else if (item.ID.Contains("P03")) { reorderLvl = 100; reorderQty = 50; }
+                else if (item.ID.Contains("P04")) { reorderLvl = 100; reorderQty = 50; }
+                else if (item.ID.Contains("R00")) { reorderLvl = 50; reorderQty = 20; }
+                else if (item.ID.Contains("S01")) { reorderLvl = 100; reorderQty = 80; }
+                else if (item.ID.Contains("S02")) { reorderLvl = 50; reorderQty = 20; }
+                else if (item.ID.Contains("S04")) { reorderLvl = 50; reorderQty = 20; }
+                else if (item.ID.Contains("S10")) { reorderLvl = 50; reorderQty = 20; }
+                else if (item.ID.Contains("T00")) { reorderLvl = 10; reorderQty = 10; }
                 else if (item.ID.Contains("T02"))
                 {
-                    if (item.ID == "T021" ) { reorderLvl = 500; reorderQty = 400; }
+                    if (item.ID == "T021") { reorderLvl = 500; reorderQty = 400; }
                     else if (item.ID == "T025") { reorderLvl = 500; reorderQty = 400; }
                     else { reorderLvl = 100; reorderQty = 200; }
                 }
                 else if (item.ID.Contains("T10")) { reorderLvl = 20; reorderQty = 10; }
                 inv.Add(new InventoryItem(reorderLvl * stockLevelMultiplier, 0, reorderLvl, reorderQty, 0, item));
             }
-            foreach(InventoryItem inventoryItem in inv)
+            foreach (InventoryItem inventoryItem in inv)
                 context.InventoryItems.Add(inventoryItem);
             context.SaveChanges();
         }
@@ -393,7 +401,7 @@ namespace SSIMS.Database
         static void InitDocuments(DatabaseContext context)
         {
             Debug.WriteLine("\tInitializing Documents");
-            Staff staff1 = StaffRepository.GetByID(10000);
+            Staff staff1 = StaffRepository.GetByID(10005);
             RequisitionOrder reqform = new RequisitionOrder(staff1);
             reqform.RepliedByStaff = staff1;
             List<DocumentItem> documentItems = new List<DocumentItem>{
@@ -426,5 +434,7 @@ namespace SSIMS.Database
             context.DisbursementLists.Add(disbursementList);
             context.SaveChanges();
         }
+
+      
     }
 }
