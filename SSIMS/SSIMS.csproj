@@ -327,7 +327,6 @@
     <Content Include="Views\PurchaseOrders\Details.cshtml" />
     <Content Include="Views\PurchaseOrders\Edit.cshtml" />
     <Content Include="Views\PurchaseOrders\Index.cshtml" />
-    <Content Include="ViewModels\RequisitionCreateViewModel.cshtml" />
     <Content Include="Views\Requisition\create.cshtml" />
   </ItemGroup>
   <ItemGroup>
