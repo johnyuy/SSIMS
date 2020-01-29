@@ -18,7 +18,7 @@ namespace SSIMS.Database
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Ignore<Document>();
-            base.OnModelCreating(modelBuilder);
+            //base.OnModelCreating(modelBuilder);
         }
 
         public DbSet<AdjustmentVoucher> AdjustmentVouchers { get; set; }
