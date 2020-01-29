@@ -18,17 +18,14 @@ namespace SSIMS.Controllers
 
         private UnitOfWork unitOfWork = new UnitOfWork();
 
-        private static DatabaseContext db1 = new DatabaseContext();
-
-
         // GET: Departments
         public ActionResult Index()
         {
 
             var departments = unitOfWork.DepartmentRepository.Get(includeProperties: "CollectionPoint, DeptHead, DepRep");
-            ViewBag.RepList = unitOfWork.Staf.GetDeptRepList();
-            Debug.WriteLine("number of heads: " + sr.GetDeptHeadList().Count());
-            var Deps  = dr.Get(filter:x=>x.ID!="STOR",includeProperties: "DeptHeadAuthorization.Staff");
+            ViewBag.RepList = unitOfWork.StaffRepository.GetDeptRepList();
+            Debug.WriteLine("number of heads: " + unitOfWork.StaffRepository.GetDeptHeadList().Count());
+            var Deps  = unitOfWork.DepartmentRepository.Get(filter:x=>x.ID!="STOR",includeProperties: "DeptHeadAuthorization.Staff");
             ViewBag.Departments = Deps;
             List<string> authNames = new List<string>();
             foreach(Department d in Deps)
@@ -39,7 +36,7 @@ namespace SSIMS.Controllers
                     authNames.Add(d.DeptHeadAuthorization.Staff.Name);
             }
             ViewBag.Auth = authNames;
-            ViewBag.DeptCount = dr.Get().Count();
+            ViewBag.DeptCount = unitOfWork.DepartmentRepository.Get().Count();
             return View(departments.ToList());
         }
 
@@ -50,7 +47,7 @@ namespace SSIMS.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Department department = db1.Departments.Find(id);
+            Department department = unitOfWork.DepartmentRepository.GetByID(id);
             if (department == null)
             {
                 return HttpNotFound();
@@ -61,9 +58,9 @@ namespace SSIMS.Controllers
         // GET: Departments/Create
         public ActionResult Create()
         {
-            ViewBag.CollectionPointID = new SelectList(db.CollectionPoints, "ID", "Location");
-            ViewBag.DeptHeadID = new SelectList(db.Staffs, "ID", "UserAccountID");
-            ViewBag.DeptRepID = new SelectList(db.Staffs, "ID", "UserAccountID");
+            ViewBag.CollectionPointID = new SelectList(unitOfWork.CollectionPointRepository.Get(), "ID", "Location"); 
+            ViewBag.DeptHeadID = new SelectList(unitOfWork.StaffRepository.Get(), "ID", "UserAccountID");
+            ViewBag.DeptRepID = new SelectList(unitOfWork.StaffRepository.Get(), "ID", "UserAccountID");
             return View();
         }
 
@@ -76,14 +73,14 @@ namespace SSIMS.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Departments.Add(department);
-                db.SaveChanges();
+                unitOfWork.DepartmentRepository.Update(department);
+                unitOfWork.Save();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.CollectionPointID = new SelectList(db.CollectionPoints, "ID", "Location", department.CollectionPoint.ID);
-            ViewBag.DeptHeadID = new SelectList(db.Staffs, "ID", "UserAccountID", department.DeptHead.ID);
-            ViewBag.DeptRepID = new SelectList(db.Staffs, "ID", "UserAccountID", department.DeptRep.ID);
+            ViewBag.CollectionPointID = new SelectList(unitOfWork.CollectionPointRepository.Get(), "ID", "Location", department.CollectionPoint.ID);
+            ViewBag.DeptHeadID = new SelectList(unitOfWork.StaffRepository.Get(), "ID", "UserAccountID", department.DeptHead.ID);
+            ViewBag.DeptRepID = new SelectList(unitOfWork.StaffRepository.Get(), "ID", "UserAccountID", department.DeptRep.ID);
             return View(department);
         }
 
@@ -94,14 +91,14 @@ namespace SSIMS.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Department department = db.Departments.Find(id);
+            Department department = unitOfWork.DepartmentRepository.GetByID(id);
             if (department == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.CollectionPointID = new SelectList(db.CollectionPoints, "ID", "Location", department.CollectionPoint.ID);
-            ViewBag.DeptHeadID = new SelectList(db.Staffs, "ID", "UserAccountID", department.DeptHead.ID);
-            ViewBag.DeptRepID = new SelectList(db.Staffs, "ID", "UserAccountID", department.DeptRep.ID);
+            ViewBag.CollectionPointID = new SelectList(unitOfWork.CollectionPointRepository.Get(), "ID", "Location", department.CollectionPoint.ID);
+            ViewBag.DeptHeadID = new SelectList(unitOfWork.StaffRepository.Get(), "ID", "UserAccountID", department.DeptHead.ID);
+            ViewBag.DeptRepID = new SelectList(unitOfWork.StaffRepository.Get(), "ID", "UserAccountID", department.DeptRep.ID);
             return View(department);
         }
 
@@ -114,13 +111,18 @@ namespace SSIMS.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(department).State = EntityState.Modified;
-                db.SaveChanges();
+                unitOfWork.DepartmentRepository.Update(department);
+                unitOfWork.Save();
                 return RedirectToAction("Index");
+
             }
-            ViewBag.CollectionPointID = new SelectList(db.CollectionPoints, "ID", "Location", department.CollectionPoint.ID);
-            ViewBag.DeptHeadID = new SelectList(db.Staffs, "ID", "UserAccountID", department.DeptHead.ID);
-            ViewBag.DeptRepID = new SelectList(db.Staffs, "ID", "UserAccountID", department.DeptRep.ID);
+            ViewBag.CollectionPointID = new SelectList(unitOfWork.CollectionPointRepository.Get(), "ID", "Location", department.CollectionPoint.ID);
+            ViewBag.DeptHeadID = new SelectList(unitOfWork.StaffRepository.Get(), "ID", "UserAccountID", department.DeptHead.ID);
+            ViewBag.DeptRepID = new SelectList(unitOfWork.StaffRepository.Get(), "ID", "UserAccountID", department.DeptRep.ID);
+
+            //ViewBag.CollectionPointID = new SelectList(unitOfWork.CollectionPointRepository.Get(), "ID", "Location", department.CollectionPoint.ID);
+            //ViewBag.DeptHeadID = new SelectList(unitOfWork.StaffRepository.Get(), "UserAccountID", department.DeptHead.ID);
+            //ViewBag.DeptRepID = new SelectList(unitOfWork.StaffRepository.Get(), "UserAccountID", department.DeptRep.ID);
             return View(department);
         }
 
@@ -131,7 +133,7 @@ namespace SSIMS.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Department department = db.Departments.Find(id);
+            Department department = unitOfWork.DepartmentRepository.GetByID(id);
             if (department == null)
             {
                 return HttpNotFound();
@@ -144,9 +146,9 @@ namespace SSIMS.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(string id)
         {
-            Department department = db.Departments.Find(id);
-            db.Departments.Remove(department);
-            db.SaveChanges();
+            Department department = unitOfWork.DepartmentRepository.GetByID(id);
+            unitOfWork.DepartmentRepository.Delete(department);
+            unitOfWork.Save();
             return RedirectToAction("Index");
         }
 
@@ -154,7 +156,7 @@ namespace SSIMS.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                unitOfWork.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -167,7 +169,7 @@ namespace SSIMS.Controllers
         }*/
 
         //select collection point
-        public ActionResult SelectCollectionPoint(string id)
+       /* public ActionResult SelectCollectionPoint(string id)
         {
             if (id == null)
             {
@@ -194,6 +196,6 @@ namespace SSIMS.Controllers
             }
             ViewBag.CollectionPointID = new SelectList(db.CollectionPoints, "ID", "Location", department.CollectionPoint.ID);
             return View(department);
-        }
+        }*/
     }
 }

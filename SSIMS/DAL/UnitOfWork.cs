@@ -6,8 +6,6 @@ namespace SSIMS.DAL
 {
     public class UnitOfWork : IUnitOfWork
     {
-
-        private bool disposed = false;
         private DatabaseContext context = new DatabaseContext();
         private CollectionPointRepository collectionPointRepository;
         private ItemRepository itemRepository;
@@ -98,6 +96,9 @@ namespace SSIMS.DAL
         {
             context.SaveChanges();
         }
+
+        private bool disposed = false;
+
 
         protected virtual void Dispose(bool disposing)
         {
