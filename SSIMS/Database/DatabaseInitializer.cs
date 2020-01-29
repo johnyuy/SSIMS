@@ -66,17 +66,17 @@ namespace SSIMS.Database
             Debug.WriteLine("\tInitializing Departments");
             List<Department> departments = new List<Department>
             {
-                new Department("ARCH", "Architecture","68901257","68921001"),
-                new Department("ARTS", "Arts","68901226", "68921011"),
-                new Department("COMM", "Commerce","68741284","68921256"),
-                new Department("CPSC", "Computer Science","68901235","68921457"),
-                new Department("ENGG", "Engineering","68901776","68922395"),
-                new Department("ENGL", "English","68742234","68921456"),
-                new Department("MEDI", "Medicine","67848808","68928106"),
-                new Department("REGR", "Registrar","68901266","68921465"),
-                new Department("SCIE", "Science","68907191","68921992"),
-                new Department("ZOOL", "Zoology","68901266","68921465"),
-                new Department("STOR", "Store","","")
+                new Department("ARCH", "Architecture","68901257","68921001", CollectionPointRepository.GetByID(1)),
+                new Department("ARTS", "Arts","68901226", "68921011", CollectionPointRepository.GetByID(1)),
+                new Department("COMM", "Commerce","68741284","68921256", CollectionPointRepository.GetByID(2)),
+                new Department("CPSC", "Computer Science","68901235","68921457", CollectionPointRepository.GetByID(2)),
+                new Department("ENGG", "Engineering","68901776","68922395", CollectionPointRepository.GetByID(3)),
+                new Department("ENGL", "English","68742234","68921456", CollectionPointRepository.GetByID(3)),
+                new Department("MEDI", "Medicine","67848808","68928106", CollectionPointRepository.GetByID(4)),
+                new Department("REGR", "Registrar","68901266","68921465", CollectionPointRepository.GetByID(4)),
+                new Department("SCIE", "Science","68907191","68921992", CollectionPointRepository.GetByID(5)),
+                new Department("ZOOL", "Zoology","68901266","68921465", CollectionPointRepository.GetByID(5)),
+                new Department("STOR", "Store","","",null)
             };
             foreach (Department dept in departments)
                 context.Departments.Add(dept);
