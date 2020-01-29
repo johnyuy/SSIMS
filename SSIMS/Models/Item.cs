@@ -25,5 +25,8 @@ namespace SSIMS.Models
             Description = description;
             UnitOfMeasure = unitOfMeasure;
         }
+
+       
+
     }
 }

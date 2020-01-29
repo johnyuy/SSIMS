@@ -4,14 +4,44 @@ using SSIMS.Database;
 
 namespace SSIMS.DAL
 {
-    public class UnitOfWork : IDisposable
+    public class UnitOfWork : IUnitOfWork
     {
+
+        private bool disposed = false;
         private DatabaseContext context = new DatabaseContext();
         private CollectionPointRepository collectionPointRepository;
         private ItemRepository itemRepository;
         private DepartmentRepository departmentRepository;
         private GenericRepository<InventoryItem> inventoryItemRepository;
+        private PurchaseOrderRepository purchaseOrderRepository;
+        private StaffRepository staffRepository;
 
+
+        public StaffRepository StaffRepository
+        {
+            get
+            {
+
+                if (this.staffRepository == null)
+                {
+                    this.staffRepository = new StaffRepository(context);
+                }
+                return staffRepository;
+            }
+        }
+
+        public PurchaseOrderRepository PurchaseOrderRepository
+        {
+            get
+            {
+
+                if (this.purchaseOrderRepository == null)
+                {
+                    this.purchaseOrderRepository = new PurchaseOrderRepository(context);
+                }
+                return purchaseOrderRepository;
+            }
+        }
 
         public CollectionPointRepository CollectionPointRepository
         {
@@ -69,8 +99,6 @@ namespace SSIMS.DAL
         {
             context.SaveChanges();
         }
-
-        private bool disposed = false;
 
         protected virtual void Dispose(bool disposing)
         {

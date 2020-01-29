@@ -7,18 +7,39 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using SSIMS.Database;
+using SSIMS.DAL;
 using SSIMS.Models;
+using System.Diagnostics;
 
 namespace SSIMS.Controllers
 {
     public class DepartmentsController : Controller
     {
-        private DatabaseContext db = new DatabaseContext();
+
+        private UnitOfWork unitOfWork = new UnitOfWork();
+
+        private static DatabaseContext db1 = new DatabaseContext();
+
 
         // GET: Departments
         public ActionResult Index()
         {
-            var departments = db.Departments.Include(d => d.CollectionPoint).Include(d => d.DeptHead).Include(d => d.DeptRep);
+
+            var departments = unitOfWork.DepartmentRepository.Get(includeProperties: "CollectionPoint, DeptHead, DepRep");
+            ViewBag.RepList = unitOfWork.Staf.GetDeptRepList();
+            Debug.WriteLine("number of heads: " + sr.GetDeptHeadList().Count());
+            var Deps  = dr.Get(filter:x=>x.ID!="STOR",includeProperties: "DeptHeadAuthorization.Staff");
+            ViewBag.Departments = Deps;
+            List<string> authNames = new List<string>();
+            foreach(Department d in Deps)
+            {
+                if (d.DeptHeadAuthorization == null)
+                    authNames.Add("none");
+                else
+                    authNames.Add(d.DeptHeadAuthorization.Staff.Name);
+            }
+            ViewBag.Auth = authNames;
+            ViewBag.DeptCount = dr.Get().Count();
             return View(departments.ToList());
         }
 
@@ -29,7 +50,7 @@ namespace SSIMS.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Department department = db.Departments.Find(id);
+            Department department = db1.Departments.Find(id);
             if (department == null)
             {
                 return HttpNotFound();
@@ -136,6 +157,43 @@ namespace SSIMS.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+/*        //delegate authority
+        public ActionResult DelegateAuthority()
+        {
+            DeptHeadAuthorization deptHead = new DeptHeadAuthorization();
+            return null;
+        }*/
+
+        //select collection point
+        public ActionResult SelectCollectionPoint(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Department department = db.Departments.Find(id);
+            if (department == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.CollectionPointID = new SelectList(db.CollectionPoints, "ID", "Location", department.CollectionPoint.ID);
+            return View(department);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SelectCollectionPoint([Bind(Include = "ID,CollectionPointID,DeptName")] Department department)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Departments.Add(department);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            ViewBag.CollectionPointID = new SelectList(db.CollectionPoints, "ID", "Location", department.CollectionPoint.ID);
+            return View(department);
         }
     }
 }
