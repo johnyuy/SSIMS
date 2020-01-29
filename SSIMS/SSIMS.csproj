@@ -205,7 +205,9 @@
     <Compile Include="Controllers\StaffsController.cs" />
     <Compile Include="DAL\CollectionPointRepository.cs" />
     <Compile Include="DAL\DepartmentRepository.cs" />
+    <Compile Include="DAL\DocumentItemRepository.cs" />
     <Compile Include="DAL\ItemRepository.cs" />
+    <Compile Include="DAL\RequisitionOrderRepository.cs" />
     <Compile Include="DAL\StaffRepository.cs" />
     <Compile Include="DAL\UnitOfWork.cs" />
     <Compile Include="Database\DatabaseContext.cs" />
