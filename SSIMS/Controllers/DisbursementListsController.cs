@@ -135,11 +135,11 @@ namespace SSIMS.Controllers
             base.Dispose(disposing);
         }
 
-        
         public ICollection<TransactionItem> GenerateRetrievalList(List<RequisitionOrder> requisitionOrders)
         {
             ArrayList transItemList = new ArrayList();
             ArrayList docItemsArray = new ArrayList();
+            ICollection<TransactionItem> retrievalList;
             foreach(RequisitionOrder requisition in requisitionOrders)
             {
                 docItemsArray.Add(requisition.DocumentItems.ToArray());
@@ -153,6 +153,13 @@ namespace SSIMS.Controllers
                 transItemList.Add(transactionItem);
             }
 
+            foreach (TransactionItem item in transItemList)
+            {
+                if (item.Item.)
+                {
+
+                }
+            }
 
             return null;
         }
