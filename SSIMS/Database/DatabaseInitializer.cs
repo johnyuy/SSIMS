@@ -36,7 +36,7 @@ namespace SSIMS.Database
             InitUserAccounts(context);
             InitInventoryItems(context);
             InitDocuments(context);
-            AnalyticsTest(context);
+           
             //other initializations copy:    static void Init (DatabaseContext context)
             context.SaveChanges();
             base.Seed(context);
@@ -435,21 +435,6 @@ namespace SSIMS.Database
             context.SaveChanges();
         }
 
-        static void AnalyticsTest(DatabaseContext context)
-        {
-            // get all requisiiton order
-            List<RequisitionOrder> requisitionOrderList = (List<RequisitionOrder>)RequisitionOrderRepository.Get();
-            foreach (RequisitionOrder ro in requisitionOrderList)
-            {
-                Debug.WriteLine(ro.CreatedByStaff.Name);
-                Debug.WriteLine(ro.CreatedByStaff.Department.DeptName);
-                Debug.WriteLine(ro.CreatedDate.ToString("dd/MM/yyyy"));
-                Debug.WriteLine(ro.CreatedDate.ToString("MM"));
-                foreach (DocumentItem di in ro.DocumentItems)
-                {
-                    Debug.WriteLine("\t" + di.Item.ID + " x " + di.Qty);
-                }
-            }
-        }
+      
     }
 }
