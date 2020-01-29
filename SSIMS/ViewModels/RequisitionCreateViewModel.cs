@@ -15,9 +15,6 @@ namespace SSIMS.ViewModels
         [Display(Name = "Unit of Measure")]
         public string UnitOfMeasure { get; set; }
 
-        [Display(Name ="Quantity")]
-        public string Qty { get; set; }
-
         [Required]
         [Display(Name = "Category")]
         public string SelectedCategory { get; set; }
@@ -27,6 +24,5 @@ namespace SSIMS.ViewModels
         [Display(Name = "Description")]
         public string SelectedDescription { get; set; }
         public IEnumerable<SelectListItem> Descriptions { get; set; }
-
     }
 }

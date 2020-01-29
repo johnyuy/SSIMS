@@ -1,4 +1,5 @@
-﻿@model SSIMS.ViewModels.RequisitionCreateViewModel
+﻿
+@model SSIMS.ViewModels.RequisitionCreateViewModel
 @using SSIMS.Models
 
 
@@ -7,35 +8,35 @@
 
 @using (Html.BeginForm())
 {
-    @Html.AntiForgeryToken()
+@Html.AntiForgeryToken()
 
 
 
-    <div class="form-group">
-        @Html.LabelFor(x => x.SelectedCategory, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-5">
-            @Html.DropDownListFor(x => x.SelectedCategory, new SelectList(Model.Categories, "Value", "Text"), htmlAttributes: new { @class = "form-control", @id = "Category" })
-            @Html.ValidationMessageFor(x => x.SelectedCategory, "", new { @class = "text-danger" })
-        </div>
+<div class="form-group">
+    @Html.LabelFor(x => x.SelectedCategory, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-5">
+        @Html.DropDownListFor(x => x.SelectedCategory, new SelectList(Model.Categories, "Value", "Text"), htmlAttributes: new { @class = "form-control", @id = "Category" })
+        @Html.ValidationMessageFor(x => x.SelectedCategory, "", new { @class = "text-danger" })
     </div>
+</div>
 
-    <div class="form-group">
-        @Html.LabelFor(x => x.SelectedDescription, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-5">
-            @Html.DropDownListFor(x => Model.SelectedDescription, new SelectList(Model.Descriptions, "Value", "Text"), htmlAttributes: new { @class = "form-control", @id = "Description" })
-            @Html.ValidationMessageFor(x => x.SelectedDescription, "", new { @class = "text-danger" })
-        </div>
+<div class="form-group">
+    @Html.LabelFor(x => x.SelectedDescription, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-5">
+        @Html.DropDownListFor(x => Model.SelectedDescription, new SelectList(Model.Descriptions, "Value", "Text"), htmlAttributes: new { @class = "form-control", @id = "Description" })
+        @Html.ValidationMessageFor(x => x.SelectedDescription, "", new { @class = "text-danger" })
     </div>
+</div>
 
-    <div class="form-group">
-        <label>Quantity ( Unit of Measure:@Model.) </label>
-        <input type="number" class="qty" id="@Model.Qty" min="0" max="100" value="@Model.Qty" )" />
-    </div>
+<div class="form-group">
+    <label>Quantity ( Unit of Measure:@Model.) </label>
+    <input type="number" class="qty" id="@Model.Qty" min="0" max="100" value="@Model.Qty" )" />
+</div>
 
-    <div class="form-group">
-        <label>Quantity: </label>
-        <input type="number" class="qty" id="@Model.Qty" min="0" max="100" value="@Model.Qty" )" />
-    </div>
+<div class="form-group">
+    <label>Quantity: </label>
+    <input type="number" class="qty" id="@Model.Qty" min="0" max="100" value="@Model.Qty" )" />
+</div>
 
 }
 
