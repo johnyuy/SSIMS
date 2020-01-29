@@ -20,7 +20,7 @@ namespace SSIMS.Models
         public string Email { get; set; }
         public string StaffRole { get; set; }
 
-        public virtual Department Department { get; set; }
+        public Department Department { get; set; }
 
         public Staff()
         {

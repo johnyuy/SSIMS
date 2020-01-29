@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using SSIMS.Database;
 using SSIMS.Models;
 using SSIMS.DAL;
+using System.Collections;
 
 namespace SSIMS.Controllers
 {
@@ -21,6 +22,7 @@ namespace SSIMS.Controllers
         {
             var collectionpoints = unitOfWork.CollectionPointRepository.Get();
             return View(collectionpoints.ToList());
+
         }
 
         // GET: CollectionPoints/Details/5
@@ -49,7 +51,7 @@ namespace SSIMS.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CollectionPointID,Location,Time")] CollectionPoint collectionPoint)
+        public ActionResult Create([Bind(Include = "ID,Location,Time")] CollectionPoint collectionPoint)
         {
             if (ModelState.IsValid)
             {
@@ -81,7 +83,7 @@ namespace SSIMS.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "CollectionPointID,Location,Time")] CollectionPoint collectionPoint)
+        public ActionResult Edit([Bind(Include = "ID,Location,Time")] CollectionPoint collectionPoint)
         {
             if (ModelState.IsValid)
             {
