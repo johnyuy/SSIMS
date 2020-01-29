@@ -155,7 +155,7 @@ namespace SSIMS.Controllers
 
             foreach (TransactionItem item in transItemList)
             {
-                if (item.Item.)
+                //if (item.Item.)
                 {
 
                 }
