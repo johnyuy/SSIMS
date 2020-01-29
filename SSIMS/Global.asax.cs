@@ -18,7 +18,7 @@ namespace SSIMS
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            DatabaseContext db = new DatabaseContext();
+            //DatabaseContext db = new DatabaseContext();
             //db.Database.Initialize(force: true);
             
             

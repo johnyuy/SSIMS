@@ -16,6 +16,7 @@ namespace SSIMS.Models
             Department = department;
         }
 
+        public DisbursementList() : base() { }
         public Boolean UpdateInventoryItem()
         {
             Console.WriteLine("UpdateInventoryItem()");

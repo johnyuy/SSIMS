@@ -19,7 +19,7 @@ namespace SSIMS.Controllers
             DatabaseContext context = new DatabaseContext();
             RequisitionOrderRepository = new RequisitionOrderRepository(context);
             // get all requisition order
-            List<RequisitionOrder> requisitionOrderList = (List<RequisitionOrder>)RequisitionOrderRepository.Get(includeProperties:"CreatedByStaff.Department");
+            List<RequisitionOrder> requisitionOrderList = (List<RequisitionOrder>)RequisitionOrderRepository.Get(includeProperties:"CreatedByStaff.Department,DocumentItems.Item");
             foreach (RequisitionOrder ro in requisitionOrderList)
             {
                 Debug.WriteLine(ro.CreatedByStaff.Name);
@@ -28,7 +28,7 @@ namespace SSIMS.Controllers
                 Debug.WriteLine(ro.CreatedDate.ToString("MM"));
                 foreach (DocumentItem di in ro.DocumentItems)
                 {
-                    //Debug.WriteLine("\t" + di.Item.ID + " x " + di.Qty);
+                    Debug.WriteLine("\t" + di.Item.ID + " x " + di.Qty);
                 }
             }
 
