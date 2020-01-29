@@ -9,17 +9,29 @@ using System.Web;
 using System.Web.Mvc;
 using SSIMS.Database;
 using SSIMS.Models;
+using SSIMS.Service;
+using SSIMS.DAL;
 
 namespace SSIMS.Controllers
 {
     public class DisbursementListsController : Controller
     {
         private DatabaseContext db = new DatabaseContext();
+        private DisbursementService ds = new DisbursementService();
 
         // GET: DisbursementLists
         public ActionResult Index()
         {
             var disbursementLists = db.DisbursementLists.Include(d => d.CreatedByStaff).Include(d => d.RepliedByStaff);
+
+            //my code for testing
+            ds.GenerateDeptRetrievalList("");
+            if (disbursementLists == null)
+            {
+                return HttpNotFound();
+            }
+
+
             return View(disbursementLists.ToList());
         }
 
@@ -135,33 +147,6 @@ namespace SSIMS.Controllers
             base.Dispose(disposing);
         }
 
-        public ICollection<TransactionItem> GenerateRetrievalList(List<RequisitionOrder> requisitionOrders)
-        {
-            ArrayList transItemList = new ArrayList();
-            ArrayList docItemsArray = new ArrayList();
-            ICollection<TransactionItem> retrievalList;
-            foreach(RequisitionOrder requisition in requisitionOrders)
-            {
-                docItemsArray.Add(requisition.DocumentItems.ToArray());
-            }
-
-            foreach (DocumentItem doc in docItemsArray)
-            {
-                Item item = doc.Item;
-                int qty = doc.Qty;
-                TransactionItem transactionItem = new TransactionItem(qty, qty, null, item);
-                transItemList.Add(transactionItem);
-            }
-
-            foreach (TransactionItem item in transItemList)
-            {
-                //if (item.Item.)
-                {
-
-                }
-            }
-
-            return null;
-        }
+       
     }
 }
