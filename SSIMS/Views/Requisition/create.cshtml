@@ -1,0 +1,71 @@
+﻿@model SSIMS.ViewModels.RequisitionCreateViewModel
+@using SSIMS.Models
+
+
+<h2>Create Requisition</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+
+
+    <div class="form-group">
+        @Html.LabelFor(x => x.SelectedCategory, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-5">
+            @Html.DropDownListFor(x => x.SelectedCategory, new SelectList(Model.Categories, "Value", "Text"), htmlAttributes: new { @class = "form-control", @id = "Category" })
+            @Html.ValidationMessageFor(x => x.SelectedCategory, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(x => x.SelectedDescription, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-5">
+            @Html.DropDownListFor(x => Model.SelectedDescription, new SelectList(Model.Descriptions, "Value", "Text"), htmlAttributes: new { @class = "form-control", @id = "Description" })
+            @Html.ValidationMessageFor(x => x.SelectedDescription, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Quantity ( Unit of Measure:@Model.) </label>
+        <input type="number" class="qty" id="@Model.Qty" min="0" max="100" value="@Model.Qty" )" />
+    </div>
+
+    <div class="form-group">
+        <label>Quantity: </label>
+        <input type="number" class="qty" id="@Model.Qty" min="0" max="100" value="@Model.Qty" )" />
+    </div>
+
+}
+
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+            $('#Category').change(function () {
+                var selectedCategory = $("#Category").val();
+                var descriptionSelect = $('#Description');
+                descriptionSelect.empty();
+                if ( selectedCategory != null &&  selectedCategory != '') {
+                    $.getJSON('@Url.Action("GetDescription")', { category:  selectedCategory }, function (descriptions) {
+                        if (descriptions != null && !jQuery.isEmptyObject(descriptions))
+                        {
+                            descriptionSelect.append($('<option/>', {
+                                value: null,
+                                text: ""
+                            }));
+                            $.each(descriptions, function (index, description) {
+                                descriptionSelect.append($('<option/>', {
+                                    value: description.Value,
+                                    text: description.Text
+                                }));
+                            });
+                        };
+                    });
+                }
+            });
+    </script>
+}

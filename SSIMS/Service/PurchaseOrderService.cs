@@ -9,48 +9,16 @@ using SSIMS.DAL;
 
 namespace SSIMS.Service
 {
-    public class PurchaseOrderService : IDisposable
+    public class PurchaseOrderService : UnitOfWork, IPurchaseOrderService
     {
-        private DatabaseContext context = new DatabaseContext();
-        private PurchaseOrderRepository purchaseOrderRepository;
+        private UnitOfWork unitOfWork = new UnitOfWork();
 
 
-        public PurchaseOrderRepository ItemRepository
-        {
-            get
-            {
 
-                if (this.purchaseOrderRepository == null)
-                {
-                    this.purchaseOrderRepository = new PurchaseOrderRepository(context);
-                }
-                return purchaseOrderRepository;
-            }
-        }
 
-        public void Save()
-        {
-            context.SaveChanges();
-        }
 
-        private bool disposed = false;
 
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!this.disposed)
-            {
-                if (disposing)
-                {
-                    context.Dispose();
-                }
-            }
-            this.disposed = true;
-        }
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
+
     }
 }

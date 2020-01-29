@@ -12,6 +12,10 @@ namespace SSIMS.Models
         public Supplier Supplier { get; set; }
         public virtual ICollection<PurchaseItem> PurchaseItems { get; set; }
 
+        public PurchaseOrder() : base()
+        {
+        }
+
         public PurchaseOrder(Staff creator, Supplier supplier, DateTime expectedDeliveryDate) : base(creator)
         {
             Supplier = supplier;
