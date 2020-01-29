@@ -3,8 +3,8 @@
 @{
     ViewBag.Title = "Index";
     List<Department> departments = ViewBag.Departments;
-    List<string> heads = ViewBag.HeadList;
-    List<string> reps = ViewBag.RepList;
+    List<Staff> heads = ViewBag.HeadList;
+    List<Staff> reps = ViewBag.RepList;
     List<string> auths = ViewBag.Auth;
     int count = ViewBag.DeptCount;
 }
@@ -46,10 +46,10 @@
            @departments[i].DeptName
         </td>
         <td>
-            @heads[i]
+            @heads[i].Name
         </td>
         <td>
-            @reps[i]
+            @reps[i].Name
         </td>
         <td>
             @auths[i]

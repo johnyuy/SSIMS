@@ -16,13 +16,14 @@ namespace SSIMS.Controllers
     public class DepartmentsController : Controller
     {
 
-        private UnitOfWork unitOfWork = new UnitOfWork();
+        
+
 
         // GET: Departments
         public ActionResult Index()
         {
-
-            var departments = unitOfWork.DepartmentRepository.Get(includeProperties: "CollectionPoint, DeptHead, DepRep");
+            UnitOfWork unitOfWork = new UnitOfWork();
+            var departments = unitOfWork.DepartmentRepository.Get(includeProperties: "CollectionPoint");
             ViewBag.RepList = unitOfWork.StaffRepository.GetDeptRepList();
             Debug.WriteLine("number of heads: " + unitOfWork.StaffRepository.GetDeptHeadList().Count());
             var Deps  = unitOfWork.DepartmentRepository.Get(filter:x=>x.ID!="STOR",includeProperties: "DeptHeadAuthorization.Staff");
@@ -35,6 +36,8 @@ namespace SSIMS.Controllers
                 else
                     authNames.Add(d.DeptHeadAuthorization.Staff.Name);
             }
+            ViewBag.HeadList = unitOfWork.StaffRepository.Get(filter:x=>x.StaffRole == "DeptHead");
+            ViewBag.RepList = unitOfWork.StaffRepository.Get(filter: x => x.StaffRole == "DeptRep");
             ViewBag.Auth = authNames;
             ViewBag.DeptCount = unitOfWork.DepartmentRepository.Get().Count();
             return View(departments.ToList());
@@ -43,6 +46,7 @@ namespace SSIMS.Controllers
         // GET: Departments/Details/5
         public ActionResult Details(string id)
         {
+            UnitOfWork unitOfWork = new UnitOfWork();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -58,6 +62,7 @@ namespace SSIMS.Controllers
         // GET: Departments/Create
         public ActionResult Create()
         {
+            UnitOfWork unitOfWork = new UnitOfWork();
             ViewBag.CollectionPointID = new SelectList(unitOfWork.CollectionPointRepository.Get(), "ID", "Location"); 
             ViewBag.DeptHeadID = new SelectList(unitOfWork.StaffRepository.Get(), "ID", "UserAccountID");
             ViewBag.DeptRepID = new SelectList(unitOfWork.StaffRepository.Get(), "ID", "UserAccountID");
@@ -71,6 +76,7 @@ namespace SSIMS.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ID,DeptRepID,DeptHeadID,CollectionPointID,DeptHeadAutorizationID,DeptName,PhoneNumber,FaxNumber")] Department department)
         {
+            UnitOfWork unitOfWork = new UnitOfWork();
             if (ModelState.IsValid)
             {
                 unitOfWork.DepartmentRepository.Update(department);
@@ -87,6 +93,7 @@ namespace SSIMS.Controllers
         // GET: Departments/Edit/5
         public ActionResult Edit(string id)
         {
+            UnitOfWork unitOfWork = new UnitOfWork();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -109,6 +116,7 @@ namespace SSIMS.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ID,DeptRepID,DeptHeadID,CollectionPointID,DeptHeadAutorizationID,DeptName,PhoneNumber,FaxNumber")] Department department)
         {
+            UnitOfWork unitOfWork = new UnitOfWork();
             if (ModelState.IsValid)
             {
                 unitOfWork.DepartmentRepository.Update(department);
@@ -129,6 +137,7 @@ namespace SSIMS.Controllers
         // GET: Departments/Delete/5
         public ActionResult Delete(string id)
         {
+            UnitOfWork unitOfWork = new UnitOfWork();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -146,6 +155,7 @@ namespace SSIMS.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(string id)
         {
+            UnitOfWork unitOfWork = new UnitOfWork();
             Department department = unitOfWork.DepartmentRepository.GetByID(id);
             unitOfWork.DepartmentRepository.Delete(department);
             unitOfWork.Save();
@@ -154,6 +164,7 @@ namespace SSIMS.Controllers
 
         protected override void Dispose(bool disposing)
         {
+            UnitOfWork unitOfWork = new UnitOfWork();
             if (disposing)
             {
                 unitOfWork.Dispose();
