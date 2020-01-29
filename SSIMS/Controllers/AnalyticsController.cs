@@ -19,7 +19,7 @@ namespace SSIMS.Controllers
             DatabaseContext context = new DatabaseContext();
             RequisitionOrderRepository = new RequisitionOrderRepository(context);
             // get all requisition order
-            List<RequisitionOrder> requisitionOrderList = (List<RequisitionOrder>)RequisitionOrderRepository.Get(includeProperties:"CreatedByStaff");
+            List<RequisitionOrder> requisitionOrderList = (List<RequisitionOrder>)RequisitionOrderRepository.Get(includeProperties:"CreatedByStaff.Department");
             foreach (RequisitionOrder ro in requisitionOrderList)
             {
                 Debug.WriteLine(ro.CreatedByStaff.Name);

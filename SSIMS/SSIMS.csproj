@@ -308,10 +308,10 @@
     <Content Include="Views\DisbursementLists\Details.cshtml" />
     <Content Include="Views\DisbursementLists\Edit.cshtml" />
     <Content Include="Views\DisbursementLists\Index.cshtml" />
+    <Content Include="Views\Analytics\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Analytics\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
