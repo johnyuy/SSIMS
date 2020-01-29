@@ -27,7 +27,7 @@ namespace SSIMS.Controllers
             if (!String.IsNullOrEmpty(searchString))
             {
                 items = items.Where(i => i.Description.ToUpper().Contains(searchString.ToUpper())
-                                       || i.Category.ToUpper().Contains(searchString.ToUpper()) 
+                                       || i.Category.ToUpper().Contains(searchString.ToUpper())
                                        || i.Category.ToUpper().Contains(searchString.ToUpper()));
             }
 
@@ -76,7 +76,7 @@ namespace SSIMS.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ItemID,Category,Description,UnitOfMeasure")] Item item)
+        public ActionResult Create([Bind(Include = "ID,Category,Description,UnitOfMeasure")] Item item)
         {
             if (ModelState.IsValid)
             {
@@ -108,7 +108,7 @@ namespace SSIMS.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ItemID,Category,Description,UnitOfMeasure")] Item item)
+        public ActionResult Edit([Bind(Include = "ID,Category,Description,UnitOfMeasure")] Item item)
         {
             if (ModelState.IsValid)
             {
