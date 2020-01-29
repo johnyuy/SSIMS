@@ -9,16 +9,10 @@ namespace SSIMS.Models
     public class Department
     {
         public string ID { get; set; }
-        public int? DeptRepID { get; set; }
-        public int? DeptHeadID { get; set; }
-        public int? CollectionPointID { get; set; }
-        public int? DeptHeadAutorizationID { get; set; }
         public string DeptName { get; set; }
 
-        [ForeignKey("DeptRepID")]
         public Staff DeptRep { get; set; }
 
-        [ForeignKey("DeptHeadID")]
         public Staff DeptHead { get; set; }
         public string PhoneNumber { get; set; }
         public string FaxNumber { get; set; }

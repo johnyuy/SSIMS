@@ -11,7 +11,7 @@ namespace SSIMS.Models
         {
 
         }
-
+        public RequisitionOrder() : base() { }
         public Boolean UpdateRetrivalList()
         {
             Console.WriteLine("UpdateRetrivalList()");

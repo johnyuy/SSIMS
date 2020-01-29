@@ -22,10 +22,8 @@ namespace SSIMS.Models
         {
         }
 
-        public DocumentItem(int itemID, int documentID, int qty, Item item, Document document)
+        public DocumentItem( int qty, Item item, Document document)
         {
-            //ItemID = itemID;
-            //DocumentID = documentID;
             Qty = qty;
             Item = item;
             Document = document;
