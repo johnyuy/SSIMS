@@ -6,13 +6,92 @@
     <title>Logic Stationery</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        #topnav {
+
+        }
+
+        #logicuicon {
+            width: 80px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            margin-left: 40px;
+            margin-right: 20px;
+            float: left;
+        }
+
+        #header {
+            color: whitesmoke;
+            margin-left: 80px;
+            margin-right: 50px;
+            margin-bottom: 10px;
+            float: left;
+        }
+        .sidebar {
+            height: 100%;
+            width: 200px;
+            position:fixed;
+            z-index: 0;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            padding-top: 86px;
+        }
+
+        .sidebar a {
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
+            font-size: 20px;
+            color: #818181;
+            display: block;
+        }
+        .sidebar a.active {
+            background-color: #4CAF50;
+            color: white;
+}
+        
+        .sidebar a:hover:not(.active) {
+            background-color: #555;
+            color: white;
+        }
+        .body-content{
+            padding-top:40px;
+        }
+
+    </style>
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <img src=@Url.Content("~/Resources/LogicUIcon.png") style="width:80px;margin-top:5px;margin-bottom:10px;margin-left:40px;margin-right:20px;float:left" />
-        <h1 style="color:whitesmoke;margin-left:80px;margin-right:50px;float:left">@ViewBag.Title</h1>
+    <div id="topnav" class="navbar navbar-inverse navbar-fixed-top">
+        <img src=@Url.Content("~/Resources/LogicUIcon.png") id="logicuicon" />
+        <h1 id="header">@ViewBag.Title</h1>
+    </div>
+    <div class="sidebar">
+        @if (ViewBag.Title == "Home Page")
+        {<a class="active" href="~/"><i class="fa fa-fw fa-home"></i> Home</a>}
+        else
+        {<a href="~/"><i class="fa fa-fw fa-home"></i> home</a>}
+        @if (ViewBag.Title == "Store Inventory")
+        {<a class="active" href="~/inventory"><i class="fa fa-fw fa-wrench"></i> Inventory</a>}
+        else
+        {<a href="~/inventory"><i class="fa fa-fw fa-wrench"></i> Inventory</a>}
+        @if (ViewBag.Title == "Departments")
+        {<a class="active" href="~/departments"><i class="fa fa-fw fa-user"></i> Departments</a>}
+        else
+        {<a href="~/departments"><i class="fa fa-fw fa-user"></i> Departments</a>}
+        @if (ViewBag.Title == "Requistions")
+        {<a class="active" href="~/requisition"> Requisitions</a>}
+        else
+        {<a href="~/requisition"> Requisitions</a>}
+        @if (ViewBag.Title == "Items")
+        {<a class="active" href="~/items">Items</a>}
+        else
+        {<a href="~/items">Items</a>}
+        <a href="#logout"><i class="fa fa-fw fa-external-link"></i> Logout</a>
     </div>
     <div class="container body-content">
+        
         @RenderBody()
         <hr />
         <footer>
