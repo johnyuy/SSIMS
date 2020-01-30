@@ -15,7 +15,8 @@ namespace SSIMS.Service
     {
         static DatabaseContext context = new DatabaseContext();
         static RequisitionOrderRepository ROrepo = new RequisitionOrderRepository(context);
-        public List<TransactionItem> GenerateDeptRetrievalList(string dept)
+        static DepartmentRepository deptRepo = new DepartmentRepository(context);
+        public List<TransactionItem> GenerateDeptRetrievalList(string deptID)
         {
             //requisitionOrders are approved
             
@@ -25,12 +26,18 @@ namespace SSIMS.Service
 
             //retrieve all RO with status approved
             List<RequisitionOrder> ROList = new List<RequisitionOrder>();
-            var approvedRO = ROrepo.Get(includeProperties:"DocumentItems.Item" ,filter: x => x.Status.ToString() == "Approved");
+            var approvedRO = ROrepo.Get(includeProperties:"DocumentItems.Item,CreatedByStaff.Department" ,filter: x => x.Status.ToString() == "Approved");
 
             foreach(RequisitionOrder RO in approvedRO)
             {
                 Debug.WriteLine("RO ID: " + RO.ID);
-                ROList.Add(RO);
+                string deptRO = RO.CreatedByStaff.Department.ID;
+                Debug.WriteLine("RO is from dept: " + deptRO);
+                if (deptRO.Equals(deptID))
+                {
+                    ROList.Add(RO);
+                }
+
                 Debug.WriteLine("Number of elements in ROList: " + ROList.Count);
             }
 
@@ -86,38 +93,69 @@ namespace SSIMS.Service
                 }
             }
 
-
-
-
-
-
-
-
             foreach (TransactionItem item in transItemList)
             {
                 Debug.WriteLine("TransItem List: " + item.Item.Description + " " + item.HandOverQty);
             }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             return transItemList;
         }
+
+
+        public List<TransactionItem> GenerateCombinedRetrievalList()
+        {
+            List<TransactionItem> combinedRetrievalList = new List<TransactionItem>();
+            List<TransactionItem> tempTransItems = new List<TransactionItem>();
+            var deptList = deptRepo.Get();
+            foreach(Department dept in deptList)
+            {
+                List<TransactionItem>deptRetrievalList = GenerateDeptRetrievalList(dept.ID);
+                if(combinedRetrievalList.Count == 0 && deptRetrievalList.Count > 0)
+                {
+                    foreach(TransactionItem item in deptRetrievalList)
+                    {
+                        tempTransItems.Add(item);
+                        Debug.WriteLine("GenerateCombinedRetrievalList temptransItems contains: " + tempTransItems.Count);
+                    }
+                }
+                
+
+                foreach(TransactionItem transItem in deptRetrievalList)
+                {
+                    bool isExist = false;
+                    TransactionItem temp;
+                    int index = 0;
+                    for (int i = 0; i < combinedRetrievalList.Count; i++)
+                    {
+                        temp = combinedRetrievalList[i];
+                        if (temp.Item.ID.Equals(transItem.Item.ID))
+                        {
+                            isExist = true;
+                            index = i;
+                            break;
+                        }
+
+                    }
+                    if (isExist)
+                    {
+                        combinedRetrievalList[index].HandOverQty += transItem.HandOverQty;
+                        combinedRetrievalList[index].TakeOverQty += transItem.TakeOverQty;
+                    }
+                    else
+                    {
+                        combinedRetrievalList.Add(transItem);
+                    }
+                }
+            }
+            foreach(TransactionItem item in combinedRetrievalList)
+            {
+                Debug.WriteLine("Combined Retrieval List contains: " + item.Item.Description + " " + item.HandOverQty);
+            }
+            return combinedRetrievalList;
+        }
+        
+        
+        
+        //public List<TransactionItem> ViewRetrievalList()
+       
     }
 }
