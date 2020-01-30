@@ -220,6 +220,7 @@
     <Compile Include="DAL\IUnitOfWork.cs" />
     <Compile Include="DAL\PurchaseOrderRepository.cs" />
     <Compile Include="DAL\RequisitionOrderRepository.cs" />
+    <Compile Include="DAL\RetrievalListRepository.cs" />
     <Compile Include="DAL\StaffRepository.cs" />
     <Compile Include="DAL\UnitOfWork.cs" />
     <Compile Include="Database\DatabaseContext.cs" />
