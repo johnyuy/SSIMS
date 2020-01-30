@@ -1,0 +1,61 @@
+﻿@model IEnumerable<SSIMS.ViewModels.RequisitionCreateViewModel>
+
+@{
+    ViewBag.Title = "View";
+}
+
+<h2>View Requisition List</h2>
+
+<
+
+
+<table class="table">
+    <tr>
+
+        <th>
+            @Html.DisplayNameFor(model => model.SelectedDescription)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.SelectedCategory)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+
+
+        <th></th>
+    </tr>
+
+    @foreach (var rcvm in Model)
+    {
+        <tr>
+
+            <td>
+                @Html.DisplayFor(modelItem => rcvm.SelectedDescription)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => rcvm.Quantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => rcvm.CreatedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => rcvm.Status)
+            </td>
+
+            <td>
+                @*@@Html.ActionLink("Edit", "Edit", new { id = }) |
+                    @Html.ActionLink("Details", "Details", new { id = }) |
+                    @Html.ActionLink("Delete", "Delete", new { id =  })*@
+            </td>
+        </tr>
+    }
+
+</table>

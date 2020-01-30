@@ -329,6 +329,7 @@
     <Content Include="Views\PurchaseOrders\Edit.cshtml" />
     <Content Include="Views\PurchaseOrders\Index.cshtml" />
     <Content Include="Views\Requisition\Create.cshtml" />
+    <Content Include="Views\Requisition\View.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

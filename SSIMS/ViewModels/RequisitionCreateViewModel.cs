@@ -7,6 +7,11 @@ using System.Web.Mvc;
 
 namespace SSIMS.ViewModels
 {
+    public enum Status
+    {
+        Pending, Approved, Cancelled, Rejected, Completed, InProgress
+    }
+
     public class RequisitionCreateViewModel
     {
         [Display(Name = "Item Number")]
@@ -15,8 +20,17 @@ namespace SSIMS.ViewModels
         [Display(Name = "Unit of Measure")]
         public string UnitOfMeasure { get; set; }
 
+        [Range(1,100)]
         [Display(Name ="Quantity")]
-        public string Quantity { get; set; }
+        public int Quantity { get; set; }
+
+        [Display(Name ="Create Date")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
+        public DateTime CreatedDate { get; set; }// one day one requisitionOrder
+
+        public Status Status { get; set; }
+
+       
 
         [Required]
         [Display(Name = "Category")]
