@@ -394,7 +394,12 @@ namespace SSIMS.Database
                 inv.Add(new InventoryItem(reorderLvl * stockLevelMultiplier, 0, reorderLvl, reorderQty, 0, item));
             }
             foreach (InventoryItem inventoryItem in inv)
+            {
+                if (inventoryItem.Item.ID.Contains("3"))
+                    inventoryItem.InStoreQty /= 5;
                 context.InventoryItems.Add(inventoryItem);
+            }
+                
             context.SaveChanges();
         }
 

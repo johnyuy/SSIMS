@@ -255,6 +255,7 @@
     <Compile Include="Service\PurchaseOrderService.cs" />
     <Compile Include="Service\StaffService.cs" />
     <Compile Include="Service\DisbursementService.cs" />
+    <Compile Include="ViewModels\InventoryViewModel.cs" />
     <Compile Include="ViewModels\RequisitionCreateViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

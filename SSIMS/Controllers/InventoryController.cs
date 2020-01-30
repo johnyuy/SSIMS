@@ -4,10 +4,13 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Diagnostics;
 using System.Web;
 using System.Web.Mvc;
+using SSIMS.DAL;
 using SSIMS.Database;
 using SSIMS.Models;
+using SSIMS.ViewModels;
 
 namespace SSIMS.Controllers
 {
@@ -16,10 +19,14 @@ namespace SSIMS.Controllers
         private DatabaseContext db = new DatabaseContext();
 
         // GET: Inventory
-        public ActionResult Index()
+        public ActionResult Index(string searchString, string lowStock)
         {
-            var inventoryItems = db.InventoryItems.Include(i => i.Item);
-            return View(inventoryItems.ToList());
+            Debug.WriteLine("searchString = " + searchString + "\nlowStock = " + lowStock);
+            bool low = lowStock == "true" ? true : false;
+            InventoryViewModel inventoryViewModel =  new InventoryViewModel(searchString, low);
+            ViewBag.LowStock = lowStock;
+            ViewBag.SearchString = searchString;
+            return View(inventoryViewModel.inventoryItems.ToList());
         }
 
         // GET: Inventory/Details/5

@@ -4,6 +4,132 @@
     ViewBag.Header = "Store Inventory";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<style>
+    .switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 18px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 15px;
+    width: 15px;
+    left: 0px;
+    bottom: 1px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: maroon;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px maroon;
+}
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+</style>
+<script>
+    
+    function lowstockfilter() {
+        var x = document.getElementById('lowstocktoggle');
+        var searchstr = document.getElementById('searchString').value;
+        if (x.checked == true) {
+            post('/inventory/index', { 'searchString': searchstr, 'lowStock':'false' });
+        } else {
+            post('/inventory/index', { 'searchString': searchstr, 'lowStock':'true' });
+        }
+    }
+    function search() {
+        var x = document.getElementById('lowstocktoggle');
+        var searchstr = document.getElementById('searchString').value;
+        if (x.checked == false) {
+            post('/inventory/index', { 'searchString': searchstr, 'lowStock':'false' });
+        } else {
+            post('/inventory/index', { 'searchString': searchstr, 'lowStock':'true' });
+        }
+    }
+    function post(path, params, method='post') {
+      const form = document.createElement('form');
+      form.method = method;
+      form.action = path;
+
+      for (const key in params) {
+        if (params.hasOwnProperty(key)) {
+          const hiddenField = document.createElement('input');
+          hiddenField.type = 'hidden';
+          hiddenField.name = key;
+          hiddenField.value = params[key];
+          form.appendChild(hiddenField);
+        }
+      }
+      document.body.appendChild(form);
+      form.submit();
+    }
+</script>
+
+<div>
+    <div style="float:left">
+        @if (ViewBag.LowStock == "true")
+        {
+            <label class="switch">
+                <input id="lowstocktoggle" type="checkbox" checked>
+                <span class="slider round" onclick="lowstockfilter()"></span>
+            </label>
+        }
+        else
+        {
+            <label class="switch">
+                <input id="lowstocktoggle" type="checkbox" unchecked>
+                <span class="slider round" onclick="lowstockfilter()"></span>
+            </label>
+        }
+        <span style="margin-left:10px">Low Stock Only</span>
+    </div>
+    <div style="float:right">
+        @Html.TextBox("searchString")
+        <input type="submit" value="search" onclick="search()" />
+    </div>
+
+
+
+</div>
 <table class="table">
     <tr>
         <th>
@@ -24,31 +150,39 @@
         <th>
             @Html.DisplayNameFor(model => model.InTransitQty)
         </th>
-        
+
     </tr>
 
-@foreach (var item in Model) {
-<tr>
-    <td>
-        @Html.DisplayFor(modelItem => item.Item.ID)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Item.Category)
-    </td>
-    <td>
-        @Html.ActionLink((string)item.Item.Description, "Details", new { id = item.ID })
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Item.UnitOfMeasure)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.InStoreQty)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.InTransitQty)
-    </td>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Item.ID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Item.Category)
+            </td>
+            <td>
+                @Html.ActionLink((string)item.Item.Description, "Details", new { id = item.ID })
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Item.UnitOfMeasure)
+            </td>
+            
+            <td>
+                @if (item.InStoreQty < item.ReorderLvl)
+                {
+                    <span style="color:maroon"><b>@item.InStoreQty</b></span>
+                } else
+                {
+                    @item.InStoreQty;
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InTransitQty)
+            </td>
 
-</tr>
-}
+        </tr>
+    }
 
 </table>
