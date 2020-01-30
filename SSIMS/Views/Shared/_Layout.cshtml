@@ -80,26 +80,26 @@
 <body>
     <div id="topnav" class="navbar navbar-inverse navbar-fixed-top">
         <img src=@Url.Content("~/Resources/LogicUIcon.png") id="logicuicon" />
-        <h1 id="header">@ViewBag.Title</h1>
+        <h1 id="header">@ViewBag.Header</h1>
     </div>
     <div class="sidebar">
-        @if (ViewBag.Title == "Home Page")
-        {<a class="active" href="~/"><i class="fa fa-fw fa-home"></i>Home</a>}
+        @if (ViewBag.Header == "Home")
+        {<a class="active" href="~/"><i class="fa fa-fw fa-home"></i> Home</a>}
         else
-        {<a href="~/"><i class="fa fa-fw fa-home"></i>Home</a>}
-        @if (ViewBag.Title == "Store Inventory")
-        {<a class="active" href="~/inventory"><i class="fa fa-fw fa-wrench"></i>Inventory</a>}
+        {<a href="~/"><i class="fa fa-fw fa-home"></i> Home</a>}
+        @if (ViewBag.Header == "Store Inventory")
+        {<a class="active" href="~/inventory"><i class="fa fa-fw fa-wrench"></i> Inventory</a>}
         else
         {<a href="~/inventory"><i class="fa fa-fw fa-wrench"></i> Inventory</a>}
-        @if (ViewBag.Title == "Departments")
-        {<a class="active" href="~/departments"><i class="fa fa-fw fa-user"></i>Departments</a>}
+        @if (ViewBag.Header == "Departments")
+        {<a class="active" href="~/departments"><i class="fa fa-fw fa-user"></i> Departments</a>}
         else
-        {<a href="~/departments"><i class="fa fa-fw fa-user"></i>Departments</a>}
-        @if (ViewBag.Title == "Requistions")
+        {<a href="~/departments"><i class="fa fa-fw fa-user"></i> Departments</a>}
+        @if (ViewBag.Header == "Requistions")
         {<a class="active" href="~/requisition">Requisitions</a>}
         else
         {<a href="~/requisition"> Requisitions</a>}
-        @if (ViewBag.Title == "Items")
+        @if (ViewBag.Header == "Items")
         {<a class="active" href="~/items">Items</a>}
         else
         {<a href="~/items">Items</a>}
