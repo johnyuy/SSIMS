@@ -9,16 +9,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
         #topnav {
-
+           height:80px;
+           background: linear-gradient(to right, #1a4a4a 0%, #ccffff 119%);
+           border:none;
         }
 
         #logicuicon {
-            width: 80px;
+            width: 90px;
             margin-top: 5px;
             margin-bottom: 10px;
-            margin-left: 40px;
+            margin-left: 60px;
             margin-right: 20px;
-            float: left;
+            position:fixed;
         }
 
         #header {
@@ -26,7 +28,8 @@
             margin-left: 80px;
             margin-right: 50px;
             margin-bottom: 10px;
-            float: left;
+            position: relative;
+            left: 150px;
         }
         .sidebar {
             height: 100%;
@@ -35,29 +38,41 @@
             z-index: 0;
             top: 0;
             left: 0;
-            background-color: #111;
+            background: linear-gradient(to right, #1a4a4a 0%, #2F5F5F 100%);
             overflow-x: hidden;
-            padding-top: 86px;
+            padding-top: 80px;
         }
 
         .sidebar a {
-            padding: 6px 8px 6px 16px;
+            padding: 14px 8px 10px 16px;
             text-decoration: none;
-            font-size: 20px;
-            color: #818181;
+            font-size: 15px;
+            height: 50px;
+            text-align: center;
+            color: lightgray;
             display: block;
         }
+
         .sidebar a.active {
-            background-color: #4CAF50;
-            color: white;
-}
-        
-        .sidebar a:hover:not(.active) {
-            background-color: #555;
-            color: white;
+            padding: 12px 8px 10px 16px;
+            background-color: #FFFFFF;
+            font-size: 18px;
+            color: black;
+            border-top-left-radius: 25px;
+            border-bottom-left-radius: 25px;
         }
-        .body-content{
-            padding-top:40px;
+
+        .sidebar a:hover:not(.active) {
+            background-color: #4F8080;
+            color: whitesmoke;
+            border-top-left-radius: 25px;
+            border-bottom-left-radius: 25px;
+        }
+
+        .body-content {
+            padding-top: 40px;
+            position: fixed;
+            left: 200px;
         }
 
     </style>
@@ -69,29 +84,28 @@
     </div>
     <div class="sidebar">
         @if (ViewBag.Title == "Home Page")
-        {<a class="active" href="~/"><i class="fa fa-fw fa-home"></i> Home</a>}
+        {<a class="active" href="~/"><i class="fa fa-fw fa-home"></i>Home</a>}
         else
-        {<a href="~/"><i class="fa fa-fw fa-home"></i> home</a>}
+        {<a href="~/"><i class="fa fa-fw fa-home"></i>Home</a>}
         @if (ViewBag.Title == "Store Inventory")
-        {<a class="active" href="~/inventory"><i class="fa fa-fw fa-wrench"></i> Inventory</a>}
+        {<a class="active" href="~/inventory"><i class="fa fa-fw fa-wrench"></i>Inventory</a>}
         else
         {<a href="~/inventory"><i class="fa fa-fw fa-wrench"></i> Inventory</a>}
         @if (ViewBag.Title == "Departments")
-        {<a class="active" href="~/departments"><i class="fa fa-fw fa-user"></i> Departments</a>}
+        {<a class="active" href="~/departments"><i class="fa fa-fw fa-user"></i>Departments</a>}
         else
-        {<a href="~/departments"><i class="fa fa-fw fa-user"></i> Departments</a>}
+        {<a href="~/departments"><i class="fa fa-fw fa-user"></i>Departments</a>}
         @if (ViewBag.Title == "Requistions")
-        {<a class="active" href="~/requisition"> Requisitions</a>}
+        {<a class="active" href="~/requisition">Requisitions</a>}
         else
         {<a href="~/requisition"> Requisitions</a>}
         @if (ViewBag.Title == "Items")
         {<a class="active" href="~/items">Items</a>}
         else
         {<a href="~/items">Items</a>}
-        <a href="#logout"><i class="fa fa-fw fa-external-link"></i> Logout</a>
+        <a href="#logout"><i class="fa fa-fw fa-external-link"></i>Logout</a>
     </div>
     <div class="container body-content">
-        
         @RenderBody()
         <hr />
         <footer>
