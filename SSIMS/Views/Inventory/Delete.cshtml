@@ -1,0 +1,73 @@
+﻿@model SSIMS.Models.InventoryItem
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>InventoryItem</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Item.Category)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Item.Category)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.InStoreQty)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.InStoreQty)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.InTransitQty)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.InTransitQty)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ReorderLvl)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ReorderLvl)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ReorderQty)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ReorderQty)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StockCheck)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StockCheck)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

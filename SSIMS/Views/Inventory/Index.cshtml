@@ -1,0 +1,54 @@
+﻿@model IEnumerable<SSIMS.Models.InventoryItem>
+
+@{
+    ViewBag.Title = "Store Inventory";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Item.ID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Item.Category)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Item.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Item.UnitOfMeasure)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.InStoreQty)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.InTransitQty)
+        </th>
+        
+    </tr>
+
+@foreach (var item in Model) {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Item.ID)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Item.Category)
+    </td>
+    <td>
+        @Html.ActionLink((string)item.Item.Description, "Details", new { id = item.ID })
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Item.UnitOfMeasure)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.InStoreQty)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.InTransitQty)
+    </td>
+
+</tr>
+}
+
+</table>
