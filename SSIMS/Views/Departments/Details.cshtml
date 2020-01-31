@@ -8,6 +8,32 @@
     List<CollectionPoint> options = ViewBag.OtherPoints;
 }
 
+<script>
+    function update() {
+        var cp = document.getElementById("collectionpoint").value;
+        alert(cp);
+        post("/departments/updatecollectionpoint", { "id": cp });
+    }
+
+    function post(path, params, method='post') {
+      const form = document.createElement('form');
+      form.method = method;
+      form.action = path;
+
+      for (const key in params) {
+        if (params.hasOwnProperty(key)) {
+          const hiddenField = document.createElement('input');
+          hiddenField.type = 'hidden';
+          hiddenField.name = key;
+          hiddenField.value = params[key];
+          form.appendChild(hiddenField);
+        }
+      }
+      document.body.appendChild(form);
+      form.submit();
+    }
+</script>
+
 <div>
     <h4>@department.DeptName Department Dashboard</h4>
     <hr />
@@ -15,11 +41,11 @@
         <tr>
             <th>Collection Location</th>
             <td>
-                <select>
-                    <option selected value=@department.CollectionPoint.Location>@department.CollectionPoint.Location</option>
+                <select id="collectionpoint" onchange="update()">
+                    <option selected value=@department.CollectionPoint.ID>@selected</option>
                     @foreach (CollectionPoint cp in options)
                     {
-                        <option value=@cp.Location>@cp.Location</option>
+                        <option value=@cp.ID>@cp.Location</option>
                     }
                 </select>
             </td>
