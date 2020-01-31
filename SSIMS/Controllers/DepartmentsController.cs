@@ -70,9 +70,6 @@ namespace SSIMS.Controllers
         {
             string deptId = Session["CurrentDepartmentID"].ToString();
             Department department = unitOfWork.DepartmentRepository.GetByID(deptId);
-            Debug.WriteLine("hey");
-            Debug.WriteLine("department = " + department.ID);
-
             CollectionPoint collectionPoint = unitOfWork.CollectionPointRepository.GetByID(int.Parse(id));
             if (collectionPoint != null) {
                 department.CollectionPoint = collectionPoint;
