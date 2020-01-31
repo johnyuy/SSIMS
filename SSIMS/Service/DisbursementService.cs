@@ -90,7 +90,7 @@ namespace SSIMS.Service
                 }
                 else
                 {
-                    TransactionItem item = new TransactionItem(doc.Qty, doc.Qty, null, doc.Item);
+                    TransactionItem item = new TransactionItem(doc.Qty, doc.Qty, "Retrieval", doc.Item);
                     transItemList.Add(item);
                 }
             }
@@ -109,6 +109,7 @@ namespace SSIMS.Service
             List<TransactionItem> deptRetrievalList = GenerateDeptRetrievalList(deptID);
             RetrievalList retrievalList = new RetrievalList(clerk, dept);
             retrievalList.ItemTransactions = deptRetrievalList;
+            retrievalList.Status = (Status)5;
             Debug.WriteLine("Saving to RLrepo...");
             context.RetrievalLists.Add(retrievalList);
             context.SaveChanges();
