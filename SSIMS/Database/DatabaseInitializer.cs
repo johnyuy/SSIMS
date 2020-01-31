@@ -32,6 +32,8 @@ namespace SSIMS.Database
             InitDepartments(context);
             InitItems(context);
             InitSuppliers(context);
+            //context.Database.ExecuteSqlCommand("INSERT INTO Tenders SELECT * FROM OPENROWSET('Microsoft.Jet.OLEDB.4.0', 'Excel 8.0;Database=\\Mac\\Home\\Downloads\\Tendertest.xlsx', 'SELECT * FROM [Sheet1$]')");
+            InitTenders(context);
             InitStaffs(context);
             InitUserAccounts(context);
             InitInventoryItems(context);
@@ -208,6 +210,231 @@ namespace SSIMS.Database
             context.Suppliers.Add(supplier3);
             context.Suppliers.Add(supplier4);
             context.SaveChanges();
+        }
+
+        static void InitTenders(DatabaseContext context)
+        {
+            Debug.WriteLine("\tInitializing Tenders");
+            UnitOfWork uow = new UnitOfWork(context);
+            //BANE Tenders...
+            List<Tender> banetender = new List<Tender>
+            {
+                new Tender("C001", "BANE", 2.49, uow),
+                new Tender("C002", "BANE", 2.79, uow),
+                new Tender("C003", "BANE", 2.99, uow),
+                new Tender("C004", "BANE", 5.99, uow),
+                new Tender("C005", "BANE", 5.49, uow),
+                new Tender("C006", "BANE", 4.99, uow),
+                new Tender("E001", "BANE", 1.29, uow),
+                new Tender("E002", "BANE", 1.39, uow),
+                new Tender("E003", "BANE", 1.49, uow),
+                new Tender("E004", "BANE", 1.59, uow),
+                new Tender("E005", "BANE", 1.29, uow),
+                new Tender("E006", "BANE", 1.39, uow),
+                new Tender("E007", "BANE", 1.49, uow),
+                new Tender("E008", "BANE", 1.59, uow),
+                new Tender("E020", "BANE", 0.39, uow),
+                new Tender("E021", "BANE", 0.29, uow),
+                new Tender("E030", "BANE", 1.19, uow),
+                new Tender("E031", "BANE", 1.29, uow),
+                new Tender("E032", "BANE", 1.79, uow),
+                new Tender("E033", "BANE", 1.89, uow),
+                new Tender("E034", "BANE", 2.29, uow),
+                new Tender("E035", "BANE", 1.29, uow),
+                new Tender("E036", "BANE", 1.39, uow),
+                new Tender("F020", "BANE", 1.99, uow),
+                new Tender("F021", "BANE", 1.59, uow),
+                new Tender("F022", "BANE", 1.65, uow),
+                new Tender("F023", "BANE", 1.59, uow),
+                new Tender("F024", "BANE", 1.65, uow),
+                new Tender("F031", "BANE", 0.79, uow),
+                new Tender("F032", "BANE", 0.79, uow),
+                new Tender("F033", "BANE", 0.79, uow),
+                new Tender("F034", "BANE", 0.79, uow),
+                new Tender("F035", "BANE", 0.79, uow),
+                new Tender("H031", "BANE", 4.59, uow),
+                new Tender("H032", "BANE", 4.99, uow),
+                new Tender("H033", "BANE", 5.59, uow),
+                new Tender("P010", "BANE", 1.49, uow),
+                new Tender("P011", "BANE", 1.59, uow),
+                new Tender("P012", "BANE", 1.69, uow),
+                new Tender("P013", "BANE", 1.79, uow),
+                new Tender("P014", "BANE", 1.89, uow),
+                new Tender("P015", "BANE", 1.89, uow),
+                new Tender("P016", "BANE", 1.99, uow),
+                new Tender("P020", "BANE", 10.99, uow),
+                new Tender("P021", "BANE", 4.99, uow),
+                new Tender("H011", "BANE", 14.49, uow),
+                new Tender("H012", "BANE", 14.39, uow),
+                new Tender("H013", "BANE", 14.49, uow),
+                new Tender("H014", "BANE", 14.39, uow),
+                new Tender("P030", "BANE", 5.49, uow),
+                new Tender("P031", "BANE", 5.49, uow),
+                new Tender("P032", "BANE", 5.39, uow),
+                new Tender("P033", "BANE", 5.99, uow),
+                new Tender("P034", "BANE", 5.99, uow),
+                new Tender("P035", "BANE", 5.89, uow),
+                new Tender("P036", "BANE", 1.89, uow),
+                new Tender("P037", "BANE", 1.59, uow),
+                new Tender("P038", "BANE", 20.49, uow),
+                new Tender("P039", "BANE", 20.49, uow),
+                new Tender("P040", "BANE", 20.49, uow),
+                new Tender("P041", "BANE", 20.29, uow),
+                new Tender("P042", "BANE", 4.29, uow),
+                new Tender("P043", "BANE", 4.39, uow),
+                new Tender("P044", "BANE", 4.35, uow),
+                new Tender("P045", "BANE", 4.25, uow),
+                new Tender("P046", "BANE", 4.35, uow),
+                new Tender("R001", "BANE", 7.19, uow),
+                new Tender("R002", "BANE", 9.59, uow),
+                new Tender("S100", "BANE", 2.39, uow),
+                new Tender("S040", "BANE", 1.49, uow),
+                new Tender("S041", "BANE", 8.99, uow),
+                new Tender("S101", "BANE", 1.10, uow),
+                new Tender("S010", "BANE", 0.99, uow),
+                new Tender("S011", "BANE", 1.09, uow),
+                new Tender("S012", "BANE", 0.89, uow),
+                new Tender("S020", "BANE", 1.00, uow),
+                new Tender("S021", "BANE", 1.50, uow),
+                new Tender("S022", "BANE", 24.00, uow),
+                new Tender("S023", "BANE", 36.00, uow),
+                new Tender("T001", "BANE", 2.00, uow),
+                new Tender("T002", "BANE", 1.50, uow),
+                new Tender("T003", "BANE", 1.00, uow),
+                new Tender("T020", "BANE", 3.99, uow),
+                new Tender("T021", "BANE", 3.89, uow),
+                new Tender("T022", "BANE", 3.99, uow),
+                new Tender("T023", "BANE", 3.99, uow),
+                new Tender("T024", "BANE", 3.79, uow),
+                new Tender("T025", "BANE", 4.09, uow),
+                new Tender("T100", "BANE", 12.59, uow),
+
+
+            };
+
+            foreach ( Tender t in banetender)
+            {
+                context.Tenders.Add(t);
+            }
+
+            List<Tender> omegtender = new List<Tender>
+            {
+                new Tender("C001", "OMEG", 2.50, uow),
+                new Tender("C002", "OMEG", 2.80, uow),
+                new Tender("C003", "OMEG", 3.00, uow),
+                new Tender("C004", "OMEG", 6.00, uow),
+                new Tender("C005", "OMEG", 5.50, uow),
+                new Tender("C006", "OMEG", 5.00, uow),
+                new Tender("E001", "OMEG", 1.30, uow),
+                new Tender("E002", "OMEG", 1.40, uow),
+                new Tender("E003", "OMEG", 1.50, uow),
+                new Tender("E004", "OMEG", 1.60, uow),
+                new Tender("E005", "OMEG", 1.30, uow),
+                new Tender("E006", "OMEG", 1.40, uow),
+                new Tender("E007", "OMEG", 1.50, uow),
+                new Tender("E008", "OMEG", 1.60, uow),
+                new Tender("E020", "OMEG", 0.40, uow),
+                new Tender("E021", "OMEG", 0.30, uow),
+                new Tender("E030", "OMEG", 0.30, uow),
+                new Tender("E031", "OMEG", 0.30, uow),
+                new Tender("E032", "OMEG", 0.30, uow),
+                new Tender("F020", "OMEG", 2.00, uow),
+                new Tender("F021", "OMEG", 1.60, uow),
+                new Tender("F022", "OMEG", 1.70, uow),
+                new Tender("F023", "OMEG", 1.60, uow),
+                new Tender("F024", "OMEG", 1.70, uow),
+                new Tender("F031", "OMEG", 0.80, uow),
+                new Tender("F032", "OMEG", 0.80, uow),
+                new Tender("F033", "OMEG", 0.80, uow),
+                new Tender("F034", "OMEG", 0.80, uow),
+                new Tender("F035", "OMEG", 0.80, uow),
+                new Tender("H031", "OMEG", 4.50, uow),
+                new Tender("H032", "OMEG", 4.90, uow),
+                new Tender("H033", "OMEG", 5.50, uow),
+                new Tender("P010", "OMEG", 1.50, uow),
+                new Tender("P011", "OMEG", 1.60, uow),
+                new Tender("P012", "OMEG", 1.70, uow),
+                new Tender("P013", "OMEG", 1.80, uow),
+                new Tender("P014", "OMEG", 1.90, uow),
+                new Tender("P015", "OMEG", 1.90, uow),
+                new Tender("P016", "OMEG", 2.00, uow),
+                new Tender("P020", "OMEG", 10.89, uow),
+                new Tender("P021", "OMEG", 4.89, uow),
+                new Tender("H011", "OMEG", 14.50, uow),
+                new Tender("H012", "OMEG", 14.40, uow),
+                new Tender("H013", "OMEG", 14.50, uow),
+                new Tender("H014", "OMEG", 14.40, uow),
+                new Tender("P030", "OMEG", 5.50, uow),
+                new Tender("P031", "OMEG", 5.50, uow),
+                new Tender("P032", "OMEG", 5.40, uow),
+                new Tender("P033", "OMEG", 6.00, uow),
+                new Tender("P034", "OMEG", 6.00, uow),
+                new Tender("P035", "OMEG", 5.90, uow),
+                new Tender("P036", "OMEG", 1.90, uow),
+                new Tender("P037", "OMEG", 1.90, uow),
+                new Tender("P038", "OMEG", 20.50, uow),
+                new Tender("P039", "OMEG", 20.50, uow),
+                new Tender("P040", "OMEG", 20.30, uow),
+                new Tender("P041", "OMEG", 20.40, uow),
+                new Tender("P042", "OMEG", 4.30, uow),
+                new Tender("P043", "OMEG", 4.40, uow),
+                new Tender("P044", "OMEG", 4.36, uow),
+                new Tender("P045", "OMEG", 4.26, uow),
+                new Tender("P046", "OMEG", 4.36, uow),
+                new Tender("R001", "OMEG", 7.20, uow),
+                new Tender("R002", "OMEG", 10.00, uow),
+                new Tender("S100", "OMEG", 2.40, uow),
+                new Tender("S040", "OMEG", 1.50, uow),
+                new Tender("S041", "OMEG", 9.00, uow),
+                new Tender("S101", "OMEG", 1.09, uow),
+                new Tender("S010", "OMEG", 1.00, uow),
+                new Tender("S011", "OMEG", 1.10, uow),
+                new Tender("S012", "OMEG", 0.90, uow),
+                new Tender("S020", "OMEG", 0.99, uow),
+                new Tender("S021", "OMEG", 1.49, uow),
+                new Tender("S022", "OMEG", 23.99, uow),
+                new Tender("S023", "OMEG", 35.99, uow),
+                new Tender("T001", "OMEG", 1.99, uow),
+                new Tender("T002", "OMEG", 1.49, uow),
+                new Tender("T003", "OMEG", 0.99, uow),
+                new Tender("T020", "OMEG", 4.00, uow),
+                new Tender("T021", "OMEG", 3.90, uow),
+                new Tender("T022", "OMEG", 4.00, uow),
+                new Tender("T023", "OMEG", 4.00, uow),
+                new Tender("T024", "OMEG", 3.80, uow),
+                new Tender("T025", "OMEG", 4.10, uow),
+                new Tender("T100", "OMEG", 12.60, uow),
+            };
+
+            foreach (Tender t in omegtender)
+            {
+                context.Tenders.Add(t);
+            }
+
+            List<Tender> alpatender = new List<Tender>
+            {
+                new Tender("C001", "ALPA", 2.69, uow)
+            };
+
+            foreach (Tender t in alpatender)
+            {
+                context.Tenders.Add(t);
+            }
+
+            List<Tender> cheptender = new List<Tender>
+            {
+                new Tender("C001", "CHEP", 2.45, uow)
+            };
+
+            foreach (Tender t in cheptender)
+            {
+                context.Tenders.Add(t);
+            }
+
+
+
+            context.SaveChanges();
+
         }
 
         static void InitStaffs(DatabaseContext context)

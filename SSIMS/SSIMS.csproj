@@ -222,6 +222,7 @@
     <Compile Include="DAL\RequisitionOrderRepository.cs" />
     <Compile Include="DAL\RetrievalListRepository.cs" />
     <Compile Include="DAL\StaffRepository.cs" />
+    <Compile Include="DAL\SupplierRepository.cs" />
     <Compile Include="DAL\TenderRepository.cs" />
     <Compile Include="DAL\UnitOfWork.cs" />
     <Compile Include="Database\DatabaseContext.cs" />
