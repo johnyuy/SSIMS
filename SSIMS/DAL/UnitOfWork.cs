@@ -15,7 +15,21 @@ namespace SSIMS.DAL
         private StaffRepository staffRepository;
         private RequisitionOrderRepository requisitionOrderRepository;
         private DocumentItemRepository documentItemRepository;
+        private RetrievalListRepository retrievalListRepository;
 
+
+        public RetrievalListRepository RetrievalListRepository
+        {
+            get
+            {
+
+                if (this.retrievalListRepository == null)
+                {
+                    this.retrievalListRepository = new RetrievalListRepository(context);
+                }
+                return retrievalListRepository;
+            }
+        }
 
         public StaffRepository StaffRepository
         {
