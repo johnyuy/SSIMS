@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using SSIMS.ViewModels;
 
 namespace SSIMS.Controllers
 {
@@ -31,8 +32,9 @@ namespace SSIMS.Controllers
                     Debug.WriteLine("\t" + di.Item.ID + " x " + di.Qty);
                 }
             }
+            AnalyticsListViewModel analyticsListViewModel = new AnalyticsListViewModel();
 
-            return View();
+            return View("AnalyticsList", analyticsListViewModel.SummaryList.ToList());
         }
         
     }
