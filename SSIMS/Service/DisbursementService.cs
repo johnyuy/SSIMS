@@ -16,6 +16,8 @@ namespace SSIMS.Service
         static DatabaseContext context = new DatabaseContext();
         static RequisitionOrderRepository ROrepo = new RequisitionOrderRepository(context);
         static DepartmentRepository deptRepo = new DepartmentRepository(context);
+        static StaffRepository staffRepo = new StaffRepository(context);
+        static RetrievalListRepository RLrepo = new RetrievalListRepository(context);
         public List<TransactionItem> GenerateDeptRetrievalList(string deptID)
         {
             //requisitionOrders are approved
@@ -100,6 +102,18 @@ namespace SSIMS.Service
             return transItemList;
         }
 
+        public void SaveToRetrievalListRepo(string deptID)
+        {
+            Staff clerk = staffRepo.GetByID(10003);
+            Department dept = deptRepo.GetByID(deptID);
+            List<TransactionItem> deptRetrievalList = GenerateDeptRetrievalList(deptID);
+            RetrievalList retrievalList = new RetrievalList(clerk, dept);
+            retrievalList.ItemTransactions = deptRetrievalList;
+            Debug.WriteLine("Saving to RLrepo...");
+            context.RetrievalLists.Add(retrievalList);
+            context.SaveChanges();
+        }
+
 
         public List<TransactionItem> GenerateCombinedRetrievalList()
         {
@@ -155,7 +169,11 @@ namespace SSIMS.Service
         
         
         
-        //public List<TransactionItem> ViewRetrievalList()
+        public List<TransactionItem> GenerateDisbursementList(string deptID)
+        {
+            
+            return null;
+        }
        
     }
 }
