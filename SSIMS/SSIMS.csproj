@@ -340,6 +340,7 @@
     <Content Include="Views\Analytics\AnalyticsList.cshtml" />
     <Content Include="Views\Requisition\Create.cshtml" />
     <Content Include="Views\Requisition\Index.cshtml" />
+    <Content Include="Views\Requisition\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -89,5 +89,12 @@ namespace SSIMS.DAL
             }
             return null;
         }
+
+        public Staff GetStaffbyID(int ID)
+        {
+            var staff = Get(filter: x => x.ID == ID).First();
+            return (Staff)staff;
+        }
+
     }
 }

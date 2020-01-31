@@ -16,14 +16,16 @@ namespace SSIMS.DAL
         {
         }
         //save documentitem through item_id and qty
-        public void InsertDocumentItembyItemandQty(Item item, int qty)
+        public DocumentItem InsertDocumentItembyItemandQty(Item item, int qty)
         {
             DocumentItem doitem = new DocumentItem();
             doitem.Item = item;
             doitem.Qty = qty;
             dbSet.Add(doitem);
+            return doitem;
         }
         //requsition list for staff themselves
+        /*
         public List<RequisitionCreateViewModel> GetRequisitionList(Staff staff)
         {
             using (var context = new DatabaseContext())
@@ -49,6 +51,17 @@ namespace SSIMS.DAL
                     return requisitionListDisplay;
                
             }
-        }
+        }*/
+
+        //input requisitionOrder ID ,output list<DocumentItem> doitems
+        //public List<DocumentItem> GetDocumentItemsbyROID(int ID)
+        //{
+
+        //    var document = 
+        //    var doitems = Get(filter: x => x.Document.ID == ID,includeProperties:"Document");
+        //    if(doitems.Count()==0 || doitems == null)
+        //        return (List<DocumentItem>)doitems;
+        //    return null;
+        //}
     }
 }

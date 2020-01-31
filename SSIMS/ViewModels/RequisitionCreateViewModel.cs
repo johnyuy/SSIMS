@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -14,6 +15,7 @@ namespace SSIMS.ViewModels
 
     public class RequisitionCreateViewModel
     {
+     
         [Display(Name = "Item Number")]
         public string ItemID { get; set; }
 
@@ -25,7 +27,7 @@ namespace SSIMS.ViewModels
         public int Quantity { get; set; }
 
         [Display(Name ="Create Date")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
+        //[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime CreatedDate { get; set; }// one day one requisitionOrder
 
         public Status Status { get; set; }

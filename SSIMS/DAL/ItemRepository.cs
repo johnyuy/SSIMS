@@ -115,42 +115,10 @@ namespace SSIMS.DAL
         }
 
         //get item object by its description
-        public Item GetItembyDescrption(string description)
+        public Item GetItembyDescrption(string itemID)
         {
-            var item = Get(filter: x => x.Description.Contains(description)).First();
-
-
+            var item = Get(filter: x => x.ID==itemID).First();
             return (Item)item;
-
-            /*
-            if (!String.IsNullOrWhiteSpace(description))
-            {
-                using (var context = new DatabaseContext())
-                {
-                    Item item = context.Items.Where(n => n.Description == description).FirstOrDefault();
-                           
-                    return item;
-                }
-            }
-            return null;
-            */
-            /*
-            using (var context = new DatabaseContext())
-            {
-                
-                var item = from i in context.Items
-                           where i.Description == description
-                           select i;
-                           
-                var item = context.Items.AsNoTracking()
-                    .Where(n => n.Description == description)
-                    .Select(n=>n).FirstOrDefault();
-
-                return (Item)item;
-            }
-*/
-
-
 
         }
 
