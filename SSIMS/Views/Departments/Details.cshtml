@@ -1,74 +1,31 @@
-﻿@model SSIMS.Models.Department
+﻿@using SSIMS.Models
 
-@{
-    ViewBag.Title = "Details";
+
+@{ 
+    ViewBag.Header = "Departments";
+    Department department = ViewBag.Department;
+    string selected = ViewBag.SelectedPoint;
+    List<CollectionPoint> options = ViewBag.OtherPoints;
 }
 
-<h2>Details</h2>
-
 <div>
-    <h4>Department</h4>
+    <h4>@department.DeptName Department Dashboard</h4>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.CollectionPoint.Location)
-        </dt>
+    <table>
+        <tr>
+            <th>Collection Location</th>
+            <td>
+                <select>
+                    <option selected value=@department.CollectionPoint.Location>@department.CollectionPoint.Location</option>
+                    @foreach (CollectionPoint cp in options)
+                    {
+                        <option value=@cp.Location>@cp.Location</option>
+                    }
+                </select>
+            </td>
 
-        <dd>
-            @Html.DisplayFor(model => model.CollectionPoint.Location)
-        </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.DeptHead.UserAccountID)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.DeptHead.UserAccountID)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.DeptRep.UserAccountID)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.DeptRep.UserAccountID)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.DeptHeadAuthorization.ID)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.DeptHeadAuthorization.ID)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.DeptName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.DeptName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.PhoneNumber)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.PhoneNumber)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.FaxNumber)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.FaxNumber)
-        </dd>
-
-    </dl>
+        </tr>
+    </table>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+
