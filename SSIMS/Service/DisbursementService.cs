@@ -13,11 +13,9 @@ namespace SSIMS.Service
 {
     public class DisbursementService
     {
-        static DatabaseContext context = new DatabaseContext();
-        static RequisitionOrderRepository ROrepo = new RequisitionOrderRepository(context);
-        static DepartmentRepository deptRepo = new DepartmentRepository(context);
-        static StaffRepository staffRepo = new StaffRepository(context);
-        static RetrievalListRepository RLrepo = new RetrievalListRepository(context);
+        static UnitOfWork unitOfWork = new UnitOfWork();
+
+        //returns a list of TransactionIems from approved Request Orders
         public List<TransactionItem> GenerateDeptRetrievalList(string deptID)
         {
             //requisitionOrders are approved
@@ -28,9 +26,10 @@ namespace SSIMS.Service
 
             //retrieve all RO with status approved
             List<RequisitionOrder> ROList = new List<RequisitionOrder>();
-            var approvedRO = ROrepo.Get(includeProperties:"DocumentItems.Item,CreatedByStaff.Department" ,filter: x => x.Status.ToString() == "Approved");
-
-            foreach(RequisitionOrder RO in approvedRO)
+            var approvedRO = unitOfWork.RequisitionOrderRepository.Get(includeProperties:"DocumentItems.Item,CreatedByStaff.Department" ,filter: x => x.Status.ToString() == "Approved");
+            
+            //filter by department
+            foreach (RequisitionOrder RO in approvedRO)
             {
                 Debug.WriteLine("RO ID: " + RO.ID);
                 string deptRO = RO.CreatedByStaff.Department.ID;
@@ -43,7 +42,7 @@ namespace SSIMS.Service
                 Debug.WriteLine("Number of elements in ROList: " + ROList.Count);
             }
 
-            //filter by department
+            
 
             //get all ROs DI into a combined list
             List<DocumentItem> combinedDocList = new List<DocumentItem>();
@@ -55,7 +54,7 @@ namespace SSIMS.Service
                    combinedDocList.Add(doc);
                 }
             }
-            Debug.WriteLine("Combined Doc List: " + combinedDocList.Count);
+            Debug.WriteLine("Combined Doc List size: " + combinedDocList.Count);
             List<TransactionItem> tempTransItems = new List<TransactionItem>();
             List<TransactionItem> transItemList = new List<TransactionItem>();
 
@@ -104,15 +103,15 @@ namespace SSIMS.Service
 
         public void SaveToRetrievalListRepo(string deptID)
         {
-            Staff clerk = staffRepo.GetByID(10003);
-            Department dept = deptRepo.GetByID(deptID);
+            Staff clerk = unitOfWork.StaffRepository.GetByID(10003);
+            Department dept = unitOfWork.DepartmentRepository.GetByID(deptID);
             List<TransactionItem> deptRetrievalList = GenerateDeptRetrievalList(deptID);
             RetrievalList retrievalList = new RetrievalList(clerk, dept);
             retrievalList.ItemTransactions = deptRetrievalList;
             retrievalList.Status = (Status)5;
             Debug.WriteLine("Saving to RLrepo...");
-            context.RetrievalLists.Add(retrievalList);
-            context.SaveChanges();
+            unitOfWork.RetrievalListRepository.Insert(retrievalList);
+            unitOfWork.Save();
         }
 
 
@@ -120,7 +119,7 @@ namespace SSIMS.Service
         {
             List<TransactionItem> combinedRetrievalList = new List<TransactionItem>();
             List<TransactionItem> tempTransItems = new List<TransactionItem>();
-            var deptList = deptRepo.Get();
+            var deptList = unitOfWork.DepartmentRepository.Get();
             foreach(Department dept in deptList)
             {
                 List<TransactionItem>deptRetrievalList = GenerateDeptRetrievalList(dept.ID);
@@ -168,11 +167,40 @@ namespace SSIMS.Service
             return combinedRetrievalList;
         }
         
+        public void UpdateRequestionOrderStatus(RequisitionOrder RO)
+        {
+            RO.Status = (Status)4;
+            unitOfWork.RequisitionOrderRepository.Update(RO);
+            unitOfWork.Save();
+        }
         
+        public void UpdateTransactionItemTakeoverQty(TransactionItem item, int  qty)
+        {
+            item.TakeOverQty = qty;
+
+        }
         
         public List<TransactionItem> GenerateDisbursementList(string deptID)
         {
-            
+            var completedRetrievals = unitOfWork.RetrievalListRepository.Get(filter: x => x.Status.ToString() == "Completed" && x.Department.ID==deptID);
+            List<TransactionItem> disbursementList = new List<TransactionItem>();
+            foreach(RetrievalList rl in completedRetrievals)
+            {
+                List<TransactionItem> retrievedItemList = (List<TransactionItem>)rl.ItemTransactions;
+                foreach(TransactionItem retrievedItem in retrievedItemList)
+                {
+                    bool isExist = false;
+                    TransactionItem temp;
+                    int index = 0;
+                    for(int i = 0; i<retrievedItemList.Count; i++)
+                    {
+
+                    }
+                    
+                    TransactionItem disbursementItem = new TransactionItem(retrievedItem.TakeOverQty, retrievedItem.TakeOverQty, "Disbursement", retrievedItem.Item);
+                    
+                }
+            }
             return null;
         }
        

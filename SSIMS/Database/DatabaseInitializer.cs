@@ -415,7 +415,7 @@ namespace SSIMS.Database
                 new DocumentItem(ItemRepository.GetByID("P039"),7),
             };
             reqform.DocumentItems = documentItems;
-            context.RequisitionForms.Add(reqform);
+            context.RequisitionOrders.Add(reqform);
 
             Staff staff2 = StaffRepository.GetByID(10010); //ARCH dept
             RequisitionOrder reqform2 = new RequisitionOrder(staff2);
@@ -428,7 +428,7 @@ namespace SSIMS.Database
             };
             reqform2.DocumentItems = documentItems2;
             reqform2.Status = (Status)1;
-            context.RequisitionForms.Add(reqform2);
+            context.RequisitionOrders.Add(reqform2);
 
             Staff staff3 = StaffRepository.GetByID(10044); //ENGL dept
             RequisitionOrder reqform3 = new RequisitionOrder(staff3);
@@ -441,7 +441,7 @@ namespace SSIMS.Database
             };
             reqform3.DocumentItems = documentItems3;
             reqform3.Status =(Status)1;
-            context.RequisitionForms.Add(reqform3);
+            context.RequisitionOrders.Add(reqform3);
 
             RetrievalList retrievalList = new RetrievalList(staff1, DepartmentRepository.GetByID("ARTS"));
             List<TransactionItem> transactionItems = new List<TransactionItem>
