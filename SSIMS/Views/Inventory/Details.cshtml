@@ -1,0 +1,67 @@
+﻿@model SSIMS.Models.InventoryItem
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>InventoryItem</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Item.Category)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Item.Category)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.InStoreQty)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.InStoreQty)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.InTransitQty)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.InTransitQty)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ReorderLvl)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ReorderLvl)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ReorderQty)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ReorderQty)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StockCheck)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StockCheck)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

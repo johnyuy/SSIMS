@@ -394,7 +394,12 @@ namespace SSIMS.Database
                 inv.Add(new InventoryItem(reorderLvl * stockLevelMultiplier, 0, reorderLvl, reorderQty, 0, item));
             }
             foreach (InventoryItem inventoryItem in inv)
+            {
+                if (inventoryItem.Item.ID.Contains("3"))
+                    inventoryItem.InStoreQty /= 5;
                 context.InventoryItems.Add(inventoryItem);
+            }
+                
             context.SaveChanges();
         }
 
@@ -412,7 +417,7 @@ namespace SSIMS.Database
             reqform.DocumentItems = documentItems;
             context.RequisitionForms.Add(reqform);
 
-            Staff staff2 = StaffRepository.GetByID(10010);
+            Staff staff2 = StaffRepository.GetByID(10010); //ARCH dept
             RequisitionOrder reqform2 = new RequisitionOrder(staff2);
             reqform2.RepliedByStaff = StaffRepository.GetByID(10006);
             List<DocumentItem> documentItems2 = new List<DocumentItem>
@@ -425,7 +430,7 @@ namespace SSIMS.Database
             reqform2.Status = (Status)1;
             context.RequisitionForms.Add(reqform2);
 
-            Staff staff3 = StaffRepository.GetByID(10044);
+            Staff staff3 = StaffRepository.GetByID(10044); //ENGL dept
             RequisitionOrder reqform3 = new RequisitionOrder(staff3);
             reqform2.RepliedByStaff = StaffRepository.GetByID(10041);
             List<DocumentItem> documentItems3 = new List<DocumentItem>

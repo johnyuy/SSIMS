@@ -25,7 +25,8 @@ namespace SSIMS.Controllers
             var disbursementLists = db.DisbursementLists.Include(d => d.CreatedByStaff).Include(d => d.RepliedByStaff);
 
             //my code for testing
-            ds.GenerateDeptRetrievalList("");
+            ds.GenerateDeptRetrievalList("ENGL");
+            ds.GenerateCombinedRetrievalList();
             if (disbursementLists == null)
             {
                 return HttpNotFound();

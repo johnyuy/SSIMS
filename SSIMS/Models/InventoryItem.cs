@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -7,9 +9,13 @@ namespace SSIMS.Models
 {
     public class InventoryItem 
     {
+        [Key]
         public int ID { get; set; }
+        [DisplayName("Item Code")]
         public string ItemID { get; set; }
+        [DisplayName("Store")]
         public int InStoreQty { get; set; }
+        [DisplayName("Disbursing")]
         public int InTransitQty { get; set; }
         public int ReorderLvl { get; set; }
         public int ReorderQty { get; set; }

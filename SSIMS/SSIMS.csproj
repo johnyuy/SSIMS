@@ -207,6 +207,7 @@
     <Compile Include="Controllers\DepartmentsController.cs" />
     <Compile Include="Controllers\DisbursementListsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InventoryController.cs" />
     <Compile Include="Controllers\ItemsController.cs" />
     <Compile Include="Controllers\PurchaseOrdersController.cs" />
     <Compile Include="Controllers\RequisitionController.cs" />
@@ -254,6 +255,7 @@
     <Compile Include="Service\PurchaseOrderService.cs" />
     <Compile Include="Service\StaffService.cs" />
     <Compile Include="Service\DisbursementService.cs" />
+    <Compile Include="ViewModels\InventoryViewModel.cs" />
     <Compile Include="ViewModels\RequisitionCreateViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -265,6 +267,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Resources\LogicUIcon.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
@@ -329,7 +332,13 @@
     <Content Include="Views\PurchaseOrders\Edit.cshtml" />
     <Content Include="Views\PurchaseOrders\Index.cshtml" />
     <Content Include="Views\Requisition\Create.cshtml" />
-    <Content Include="Views\Requisition\View.cshtml" />
+    <Content Include="Views\Requisition\create.cshtml" />
+    <Content Include="Views\Inventory\Create.cshtml" />
+    <Content Include="Views\Inventory\Delete.cshtml" />
+    <Content Include="Views\Inventory\Details.cshtml" />
+    <Content Include="Views\Inventory\Edit.cshtml" />
+    <Content Include="Views\Inventory\Index.cshtml" />
+    <Content Include="Views\Analytics\AnalyticsList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

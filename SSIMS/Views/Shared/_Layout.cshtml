@@ -3,35 +3,113 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>Logic Stationery</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        #topnav {
+           height:80px;
+           background: linear-gradient(to right, #1a4a4a 0%, #ccffff 119%);
+           border:none;
+        }
+
+        #logicuicon {
+            width: 90px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            margin-left: 60px;
+            margin-right: 20px;
+            position:fixed;
+        }
+
+        #header {
+            color: whitesmoke;
+            margin-left: 80px;
+            margin-right: 50px;
+            margin-bottom: 10px;
+            position: relative;
+            left: 150px;
+        }
+        .sidebar {
+            height: 100%;
+            width: 200px;
+            position:fixed;
+            z-index: 0;
+            top: 0;
+            left: 0;
+            background: linear-gradient(to right, #1a4a4a 0%, #2F5F5F 100%);
+            overflow-x: hidden;
+            padding-top: 80px;
+        }
+
+        .sidebar a {
+            padding: 14px 8px 10px 16px;
+            text-decoration: none;
+            font-size: 15px;
+            height: 50px;
+            text-align: center;
+            color: lightgray;
+            display: block;
+        }
+
+        .sidebar a.active {
+            padding: 12px 8px 10px 16px;
+            background-color: #FFFFFF;
+            font-size: 18px;
+            color: black;
+            border-top-left-radius: 25px;
+            border-bottom-left-radius: 25px;
+        }
+
+        .sidebar a:hover:not(.active) {
+            background-color: #4F8080;
+            color: whitesmoke;
+            border-top-left-radius: 25px;
+            border-bottom-left-radius: 25px;
+        }
+
+        .body-content {
+            padding-top: 40px;
+            position:absolute;
+            left:200px;
+        }
+
+    </style>
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                </ul>
-            </div>
-        </div>
+    <div id="topnav" class="navbar navbar-inverse navbar-fixed-top">
+        <img src=@Url.Content("~/Resources/LogicUIcon.png") id="logicuicon" />
+        <h1 id="header">@ViewBag.Header</h1>
+    </div>
+    <div class="sidebar">
+        @if (ViewBag.Header == "Home")
+        {<a class="active" href="~/"><i class="fa fa-fw fa-home"></i> Home</a>}
+        else
+        {<a href="~/"><i class="fa fa-fw fa-home"></i> Home</a>}
+        @if (ViewBag.Header == "Store Inventory")
+        {<a class="active" href="~/inventory"><i class="fa fa-fw fa-wrench"></i> Inventory</a>}
+        else
+        {<a href="~/inventory"><i class="fa fa-fw fa-wrench"></i> Inventory</a>}
+        @if (ViewBag.Header == "Departments")
+        {<a class="active" href="~/departments"><i class="fa fa-fw fa-user"></i> Departments</a>}
+        else
+        {<a href="~/departments"><i class="fa fa-fw fa-user"></i> Departments</a>}
+        @if (ViewBag.Header == "Requistions")
+        {<a class="active" href="~/requisition">Requisitions</a>}
+        else
+        {<a href="~/requisition"> Requisitions</a>}
+        @if (ViewBag.Header == "Items")
+        {<a class="active" href="~/items">Items</a>}
+        else
+        {<a href="~/items">Items</a>}
+        <a href="#logout"><i class="fa fa-fw fa-external-link"></i>Logout</a>
     </div>
     <div class="container body-content">
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>&copy; @DateTime.Now.Year - SSIMS</p>
         </footer>
     </div>
 
