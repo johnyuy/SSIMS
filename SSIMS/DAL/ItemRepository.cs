@@ -34,20 +34,13 @@ namespace SSIMS.DAL
             var items = Get();
             List<string> CategoryList = new List<string>();
 
-            Console.WriteLine("Print item.category");
-
             foreach (Item item in items)
             {
-                CategoryList.Add(item.Category);
-                Console.WriteLine(item.Category);
+                CategoryList.Add(item.Category); 
             }
             CategoryList = CategoryList.Distinct().ToList();
 
             return CategoryList;
-
-
-
-
         }
 
         //get description list according to the category
@@ -63,6 +56,7 @@ namespace SSIMS.DAL
             return DesList.ToList();
         }
 
+        //get selectlist for dynamic dropdownlist
         public IEnumerable<SelectListItem> GetCategories()
         {
             using (var context = new DatabaseContext())
@@ -84,7 +78,7 @@ namespace SSIMS.DAL
                 return new SelectList(countries, "Value", "Text");
             }
         }
-
+        //get selectlist for dynamic dropdownlist
         public IEnumerable<SelectListItem> GetDescription()
         {
             List<SelectListItem> items = new List<SelectListItem>()
@@ -97,7 +91,7 @@ namespace SSIMS.DAL
             };
             return items;
         }
-
+        //get selectlist for dynamic dropdownlist
         public IEnumerable<SelectListItem> GetDescription(string category)
         {
             if (!String.IsNullOrWhiteSpace(category))
@@ -119,5 +113,46 @@ namespace SSIMS.DAL
             return null;
 
         }
+
+        //get item object by its description
+        public Item GetItembyDescrption(string description)
+        {
+            var item = Get(filter: x => x.Description.Contains(description)).First();
+
+
+            return (Item)item;
+
+            /*
+            if (!String.IsNullOrWhiteSpace(description))
+            {
+                using (var context = new DatabaseContext())
+                {
+                    Item item = context.Items.Where(n => n.Description == description).FirstOrDefault();
+                           
+                    return item;
+                }
+            }
+            return null;
+            */
+            /*
+            using (var context = new DatabaseContext())
+            {
+                
+                var item = from i in context.Items
+                           where i.Description == description
+                           select i;
+                           
+                var item = context.Items.AsNoTracking()
+                    .Where(n => n.Description == description)
+                    .Select(n=>n).FirstOrDefault();
+
+                return (Item)item;
+            }
+*/
+
+
+
+        }
+
     }
 }

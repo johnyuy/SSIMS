@@ -1,5 +1,6 @@
 ﻿using SSIMS.Database;
 using SSIMS.Models;
+using SSIMS.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,10 @@ namespace SSIMS.DAL
             : base(context)
         {
         }
+
+        
+        
+
+
     }
 }

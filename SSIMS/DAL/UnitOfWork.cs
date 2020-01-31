@@ -13,6 +13,8 @@ namespace SSIMS.DAL
         private GenericRepository<InventoryItem> inventoryItemRepository;
         private PurchaseOrderRepository purchaseOrderRepository;
         private StaffRepository staffRepository;
+        private RequisitionOrderRepository requisitionOrderRepository;
+        private DocumentItemRepository documentItemRepository;
 
 
         public StaffRepository StaffRepository
@@ -92,6 +94,32 @@ namespace SSIMS.DAL
                 return inventoryItemRepository;
             }
         }
+
+        public RequisitionOrderRepository RequisitionOrderRepository
+        {
+            get
+            {
+
+                if (this.requisitionOrderRepository == null)
+                {
+                    this.requisitionOrderRepository = new RequisitionOrderRepository(context);
+                }
+                return requisitionOrderRepository;
+            }
+        }
+        public DocumentItemRepository DocumentItemRepository
+        {
+            get
+            {
+
+                if (this.documentItemRepository == null)
+                {
+                    this.documentItemRepository = new DocumentItemRepository(context);
+                }
+                return documentItemRepository;
+            }
+        }
+
 
         public void Save()
         {

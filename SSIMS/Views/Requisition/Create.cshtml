@@ -11,7 +11,7 @@
     @Html.AntiForgeryToken()
 
 
-    <p></p>
+
     <div class="form-group">
         @Html.LabelFor(x => x.SelectedCategory, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-5">
@@ -20,7 +20,7 @@
         </div>
     </div>
 
-    <p></p>
+
 
     <div class="form-group">
         @Html.LabelFor(x => x.SelectedDescription, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -30,14 +30,18 @@
         </div>
     </div>
 
-    <p></p>
+
 
     <div class="form-group">
-        <label>Quantity: </label>
-        <input type="number" class="qty" id="@Model.Quantity" min="0" max="100" value="@Model.Quantity" )" />
+        @Html.LabelFor(x => x.Quantity, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.TextBoxFor(model => model.Quantity, new { type = "number", min = "0", max = "100" })
+        @Html.ValidationMessageFor(x => x.Quantity, "", new { @class = "text-danger" })
     </div>
 
-    <p></p>
+    <div class="form-group">
+        @Html.HiddenFor(model => model.CreatedDate)
+    </div>
+
 
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <div class="form-group">
@@ -78,3 +82,4 @@
             });
     </script>
 }
+
