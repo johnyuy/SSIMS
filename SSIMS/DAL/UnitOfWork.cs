@@ -41,6 +41,19 @@ namespace SSIMS.DAL
         }
 
 
+        public RetrievalListRepository RetrievalListRepository
+        {
+            get
+            {
+
+                if (this.retrievalListRepository == null)
+                {
+                    this.retrievalListRepository = new RetrievalListRepository(context);
+                }
+                return retrievalListRepository;
+            }
+        }
+
         public StaffRepository StaffRepository
         {
             get

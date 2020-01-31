@@ -16,9 +16,6 @@ namespace SSIMS.Controllers
     public class DepartmentsController : Controller
     {
 
-        
-
-
         // GET: Departments
         public ActionResult Index()
         {
@@ -26,17 +23,17 @@ namespace SSIMS.Controllers
             var departments = unitOfWork.DepartmentRepository.Get(includeProperties: "CollectionPoint");
             ViewBag.RepList = unitOfWork.StaffRepository.GetDeptRepList();
             Debug.WriteLine("number of heads: " + unitOfWork.StaffRepository.GetDeptHeadList().Count());
-            var Deps  = unitOfWork.DepartmentRepository.Get(filter:x=>x.ID!="STOR",includeProperties: "DeptHeadAuthorization.Staff");
+            var Deps = unitOfWork.DepartmentRepository.Get(filter: x => x.ID != "STOR", includeProperties: "DeptHeadAuthorization.Staff");
             ViewBag.Departments = Deps;
             List<string> authNames = new List<string>();
-            foreach(Department d in Deps)
+            foreach (Department d in Deps)
             {
                 if (d.DeptHeadAuthorization == null)
                     authNames.Add("none");
                 else
                     authNames.Add(d.DeptHeadAuthorization.Staff.Name);
             }
-            ViewBag.HeadList = unitOfWork.StaffRepository.Get(filter:x=>x.StaffRole == "DeptHead");
+            ViewBag.HeadList = unitOfWork.StaffRepository.Get(filter: x => x.StaffRole == "DeptHead");
             ViewBag.RepList = unitOfWork.StaffRepository.Get(filter: x => x.StaffRole == "DeptRep");
             ViewBag.Auth = authNames;
             ViewBag.DeptCount = unitOfWork.DepartmentRepository.Get().Count();
@@ -47,23 +44,28 @@ namespace SSIMS.Controllers
         public ActionResult Details(string id)
         {
             UnitOfWork unitOfWork = new UnitOfWork();
+            Department department = unitOfWork.DepartmentRepository.Get(filter: x => x.ID == id, includeProperties: "CollectionPoint").First();
+            CollectionPoint selected = department.CollectionPoint;
+            ViewBag.SelectedPoint = selected.Location;
+            ViewBag.OtherPoints = unitOfWork.CollectionPointRepository.Get(filter: x => x.Location != selected.Location);
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Department department = unitOfWork.DepartmentRepository.GetByID(id);
             if (department == null)
             {
                 return HttpNotFound();
             }
-            return View(department);
+            ViewBag.Department = department;
+
+            return View();
         }
 
-        // GET: Departments/Create
+        // GET: Departments/Create 
         public ActionResult Create()
         {
             UnitOfWork unitOfWork = new UnitOfWork();
-            ViewBag.CollectionPointID = new SelectList(unitOfWork.CollectionPointRepository.Get(), "ID", "Location"); 
+            ViewBag.CollectionPointID = new SelectList(unitOfWork.CollectionPointRepository.Get(), "ID", "Location");
             ViewBag.DeptHeadID = new SelectList(unitOfWork.StaffRepository.Get(), "ID", "UserAccountID");
             ViewBag.DeptRepID = new SelectList(unitOfWork.StaffRepository.Get(), "ID", "UserAccountID");
             return View();
@@ -90,7 +92,7 @@ namespace SSIMS.Controllers
             return View(department);
         }
 
-        // GET: Departments/Edit/5
+        // GET: Departments/Edit/ARCH
         public ActionResult Edit(string id)
         {
             UnitOfWork unitOfWork = new UnitOfWork();
@@ -172,41 +174,22 @@ namespace SSIMS.Controllers
             base.Dispose(disposing);
         }
 
-/*        //delegate authority
-        public ActionResult DelegateAuthority()
+        public ActionResult SelectCollectionPoint (string id)
         {
-            DeptHeadAuthorization deptHead = new DeptHeadAuthorization();
-            return null;
-        }*/
-
-        //select collection point
-       /* public ActionResult SelectCollectionPoint(string id)
-        {
+            UnitOfWork unitOfWork = new UnitOfWork();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Department department = db.Departments.Find(id);
+            Department department = unitOfWork.DepartmentRepository.GetByID(id);
             if (department == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.CollectionPointID = new SelectList(db.CollectionPoints, "ID", "Location", department.CollectionPoint.ID);
+            ViewBag.CollectionPointID = new SelectList(unitOfWork.CollectionPointRepository.Get(), "ID", "Location", department.CollectionPoint.ID);
             return View(department);
         }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult SelectCollectionPoint([Bind(Include = "ID,CollectionPointID,DeptName")] Department department)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Departments.Add(department);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            ViewBag.CollectionPointID = new SelectList(db.CollectionPoints, "ID", "Location", department.CollectionPoint.ID);
-            return View(department);
-        }*/
+     
     }
 }
+
