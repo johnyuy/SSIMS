@@ -40,6 +40,8 @@ namespace SSIMS.Models
             ResponseDate = null;
             Status = 0;
         }
-        public Document() { }
+        public Document() {
+
+        }
     }
 }

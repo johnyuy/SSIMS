@@ -1,26 +1,19 @@
-﻿@model IEnumerable<SSIMS.ViewModels.RequisitionCreateViewModel>
+﻿@model IEnumerable<SSIMS.Models.RequisitionOrder>
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
-
-
 
 <h2>View Requisition List</h2>
 
-<
+
 
 
 <table class="table">
     <tr>
 
         <th>
-            @Html.DisplayNameFor(model => model.SelectedDescription)
-        </th>
-
-        <th>
-            @Html.DisplayNameFor(model => model.SelectedCategory)
+            @Html.DisplayNameFor(model => model.ID)
         </th>
 
         <th>
@@ -31,32 +24,39 @@
             @Html.DisplayNameFor(model => model.Status)
         </th>
 
+        <th>
+            @Html.DisplayNameFor(model => model.ResponseDate)
+        </th>
+
+        <th>
+            My Requisition
+        </th>
 
         <th></th>
     </tr>
 
-    @foreach (var rcvm in Model)
+    @foreach (var ro in Model)
     {
         <tr>
 
             <td>
-                @Html.DisplayFor(modelItem => rcvm.SelectedDescription)
+                @Html.DisplayFor(modelItem => ro.ID)
             </td>
 
             <td>
-                @Html.DisplayFor(modelItem => rcvm.Quantity)
+                @Html.DisplayFor(modelItem => ro.CreatedDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => rcvm.CreatedDate)
+                @Html.DisplayFor(modelItem => ro.Status)    
             </td>
             <td>
-                @Html.DisplayFor(modelItem => rcvm.Status)
+                @Html.DisplayFor(modelItem => ro.ResponseDate)
             </td>
 
             <td>
-                @*@@Html.ActionLink("Edit", "Edit", new { id = }) |
-                    @Html.ActionLink("Details", "Details", new { id = }) |
-                    @Html.ActionLink("Delete", "Delete", new { id =  })*@
+               
+                @Html.ActionLink("Details", "Details", new { id =ro.ID }) 
+                   
             </td>
         </tr>
     }
