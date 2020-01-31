@@ -8,7 +8,6 @@ namespace SSIMS.Models
     public class PurchaseItem
     {
         public int ID { get; set; }
-        public int TenderID { get; set; }
         public int Qty { get; set; }
  
         public Tender Tender { get; set; }
@@ -17,10 +16,9 @@ namespace SSIMS.Models
         {
         }
 
-        public PurchaseItem(int purchaseItemId, int tenderID, int qty)
+        public PurchaseItem(int purchaseItemId, int qty)
         {
             ID = purchaseItemId;
-            TenderID = tenderID;
             Qty = qty;
         }
     }

@@ -1,8 +1,9 @@
-﻿
+﻿@model IEnumerable<SSIMS.ViewModels.RequisitionSummaryViewModel>
 @{
+
     ViewBag.Title = "AnalyticsList";
-    var db = Database.Open("SSIMS");
-    var selectQueryString = "select DocumentItems.Qty,Items.Category,RequisitionOrders.CreatedDate,Staffs.Department_ID ,MONTH(RequisitionOrders.CreatedDate) AS MONTHfrom Staffs, RequisitionOrders, DocumentItems, Items where Items.ID=DocumentItems.Item_ID and Staffs.ID=RequisitionOrders.CreatedByStaffID";
+   //DatabaseContext db = new DatabaseContext();
+    //var selectQueryString = "select DocumentItems.Qty,Items.Category,RequisitionOrders.CreatedDate,Staffs.Department_ID ,MONTH(RequisitionOrders.CreatedDate) AS MONTHfrom Staffs, RequisitionOrders, DocumentItems, Items where Items.ID=DocumentItems.Item_ID and Staffs.ID=RequisitionOrders.CreatedByStaffID";
 
 }
 <!DOCTYPE html>
@@ -10,7 +11,7 @@
 
 <html>
 <head>
-    <title>Small Bakery Products</title>
+    <title>order</title>
     <style>
         table, th, td {
             border: solid 1px #bbbbbb;
@@ -20,7 +21,7 @@
     </style>
 </head>
 <body>
-    <h1>Small Bakery Products</h1>
+    <h1>Orders</h1>
     <table>
         <thead>
             <tr>
@@ -32,15 +33,16 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var row in db.Query(selectQueryString))
+            @foreach (var item in Model)
             {
-                <tr>
-                    <td>@row.Qty</td>
-                    <td>@row.Category</td>
-                    <td>@row.CreatDaten</td>
-                    <td>@row.Department_ID</td>
-                    <td>@row.MONTH</td>
-                </tr>
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Qty)</td>
+                <td>@Html.DisplayFor(modelItem => item.Category)</td>
+                <td>@Html.DisplayFor(modelItem => item.CreatedDate)</td>
+                <td>@Html.DisplayFor(modelItem => item.Department)</td>
+                <td>@Html.DisplayFor(modelItem => item.Month)</td>
+
+            </tr>
             }
         </tbody>
     </table>

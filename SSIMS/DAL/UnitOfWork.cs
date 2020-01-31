@@ -6,7 +6,7 @@ namespace SSIMS.DAL
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private DatabaseContext context = new DatabaseContext();
+        private DatabaseContext context;
         private CollectionPointRepository collectionPointRepository;
         private ItemRepository itemRepository;
         private DepartmentRepository departmentRepository;
@@ -15,7 +15,45 @@ namespace SSIMS.DAL
         private StaffRepository staffRepository;
         private RequisitionOrderRepository requisitionOrderRepository;
         private DocumentItemRepository documentItemRepository;
+        private SupplierRepository supplierRepository;
+        private RetrievalListRepository retrievalListRepository;
 
+        public UnitOfWork()
+        {
+            this.context = new DatabaseContext(); ;
+        }
+
+        public UnitOfWork(DatabaseContext context)
+        {
+            this.context = context;
+        }
+
+        public SupplierRepository SupplierRepository
+        {
+            get
+            {
+
+                if (this.supplierRepository == null)
+                {
+                    this.supplierRepository = new SupplierRepository(context);
+                }
+                return supplierRepository;
+            }
+        }
+
+
+        public RetrievalListRepository RetrievalListRepository
+        {
+            get
+            {
+
+                if (this.retrievalListRepository == null)
+                {
+                    this.retrievalListRepository = new RetrievalListRepository(context);
+                }
+                return retrievalListRepository;
+            }
+        }
 
         public StaffRepository StaffRepository
         {

@@ -222,6 +222,8 @@
     <Compile Include="DAL\RequisitionOrderRepository.cs" />
     <Compile Include="DAL\RetrievalListRepository.cs" />
     <Compile Include="DAL\StaffRepository.cs" />
+    <Compile Include="DAL\SupplierRepository.cs" />
+    <Compile Include="DAL\TenderRepository.cs" />
     <Compile Include="DAL\UnitOfWork.cs" />
     <Compile Include="Database\DatabaseContext.cs" />
     <Compile Include="Database\DatabaseCustomizer.cs" />
@@ -256,8 +258,10 @@
     <Compile Include="Service\PurchaseOrderService.cs" />
     <Compile Include="Service\StaffService.cs" />
     <Compile Include="Service\DisbursementService.cs" />
+    <Compile Include="ViewModels\AnalyticsListViewModel.cs" />
     <Compile Include="ViewModels\InventoryViewModel.cs" />
     <Compile Include="ViewModels\RequisitionCreateViewModel.cs" />
+    <Compile Include="ViewModels\RequisitionSummaryViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -321,7 +325,6 @@
     <Content Include="Views\DisbursementLists\Details.cshtml" />
     <Content Include="Views\DisbursementLists\Edit.cshtml" />
     <Content Include="Views\DisbursementLists\Index.cshtml" />
-    <Content Include="Views\Analytics\Index.cshtml" />
     <Content Include="Views\Departments\Create.cshtml" />
     <Content Include="Views\Departments\Delete.cshtml" />
     <Content Include="Views\Departments\Details.cshtml" />
@@ -340,6 +343,7 @@
     <Content Include="Views\Analytics\AnalyticsList.cshtml" />
     <Content Include="Views\Requisition\Create.cshtml" />
     <Content Include="Views\Requisition\Index.cshtml" />
+    <Content Include="Views\Departments\DelegateAuthority.cshtml" />
     <Content Include="Views\Requisition\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
