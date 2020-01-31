@@ -16,6 +16,7 @@ namespace SSIMS.DAL
         private RequisitionOrderRepository requisitionOrderRepository;
         private DocumentItemRepository documentItemRepository;
         private SupplierRepository supplierRepository;
+        private RetrievalListRepository retrievalListRepository;
 
         public UnitOfWork()
         {
