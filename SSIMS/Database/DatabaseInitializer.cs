@@ -219,7 +219,7 @@ namespace SSIMS.Database
             //BANE Tenders...
             List<Tender> banetender = new List<Tender>
             {
-                new Tender("C001", "BANE yoyoyo", 2.49, uow),
+                new Tender("C001", "BANE", 2.49, uow),
                 new Tender("C002", "BANE", 2.79, uow),
                 new Tender("C003", "BANE", 2.99, uow),
                 new Tender("C004", "BANE", 5.99, uow),
