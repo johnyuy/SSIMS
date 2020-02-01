@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -21,7 +22,14 @@ namespace SSIMS.Controllers
         public ActionResult Authenticate(UserLogin userLogin)
         {
             ILoginService LoginService = new LoginService();
-            LoginService.VerifyPassword("ssimstestaccount", "password33");
+            if(LoginService.VerifyPassword(userLogin.Username, userLogin.Password))
+            {
+                Debug.WriteLine("\n");
+                Debug.WriteLine("Session.SessionID = " + Session.SessionID);
+                Debug.WriteLine("HttpContext.Session.SessionID = "+ HttpContext.Session.SessionID);
+                return RedirectToAction("Index", "Home");
+            }
+                
             
             return RedirectToAction("Authenthication", userLogin);
         }

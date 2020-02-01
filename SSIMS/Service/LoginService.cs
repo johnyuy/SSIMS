@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using SSIMS.DAL;
+using SSIMS.Models;
 using System.Diagnostics;
 
 namespace SSIMS.Service
@@ -12,10 +13,15 @@ namespace SSIMS.Service
         UnitOfWork uow = new UnitOfWork();
         public bool VerifyPassword(string username, string password)
         {
-            Debug.WriteLine("Verifying Login username and password");
-            Debug.WriteLine("Username = " + username);
-            Debug.WriteLine("Password = " + password);
-
+            Debug.WriteLine("Verifying Login");
+            Debug.WriteLine("\tUsername = " + username);
+            Debug.WriteLine("\tPassword = " + password);
+            UserAccount account = uow.UserAccountRepository.GetByID(username);
+            if (account != null && password == account.Password) {
+                Debug.WriteLine("\tAuthenthication successful!");
+                return true;
+            }
+            Debug.WriteLine("\tAuthenthication Unsuccessful!");
             return false;
         }
     }
