@@ -116,83 +116,74 @@ namespace SSIMS.Service
             unitOfWork.Save();
         }
 
-        public DeptRetrievalItemViewModel GenerateDeptRetrievalItemViewModels(Department d, Item item)
+        //generate the retrieval list item for the model view
+        public DeptRetrievalItemViewModel GenerateDeptRetrievalItem(Department d, Item item)
         {
-  
+
             // find transactional item using dept and item and in progress
-            var titem = unitOfWork.RetrievalListRepository.Get(filter: x => x.Department == d &&  == && Status in progress )
+            List<TransactionItem> deptRetrievalList = GenerateDeptRetrievalList(d.ID);
+            TransactionItem tItem = (TransactionItem)deptRetrievalList.Where(x => x.Item == item);
 
-            // using found item to construct deptRetrievalItemList
-            DeptRetrievalItemViewModel deptRetrievalItemList = new DeptRetrievalItemViewModel(titem);
+            // using found item to construct DeptRetrievalItem
+            DeptRetrievalItemViewModel deptRetrievalItem = new DeptRetrievalItemViewModel(d.ID, tItem);
 
-            return deptRetrievalItemList;
+            return deptRetrievalItem;
         }
 
-
-        public List<RetrievalItemViewModel> vvvvv()
+        //generate the retrieval list item for the model view using Retrieval List as input
+        public List<DeptRetrievalItemViewModel> GenerateDeptRetrievalItemListByRetrievalList(RetrievalList retrievalList)
         {
-            List<TransactionItem> uniqueitems = GenerateCombinedRetrievalList();
-            List<RetrievalItemViewModel> result = new List<RetrievalItemViewModel>();
-            foreach (TransactionItem t in uniqueitems)
+            List<TransactionItem> itemList = (List<TransactionItem>)retrievalList.ItemTransactions;
+            List<DeptRetrievalItemViewModel> drivmList = new List<DeptRetrievalItemViewModel>();
+            foreach (TransactionItem item in itemList)
             {
-                RetrievalItemViewModel rvm = new RetrievalItemViewModel(t.Item, t);
-                var depts = unitOfWork.DepartmentRepository.Get();
-                foreach (Department d in depts)
-                {
+                DeptRetrievalItemViewModel drvm = new DeptRetrievalItemViewModel(retrievalList.Department.ID, item);
+                drivmList.Add(drvm);
+            }
+            return drivmList;
+        }
 
-                    DeptRetrievalItemViewModel drimv = GenerateDeptRetrievalItemViewModels(d, t.Item);
-                    rvm.deptRetrievalItems.Add(drimv);
-                }
-                result.Add(rvm);
+        //generate RetrievalItemViewwModel i.e. the item for the combined retrieval list 
+        public List<RetrievalItemViewModel> GenerateRetrievalItemViewModelWithoutDRIVMList(List<TransactionItem> combinedRetrievalList)
+        {
+            List<RetrievalItemViewModel> combinedRetrievalItemVMList = new List<RetrievalItemViewModel>();
+            foreach(TransactionItem item in combinedRetrievalList)
+            {
+                RetrievalItemViewModel itemVM = new RetrievalItemViewModel(item.Item, item);
+                combinedRetrievalItemVMList.Add(itemVM);
+            }
+            return combinedRetrievalItemVMList;
+        }
+        
+        
+        //generate the combined retrieval list by item.
+        public List<RetrievalItemViewModel> GenerateRetrievalItemViewModel(List<TransactionItem> combinedRetrievalList)
+        {
+            List<RetrievalItemViewModel> combinedRIVMList = new List<RetrievalItemViewModel>();
+            List<RetrievalItemViewModel> rivmList = GenerateRetrievalItemViewModelWithoutDRIVMList(combinedRetrievalList);
+            var retrievalListList = unitOfWork.RetrievalListRepository.Get(filter: x => x.Status.ToString() == "Approved");
+            List<List<DeptRetrievalItemViewModel>> drivmListList = new List<List<DeptRetrievalItemViewModel>>();
+            foreach (RetrievalList rl in retrievalListList)
+            {
+                List<DeptRetrievalItemViewModel> drivmList = GenerateDeptRetrievalItemListByRetrievalList(rl);
+                drivmListList.Add(drivmList);
             }
 
-
-            //
+            foreach (RetrievalItemViewModel rivm in rivmList)
+            {
+                foreach(List<DeptRetrievalItemViewModel> drivmList in drivmListList)
+                {
+                    DeptRetrievalItemViewModel item = (DeptRetrievalItemViewModel) drivmList.Where(x => x.transactionItem.Item == rivm.item);
+                    rivm.deptRetrievalItems.Add(item);
+                }
+            }
+            foreach(RetrievalItemViewModel rivm in rivmList)
+            {
+                Debug.WriteLine("Items in Model View: " + rivm.item.Description + " Handover Qty: " + rivm.transactionItem.HandOverQty);
+            }
+            return rivmList;
         } 
 
-        public List<RetrievalItemViewModel> GenerateRetrievalItemViewModel(List<List<DeptRetrievalItemViewModel>> deptRetrievalItemsListList)
-        {
-            List<RetrievalItemViewModel> itemViewList = new List<RetrievalItemViewModel>();
-            List<DeptRetrievalItemViewModel> listDeptByItem = new List<DeptRetrievalItemViewModel>();
-            if (itemViewList.Count==0 && deptRetrievalItemsListList.Count>0)
-            {
-                foreach(List<DeptRetrievalItemViewModel> listItemByDept in deptRetrievalItemsListList)
-                {
-                    foreach(DeptRetrievalItemViewModel deptItem in listItemByDept)
-                    {
-                        
-                        RetrievalItemViewModel itemView = new RetrievalItemViewModel(deptItem.transactionItem.Item, deptItem.transactionItem, listDeptByItem);
-                        itemViewList.Add(itemView);
-                    }
-                }
-            }
-            
-            foreach(List<DeptRetrievalItemViewModel> listItemByDept in deptRetrievalItemsListList)
-            {
-                foreach (DeptRetrievalItemViewModel deptItem in listItemByDept)
-                {
-                    bool isExist = false;
-                    RetrievalItemViewModel temp;
-                    int index = 0;
-
-                    for(int i = 0; i<itemViewList.Count; i++)
-                    {
-                        temp = itemViewList[i];
-                        if (temp.item.ID.Equals(deptItem.transactionItem.Item.ID){
-                            isExist = true;
-                            index = i;
-                            break;
-                        }
-                        if (isExist)
-                        {
-                            listDeptByItem.Add(deptItem);
-                        }
-                    }
-                }
-            }
-            
-            return null;
-        }
 
         public List<TransactionItem> GenerateCombinedRetrievalList()
         {

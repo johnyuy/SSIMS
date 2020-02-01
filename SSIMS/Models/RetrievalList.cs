@@ -16,5 +16,9 @@ namespace SSIMS.Models
         {
             Department = department;
         }
+
+        public RetrievalList()
+        {
+        }
     }
 }

@@ -26,8 +26,9 @@ namespace SSIMS.Controllers
 
             //my code for testing
             ds.GenerateDeptRetrievalList("ENGL");
-            ds.GenerateCombinedRetrievalList();
+            var combinedList = ds.GenerateCombinedRetrievalList();
             ds.InsertDeptRetrievalList("ENGL");
+            ds.GenerateRetrievalItemViewModel(combinedList);
             if (disbursementLists == null)
             {
                 return HttpNotFound();
