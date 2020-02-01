@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@{ 
+    string user = (HttpContext.Current.Session.Count>0) ? HttpContext.Current.Session[0].ToString() : "Login Authentication Failed";
+}
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -106,7 +109,7 @@
         else
         {<a href="~/items/index">Items</a>}
         <a href="#logout"><i class="fa fa-fw fa-external-link"></i>Logout</a>
-        <div><div style="color:wheat; width:50px; margin:30px auto;"><b>@HttpContext.Current.Session[0]</b></div></div>
+        <div><div style="color:wheat; width:70px; margin:30px auto;"><b>@user</b></div></div>
     </div>
     <div class="container body-content">
         @RenderBody()
