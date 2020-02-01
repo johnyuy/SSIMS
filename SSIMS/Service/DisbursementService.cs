@@ -259,7 +259,7 @@ namespace SSIMS.Service
             unitOfWork.Save();
         }
         
-        //Generates dept disbursement list
+        //Generates dept disbursement list using the combined dept retrieval list
         public DisbursementList GenerateDisbursementList(string deptID)
         {
             Debug.WriteLine("Generating Dept Disbursement List...");
@@ -284,6 +284,8 @@ namespace SSIMS.Service
             return disbursementList;
         }
 
+        //Condensing all the retrieval lists from that dept that are InProgress (i.e. not disbursed yet) into a combined retrieval list with unique items
+        //Changing the status of the retrieval list to Completed. 
         public RetrievalList GenerateCombinedDeptRetrievalList(string deptID)
         {
             var completedRetrievals = unitOfWork.RetrievalListRepository.Get(filter: x => x.Status.ToString() == "InProgress" && x.Department.ID == deptID).ToList();
@@ -329,6 +331,10 @@ namespace SSIMS.Service
                         combinedRetrievalList.Add(transItem);
                     }
                 }
+                rl.Status = (Models.Status)4; //Set Retrieval List statue to "Completed"
+                Debug.WriteLine("Setting Retrieval List status to Completed...");
+                unitOfWork.RetrievalListRepository.Update(rl);
+                unitOfWork.Save();
             }
             foreach (TransactionItem item in combinedRetrievalList)
             {
