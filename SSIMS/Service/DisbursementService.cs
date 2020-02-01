@@ -118,14 +118,15 @@ namespace SSIMS.Service
 
         public DeptRetrievalItemViewModel GenerateDeptRetrievalItemViewModels(Department d, Item item)
         {
-  
+
             // find transactional item using dept and item and in progress
-            var titem = unitOfWork.RetrievalListRepository.Get(filter: x => x.Department == d &&  == && Status in progress )
+            /* var titem = unitOfWork.RetrievalListRepository.Get(filter: x => x.Department == d &&  == && Status in progress )
 
-            // using found item to construct deptRetrievalItemList
-            DeptRetrievalItemViewModel deptRetrievalItemList = new DeptRetrievalItemViewModel(titem);
+             // using found item to construct deptRetrievalItemList
+             DeptRetrievalItemViewModel deptRetrievalItemList = new DeptRetrievalItemViewModel(titem);
 
-            return deptRetrievalItemList;
+             return deptRetrievalItemList;*/
+            return null;
         }
 
 
@@ -146,7 +147,7 @@ namespace SSIMS.Service
                 result.Add(rvm);
             }
 
-
+            return null;
             //
         } 
 
@@ -178,7 +179,7 @@ namespace SSIMS.Service
                     for(int i = 0; i<itemViewList.Count; i++)
                     {
                         temp = itemViewList[i];
-                        if (temp.item.ID.Equals(deptItem.transactionItem.Item.ID){
+                        if (temp.item.ID.Equals(deptItem.transactionItem.Item.ID)){
                             isExist = true;
                             index = i;
                             break;

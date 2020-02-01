@@ -8,7 +8,7 @@ using SSIMS.DAL;
 
 namespace SSIMS.Database
 {
-    public class DatabaseInitializer<T> : CreateDatabaseIfNotExists<DatabaseContext>
+    public class DatabaseInitializer<T> : DropCreateDatabaseAlways<DatabaseContext>
     {
         static StaffRepository StaffRepository;
         static ItemRepository ItemRepository;

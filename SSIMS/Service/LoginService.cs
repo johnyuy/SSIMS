@@ -11,6 +11,7 @@ namespace SSIMS.Service
     public class LoginService : ILoginService
     {
         UnitOfWork uow = new UnitOfWork();
+        
         public bool VerifyPassword(string username, string password)
         {
             Debug.WriteLine("Verifying Login");
@@ -18,10 +19,34 @@ namespace SSIMS.Service
             Debug.WriteLine("\tPassword = " + password);
             UserAccount account = uow.UserAccountRepository.GetByID(username);
             if (account != null && password == account.Password) {
-                Debug.WriteLine("\tAuthenthication successful!");
+                Debug.WriteLine("\tLogin successful!");
                 return true;
             }
-            Debug.WriteLine("\tAuthenthication Unsuccessful!");
+            Debug.WriteLine("\tLogin Unsuccessful!");
+            return false;
+        }
+
+        public void CreateNewSession(string username, string sessionId)
+        {
+            UserAccount account = uow.UserAccountRepository.GetByID(username);
+            if(account != null)
+            {
+                Debug.Print("\tOld SessionID for " + account.ID + " = " + account.SessionID);
+                account.SessionID = sessionId;
+                uow.UserAccountRepository.Update(account);
+                uow.Save();
+                Debug.Print("\tNew SessionID for " + account.ID + " = " + account.SessionID);
+            }
+        }
+
+        public bool AuthenticateSession(string username, string sessionId)
+        {
+            UserAccount account = uow.UserAccountRepository.GetByID(username);
+            if(account != null)
+            {
+                if (sessionId == account.SessionID)
+                    return true;
+            }
             return false;
         }
     }

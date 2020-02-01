@@ -231,6 +231,7 @@
     <Compile Include="Database\DatabaseInitializer.cs" />
     <Compile Include="DAL\GenericRepository.cs" />
     <Compile Include="Database\ServerConnection.cs" />
+    <Compile Include="Filters\AuthenticationFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -340,7 +341,7 @@
     <Content Include="Views\Departments\DelegateAuthority.cshtml" />
     <Content Include="Views\Requisition\Details.cshtml" />
     <Content Include="Views\Shared\_Login_Layout.cshtml" />
-    <Content Include="Views\Login\Authenthication.cshtml" />
+    <Content Include="Views\Login\Authentication.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

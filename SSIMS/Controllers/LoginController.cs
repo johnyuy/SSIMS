@@ -11,9 +11,13 @@ namespace SSIMS.Controllers
 {
     public class LoginController : Controller
     {
+        public ActionResult Index()
+        {
+            return RedirectToAction("Authentication");
+        }
         
         // GET: Login
-        public ActionResult Authenthication()
+        public ActionResult Authentication()
         {
             return View();
         }
@@ -25,16 +29,16 @@ namespace SSIMS.Controllers
             if(LoginService.VerifyPassword(userLogin.Username, userLogin.Password))
             {
                 Debug.WriteLine("\n");
-                Debug.WriteLine("Session.SessionID = " + Session.SessionID);
                 Debug.WriteLine("HttpContext.Session.SessionID = "+ HttpContext.Session.SessionID);
                 
                 HttpContext.Session.Add("username",userLogin.Username);
                 
+               
+                LoginService.CreateNewSession(userLogin.Username,HttpContext.Session.SessionID);
                 return RedirectToAction("Index", "Home");
             }
                 
-            
-            return RedirectToAction("Authenthication", userLogin);
+            return RedirectToAction("Authentication", userLogin);
         }
     }
 }
