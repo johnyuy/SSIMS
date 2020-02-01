@@ -27,6 +27,9 @@ namespace SSIMS.Controllers
                 Debug.WriteLine("\n");
                 Debug.WriteLine("Session.SessionID = " + Session.SessionID);
                 Debug.WriteLine("HttpContext.Session.SessionID = "+ HttpContext.Session.SessionID);
+                
+                HttpContext.Session.Add("username",userLogin.Username);
+                
                 return RedirectToAction("Index", "Home");
             }
                 
