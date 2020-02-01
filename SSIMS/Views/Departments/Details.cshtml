@@ -1,74 +1,57 @@
-﻿@model SSIMS.Models.Department
+﻿@using SSIMS.Models
 
-@{
-    ViewBag.Title = "Details";
+
+@{ 
+    ViewBag.Header = "Departments";
+    Department department = ViewBag.Department;
+    string selected = ViewBag.SelectedPoint;
+    List<CollectionPoint> options = ViewBag.OtherPoints;
 }
 
-<h2>Details</h2>
+<script>
+    function update() {
+        var cp = document.getElementById("collectionpoint").value;
+        alert("Collection Point Updated!");
+        post("/departments/updatecollectionpoint", { "id": cp });
+    }
+
+    function post(path, params, method='post') {
+      const form = document.createElement('form');
+      form.method = method;
+      form.action = path;
+
+      for (const key in params) {
+        if (params.hasOwnProperty(key)) {
+          const hiddenField = document.createElement('input');
+          hiddenField.type = 'hidden';
+          hiddenField.name = key;
+          hiddenField.value = params[key];
+          form.appendChild(hiddenField);
+        }
+      }
+      document.body.appendChild(form);
+      form.submit();
+    }
+</script>
 
 <div>
-    <h4>Department</h4>
+    <h4>@department.DeptName Department Dashboard</h4>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.CollectionPoint.Location)
-        </dt>
+    <table>
+        <tr>
+            <th>Collection Location</th>
+            <td>
+                <select id="collectionpoint" onchange="update()">
+                    <option selected value=@department.CollectionPoint.ID>@selected</option>
+                    @foreach (CollectionPoint cp in options)
+                    {
+                        <option value=@cp.ID>@cp.Location</option>
+                    }
+                </select>
+            </td>
 
-        <dd>
-            @Html.DisplayFor(model => model.CollectionPoint.Location)
-        </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.DeptHead.UserAccountID)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.DeptHead.UserAccountID)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.DeptRep.UserAccountID)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.DeptRep.UserAccountID)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.DeptHeadAuthorization.ID)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.DeptHeadAuthorization.ID)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.DeptName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.DeptName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.PhoneNumber)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.PhoneNumber)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.FaxNumber)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.FaxNumber)
-        </dd>
-
-    </dl>
+        </tr>
+    </table>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+

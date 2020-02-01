@@ -6,7 +6,7 @@ namespace SSIMS.DAL
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private DatabaseContext context = new DatabaseContext();
+        private DatabaseContext context;
         private CollectionPointRepository collectionPointRepository;
         private ItemRepository itemRepository;
         private DepartmentRepository departmentRepository;
@@ -15,8 +15,44 @@ namespace SSIMS.DAL
         private StaffRepository staffRepository;
         private RequisitionOrderRepository requisitionOrderRepository;
         private DocumentItemRepository documentItemRepository;
+        private SupplierRepository supplierRepository;
         private RetrievalListRepository retrievalListRepository;
+        private UserAccountRepository userAccountRepository;
 
+        public UnitOfWork()
+        {
+            this.context = new DatabaseContext(); ;
+        }
+
+        public UnitOfWork(DatabaseContext context)
+        {
+            this.context = context;
+        }
+
+        public UserAccountRepository UserAccountRepository
+        {
+            get
+            {
+                if (this.userAccountRepository == null)
+                {
+                    this.userAccountRepository = new UserAccountRepository(context);
+                }
+                return userAccountRepository;
+            }
+        }
+
+        public SupplierRepository SupplierRepository
+        {
+            get
+            {
+
+                if (this.supplierRepository == null)
+                {
+                    this.supplierRepository = new SupplierRepository(context);
+                }
+                return supplierRepository;
+            }
+        }
 
         public RetrievalListRepository RetrievalListRepository
         {
@@ -121,6 +157,7 @@ namespace SSIMS.DAL
                 return requisitionOrderRepository;
             }
         }
+
         public DocumentItemRepository DocumentItemRepository
         {
             get
@@ -134,14 +171,12 @@ namespace SSIMS.DAL
             }
         }
 
-
         public void Save()
         {
             context.SaveChanges();
         }
 
         private bool disposed = false;
-
 
         protected virtual void Dispose(bool disposing)
         {

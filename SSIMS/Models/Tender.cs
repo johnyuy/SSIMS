@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
+using SSIMS.Database;
+using SSIMS.DAL;
 
 namespace SSIMS.Models
 {
@@ -18,12 +20,13 @@ namespace SSIMS.Models
         {
         }
 
-        public Tender(Item item, Supplier supplier, double price)
+        public Tender(string itemID, string supplierID, double price, UnitOfWork unitOfWork)
         {
-            Item = item;
-            Supplier = supplier;
+            Item = unitOfWork.ItemRepository.GetByID(itemID);
+            Supplier = unitOfWork.SupplierRepository.GetByID(supplierID);
             Price = price;
         }
+
     }
 
 }

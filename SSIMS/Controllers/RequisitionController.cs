@@ -4,7 +4,9 @@ using SSIMS.Models;
 using SSIMS.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -13,10 +15,31 @@ namespace SSIMS.Controllers
     public class RequisitionController : Controller
     {
         // GET: Requisition
-        public ActionResult Index()
+        public ActionResult Index(Staff staff)
         {
-            return View();
+            staff.ID = 10006;
+            var unitofwork = new UnitOfWork();
+
+            staff = unitofwork.StaffRepository.GetStaffbyID(staff.ID);
+           
+            var reqList = unitofwork.RequisitionOrderRepository.Get(filter:x=>x.CreatedByStaffID==staff.ID);
+            return View(reqList);
+
+           
         }
+
+        // GET: Requisition/ViewAllList
+        public ActionResult ViewAllList()
+        {
+            
+            var unitofwork = new UnitOfWork();
+
+            var reqList = unitofwork.RequisitionOrderRepository.Get();
+
+            return View(reqList);
+
+        }
+
 
         [HttpGet]
         public ActionResult GetDescription(string category)
@@ -38,66 +61,70 @@ namespace SSIMS.Controllers
             RequisitionCreateViewModel vm = new RequisitionCreateViewModel();
             vm.Categories = irepo.GetCategories();
             vm.Descriptions = irepo.GetDescription();
-            vm.CreatedDate = DateTime.Today;
+            //vm.CreatedDate = DateTime.Today;
             vm.Status = 0;
+          
             
             return View(vm);
         }
 
-        // POST: Items/Create
+        // POST: Requisition/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "SelectedCategory,SelectedDescription,Quantity")] RequisitionCreateViewModel rcvm)
         {
             var unitofwork = new UnitOfWork();
-           
+            Debug.WriteLine(rcvm.SelectedCategory + "\n" + rcvm.SelectedDescription + " x " + rcvm.Quantity.ToString());
+            Debug.WriteLine(rcvm.CreatedDate);
+            Debug.WriteLine(rcvm.Status);
+           // Debug.WriteLine(rcvm.RequisitionOrderID);
             if (ModelState.IsValid)
             {
                
-                //get item
+                //get item by itemID
                 Item item = unitofwork.ItemRepository.GetItembyDescrption(rcvm.SelectedDescription);
-                Console.WriteLine(item.ID);
+                Debug.WriteLine(item.ID);
 
                 //save this item into the doucumentitem(item, qty)
-                unitofwork.DocumentItemRepository.InsertDocumentItembyItemandQty(item, rcvm.Quantity);
-
-                //set get documenitem value
-                DocumentItem doItem = new DocumentItem();
-                doItem.Item = item;
-                doItem.Qty = rcvm.Quantity;
-               
-
-                //save this docuItem
-                unitofwork.DocumentItemRepository.Insert(doItem);
-
-
-            
-                //save all
+                DocumentItem doitem= unitofwork.DocumentItemRepository.InsertDocumentItembyItemandQty(item, rcvm.Quantity);
                 unitofwork.Save();
+                Debug.WriteLine(doitem.ID);
 
-                //RequisitionOrder reqorder = unitofwork.RequisitionOrderRepository.Insert(documentitem);
+               RequisitionOrder rq = new RequisitionOrder(unitofwork.StaffRepository.GetByID(10006));
+               rq.DocumentItems.Add(unitofwork.DocumentItemRepository.GetByID(doitem.ID));
 
-                //save this documenitem into the reqOrder
+               unitofwork.RequisitionOrderRepository.Insert(rq);
+               
+               unitofwork.Save();
 
-                
-
-                //return list after creating
-
-                return RedirectToAction("View");
+               return RedirectToAction("Index");
             }
 
             return View(rcvm);
         }
 
-        // GET: Requisition/View
-        public ActionResult View(Staff staff)
-        {
-           
-            var unitofwork = new UnitOfWork();
-            var reqList = unitofwork.DocumentItemRepository.GetRequisitionList(staff);
-            return View(reqList);
 
-          
+        // GET: Requisition/Details/4
+        public ActionResult Details(int id)
+        {
+            //return documentitem by input requisitionOrder ID
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            
+            var unitofwork = new UnitOfWork();
+
+            var requisitionOrder = unitofwork.RequisitionOrderRepository.Get(filter: x => x.ID == id, includeProperties:"DocumentItems.Item").FirstOrDefault();
+
+           
+            if (requisitionOrder == null)
+            {
+                return HttpNotFound();
+            }
+            return View(requisitionOrder);
+
         }
+
     }
 }

@@ -1,0 +1,70 @@
+﻿@model SSIMS.Models.RequisitionOrder
+
+    @{
+        ViewBag.Title = "Details";
+    }
+
+    <h2>Details</h2>
+@*
+    <div>
+        <h4>Requisition Order Details</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Document.ID)
+            </dt>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Document.CreatedDate)
+            </dt>
+
+
+        </dl>
+    </div>
+
+*@
+
+
+    <table class="table">
+        <tr>
+
+            <th>
+                Description
+                @*@Html.DisplayNameFor(model => model.Item.Description)*@
+            </th>
+
+            <th>
+                Unit of Measure
+                @*@Html.DisplayNameFor(model => model.Item.UnitOfMeasure)*@
+            </th>
+
+            <th>
+                Qty
+                @*@Html.DisplayNameFor(model => model.Qty)*@
+            </th>
+
+        </tr>
+
+        @foreach (var ro in Model.DocumentItems)
+        {
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => ro.Item.Description)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => ro.Item.UnitOfMeasure)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => ro.Qty)
+                </td>
+                
+            </tr>
+        }
+
+    </table>
+
+    <p>
+        @Html.ActionLink("Back to List", "Index")
+    </p>
