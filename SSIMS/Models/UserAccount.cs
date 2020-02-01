@@ -13,7 +13,7 @@ namespace SSIMS.Models
         public string Password { get; set; }
         public int StoreAccess { get; set; }
         public int DeptAccess { get; set; }
-
+        public string SessionID { get; set; }
         public UserAccount()
         {
         }

@@ -8,6 +8,8 @@ namespace SSIMS.Service
 {
     interface ILoginService
     {
-        bool VerifyPassword(string uesrname, string password);
+        bool VerifyPassword(string username, string password);
+        void CreateNewSession(string username, string sessionId);
+        bool AuthenticateSession(string username, string sessionId);
     }
 }

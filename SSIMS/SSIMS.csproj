@@ -231,6 +231,7 @@
     <Compile Include="Database\DatabaseInitializer.cs" />
     <Compile Include="DAL\GenericRepository.cs" />
     <Compile Include="Database\ServerConnection.cs" />
+    <Compile Include="Filters\AuthenticationFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -302,20 +303,13 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\_Admin_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\CollectionPoints\Create.cshtml" />
-    <Content Include="Views\CollectionPoints\Index.cshtml" />
     <Content Include="Views\Items\Create.cshtml" />
     <Content Include="Views\Items\Delete.cshtml" />
     <Content Include="Views\Items\Details.cshtml" />
     <Content Include="Views\Items\Edit.cshtml" />
     <Content Include="Views\Items\Index.cshtml" />
-    <Content Include="Views\CollectionPoints\Delete.cshtml" />
-    <Content Include="Views\CollectionPoints\Details.cshtml" />
-    <Content Include="Views\CollectionPoints\Edit.cshtml" />
     <Content Include="Views\Staffs\Create.cshtml" />
     <Content Include="Views\Staffs\Delete.cshtml" />
     <Content Include="Views\Staffs\Details.cshtml" />
@@ -347,10 +341,11 @@
     <Content Include="Views\Departments\DelegateAuthority.cshtml" />
     <Content Include="Views\Requisition\Details.cshtml" />
     <Content Include="Views\Shared\_Login_Layout.cshtml" />
-    <Content Include="Views\Login\Authenthication.cshtml" />
+    <Content Include="Views\Login\Authentication.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\CollectionPoints\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

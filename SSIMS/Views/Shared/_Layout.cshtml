@@ -106,7 +106,7 @@
         else
         {<a href="~/items/index">Items</a>}
         <a href="#logout"><i class="fa fa-fw fa-external-link"></i>Logout</a>
-        <span style="color:wheat"><b>ADMIN</b></span>
+        <div><div style="color:wheat; width:50px; margin:30px auto;"><b>@HttpContext.Current.Session[0]</b></div></div>
     </div>
     <div class="container body-content">
         @RenderBody()
