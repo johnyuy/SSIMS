@@ -214,6 +214,7 @@
     <Compile Include="Controllers\StaffsController.cs" />
     <Compile Include="DAL\CollectionPointRepository.cs" />
     <Compile Include="DAL\DepartmentRepository.cs" />
+    <Compile Include="DAL\DisbursementListRepository.cs" />
     <Compile Include="DAL\DocumentItemRepository.cs" />
     <Compile Include="DAL\IPurchaseOrderRepository.cs" />
     <Compile Include="DAL\ItemRepository.cs" />
@@ -224,6 +225,7 @@
     <Compile Include="DAL\StaffRepository.cs" />
     <Compile Include="DAL\SupplierRepository.cs" />
     <Compile Include="DAL\TenderRepository.cs" />
+    <Compile Include="DAL\TransactionItemRepository.cs" />
     <Compile Include="DAL\UnitOfWork.cs" />
     <Compile Include="DAL\UserAccountRepository.cs" />
     <Compile Include="Database\DatabaseContext.cs" />

@@ -20,5 +20,11 @@ namespace SSIMS.Models
         public RetrievalList()
         {
         }
+
+        public RetrievalList(ICollection<TransactionItem> itemTransactions, Department department)
+        {
+            ItemTransactions = itemTransactions;
+            Department = department;
+        }
     }
 }
