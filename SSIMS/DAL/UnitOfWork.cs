@@ -17,6 +17,7 @@ namespace SSIMS.DAL
         private DocumentItemRepository documentItemRepository;
         private SupplierRepository supplierRepository;
         private RetrievalListRepository retrievalListRepository;
+        private UserAccountRepository userAccountRepository;
 
         public UnitOfWork()
         {
@@ -26,6 +27,18 @@ namespace SSIMS.DAL
         public UnitOfWork(DatabaseContext context)
         {
             this.context = context;
+        }
+
+        public UserAccountRepository UserAccountRepository
+        {
+            get
+            {
+                if (this.userAccountRepository == null)
+                {
+                    this.userAccountRepository = new UserAccountRepository(context);
+                }
+                return userAccountRepository;
+            }
         }
 
         public SupplierRepository SupplierRepository
@@ -40,7 +53,6 @@ namespace SSIMS.DAL
                 return supplierRepository;
             }
         }
-
 
         public RetrievalListRepository RetrievalListRepository
         {
@@ -145,6 +157,7 @@ namespace SSIMS.DAL
                 return requisitionOrderRepository;
             }
         }
+
         public DocumentItemRepository DocumentItemRepository
         {
             get
@@ -158,14 +171,12 @@ namespace SSIMS.DAL
             }
         }
 
-
         public void Save()
         {
             context.SaveChanges();
         }
 
         private bool disposed = false;
-
 
         protected virtual void Dispose(bool disposing)
         {

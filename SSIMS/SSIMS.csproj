@@ -226,6 +226,7 @@
     <Compile Include="DAL\SupplierRepository.cs" />
     <Compile Include="DAL\TenderRepository.cs" />
     <Compile Include="DAL\UnitOfWork.cs" />
+    <Compile Include="DAL\UserAccountRepository.cs" />
     <Compile Include="Database\DatabaseContext.cs" />
     <Compile Include="Database\DatabaseCustomizer.cs" />
     <Compile Include="Database\DatabaseInitializer.cs" />
