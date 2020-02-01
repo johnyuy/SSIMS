@@ -11,7 +11,7 @@
 <script>
     function update() {
         var cp = document.getElementById("collectionpoint").value;
-        alert(cp);
+        alert("Collection Point Updated!");
         post("/departments/updatecollectionpoint", { "id": cp });
     }
 

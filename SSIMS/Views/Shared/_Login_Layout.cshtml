@@ -1,0 +1,65 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Logic Stationery</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <style>
+        #topnav {
+            height: 80px;
+            background: linear-gradient(to right, #1a4a4a 0%, #ccffff 119%);
+            border: none;
+        }
+
+        #logicuicon {
+            width: 90px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            margin-left: 60px;
+            margin-right: 20px;
+            position: fixed;
+        }
+
+        #header {
+            color: whitesmoke;
+            margin-left: 80px;
+            margin-right: 50px;
+            margin-bottom: 10px;
+            position: relative;
+            left: 150px;
+        }
+        .body-content {
+            width:700px;
+            margin: 100px auto;
+            position:relative;
+            left:100px;
+        }
+       
+    </style>
+</head>
+<body>
+    <div id="topnav" class="navbar navbar-inverse navbar-fixed-top">
+        <img src=@Url.Content("~/Resources/LogicUIcon.png") id="logicuicon" />
+        <h1 id="header">Login</h1>
+    </div>
+    
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - SSIMS</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

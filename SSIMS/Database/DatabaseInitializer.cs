@@ -8,7 +8,7 @@ using SSIMS.DAL;
 
 namespace SSIMS.Database
 {
-    public class DatabaseInitializer<T> : DropCreateDatabaseAlways<DatabaseContext>
+    public class DatabaseInitializer<T> : CreateDatabaseIfNotExists<DatabaseContext>
     {
         static StaffRepository StaffRepository;
         static ItemRepository ItemRepository;
@@ -316,7 +316,7 @@ namespace SSIMS.Database
             {
                 context.Tenders.Add(t);
             }
-
+            context.SaveChanges();
             List<Tender> omegtender = new List<Tender>
             {
                 new Tender("C001", "OMEG", 2.50, uow),
@@ -410,7 +410,7 @@ namespace SSIMS.Database
             {
                 context.Tenders.Add(t);
             }
-
+            context.SaveChanges();
             List<Tender> alpatender = new List<Tender>
             {
                 new Tender("C001", "ALPA", 2.69, uow),
@@ -508,7 +508,7 @@ namespace SSIMS.Database
             {
                 context.Tenders.Add(t);
             }
-
+            context.SaveChanges();
             List<Tender> cheptender = new List<Tender>
             {
                 new Tender("C001", "CHEP", 2.45, uow),

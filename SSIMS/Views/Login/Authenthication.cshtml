@@ -1,0 +1,29 @@
+﻿@model SSIMS.ViewModels.UserLogin
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Login_Layout.cshtml";
+}
+@using (Html.BeginForm("Authenticate", "Login", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <table>
+
+        <tr>
+            <th>@Html.LabelFor(x => x.Username)  </th>
+            <td>@Html.TextBoxFor(x => x.Username, new { placeholder = "username" })</td>
+            <td>@Html.ValidationMessageFor(x => x.Username)</td>
+        </tr>
+
+        <tr>
+            <td>@Html.LabelFor(x => x.Password)  </td>
+            <td>@Html.PasswordFor(x => x.Password, new { placeholder = "password" })</td>
+            <td>@Html.ValidationMessageFor(x => x.Password)</td>
+        </tr>
+
+        <tr>
+            <td colspan="2" align="right"><input type="submit" value="Login" /></td>
+            <td></td>
+        </tr>
+    </table>
+}
+
