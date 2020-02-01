@@ -9,21 +9,23 @@
     <table>
 
         <tr>
-            <th>@Html.LabelFor(x => x.Username)  </th>
-            <td>@Html.TextBoxFor(x => x.Username, new { placeholder = "username" })</td>
-            <td>@Html.ValidationMessageFor(x => x.Username)</td>
+            <th align="center">@Html.LabelFor(x => x.Username)  </th>
+            <td>@Html.TextBoxFor(x => x.Username, new { placeholder = " username" })</td>
+            <td align="center">@Html.ValidationMessageFor(x => x.Username)</td>
         </tr>
 
         <tr>
-            <td>@Html.LabelFor(x => x.Password)  </td>
-            <td>@Html.PasswordFor(x => x.Password, new { placeholder = "password" })</td>
-            <td>@Html.ValidationMessageFor(x => x.Password)</td>
+            <td align="center">@Html.LabelFor(x => x.Password)  </td>
+            <td>@Html.PasswordFor(x => x.Password, new { placeholder = " password" })</td>
+            <td align="center">@Html.ValidationMessageFor(x => x.Password)</td>
         </tr>
 
         <tr>
             <td colspan="2" align="right"><input type="submit" value="Login" /></td>
-            <td></td>
+            <td><td>
         </tr>
+        
     </table>
+
 }
 
