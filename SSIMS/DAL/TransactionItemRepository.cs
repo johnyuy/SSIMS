@@ -4,15 +4,13 @@ using System.Linq;
 using System.Web;
 using SSIMS.Models;
 using SSIMS.Database;
-using System.Diagnostics;
 
 namespace SSIMS.DAL
 {
-    public class TenderRepository : GenericRepository<Tender>
+    public class TransactionItemRepository : GenericRepository<TransactionItem>
     {
-
-        public TenderRepository(DatabaseContext context)
-    : base(context)
+        public TransactionItemRepository(DatabaseContext context)
+   : base(context)
         {
         }
     }

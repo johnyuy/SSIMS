@@ -1,0 +1,80 @@
+﻿@model IEnumerable<SSIMS.ViewModels.RetrievalItemViewModel>
+
+
+@{
+    ViewBag.Title = "Retrieval";
+}
+    <head>
+        <style>
+            .displaydept .sign:after {
+                content: "+";
+                display: inline-block;
+            }
+
+            .displaydept.expand .sign:after {
+                content: "-";
+            }
+        </style>
+    </head>
+
+<h2>Retrieval List</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.item.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.transactionItem.HandOverQty)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.transactionItem.TakeOverQty)
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var Retrievalitem in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => Retrievalitem.item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Retrievalitem.transactionItem.HandOverQty)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Retrievalitem.transactionItem.TakeOverQty)
+            </td>
+        </tr>
+
+        <tr colspan="3" class="displaydept">
+            <td>
+                <table>
+                    @foreach (var drivm in Retrievalitem.deptRetrievalItems)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => drivm.deptID)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => drivm.transactionItem.HandOverQty)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => drivm.transactionItem.TakeOverQty)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => drivm.transactionItem.Reason)
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </td>
+        </tr>
+
+    }
+
+</table>
