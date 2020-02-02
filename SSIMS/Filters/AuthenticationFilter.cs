@@ -15,6 +15,10 @@ namespace SSIMS.Filters
         public void OnAuthentication(AuthenticationContext filterContext)
         {
             authenticated = false;
+            HttpContext.Current.Response.AddHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+            HttpContext.Current.Response.AddHeader("Pragma", "no-cache");
+            HttpContext.Current.Response.AddHeader("Expires", "0");
+
             ILoginService loginService = new LoginService();
             string sessionid = HttpContext.Current.Session.SessionID;
             if(HttpContext.Current.Session.Count > 0)

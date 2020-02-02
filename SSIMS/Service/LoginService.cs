@@ -56,9 +56,7 @@ namespace SSIMS.Service
                 account.SessionID = null;
                 uow.UserAccountRepository.Update(account);
                 uow.Save();
-                HttpContext.Current.Session.Clear();
-                HttpContext.Current.Session.Abandon();
-                Debug.Print("\tSession for " + account.ID + " ended");
+                Debug.Print("Session for " + account.ID + " ended");
             }
         }
         private static void GenerateIdentity(UserAccount userAccount)

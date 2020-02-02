@@ -1,11 +1,12 @@
 ﻿@{
-    string user = (HttpContext.Current.Session.Count > 0) ? HttpContext.Current.Session["username"].ToString().ToUpper() : "Login Authentication Failed";
+    string user = (HttpContext.Current.Session.Count > 0) ? HttpContext.Current.Session["username"].ToString() : "Login Authentication Failed";
 }
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Logic Stationery</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
@@ -96,7 +97,7 @@
     <div id="topnav" class="navbar navbar-inverse navbar-fixed-top">
         <img src=@Url.Content("~/Resources/LogicUIcon.png") id="logicuicon" />
         <div id="header"><h1>@ViewBag.Header</h1></div>
-        <div id="username"><b>@user</b>|&nbsp;@Html.ActionLink("Logout","Logout","Login",new { username = user },null)</div>
+        <div id="username"><b>@user.ToUpper()</b>|&nbsp;@Html.ActionLink("Logout","Logout","Login",new { username = user },null)</div>
     </div>
     <div class="sidebar">
         @if (ViewBag.Header == "Home")
