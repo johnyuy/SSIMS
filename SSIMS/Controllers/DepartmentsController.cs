@@ -202,7 +202,20 @@ namespace SSIMS.Controllers
             ViewBag.CollectionPointID = new SelectList(unitOfWork.CollectionPointRepository.Get(), "ID", "Location", department.CollectionPoint.ID);
             return View(department);
         }
-     
+        
+        public ActionResult DelegateAuthority (string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Department department = unitOfWork.DepartmentRepository.GetByID(id);
+            if (department == null)
+            {
+                return HttpNotFound();
+            }
+            return View(department);
+        }
     }
 }
 
