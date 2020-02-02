@@ -14,7 +14,7 @@ namespace SSIMS.Service
         
         public bool VerifyPassword(string username, string password)
         {
-            Debug.WriteLine("[Login Attempt]");
+            Debug.WriteLine("\n[Login Attempt]");
             UserAccount account = uow.UserAccountRepository.GetByID(username);
             if (account != null && password == account.Password) {
                 Debug.WriteLine("ACCESS GRANTED: " + account.ID);
@@ -33,7 +33,7 @@ namespace SSIMS.Service
                 account.SessionID = sessionId;
                 uow.UserAccountRepository.Update(account);
                 uow.Save();
-                Debug.Print("\tUpdated SessionID " + account.SessionID);
+                Debug.Print("\tUpdated SessionID : " + account.SessionID);
             }
         }
 
@@ -48,6 +48,19 @@ namespace SSIMS.Service
             return false;
         }
 
+        public void CancelSession(string username)
+        {
+            UserAccount account = uow.UserAccountRepository.GetByID(username);
+            if (account != null)
+            {
+                account.SessionID = null;
+                uow.UserAccountRepository.Update(account);
+                uow.Save();
+                HttpContext.Current.Session.Clear();
+                HttpContext.Current.Session.Abandon();
+                Debug.Print("\tSession for " + account.ID + " ended");
+            }
+        }
         private static void GenerateIdentity(UserAccount userAccount)
         {
             List<string> roles = new List<string>();

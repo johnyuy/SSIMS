@@ -11,6 +11,7 @@ namespace SSIMS.Controllers
 {
     public class LoginController : Controller
     {
+        readonly ILoginService LoginService = new LoginService();
         public ActionResult Index()
         {
             return RedirectToAction("Authentication");
@@ -25,7 +26,7 @@ namespace SSIMS.Controllers
         [HttpPost]
         public ActionResult Authenticate(UserLogin userLogin)
         {
-            ILoginService LoginService = new LoginService();
+            
             if(LoginService.VerifyPassword(userLogin.Username, userLogin.Password))
             {
                
@@ -34,6 +35,15 @@ namespace SSIMS.Controllers
             }
                 
             return RedirectToAction("Authentication", userLogin);
+        }
+
+        public ActionResult Logout(string username)
+        {
+            LoginService.CancelSession(username);
+            HttpContext.Session.Clear();
+            HttpContext.Session.Abandon();
+            Debug.WriteLine("\n[" + username + " logged out]");
+            return RedirectToAction("Authentication", "");
         }
     }
 }

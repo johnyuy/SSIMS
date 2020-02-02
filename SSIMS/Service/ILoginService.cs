@@ -11,5 +11,6 @@ namespace SSIMS.Service
         bool VerifyPassword(string username, string password);
         void CreateNewSession(string username, string sessionId);
         bool AuthenticateSession(string username, string sessionId);
+        void CancelSession(string username);
     }
 }

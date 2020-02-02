@@ -11,9 +11,10 @@ namespace SSIMS.Filters
 {
     public class AuthenticationFilter : ActionFilterAttribute, IAuthenticationFilter
     {
-        private bool authenticated = false;
+        private bool authenticated;
         public void OnAuthentication(AuthenticationContext filterContext)
         {
+            authenticated = false;
             ILoginService loginService = new LoginService();
             string sessionid = HttpContext.Current.Session.SessionID;
             if(HttpContext.Current.Session.Count > 0)
@@ -22,7 +23,7 @@ namespace SSIMS.Filters
                 
                 if (loginService.AuthenticateSession(username, sessionid))
                 {
-                    Debug.WriteLine("\n[Authentication Filter : \t" + username + " + " + sessionid +"]\n");
+                    Debug.WriteLine("\n[Authentication Filter:\t" + username + "/" + sessionid +"]\n");
                     authenticated = true;
                 }
             }
@@ -32,7 +33,7 @@ namespace SSIMS.Filters
         {
             if (!authenticated)
             {
-                Debug.WriteLine("\n[Authentication Filter :\tFAILED!" +
+                Debug.WriteLine("\n[Authentication Filter :\tFAILED!]" +
                     "\nRedirecting to Login Page..");
                 filterContext.Result = new RedirectToRouteResult(
                         new System.Web.Routing.RouteValueDictionary
