@@ -17,6 +17,7 @@ namespace SSIMS.Models
     public abstract class Document
     {
         [Key]
+        [Display(Name = "Requisition ID")]
         public int ID { get; set; }
 
         [ForeignKey("CreatedByStaff")]

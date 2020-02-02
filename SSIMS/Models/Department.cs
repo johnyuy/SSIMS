@@ -10,7 +10,9 @@ namespace SSIMS.Models
 {
     public class Department
     {
+        [Display(Name = "Department ID")]
         public string ID { get; set; }
+        [Display(Name = "Department Name")]
         public string DeptName { get; set; }
 
         public Staff DeptRep { get; set; }
