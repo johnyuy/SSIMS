@@ -14,6 +14,15 @@ namespace SSIMS.Controllers
         readonly ILoginService LoginService = new LoginService();
         public ActionResult Index()
         {
+            if (Request.Cookies.Get("Auth") != null)
+            {
+                //if cookie's session ID matches the sessionId in database then go to home controller
+                if (LoginService.IsStoredSession(Request.Cookies.Get("Auth")))
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+            //go to login
             return RedirectToAction("Authentication");
         }
         
@@ -29,8 +38,10 @@ namespace SSIMS.Controllers
             
             if(LoginService.VerifyPassword(userLogin.Username, userLogin.Password))
             {
-               
-                LoginService.CreateNewSession(userLogin.Username,HttpContext.Session.SessionID);
+                String sessionId = LoginService.CreateNewSession(userLogin.Username, HttpContext.Session.SessionID);
+                HttpCookie AuthCookie = new HttpCookie("Auth", userLogin.Username+"#"+sessionId);
+                AuthCookie.Expires = DateTime.Now.AddDays(7d);
+                Response.Cookies.Add(AuthCookie);
                 return RedirectToAction("Index", "Home");
             }
                 
@@ -40,6 +51,8 @@ namespace SSIMS.Controllers
         public ActionResult Logout(string username)
         {
             LoginService.CancelSession(username);
+            Response.Cookies["SessionID"].Expires = DateTime.Now.AddDays(-100);
+            Response.Cookies["Username"].Expires = DateTime.Now.AddDays(-100);
             HttpContext.Session.Clear();
             HttpContext.Session.Abandon();
             Debug.WriteLine("\n[" + username + " logged out]");

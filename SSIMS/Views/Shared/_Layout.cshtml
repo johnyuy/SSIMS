@@ -97,7 +97,7 @@
     <div id="topnav" class="navbar navbar-inverse navbar-fixed-top">
         <img src=@Url.Content("~/Resources/LogicUIcon.png") id="logicuicon" />
         <div id="header"><h1>@ViewBag.Header</h1></div>
-        <div id="username"><b>@user.ToUpper()</b>|&nbsp;@Html.ActionLink("Logout","Logout","Login",new { username = user },null)</div>
+        <div id="username"><b>@user.ToUpper()</b>&nbsp;&nbsp;&nbsp;@Html.ActionLink("Logout","Logout","Login",new { username = user },null)</div>
     </div>
     <div class="sidebar">
         @if (ViewBag.Header == "Home")

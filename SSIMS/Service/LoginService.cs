@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 using SSIMS.DAL;
 using SSIMS.Models;
 using System.Diagnostics;
@@ -17,7 +18,7 @@ namespace SSIMS.Service
             Debug.WriteLine("\n[Login Attempt]");
             UserAccount account = uow.UserAccountRepository.GetByID(username);
             if (account != null && password == account.Password) {
-                Debug.WriteLine("ACCESS GRANTED: " + account.ID);
+                Debug.WriteLine("\tACCESS GRANTED: " + account.ID);
                 GenerateIdentity(account);
                 return true;
             }
@@ -25,7 +26,7 @@ namespace SSIMS.Service
             return false;
         }
 
-        public void CreateNewSession(string username, string sessionId)
+        public string CreateNewSession(string username, string sessionId)
         {
             UserAccount account = uow.UserAccountRepository.GetByID(username);
             if(account != null)
@@ -35,6 +36,7 @@ namespace SSIMS.Service
                 uow.Save();
                 Debug.Print("\tUpdated SessionID : " + account.SessionID);
             }
+            return sessionId;
         }
 
         public bool AuthenticateSession(string username, string sessionId)
@@ -58,6 +60,23 @@ namespace SSIMS.Service
                 uow.Save();
                 Debug.Print("Session for " + account.ID + " ended");
             }
+        }
+
+        public bool IsStoredSession(HttpCookie AuthCookie)
+        {
+            string username = AuthCookie.Value.Split('#')[0];
+            string sessionid = AuthCookie.Value.Split('#')[1];
+            UserAccount account = uow.UserAccountRepository.GetByID(username);
+            if (account != null)
+            {
+                if (sessionid == account.SessionID)
+                {
+                    Debug.WriteLine("\n[Resume Session : " + username + "/" + sessionid+"]");
+                    GenerateIdentity(account);
+                    return true;
+                }
+            }
+            return false;
         }
         private static void GenerateIdentity(UserAccount userAccount)
         {
