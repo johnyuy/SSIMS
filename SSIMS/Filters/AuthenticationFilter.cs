@@ -16,17 +16,13 @@ namespace SSIMS.Filters
         {
             ILoginService loginService = new LoginService();
             string sessionid = HttpContext.Current.Session.SessionID;
-            int c = HttpContext.Current.Session.Count;
-            int d = HttpContext.Current.Session.Keys.Count;
-            Debug.WriteLine("Session count = " + c);
-            Debug.WriteLine("Session count = " + d);
-
-            if(c > 0)
+            if(HttpContext.Current.Session.Count > 0)
             {
-                string username = HttpContext.Current.Session[0].ToString();
-                Debug.WriteLine("On Authentication : " + username + " / " + sessionid);
+                string username = HttpContext.Current.Session["username"].ToString();
+                
                 if (loginService.AuthenticateSession(username, sessionid))
                 {
+                    Debug.WriteLine("\n[Authentication Filter : \t" + username + " + " + sessionid +"]\n");
                     authenticated = true;
                 }
             }
@@ -36,7 +32,8 @@ namespace SSIMS.Filters
         {
             if (!authenticated)
             {
-                Debug.WriteLine("Authentication Failed!");
+                Debug.WriteLine("\n[Authentication Filter :\tFAILED!" +
+                    "\nRedirecting to Login Page..");
                 filterContext.Result = new RedirectToRouteResult(
                         new System.Web.Routing.RouteValueDictionary
                         {

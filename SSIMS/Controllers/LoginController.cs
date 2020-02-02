@@ -28,11 +28,6 @@ namespace SSIMS.Controllers
             ILoginService LoginService = new LoginService();
             if(LoginService.VerifyPassword(userLogin.Username, userLogin.Password))
             {
-                Debug.WriteLine("\n");
-                Debug.WriteLine("HttpContext.Session.SessionID = "+ HttpContext.Session.SessionID);
-                
-                HttpContext.Session.Add("username",userLogin.Username);
-                
                
                 LoginService.CreateNewSession(userLogin.Username,HttpContext.Session.SessionID);
                 return RedirectToAction("Index", "Home");
