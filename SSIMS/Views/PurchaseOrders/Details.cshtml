@@ -1,4 +1,4 @@
-﻿@model SSIMS.Models.PurchaseOrder
+﻿@model SSIMS.ViewModels.PurchaseOrderVM  
 
 @{
     ViewBag.Title = "Details";
@@ -11,35 +11,44 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.CreatedByStaff.UserAccountID)
+            @Html.DisplayNameFor(model => model.ID)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.CreatedByStaff.UserAccountID)
+            @Html.DisplayFor(model => model.ID)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.RepliedByStaff.UserAccountID)
+            @Html.DisplayNameFor(model => model.Supplier.SupplierName)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.RepliedByStaff.UserAccountID)
+            @Html.DisplayFor(model => model.Supplier.SupplierName)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.ExpectedDeliveryDate)
+            @Html.DisplayNameFor(model => model.Supplier.Address)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.ExpectedDeliveryDate)
+            @Html.DisplayFor(model => model.Supplier.Address)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Comments)
+            @Html.DisplayNameFor(model => model.Supplier.PhoneNumber)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Comments)
+            @Html.DisplayFor(model => model.Supplier.PhoneNumber)
+        </dd>
+
+        <dt>
+            Attn:
+            @Html.DisplayNameFor(model => model.CreatedByStaff.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedByStaff.Name)
         </dd>
 
         <dt>
@@ -48,6 +57,13 @@
 
         <dd>
             @Html.DisplayFor(model => model.CreatedDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RepliedByStaff.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RepliedByStaff.Name)
         </dd>
 
         <dt>
@@ -65,8 +81,57 @@
         <dd>
             @Html.DisplayFor(model => model.Status)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.TotalCost)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TotalCost)
+        </dd>
 
     </dl>
+    <table class="table">
+        <tr>
+            <th>
+                Item Code
+            </th>
+            <th>
+                Item Description
+            </th>
+            <th>
+                Quantity
+            </th>
+            <th>
+                Unit Price
+            </th>
+            <th>
+                Amount
+            </th>
+            <th></th>
+        </tr>
+
+
+        @foreach (var item in Model.PurchaseItems)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tender.Item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Qty)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tender.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Amount)
+                </td>
+            </tr>
+        }
+    </table>
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |

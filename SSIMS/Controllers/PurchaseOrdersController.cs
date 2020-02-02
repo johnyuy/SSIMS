@@ -25,7 +25,7 @@ namespace SSIMS.Controllers
         {
 
 
-            var purchaseOrders = uow.PurchaseOrderRepository.Get(includeProperties: "Supplier");
+            var purchaseOrders = uow.PurchaseOrderRepository.Get(includeProperties: "Supplier, PurchaseItems.Tender");
             List<PurchaseOrderVM> vm = new List<PurchaseOrderVM>();
 
             foreach (PurchaseOrder PO in purchaseOrders)
@@ -45,12 +45,13 @@ namespace SSIMS.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PurchaseOrder purchaseOrder = db.PurchaseOrders.Find(id);
+            PurchaseOrder purchaseOrder = uow.PurchaseOrderRepository.Get(filter: x => x.ID == id, includeProperties: "Supplier, CreatedByStaff, RepliedByStaff, PurchaseItems.Tender.Item ").FirstOrDefault();
+            PurchaseOrderVM vm = new PurchaseOrderVM(purchaseOrder);
             if (purchaseOrder == null)
             {
                 return HttpNotFound();
             }
-            return View(purchaseOrder);
+            return View(vm);
         }
 
         // GET: PurchaseOrders/Create

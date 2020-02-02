@@ -915,7 +915,7 @@ namespace SSIMS.Database
             PurchaseOrder PO4 = new PurchaseOrder(10003, "ALPA", uow);
             List<PurchaseItem> purchaseItems4 = new List<PurchaseItem>{
                 new PurchaseItem("C005",PO4.Supplier.ID,10,uow),
-                new PurchaseItem("H32",PO4.Supplier.ID,12,uow),
+                new PurchaseItem("H032",PO4.Supplier.ID,12,uow),
                 new PurchaseItem("C001",PO4.Supplier.ID,10,uow),
             };
             PO4.PurchaseItems = purchaseItems4;
