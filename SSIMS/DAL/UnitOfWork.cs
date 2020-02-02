@@ -17,6 +17,9 @@ namespace SSIMS.DAL
         private DocumentItemRepository documentItemRepository;
         private SupplierRepository supplierRepository;
         private RetrievalListRepository retrievalListRepository;
+        private UserAccountRepository userAccountRepository;
+        private TransactionItemRepository transactionItemRepository;
+        private DisbursementListRepository disbursementListRepository;
         private TenderRepository tenderRepository;
 
         public UnitOfWork()
@@ -27,6 +30,45 @@ namespace SSIMS.DAL
         public UnitOfWork(DatabaseContext context)
         {
             this.context = context;
+        }
+
+        public DisbursementListRepository DisbursementListRepository
+        {
+            get
+            {
+
+                if (this.disbursementListRepository == null)
+                {
+                    this.disbursementListRepository = new DisbursementListRepository(context);
+                }
+                return disbursementListRepository;
+            }
+        }
+
+        public TransactionItemRepository TransactionItemRepository
+        {
+            get
+            {
+
+                if (this.transactionItemRepository == null)
+                {
+                    this.transactionItemRepository = new TransactionItemRepository(context);
+                }
+                return transactionItemRepository;
+            }
+        }
+
+        public UserAccountRepository UserAccountRepository
+        {
+            get
+            {
+
+                if (this.userAccountRepository == null)
+                {
+                    this.userAccountRepository = new UserAccountRepository(context);
+                }
+                return userAccountRepository;
+            }
         }
 
         public TenderRepository TenderRepository

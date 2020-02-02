@@ -41,7 +41,7 @@ namespace SSIMS.Models
             Status = Status.Pending;
         }
         public Document() {
-
+            CreatedDate = DateTime.Now;
         }
 
         public void Approve(Staff RepliedByStaffID)

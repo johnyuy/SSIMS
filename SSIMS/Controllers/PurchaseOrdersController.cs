@@ -9,19 +9,31 @@ using System.Web.Mvc;
 using SSIMS.Database;
 using SSIMS.Models;
 using SSIMS.Service;
+using SSIMS.DAL;
+using SSIMS.ViewModels;
+
 
 namespace SSIMS.Controllers
 {
     public class PurchaseOrdersController : Controller
     {
         private DatabaseContext db = new DatabaseContext();
+        private UnitOfWork uow = new UnitOfWork();
 
         // GET: PurchaseOrders
         public ActionResult Index()
         {
-            var purchaseOrders = db.PurchaseOrders.Include(p => p.CreatedByStaff).Include(p => p.RepliedByStaff);
 
-            return View(purchaseOrders.ToList());
+
+            var purchaseOrders = uow.PurchaseOrderRepository.Get(includeProperties: "Supplier");
+            List<PurchaseOrderVM> vm = new List<PurchaseOrderVM>();
+
+            foreach (PurchaseOrder PO in purchaseOrders)
+            {
+                vm.Add(new PurchaseOrderVM(PO));
+            }
+
+            return View(vm);
 
 
         }

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SSIMS.Models.PurchaseOrder>
+﻿@model IEnumerable<SSIMS.ViewModels.PurchaseOrderVM>
 
 @{
     ViewBag.Title = "Index";
@@ -12,22 +12,17 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.CreatedByStaff.UserAccountID)
+            @Html.DisplayNameFor(model => model.ID)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.RepliedByStaff.UserAccountID)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ExpectedDeliveryDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Comments)
+            @Html.DisplayNameFor(model => model.Supplier.ID)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.CreatedDate)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ResponseDate)
+            Total Cost
+            @*@Html.DisplayNameFor(model => model.Comments)*@
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Status)
@@ -38,22 +33,16 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.CreatedByStaff.UserAccountID)
+            @Html.DisplayFor(modelItem => item.ID)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.RepliedByStaff.UserAccountID)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ExpectedDeliveryDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Comments)
+            @Html.DisplayFor(modelItem => item.Supplier.ID)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.CreatedDate)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.ResponseDate)
+            @Html.DisplayFor(modelItem => item.TotalCost)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Status)

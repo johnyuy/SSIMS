@@ -8,7 +8,9 @@ using SSIMS.DAL;
 
 namespace SSIMS.Database
 {
+    //public class DatabaseInitializer<T> : DropCreateDatabaseAlways<DatabaseContext>
     public class DatabaseInitializer<T> : CreateDatabaseIfNotExists<DatabaseContext>
+
     {
         static StaffRepository StaffRepository;
         static ItemRepository ItemRepository;
@@ -38,7 +40,7 @@ namespace SSIMS.Database
             InitUserAccounts(context);
             InitInventoryItems(context);
             InitDocuments(context);
-            InitPurcahseOrders(context);
+            InitPurchaseOrders(context);
            
             //other initializations copy:    static void Init (DatabaseContext context)
             context.SaveChanges();
@@ -867,7 +869,7 @@ namespace SSIMS.Database
             context.SaveChanges();
         }
 
-        static void InitPurcahseOrders(DatabaseContext context)
+        static void InitPurchaseOrders(DatabaseContext context)
         {
             UnitOfWork uow = new UnitOfWork(context);
 
@@ -880,7 +882,7 @@ namespace SSIMS.Database
             PurchaseOrder PO1 = new PurchaseOrder(10003, "ALPA", uow);
             List<PurchaseItem> purchaseItems = new List<PurchaseItem>{
                 new PurchaseItem("C005",PO1.Supplier.ID,10,uow),
-                new PurchaseItem("H32",PO1.Supplier.ID,12,uow),
+                new PurchaseItem("H032",PO1.Supplier.ID,12,uow),
                 new PurchaseItem("C001",PO1.Supplier.ID,10,uow),
             };
             PO1.PurchaseItems = purchaseItems;
@@ -916,7 +918,7 @@ namespace SSIMS.Database
                 new PurchaseItem("H32",PO4.Supplier.ID,12,uow),
                 new PurchaseItem("C001",PO4.Supplier.ID,10,uow),
             };
-            PO4.PurchaseItems = purchaseItems;
+            PO4.PurchaseItems = purchaseItems4;
             context.PurchaseOrders.Add(PO4);
 
             // Clerk 2
@@ -936,7 +938,7 @@ namespace SSIMS.Database
                 new PurchaseItem("P046",PO6.Supplier.ID, 9,uow),
                 new PurchaseItem("R001",PO6.Supplier.ID,3,uow),
             };
-            PO6.PurchaseItems = purchaseItems3;
+            PO6.PurchaseItems = purchaseItems6;
             context.PurchaseOrders.Add(PO6);
 
             context.SaveChanges();
