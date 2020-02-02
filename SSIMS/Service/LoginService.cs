@@ -19,6 +19,7 @@ namespace SSIMS.Service
             UserAccount account = uow.UserAccountRepository.GetByID(username);
             if (account != null && password == account.Password) {
                 Debug.WriteLine("\tACCESS GRANTED: " + account.ID);
+
                 GenerateIdentity(account);
                 return true;
             }
@@ -26,7 +27,7 @@ namespace SSIMS.Service
             return false;
         }
 
-        public string CreateNewSession(string username, string sessionId)
+        public string UpdateSession(string username, string sessionId)
         {
             UserAccount account = uow.UserAccountRepository.GetByID(username);
             if(account != null)
@@ -72,12 +73,15 @@ namespace SSIMS.Service
                 if (sessionid == account.SessionID)
                 {
                     Debug.WriteLine("\n[Resume Session : " + username + "/" + sessionid+"]");
+                    UpdateSession(username, HttpContext.Current.Session.SessionID);
                     GenerateIdentity(account);
                     return true;
                 }
             }
             return false;
         }
+
+       
         private static void GenerateIdentity(UserAccount userAccount)
         {
             List<string> roles = new List<string>();
