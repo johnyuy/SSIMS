@@ -21,9 +21,6 @@ namespace SSIMS.DAL
         private TransactionItemRepository transactionItemRepository;
         private DisbursementListRepository disbursementListRepository;
         private TenderRepository tenderRepository;
-        private UserAccountRepository userAccountRepository;
-        private TransactionItemRepository transactionItemRepository;
-        private DisbursementListRepository disbursementListRepository;
 
         public UnitOfWork()
         {
