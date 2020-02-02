@@ -11,9 +11,11 @@ using SSIMS.DAL;
 using SSIMS.Database;
 using SSIMS.Models;
 using SSIMS.ViewModels;
+using SSIMS.Filters;
 
 namespace SSIMS.Controllers
 {
+    [AuthenticationFilter]
     public class InventoryController : Controller
     {
         private DatabaseContext db = new DatabaseContext();

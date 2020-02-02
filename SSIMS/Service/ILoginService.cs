@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Web;
 
 namespace SSIMS.Service
 {
     interface ILoginService
     {
         bool VerifyPassword(string username, string password);
-        void CreateNewSession(string username, string sessionId);
+        string UpdateSession(string username, string sessionId);
         bool AuthenticateSession(string username, string sessionId);
+        bool IsStoredSession(HttpCookie AuthCookie);
+        void CancelSession(string username);
     }
 }

@@ -8,7 +8,9 @@ using SSIMS.DAL;
 
 namespace SSIMS.Database
 {
-    public class DatabaseInitializer<T> : DropCreateDatabaseAlways<DatabaseContext>
+    //public class DatabaseInitializer<T> : DropCreateDatabaseAlways<DatabaseContext>
+    public class DatabaseInitializer<T> : CreateDatabaseIfNotExists<DatabaseContext>
+
     {
         static StaffRepository StaffRepository;
         static ItemRepository ItemRepository;
@@ -38,6 +40,7 @@ namespace SSIMS.Database
             InitUserAccounts(context);
             InitInventoryItems(context);
             InitDocuments(context);
+            InitPurchaseOrders(context);
            
             //other initializations copy:    static void Init (DatabaseContext context)
             context.SaveChanges();
@@ -607,10 +610,7 @@ namespace SSIMS.Database
                 context.Tenders.Add(t);
             }
 
-
-
             context.SaveChanges();
-
         }
 
         static void InitStaffs(DatabaseContext context)
@@ -869,6 +869,81 @@ namespace SSIMS.Database
             context.SaveChanges();
         }
 
-      
+        static void InitPurchaseOrders(DatabaseContext context)
+        {
+            UnitOfWork uow = new UnitOfWork(context);
+
+            Staff Supervisor = StaffRepository.GetByID(10002);
+
+            Staff staff1 = StaffRepository.GetByID(10003);
+
+            Debug.WriteLine("\tInitializing Purchase Orders");
+            // Clerk 1
+            PurchaseOrder PO1 = new PurchaseOrder(10003, "ALPA", uow);
+            List<PurchaseItem> purchaseItems = new List<PurchaseItem>{
+                new PurchaseItem("C005",PO1.Supplier.ID,10,uow),
+                new PurchaseItem("H032",PO1.Supplier.ID,12,uow),
+                new PurchaseItem("C001",PO1.Supplier.ID,10,uow),
+            };
+            PO1.PurchaseItems = purchaseItems;
+            PO1.Approve(Supervisor);
+            context.PurchaseOrders.Add(PO1);
+
+            // Clerk 2
+            PurchaseOrder PO2 = new PurchaseOrder(10004, "BANE", uow);
+            List<PurchaseItem> purchaseItems2 = new List<PurchaseItem>{
+                new PurchaseItem("C006",PO2.Supplier.ID,10,uow),
+                new PurchaseItem("E003",PO2.Supplier.ID, 9,uow),
+                new PurchaseItem("C001",PO2.Supplier.ID,10,uow),
+            };
+            PO2.PurchaseItems = purchaseItems2;
+            PO2.Approve(Supervisor);
+            context.PurchaseOrders.Add(PO2);
+
+            //Clerk 3
+            PurchaseOrder PO3 = new PurchaseOrder(10004, "CHEP", uow);
+            List<PurchaseItem> purchaseItems3 = new List<PurchaseItem>{
+                new PurchaseItem("C003",PO3.Supplier.ID,10,uow),
+                new PurchaseItem("P046",PO3.Supplier.ID, 9,uow),
+                new PurchaseItem("R001",PO3.Supplier.ID,3,uow),
+            };
+            PO3.PurchaseItems = purchaseItems3;
+            PO3.Approve(Supervisor);
+            context.PurchaseOrders.Add(PO3);
+
+            // Clerk 1
+            PurchaseOrder PO4 = new PurchaseOrder(10003, "ALPA", uow);
+            List<PurchaseItem> purchaseItems4 = new List<PurchaseItem>{
+                new PurchaseItem("C005",PO4.Supplier.ID,10,uow),
+                new PurchaseItem("H032",PO4.Supplier.ID,12,uow),
+                new PurchaseItem("C001",PO4.Supplier.ID,10,uow),
+            };
+            PO4.PurchaseItems = purchaseItems4;
+            context.PurchaseOrders.Add(PO4);
+
+            // Clerk 2
+            PurchaseOrder PO5 = new PurchaseOrder(10004, "BANE", uow);
+            List<PurchaseItem> purchaseItems5 = new List<PurchaseItem>{
+                new PurchaseItem("C006",PO5.Supplier.ID,10,uow),
+                new PurchaseItem("E003",PO5.Supplier.ID, 9,uow),
+                new PurchaseItem("C001",PO5.Supplier.ID,10,uow),
+            };
+            PO5.PurchaseItems = purchaseItems5;
+            context.PurchaseOrders.Add(PO5);
+
+            //Clerk 3
+            PurchaseOrder PO6 = new PurchaseOrder(10004, "CHEP", uow);
+            List<PurchaseItem> purchaseItems6 = new List<PurchaseItem>{
+                new PurchaseItem("C003",PO6.Supplier.ID,10,uow),
+                new PurchaseItem("P046",PO6.Supplier.ID, 9,uow),
+                new PurchaseItem("R001",PO6.Supplier.ID,3,uow),
+            };
+            PO6.PurchaseItems = purchaseItems6;
+            context.PurchaseOrders.Add(PO6);
+
+            context.SaveChanges();
+        }
+
+
     }
 }

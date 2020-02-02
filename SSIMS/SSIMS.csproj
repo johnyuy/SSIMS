@@ -20,8 +20,10 @@
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
     <IISExpressSSLPort>44386</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication />
-    <IISExpressWindowsAuthentication />
+    <IISExpressAnonymousAuthentication>
+    </IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>
+    </IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
@@ -267,6 +269,7 @@
     <Compile Include="ViewModels\AnalyticsListViewModel.cs" />
     <Compile Include="ViewModels\DeptRetrievalItemViewModel.cs" />
     <Compile Include="ViewModels\InventoryViewModel.cs" />
+    <Compile Include="ViewModels\PurchaseOrderVM.cs" />
     <Compile Include="ViewModels\RequisitionCreateViewModel.cs" />
     <Compile Include="ViewModels\RequisitionSummaryViewModel.cs" />
     <Compile Include="ViewModels\UserLogin.cs" />

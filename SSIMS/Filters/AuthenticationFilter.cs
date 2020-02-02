@@ -11,22 +11,22 @@ namespace SSIMS.Filters
 {
     public class AuthenticationFilter : ActionFilterAttribute, IAuthenticationFilter
     {
-        private bool authenticated = false;
+        private bool authenticated;
         public void OnAuthentication(AuthenticationContext filterContext)
         {
-            ILoginService loginService = new LoginService();
-            string sessionid = HttpContext.Current.Session.SessionID;
-            int c = HttpContext.Current.Session.Count;
-            int d = HttpContext.Current.Session.Keys.Count;
-            Debug.WriteLine("Session count = " + c);
-            Debug.WriteLine("Session count = " + d);
+            authenticated = false;
+            HttpContext.Current.Response.AddHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+            HttpContext.Current.Response.AddHeader("Pragma", "no-cache");
+            HttpContext.Current.Response.AddHeader("Expires", "0");
 
-            if(c > 0)
+            ILoginService loginService = new LoginService();
+            if(HttpContext.Current.Session.Count > 0)
             {
-                string username = HttpContext.Current.Session[0].ToString();
-                Debug.WriteLine("On Authentication : " + username + " / " + sessionid);
-                if (loginService.AuthenticateSession(username, sessionid))
+                if (loginService.AuthenticateSession(
+                    HttpContext.Current.Session["username"].ToString(), 
+                    HttpContext.Current.Session.SessionID))
                 {
+                    Debug.WriteLine("\n[Authentication Filter :\tSUCCESS!]\n");
                     authenticated = true;
                 }
             }
@@ -36,7 +36,8 @@ namespace SSIMS.Filters
         {
             if (!authenticated)
             {
-                Debug.WriteLine("Authentication Failed!");
+                Debug.WriteLine("\n[Authentication Filter :\tFAILED!]" +
+                    "\nRedirecting to Login Page..");
                 filterContext.Result = new RedirectToRouteResult(
                         new System.Web.Routing.RouteValueDictionary
                         {

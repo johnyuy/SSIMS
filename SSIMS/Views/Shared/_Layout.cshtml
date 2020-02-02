@@ -1,20 +1,23 @@
-﻿@{ 
-    string user = (HttpContext.Current.Session.Count>0) ? HttpContext.Current.Session[0].ToString() : "Login Authentication Failed";
+﻿@{
+    string user = (HttpContext.Current.Session.Count > 0) ? HttpContext.Current.Session["username"].ToString() : "Login Authentication Failed";
 }
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Logic Stationery</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
         #topnav {
-           height:80px;
-           background: linear-gradient(to right, #1a4a4a 0%, #ccffff 119%);
-           border:none;
+            height: 80px;
+            min-width:1500px;
+            background: linear-gradient(to right, #1a4a4a 0%, #ccffff 119%);
+            border: none;
+            
         }
 
         #logicuicon {
@@ -23,7 +26,7 @@
             margin-bottom: 10px;
             margin-left: 60px;
             margin-right: 20px;
-            position:fixed;
+            position: fixed;
         }
 
         #header {
@@ -32,12 +35,23 @@
             margin-right: 50px;
             margin-bottom: 10px;
             position: relative;
+            width:500px;
             left: 150px;
         }
+
+        #username {
+            color: black;
+            width: 150px;
+            margin:10px;
+            position:absolute;
+            right:250px;
+            top:20px;
+        }
+
         .sidebar {
             height: 100%;
             width: 200px;
-            position:fixed;
+            position: fixed;
             z-index: 0;
             top: 0;
             left: 0;
@@ -46,44 +60,44 @@
             padding-top: 80px;
         }
 
-        .sidebar a {
-            padding: 14px 8px 10px 16px;
-            text-decoration: none;
-            font-size: 15px;
-            height: 50px;
-            text-align: center;
-            color: lightgray;
-            display: block;
-        }
+            .sidebar a {
+                padding: 14px 8px 10px 16px;
+                text-decoration: none;
+                font-size: 15px;
+                height: 50px;
+                text-align: center;
+                color: lightgray;
+                display: block;
+            }
 
-        .sidebar a.active {
-            padding: 12px 8px 10px 16px;
-            background-color: #FFFFFF;
-            font-size: 18px;
-            color: black;
-            border-top-left-radius: 25px;
-            border-bottom-left-radius: 25px;
-        }
+                .sidebar a.active {
+                    padding: 12px 8px 10px 16px;
+                    background-color: #FFFFFF;
+                    font-size: 18px;
+                    color: black;
+                    border-top-left-radius: 25px;
+                    border-bottom-left-radius: 25px;
+                }
 
-        .sidebar a:hover:not(.active) {
-            background-color: #4F8080;
-            color: whitesmoke;
-            border-top-left-radius: 25px;
-            border-bottom-left-radius: 25px;
-        }
+                .sidebar a:hover:not(.active) {
+                    background-color: #4F8080;
+                    color: whitesmoke;
+                    border-top-left-radius: 25px;
+                    border-bottom-left-radius: 25px;
+                }
 
         .body-content {
             padding-top: 40px;
-            position:absolute;
-            left:200px;
+            position: absolute;
+            left: 200px;
         }
-
     </style>
 </head>
 <body>
     <div id="topnav" class="navbar navbar-inverse navbar-fixed-top">
         <img src=@Url.Content("~/Resources/LogicUIcon.png") id="logicuicon" />
-        <h1 id="header">@ViewBag.Header</h1>
+        <div id="header"><h1>@ViewBag.Header</h1></div>
+        <div id="username"><b>@user.ToUpper()</b>&nbsp;&nbsp;&nbsp;@Html.ActionLink("Logout","Logout","Login",new { username = user },null)</div>
     </div>
     <div class="sidebar">
         @if (ViewBag.Header == "Home")
@@ -109,7 +123,7 @@
         else
         {<a href="~/items/index">Items</a>}
         <a href="#logout"><i class="fa fa-fw fa-external-link"></i>Logout</a>
-        <div><div style="color:wheat; width:70px; margin:30px auto;"><b>@user</b></div></div>
+
     </div>
     <div class="container body-content">
         @RenderBody()
