@@ -214,6 +214,7 @@ namespace SSIMS.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.DelegateAuthority = new SelectList(unitOfWork.StaffRepository.Get(), "ID", "Name", department.DeptHeadAuthorization.ID);
             return View(department);
         }
     }
