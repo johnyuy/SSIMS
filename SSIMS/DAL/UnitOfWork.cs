@@ -19,7 +19,7 @@ namespace SSIMS.DAL
         private RetrievalListRepository retrievalListRepository;
         private TenderRepository tenderRepository;
         private UserAccountRepository userAccountRepository;
-        private TransactionItemRepository transactionItemRepository;
+        private DisbursementListRepository disbursementListRepository;
 
         public UnitOfWork()
         {
@@ -29,6 +29,19 @@ namespace SSIMS.DAL
         public UnitOfWork(DatabaseContext context)
         {
             this.context = context;
+        }
+
+        public DisbursementListRepository DisbursementListRepository
+        {
+            get
+            {
+
+                if (this.disbursementListRepository == null)
+                {
+                    this.disbursementListRepository = new DisbursementListRepository(context);
+                }
+                return disbursementListRepository;
+            }
         }
 
         public TransactionItemRepository TransactionItemRepository
@@ -70,7 +83,6 @@ namespace SSIMS.DAL
             }
         }
 
-
         public SupplierRepository SupplierRepository
         {
             get
@@ -83,7 +95,6 @@ namespace SSIMS.DAL
                 return supplierRepository;
             }
         }
-
 
         public RetrievalListRepository RetrievalListRepository
         {
@@ -188,6 +199,7 @@ namespace SSIMS.DAL
                 return requisitionOrderRepository;
             }
         }
+
         public DocumentItemRepository DocumentItemRepository
         {
             get
@@ -201,14 +213,12 @@ namespace SSIMS.DAL
             }
         }
 
-
         public void Save()
         {
             context.SaveChanges();
         }
 
         private bool disposed = false;
-
 
         protected virtual void Dispose(bool disposing)
         {
