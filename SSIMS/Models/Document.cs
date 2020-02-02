@@ -38,10 +38,40 @@ namespace SSIMS.Models
             RepliedByStaff = null;
             CreatedDate = DateTime.Now;
             ResponseDate = null;
-            Status = 0;
+            Status = Status.Pending;
         }
         public Document() {
 
+        }
+
+        public void Approve(Staff RepliedByStaffID)
+        {
+            RepliedByStaff = RepliedByStaffID;
+            Status = Status.Approved;
+        }
+
+        public void Cancelled(Staff RepliedByStaffID)
+        {
+            RepliedByStaff = RepliedByStaffID;
+            Status = Status.Cancelled;
+        }
+
+        public void Rejected(Staff RepliedByStaffID)
+        {
+            RepliedByStaff = RepliedByStaffID;
+            Status = Status.Rejected;
+        }
+
+        public void Completed(Staff RepliedByStaffID)
+        {
+            RepliedByStaff = RepliedByStaffID;
+            Status = Status.Completed;
+        }
+
+        public void InProgress(Staff RepliedByStaffID)
+        {
+            RepliedByStaff = RepliedByStaffID;
+            Status = Status.InProgress;
         }
     }
 }

@@ -16,6 +16,8 @@ namespace SSIMS.DAL
         private RequisitionOrderRepository requisitionOrderRepository;
         private DocumentItemRepository documentItemRepository;
         private SupplierRepository supplierRepository;
+        private RetrievalListRepository retrievalListRepository;
+        private TenderRepository tenderRepository;
 
         public UnitOfWork()
         {
@@ -26,6 +28,20 @@ namespace SSIMS.DAL
         {
             this.context = context;
         }
+
+        public TenderRepository TenderRepository
+        {
+            get
+            {
+
+                if (this.tenderRepository == null)
+                {
+                    this.tenderRepository = new TenderRepository(context);
+                }
+                return tenderRepository;
+            }
+        }
+
 
         public SupplierRepository SupplierRepository
         {

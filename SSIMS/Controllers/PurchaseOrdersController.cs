@@ -15,7 +15,6 @@ namespace SSIMS.Controllers
     public class PurchaseOrdersController : Controller
     {
         private DatabaseContext db = new DatabaseContext();
-        private StaffService ss = new StaffService();
 
         // GET: PurchaseOrders
         public ActionResult Index()
