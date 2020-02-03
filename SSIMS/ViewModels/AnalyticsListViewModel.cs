@@ -8,6 +8,8 @@ using SSIMS.ViewModels;
 using SSIMS.Models;
 using System.Diagnostics;
 using System.Linq;
+using System.Collections;
+using SSIMS.Service;
 
 namespace SSIMS.ViewModels
 {
@@ -20,19 +22,25 @@ namespace SSIMS.ViewModels
             List<RequisitionSummaryViewModel> summaryList = new List<RequisitionSummaryViewModel>();
             UnitOfWork unitOfWork = new UnitOfWork();
             Debug.WriteLine(DateTime.Now.Year.ToString());
+
             var items = unitOfWork.RequisitionOrderRepository
                 .Get(includeProperties: "CreatedByStaff.Department, DocumentItems.Item");
             ROList = items.ToList();
+
             Debug.WriteLine("Number of items = " + ROList.Count());
             foreach (RequisitionOrder ro in ROList)
             {
                 foreach (DocumentItem di in ro.DocumentItems)
                 {
                     RequisitionSummaryViewModel rvsm = new RequisitionSummaryViewModel(di.Qty, di.Item.Category, ro.CreatedDate, ro.CreatedByStaff.Department.ID);
+                    
                     summaryList.Add(rvsm);
+                    
                 }
             }
             SummaryList = summaryList;
+            
+            
         }
     }
 }

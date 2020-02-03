@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<SSIMS.ViewModels.RequisitionSummaryViewModel>
+@using SSIMS.ViewModels
 @{
 
     ViewBag.Title = "AnalyticsList";
@@ -11,6 +12,7 @@
   yValues: SummaryList.Qty, yFields: "Qty")
   .Write();
   */
+    List<RequisitionSummaryViewModel> summarylist = ViewBag.SummaryList;
 
 }
 <!DOCTYPE html>
@@ -28,28 +30,63 @@
     </style>
 </head>
 <body>
-    <h1>Orders</h1>
+    <h1>SummaryList</h1>
     <table>
         <thead>
             <tr>
-                <th>Qty</th>
-                <th>Category</th>
-                <th>CreatDate</th>
-                <th>Department_ID</th>
-                <th>MONTH</th>
+                @if (summarylist[0].Qty != 0)
+                {<th>Qty</th>}
+                @if (summarylist[0].Category != "") { <th>Category</th>}
+                
+                @if (summarylist[0].CreatedDate.ToString("yyyy") != "0001")
+                {
+                    <th>CreateDate</th>
+}
+                @if (summarylist[0].Department != null)
+                {
+                    <th>Department_ID</th>
+}
+                @if (summarylist[0].Month != 0)
+                {
+                    <th>MONTH</th>
+}
+                @if (summarylist[0].count != 0)
+                {
+                    <th>COUNT</th>
+}
+
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
+            <tr>
+                @if (summarylist[0].Qty != 0) { 
                     <td>@Html.DisplayFor(modelItem => item.Qty)</td>
+                    }
+                    
+                @if (summarylist[0].Category != "") { 
                     <td>@Html.DisplayFor(modelItem => item.Category)</td>
+                    }
+                    
+                @if (summarylist[0].CreatedDate.ToString("yyyy") != "0001")
+                {
                     <td>@Html.DisplayFor(modelItem => item.CreatedDate)</td>
+                }
+                @if (summarylist[0].Department != null)
+                {
                     <td>@Html.DisplayFor(modelItem => item.Department)</td>
+                }
+                @if (summarylist[0].Month != 0)
+                {
                     <td>@Html.DisplayFor(modelItem => item.Month)</td>
+                }
+                @if (summarylist[0].count != 0)
+                {
+                    <td>@Html.DisplayFor(modelItem => item.count)</td>
+                }
 
-                </tr>
+            </tr>
             }
         </tbody>
     </table>
