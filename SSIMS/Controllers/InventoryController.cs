@@ -15,6 +15,7 @@ using SSIMS.Filters;
 
 namespace SSIMS.Controllers
 {
+    [AuthenticationFilter]
     [AuthorizationFilter]
     public class InventoryController : Controller
     {
