@@ -54,6 +54,9 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>packages\EntityFramework.6.4.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="FoolproofValidation, Version=0.9.5851.39121, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Foolproof.0.9.4518\lib\net45\FoolproofValidation.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Bcl.AsyncInterfaces.1.1.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
@@ -211,6 +214,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AnalyticsController.cs" />
+    <Compile Include="Controllers\DeliveryOrdersController.cs" />
     <Compile Include="Controllers\DepartmentsController.cs" />
     <Compile Include="Controllers\DisbursementListsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -271,11 +275,14 @@
     <Compile Include="Service\ILoginService.cs" />
     <Compile Include="Service\IPurchaseOrderService.cs" />
     <Compile Include="Service\LoginService.cs" />
+    <Compile Include="Service\NestedListValidationAttribute.cs" />
+    <Compile Include="Service\NestedListValidationResult.cs" />
     <Compile Include="Service\PurchaseOrderService.cs" />
     <Compile Include="Service\PurchaseService.cs" />
     <Compile Include="Service\StaffService.cs" />
     <Compile Include="Service\DisbursementService.cs" />
     <Compile Include="ViewModels\AnalyticsListViewModel.cs" />
+    <Compile Include="ViewModels\DeliveryOrderVM.cs" />
     <Compile Include="ViewModels\DeptRetrievalItemViewModel.cs" />
     <Compile Include="ViewModels\InventoryViewModel.cs" />
     <Compile Include="ViewModels\PurchaseItemVM.cs" />
@@ -286,6 +293,12 @@
     <Compile Include="ViewModels\RetrievalItemViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Client Scripts\mvcfoolproof.unobtrusive.js" />
+    <Content Include="Client Scripts\mvcfoolproof.unobtrusive.min.js" />
+    <Content Include="Client Scripts\MvcFoolproofJQueryValidation.js" />
+    <Content Include="Client Scripts\MvcFoolproofJQueryValidation.min.js" />
+    <Content Include="Client Scripts\MvcFoolproofValidation.js" />
+    <Content Include="Client Scripts\MvcFoolproofValidation.min.js" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -363,6 +376,11 @@
     <Content Include="Views\PurchaseItems\Details.cshtml" />
     <Content Include="Views\PurchaseItems\Edit.cshtml" />
     <Content Include="Views\PurchaseItems\Index.cshtml" />
+    <Content Include="Views\DeliveryOrders\Create.cshtml" />
+    <Content Include="Views\DeliveryOrders\Delete.cshtml" />
+    <Content Include="Views\DeliveryOrders\Details.cshtml" />
+    <Content Include="Views\DeliveryOrders\Edit.cshtml" />
+    <Content Include="Views\DeliveryOrders\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

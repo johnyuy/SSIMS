@@ -14,5 +14,10 @@ namespace SSIMS.DAL
         {
         }
 
+        public PurchaseOrder GetByPurchaseOrderID(int? id)
+        {
+            return Get(filter: x => x.ID == id, includeProperties: "Supplier, CreatedByStaff, RepliedByStaff, PurchaseItems.Tender.Item ").FirstOrDefault();
+        }
+
     }
 }
