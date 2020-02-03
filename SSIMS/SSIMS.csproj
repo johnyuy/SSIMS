@@ -347,6 +347,12 @@
     <Content Include="Views\Shared\_Login_Layout.cshtml" />
     <Content Include="Views\Login\Authentication.cshtml" />
     <Content Include="Views\DisbursementLists\Retrieval.cshtml" />
+    <Content Include="Views\Requisition\Cancel.cshtml" />
+    <Content Include="Views\Requisition\Edit.cshtml" />
+    <Content Include="Views\Requisition\ViewHistory.cshtml" />
+    <Content Include="Views\Requisition\Deal.cshtml" />
+    <Content Include="Views\Requisition\Approve.cshtml" />
+    <Content Include="Views\Requisition\Reject.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
