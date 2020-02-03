@@ -2,8 +2,15 @@
 @{
 
     ViewBag.Title = "AnalyticsList";
-   //DatabaseContext db = new DatabaseContext();
+
+    //DatabaseContext db = new DatabaseContext();
     //var selectQueryString = "select DocumentItems.Qty,Items.Category,RequisitionOrders.CreatedDate,Staffs.Department_ID ,MONTH(RequisitionOrders.CreatedDate) AS MONTHfrom Staffs, RequisitionOrders, DocumentItems, Items where Items.ID=DocumentItems.Item_ID and Staffs.ID=RequisitionOrders.CreatedByStaffID";
+    /*  var myChart = new Chart(width: 600, height: 400)
+          .AddTitle("Chart1")
+          .AddSeries(chartType:"column",xValue:SummaryList.CreatedDate, xField: "CreatDate",
+  yValues: SummaryList.Qty, yFields: "Qty")
+  .Write();
+  */
 
 }
 <!DOCTYPE html>
@@ -35,16 +42,27 @@
         <tbody>
             @foreach (var item in Model)
             {
-            <tr>
-                <td>@Html.DisplayFor(modelItem => item.Qty)</td>
-                <td>@Html.DisplayFor(modelItem => item.Category)</td>
-                <td>@Html.DisplayFor(modelItem => item.CreatedDate)</td>
-                <td>@Html.DisplayFor(modelItem => item.Department)</td>
-                <td>@Html.DisplayFor(modelItem => item.Month)</td>
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Qty)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Category)</td>
+                    <td>@Html.DisplayFor(modelItem => item.CreatedDate)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Department)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Month)</td>
 
-            </tr>
+                </tr>
             }
         </tbody>
     </table>
+    <div>
+        <h1>Chart</h1>
+    </div>
+    <div>
+        <img src=" @Url.Action("Chart1")" alt="Chart" />
+    </div>
+    <div>
+        <img src=" @Url.Action("Chart2")" alt="Chart" />
+    </div>
+
+
 </body>
 </html>

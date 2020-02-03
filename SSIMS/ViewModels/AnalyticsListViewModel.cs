@@ -20,7 +20,8 @@ namespace SSIMS.ViewModels
             List<RequisitionSummaryViewModel> summaryList = new List<RequisitionSummaryViewModel>();
             UnitOfWork unitOfWork = new UnitOfWork();
             Debug.WriteLine(DateTime.Now.Year.ToString());
-            var items = unitOfWork.RequisitionOrderRepository.Get(includeProperties: "CreatedByStaff.Department, DocumentItems.Item");
+            var items = unitOfWork.RequisitionOrderRepository
+                .Get(includeProperties: "CreatedByStaff.Department, DocumentItems.Item");
             ROList = items.ToList();
             Debug.WriteLine("Number of items = " + ROList.Count());
             foreach (RequisitionOrder ro in ROList)

@@ -260,6 +260,7 @@
     <Compile Include="Models\TransactionItem.cs" />
     <Compile Include="Models\UserAccount.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\AnalyticsService.cs" />
     <Compile Include="Service\ILoginService.cs" />
     <Compile Include="Service\IPurchaseOrderService.cs" />
     <Compile Include="Service\LoginService.cs" />
