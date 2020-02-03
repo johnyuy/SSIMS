@@ -1,29 +1,28 @@
 ﻿@model SSIMS.ViewModels.RequisitionItemVM
+@using SSIMS.ViewModels;
 
-<script src = "~/Scripts/jquery-1.10.2.min.js" > </script> 
-<script type = "text/javascript" > 
-    $(document).ready(function () {
-    var row;
-    $.getJSON("/Requisition/GetDocumentItems", function(data) {
-        $.each(data, function(i, DoitemData) {
-            row = $('<tr />');
-            //row.append("<td>" + CustData.FirstName + "</td>");
-            //row.append("<td>" + CustData.LastName + "</td>");
-            //row.append("<td>" + CustData.Age + "</td>");
-            row.append("<td>" + DoitemData.quantity + "</td>");
-            $('#tblCust').append(row);
-        });
-    });
-    });
-   </script> <table id = "tblCust"  class = "table table-bordered" > `  
-  
-<thead>  
-   <tr>  
-      @*<th>First Name</th>  
-      <th>Last Name</th>  
-      <th>Age</th>*@  
-      <th>Quantity</th>  
-   </tr>  
-</thead>  
-   <tbody></tbody>  
-</table>    
+@{
+    List<RequisitionItemVM> requisitionItems = ViewBag.RequisitionItems;
+}
+
+
+@using (Html.BeginForm())
+{
+
+    <table id="tblCust" class="table table-bordered">
+        <tr>
+            <th>Category</th>
+            <th>Description</th>
+            <th>Quantity</th>
+        </tr>
+        @foreach (RequisitionItemVM rivm in requisitionItems)
+        {
+            <tr>
+                <td>@rivm.SelectedCategory</td>
+                <td>@rivm.SelectedDescription</td>
+                <td>@rivm.Quantity</td>
+            </tr>
+        }
+    </table>
+    <input type="submit" value="SubmitRequisition" class="btn btn-primary" />
+} 

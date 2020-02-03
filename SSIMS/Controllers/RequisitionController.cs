@@ -26,22 +26,27 @@ namespace SSIMS.Controllers
         {
             
             var qry = new List<RequisitionItemVM>();//need to according to staff
+            //qry = ritems;
             return Json(qry, JsonRequestBehavior.AllowGet);
         }
 
 
         [HttpPost]
-        public ActionResult Add([ModelBinder(typeof(RequisitionCreateBinder))] List<RequisitionItemVM> requisitionItems)
+        public ActionResult Add(string SelectedCategory, string SelectedDescription, string Quantity)
         {
-            
+            if(Session["RequestList"] == null)
+                Session["RequestList"] = new List<RequisitionItemVM>();
+            List<RequisitionItemVM> requisitionItems = (List<RequisitionItemVM>)Session["RequestList"];
+
             if (ModelState.IsValid)
             {
                 //call service to add 
-                Staff user = StaffService.GetStaffByUsername(Session["username"].ToString());
-                RequisitionService.CreateNewRequistionOrder(requisitionItems, user);
-                TempData["message"] = "Record saved successfully";
+                RequisitionItemVM requisitionItem = new RequisitionItemVM { SelectedCategory = SelectedCategory, SelectedDescription = SelectedDescription, Quantity = int.Parse(Quantity) };
+                requisitionItems.Add(requisitionItem);
+                Debug.WriteLine("Added item to list, going back to create");
             }
-            return View();
+            Session["RequestList"] = requisitionItems;
+            return RedirectToAction("Create","Requisition");
         }
 
         public class RequisitionCreateBinder : IModelBinder
@@ -49,18 +54,18 @@ namespace SSIMS.Controllers
             public object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
             {  //throw new NotImplementedException();
                 HttpContextBase objContext = controllerContext.HttpContext;
-                //String category = objContext.Request.Form["SelectedCategory"];
-                //String description= objContext.Request.Form["SelectedDescription"];//return item ID
+                String category = objContext.Request.Form["SelectedCategory"];
+                String description= objContext.Request.Form["SelectedDescription"];//return item ID
                 int quantity = Convert.ToInt32(objContext.Request.Form["Quantity"]);
-
-                DocumentItem objdoitem = new DocumentItem
+                RequisitionItemVM objrivm = new RequisitionItemVM
                 {
-
-                    Qty = quantity
-                    
+                    ItemID=description,
+                    SelectedCategory = category,
+                    Quantity=quantity
                 };
+               
 
-                return objdoitem;
+                return objrivm;
             }
 
         }
@@ -131,53 +136,64 @@ namespace SSIMS.Controllers
         }
         public ActionResult Create()
         {
-            //for create dynamic dropdownlist
+            Debug.WriteLine("Hello im in create now");
+            
             RequisitionItemVM vm = new RequisitionItemVM();
-            List<RequisitionItemVM> vmList = new List<RequisitionItemVM>();
-            vmList.Add(vm);
+            List<RequisitionItemVM> list = (List < RequisitionItemVM >) Session["RequestList"];
+            //Debug.WriteLine("Session list has " + list.Count + "items");
+            ViewBag.RequisitionItems = list;
+            if (list == null)
+            //for create dynamic dropdownlist
+            {
+                List<RequisitionItemVM> vmList = new List<RequisitionItemVM>();
+                vmList.Add(vm);
+                Session["RequestList"] = vmList;
+                ViewBag.RequisitionItems = vmList;
+            }
+            
             return View(vm);
         }
 
-        ////POST: Requisition/Add
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Add([Bind(Include = "SelectedCategory,SelectedDescription,Quantity")] RequisitionCreateViewModel rcvm)
-        //{
-        //    var unitofwork = new UnitOfWork();
-        //    Debug.WriteLine(rcvm.SelectedCategory + "\n" + rcvm.SelectedDescription + " x " + rcvm.Quantity.ToString());
-        //    Debug.WriteLine(rcvm.CreatedDate);
-        //    Debug.WriteLine(rcvm.Status);
-        //    // Debug.WriteLine(rcvm.RequisitionOrderID);
-        //    if (ModelState.IsValid)
-        //    {
 
-        //        //get item by itemID
-        //        Item item = unitofwork.ItemRepository.GetItembyDescrption(rcvm.SelectedDescription);
-        //        Debug.WriteLine(item.ID);
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SubmitRequisition()
+        {
+            var unitofwork = new UnitOfWork();
+            List<RequisitionItemVM> vmList =(List<RequisitionItemVM>) Session["RequestList"];
+            //RequisitionItemVM rcvm = new RequisitionItemVM;
 
-        //        //save this item into the doucumentitem(item, qty)
-        //        DocumentItem doitem = unitofwork.DocumentItemRepository.InsertDocumentItembyItemandQty(item, rcvm.Quantity);
-        //        unitofwork.Save();
-        //        Debug.WriteLine(doitem.ID);
+            if (ModelState.IsValid)
+            {
+                //foreach(RequisitionItemVM rcvm in vmList)
+                //{
+                //    Item item = unitofwork.ItemRepository.GetItembyDescrption(rcvm.SelectedDescription);
+                //    DocumentItem doitem = unitofwork.DocumentItemRepository.InsertDocumentItembyItemandQty(item, rcvm.Quantity);
+                //    List<DocumentItem> doitems = new List<DocumentItem>();
+                //    doitems.Add(doitem);
+                //    unitofwork.Save();
+                //}
 
-        //        //RequisitionOrder rq = new RequisitionOrder(unitofwork.StaffRepository.GetByID(10006));
-        //        //rq.DocumentItems.Add(unitofwork.DocumentItemRepository.GetByID(doitem.ID));
+              
 
-        //        //unitofwork.RequisitionOrderRepository.Insert(rq);
+                //RequisitionOrder rq = new RequisitionOrder(unitofwork.StaffRepository.GetByID(10006));
+                //rq.DocumentItems.Add(unitofwork.DocumentItemRepository.GetByID(doitem.ID));
 
-        //        //unitofwork.Save();
+                RequisitionService.CreateNewRequistionOrder(vmList, unitofwork.StaffRepository.GetByID(10006));
+                //unitofwork.RequisitionOrderRepository.Insert(rq);
 
-        //        return View(doitem);
-        //    }
+                unitofwork.Save();
 
-        //    return View(rcvm);
-        //}
+                return RedirectToAction("Index");
+            }
 
+            return View();
+        }
 
         // POST: Requisition/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "SelectedCategory,SelectedDescription,Quantity")] RequisitionItemVM rcvm)
+        public ActionResult Create2([Bind(Include = "SelectedCategory,SelectedDescription,Quantity")] RequisitionItemVM rcvm)
         {
             var unitofwork = new UnitOfWork();
             Debug.WriteLine(rcvm.SelectedCategory + "\n" + rcvm.SelectedDescription + " x " + rcvm.Quantity.ToString());
