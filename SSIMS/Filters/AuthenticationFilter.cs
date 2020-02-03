@@ -42,7 +42,7 @@ namespace SSIMS.Filters
                         new System.Web.Routing.RouteValueDictionary
                         {
                             {"controller", "Login" },
-                            {"action","Authentication" }
+                            {"action","Index" }
                         });
             }
         }

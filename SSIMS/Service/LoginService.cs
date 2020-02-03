@@ -46,7 +46,11 @@ namespace SSIMS.Service
             if(account != null)
             {
                 if (sessionId == account.SessionID)
+                {
+                    
                     return true;
+                }
+                    
             }
             return false;
         }

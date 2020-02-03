@@ -49,6 +49,32 @@
                     }
                 </select>
             </td>
+            <td>
+                @if (department.CollectionPoint.ID == 1)
+                {
+                    <img src=@Url.Content("~/Resources/Maps/SelectedStore.png") id="collectionmap" width=450 height=300 />
+                }
+                @if (department.CollectionPoint.ID == 2)
+                {
+                    <img src=@Url.Content("~/Resources/Maps/SelectedMgmt.png") id="collectionmap" width=450 height=300 />
+                }
+                @if (department.CollectionPoint.ID == 3)
+                {
+                    <img src=@Url.Content("~/Resources/Maps/SelectedMedi.png") id="collectionmap" width=450 height=300 />
+                }
+                @if (department.CollectionPoint.ID == 4)
+                {
+                    <img src=@Url.Content("~/Resources/Maps/SelectedENGG.png") id="collectionmap" width=450 height=300 />
+                }
+                @if (department.CollectionPoint.ID == 5)
+                {
+                    <img src=@Url.Content("~/Resources/Maps/SelectedScience.png") id="collectionmap" width=450 height=300 />
+                }
+                @if (department.CollectionPoint.ID == 6)
+                {
+                    <img src=@Url.Content("~/Resources/Maps/SelectedHosp.png") id="collectionmap" width=450 height=300 />
+                }
+            </td>
 
 
         </tr>
