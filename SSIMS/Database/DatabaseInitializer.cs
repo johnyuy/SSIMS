@@ -40,8 +40,9 @@ namespace SSIMS.Database
             InitUserAccounts(context);
             InitInventoryItems(context);
             InitDocuments(context);
+            InitPurchaseItems(context);
             InitPurchaseOrders(context);
-           
+
             //other initializations copy:    static void Init (DatabaseContext context)
             context.SaveChanges();
             base.Seed(context);
@@ -315,7 +316,7 @@ namespace SSIMS.Database
 
             };
 
-            foreach ( Tender t in banetender)
+            foreach (Tender t in banetender)
             {
                 context.Tenders.Add(t);
             }
@@ -802,7 +803,7 @@ namespace SSIMS.Database
                     inventoryItem.InStoreQty /= 5;
                 context.InventoryItems.Add(inventoryItem);
             }
-                
+
             context.SaveChanges();
         }
 
@@ -843,7 +844,7 @@ namespace SSIMS.Database
                 new DocumentItem(ItemRepository.GetByID("F033"),20),
             };
             reqform3.DocumentItems = documentItems3;
-            reqform3.Status =(Status)1;
+            reqform3.Status = (Status)1;
             context.RequisitionOrders.Add(reqform3);
 
             RetrievalList retrievalList = new RetrievalList(staff1, DepartmentRepository.GetByID("ARTS"));
@@ -868,6 +869,61 @@ namespace SSIMS.Database
             context.DisbursementLists.Add(disbursementList);
             context.SaveChanges();
         }
+
+        static void InitPurchaseItems(DatabaseContext context)
+        {
+            UnitOfWork uow = new UnitOfWork(context);
+            List<PurchaseItem> purchaseItems = new List<PurchaseItem>{
+                new PurchaseItem("P043", "BANE", 12, uow),
+                new PurchaseItem("P044", "BANE", 4, uow),
+                new PurchaseItem("P045", "BANE", 3, uow),
+                new PurchaseItem("P046", "BANE", 4, uow),
+                new PurchaseItem("R001", "BANE", 7, uow),
+                new PurchaseItem("R002", "BANE", 9, uow),
+                new PurchaseItem("S100", "BANE", 29, uow),
+                new PurchaseItem("C005","ALPA",10,uow),
+                new PurchaseItem("H032","ALPA",12,uow),
+                new PurchaseItem("C001","ALPA",10,uow),
+                new PurchaseItem("S022", "ALPA", 25, uow),
+                new PurchaseItem("S023", "ALPA", 5, uow),
+                new PurchaseItem("T001", "ALPA", 15, uow),
+                new PurchaseItem("T002", "ALPA", 9, uow),
+                new PurchaseItem("T003", "ALPA", 9, uow),
+                new PurchaseItem("T020", "ALPA", 5, uow),
+                new PurchaseItem("T021", "ALPA", 5, uow),
+                new PurchaseItem("T022", "ALPA", 8, uow),
+                new PurchaseItem("T023", "ALPA", 3, uow),
+                new PurchaseItem("E006", "CHEP", 2, uow),
+                new PurchaseItem("E007", "CHEP", 3, uow),
+                new PurchaseItem("E008", "CHEP", 4, uow),
+                new PurchaseItem("E020", "CHEP", 6, uow),
+                new PurchaseItem("E021", "CHEP", 7, uow),
+                new PurchaseItem("E030", "CHEP", 21, uow),
+                new PurchaseItem("E031", "CHEP", 3, uow),
+                new PurchaseItem("E032", "CHEP", 5, uow),
+                new PurchaseItem("E033", "CHEP", 8, uow),
+                new PurchaseItem("H032", "OMEG", 8, uow),
+                new PurchaseItem("H033", "OMEG", 10, uow),
+                new PurchaseItem("P010", "OMEG", 5, uow),
+                new PurchaseItem("P011", "OMEG", 11, uow),
+                new PurchaseItem("P012", "OMEG", 12, uow),
+                new PurchaseItem("P013", "OMEG", 13, uow),
+                new PurchaseItem("P014", "OMEG", 5, uow),
+                new PurchaseItem("P015", "OMEG", 6, uow),
+                new PurchaseItem("P016", "OMEG", 7, uow),
+                new PurchaseItem("P020", "OMEG", 9, uow),
+            };
+
+            foreach (PurchaseItem p in purchaseItems)
+            {
+                context.PurchaseItems.Add(p);
+            }
+
+            context.SaveChanges();
+
+        }
+
+
 
         static void InitPurchaseOrders(DatabaseContext context)
         {

@@ -48,6 +48,11 @@ namespace SSIMS.DAL
             }
         }
 
+        public virtual IEnumerable<TEntity> GetWithRawSql(string query, params object[] parameters)
+        {
+            return dbSet.SqlQuery(query, parameters).ToList();
+        }
+
         public virtual TEntity GetByID(object id)
         {
             return dbSet.Find(id);

@@ -1,0 +1,91 @@
+﻿@model PagedList.IPagedList<SSIMS.ViewModels.PurchaseItemVM>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "PurchaseItems";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+@using (Html.BeginForm("Index", "PurchaseItems", FormMethod.Get))
+{
+    <p>
+        Find by name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+        <input type="submit" value="Search" />
+    </p>
+}
+<table class="table">
+    <tr>
+        <th>
+            @*@Html.DisplayNameFor(model => model.Tender.Item.ID)*@
+            @Html.ActionLink("Item ID", "Index", new { sortOrder = ViewBag.ItemIDSortParm })
+        </th>
+        <th>
+            @*@Html.DisplayNameFor(model => model.Tender.Item.Description)*@
+            @Html.ActionLink("Discription", "Index", new { sortOrder = ViewBag.ItemDescSortParm })
+
+        </th>
+        <th>
+            @*@Html.DisplayNameFor(model => model.Tender.Supplier.ID)*@
+            Supplier ID
+        </th>
+        <th>
+            @*@Html.DisplayNameFor(model => model.StoreQty)*@
+            Current Store Qty
+        </th>
+        <th>
+            @*@Html.DisplayNameFor(model => .Qty)*@
+            Purchasing Qty
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tender.Item.ID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tender.Item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tender.Supplier.ID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StoreQty)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Qty)
+            </td>
+
+            <td>
+                @*@Html.ActionLink("Edit", "Edit", new { id = item.ID }) |*@
+                @*@Html.ActionLink("Details", "Details", new { id = item.ID }) |*@
+                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+            </td>
+        </tr>
+
+    }
+    <tr>
+        <th>@Html.ActionLink("Add All Low Stock", "AddAllLowStockToPurchaseItems")</th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th>@Html.ActionLink("Generate Purchase Orders", "GeneratePurchaseOrders")</th>
+    </tr>
+
+</table>
+
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+
+

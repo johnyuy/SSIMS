@@ -100,6 +100,12 @@
     <Reference Include="Microsoft.Extensions.Primitives, Version=3.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Extensions.Primitives.3.1.1\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll</HintPath>
     </Reference>
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList.Mvc, Version=4.5.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\System.Buffers.4.4.0\lib\netstandard2.0\System.Buffers.dll</HintPath>
@@ -211,6 +217,7 @@
     <Compile Include="Controllers\InventoryController.cs" />
     <Compile Include="Controllers\ItemsController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\PurchaseItemsController.cs" />
     <Compile Include="Controllers\PurchaseOrdersController.cs" />
     <Compile Include="Controllers\RequisitionController.cs" />
     <Compile Include="Controllers\StaffsController.cs" />
@@ -221,6 +228,7 @@
     <Compile Include="DAL\IPurchaseOrderRepository.cs" />
     <Compile Include="DAL\ItemRepository.cs" />
     <Compile Include="DAL\IUnitOfWork.cs" />
+    <Compile Include="DAL\PurchaseItemRepository.cs" />
     <Compile Include="DAL\PurchaseOrderRepository.cs" />
     <Compile Include="DAL\RequisitionOrderRepository.cs" />
     <Compile Include="DAL\RetrievalListRepository.cs" />
@@ -264,11 +272,13 @@
     <Compile Include="Service\IPurchaseOrderService.cs" />
     <Compile Include="Service\LoginService.cs" />
     <Compile Include="Service\PurchaseOrderService.cs" />
+    <Compile Include="Service\PurchaseService.cs" />
     <Compile Include="Service\StaffService.cs" />
     <Compile Include="Service\DisbursementService.cs" />
     <Compile Include="ViewModels\AnalyticsListViewModel.cs" />
     <Compile Include="ViewModels\DeptRetrievalItemViewModel.cs" />
     <Compile Include="ViewModels\InventoryViewModel.cs" />
+    <Compile Include="ViewModels\PurchaseItemVM.cs" />
     <Compile Include="ViewModels\PurchaseOrderVM.cs" />
     <Compile Include="ViewModels\RequisitionCreateViewModel.cs" />
     <Compile Include="ViewModels\RequisitionSummaryViewModel.cs" />
@@ -280,6 +290,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\PagedList.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -347,6 +358,11 @@
     <Content Include="Views\Requisition\Details.cshtml" />
     <Content Include="Views\Shared\_Login_Layout.cshtml" />
     <Content Include="Views\Login\Authentication.cshtml" />
+    <Content Include="Views\PurchaseItems\Create.cshtml" />
+    <Content Include="Views\PurchaseItems\Delete.cshtml" />
+    <Content Include="Views\PurchaseItems\Details.cshtml" />
+    <Content Include="Views\PurchaseItems\Edit.cshtml" />
+    <Content Include="Views\PurchaseItems\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

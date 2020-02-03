@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using SSIMS.Models;
 using SSIMS.Database;
+using SSIMS.Models;
 
 namespace SSIMS.DAL
 {
-    public class PurchaseOrderRepository : GenericRepository<PurchaseOrder>
+    public class PurchaseItemRepository : GenericRepository<PurchaseItem>
     {
-        public PurchaseOrderRepository(DatabaseContext context)
+        public PurchaseItemRepository(DatabaseContext context)
     : base(context)
         {
         }

@@ -47,30 +47,35 @@ namespace SSIMS.Models
         public void Approve(Staff RepliedByStaffID)
         {
             RepliedByStaff = RepliedByStaffID;
+            ResponseDate = DateTime.Now;
             Status = Status.Approved;
         }
 
         public void Cancelled(Staff RepliedByStaffID)
         {
             RepliedByStaff = RepliedByStaffID;
+            ResponseDate = DateTime.Now;
             Status = Status.Cancelled;
         }
 
         public void Rejected(Staff RepliedByStaffID)
         {
             RepliedByStaff = RepliedByStaffID;
+            ResponseDate = DateTime.Now;
             Status = Status.Rejected;
         }
 
         public void Completed(Staff RepliedByStaffID)
         {
             RepliedByStaff = RepliedByStaffID;
+            ResponseDate = DateTime.Now;
             Status = Status.Completed;
         }
 
         public void InProgress(Staff RepliedByStaffID)
         {
             RepliedByStaff = RepliedByStaffID;
+            ResponseDate = DateTime.Now;
             Status = Status.InProgress;
         }
     }
