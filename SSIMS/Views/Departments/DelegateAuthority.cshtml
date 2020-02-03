@@ -1,14 +1,14 @@
 ﻿@using SSIMS.Models
 
 @{
-    ViewBag.Header = "DeptHead";
+    ViewBag.Header = "Delegate Authority";
     Department department = ViewBag.Department;
     string selected = ViewBag.SelectedAuth;
-    List<DeptHeadAuthorization> options = ViewBag.OtherStaff;
+    List<Staff> options = ViewBag.StaffList;
 }
 
 
-<h2>New Delegation</h2>
+<h2>@department.DeptName  Authority Delegation</h2>
 
 <script>
     function update() {
@@ -37,9 +37,34 @@
 </script>
 
 <div>
-    <h4>@department.DeptName Authority Delegation</h4>
-    <hr />
-    
+
+    <table>
+        <tr>
+            <th>Currently Authorized: </th>
+            <td></td>
+        </tr>
+
+        <tr>
+            <th>Authorize: </th>
+            <td>
+
+            </td>
+        </tr>
+
+        <tr>
+            <th>From: </th>
+            <td>
+
+            </td>
+        </tr>
+
+        <tr>
+            <th>Till: </th>
+            <td>
+
+            </td>
+        </tr>
+    </table>
 </div>
 
 
