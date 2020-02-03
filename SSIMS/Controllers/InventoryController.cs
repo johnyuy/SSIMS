@@ -16,11 +16,11 @@ using SSIMS.Filters;
 namespace SSIMS.Controllers
 {
     [AuthenticationFilter]
+    [AuthorizationFilter]
     public class InventoryController : Controller
     {
         private DatabaseContext db = new DatabaseContext();
 
-        // GET: Inventory
         public ActionResult Index(string searchString, string lowStock)
         {
             Debug.WriteLine("searchString = " + searchString + "\nlowStock = " + lowStock);

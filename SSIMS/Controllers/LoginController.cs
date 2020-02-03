@@ -9,6 +9,7 @@ using SSIMS.ViewModels;
 
 namespace SSIMS.Controllers
 {
+    [AllowAnonymous]
     public class LoginController : Controller
     {
         readonly ILoginService LoginService = new LoginService();
@@ -29,13 +30,11 @@ namespace SSIMS.Controllers
             //go to login
             return RedirectToAction("Authentication");
         }
-        
         // GET: Login
         public ActionResult Authentication()
         {
             return View();
         }
-
         [HttpPost]
         public ActionResult Authenticate(UserLogin userLogin)
         {
