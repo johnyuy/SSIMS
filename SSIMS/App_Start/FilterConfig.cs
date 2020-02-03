@@ -9,7 +9,7 @@ namespace SSIMS
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());
-            filters.Add(new AuthenticationFilter());
+            //filters.Add(new AuthenticationFilter());
             
         }
     }
