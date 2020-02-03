@@ -209,21 +209,26 @@ namespace SSIMS.Controllers
             return View(department);
         }
 
-       /* public ActionResult DelegateAuthority(string id)
+        public ActionResult DelegateAuthority(string id)
         {
+            if (String.IsNullOrEmpty(id))
+                return RedirectToAction("Index");
+
+            Department department = unitOfWork.DepartmentRepository.Get(filter: x => x.ID == id, includeProperties: "DeptHeadAuthorization").First();
+            Staff selected = department.DeptHead;
+            ViewBag.StaffList = unitOfWork.StaffRepository.Get(filter: x => x.Department.DeptName == department.DeptName);
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Department department = unitOfWork.DepartmentRepository.GetByID(id);
             if (department == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.DeptHead = new SelectList(unitOfWork.StaffRepository.Get(), "ID", "Name", department.DeptHead.ID);
-            //        ViewBag.DeptRep = new SelectList(unitOfWork.StaffRepository.Get(), "staffID", "Name", department.DeptRep.ID);
-            return View(department);
-        }*/
+            ViewBag.Department = department;
+            Session["CurrentDepartmentID"] = department.ID;
+            return View();
+        }
     }
 }
 

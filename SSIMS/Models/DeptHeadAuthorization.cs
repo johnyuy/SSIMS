@@ -10,19 +10,19 @@ namespace SSIMS.Models
     {
         [DisplayName("Dept Head Authorized")]
         public int ID { get; set; }
-        public int StaffID { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
+        public int DepartmentID { get; set; }
         public Staff Staff { get; set; }
-
         public DeptHeadAuthorization()
         {
         }
 
-        public DeptHeadAuthorization(int staffID, DateTime startDate, DateTime endDate)
+        public DeptHeadAuthorization(Staff staff,int departmentID, DateTime startDate, DateTime endDate)
         {
-            StaffID = staffID;
+            Staff = staff;
+            DepartmentID = departmentID;
             StartDate = startDate;
             EndDate = endDate;
         }
