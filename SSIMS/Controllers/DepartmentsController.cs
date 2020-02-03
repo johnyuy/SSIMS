@@ -202,8 +202,8 @@ namespace SSIMS.Controllers
             ViewBag.CollectionPointID = new SelectList(unitOfWork.CollectionPointRepository.Get(), "ID", "Location", department.CollectionPoint.ID);
             return View(department);
         }
-        
-        public ActionResult DelegateAuthority (string id)
+
+       /* public ActionResult DelegateAuthority(string id)
         {
             if (id == null)
             {
@@ -214,9 +214,10 @@ namespace SSIMS.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.DelegateAuthority = new SelectList(unitOfWork.StaffRepository.Get(), "ID", "Name", department.DeptHeadAuthorization.ID);
+            ViewBag.DeptHead = new SelectList(unitOfWork.StaffRepository.Get(), "ID", "Name", department.DeptHead.ID);
+            //        ViewBag.DeptRep = new SelectList(unitOfWork.StaffRepository.Get(), "staffID", "Name", department.DeptRep.ID);
             return View(department);
-        }
+        }*/
     }
 }
 
