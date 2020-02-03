@@ -1,5 +1,7 @@
 ﻿@{
     string user = (HttpContext.Current.Session.Count > 0) ? HttpContext.Current.Session["username"].ToString() : "Login Authentication Failed";
+    string usertype = ViewBag.usertype;
+    string usergroup = ViewBag.usergroup;
 }
 <!DOCTYPE html>
 <html>
@@ -100,30 +102,115 @@
         <div id="username"><b>@user.ToUpper()</b>&nbsp;&nbsp;&nbsp;@Html.ActionLink("Logout","Logout","Login",new { username = user },null)</div>
     </div>
     <div class="sidebar">
-        @if (ViewBag.Header == "Home")
-        {<a class="active" href="~/"><i class="fa fa-fw fa-home"></i> Home</a>}
-        else
-        {<a href="~/home/index"><i class="fa fa-fw fa-home"></i> Home</a>}
-        @if (ViewBag.Header == "Store Inventory")
-        {<a class="active" href="~/inventory"><i class="fa fa-fw fa-wrench"></i> Inventory</a>}
-        else
-        {<a href="~/inventory/index"><i class="fa fa-fw fa-wrench"></i> Inventory</a>}
+        @{
+            if (usertype == "admin")
+            {
+                if (ViewBag.Section == "Home")
+                {<a class="active" href="~/home/index"><i class="fa fa-fw fa-home"></i> Home</a>}
+                else
+                {<a href="~/home/index"><i class="fa fa-fw fa-home"></i> Home</a>}
 
-        @if (ViewBag.Header == "Departments")
-        {<a class="active" href="~/departments/index"><i class="fa fa-fw fa-user"></i> Departments</a>}
-        else
-        {<a href="~/departments/index"><i class="fa fa-fw fa-user"></i> Departments</a>}
+                if (ViewBag.Section == "Analytics")
+                {<a class="active" href="~/analytics/index"><i class=""></i> Analytics</a>}
+                else
+                {<a href="~/analytics/index"><i class=""></i> Analytics</a>}
 
-        @if (ViewBag.Header == "Requistions")
-        {<a class="active" href="~/requisition/index">Requisitions</a>}
-        else
-        {<a href="~/requisition/index"> Requisitions</a>}
-        @if (ViewBag.Header == "Items")
-        {<a class="active" href="~/items/index">Items</a>}
-        else
-        {<a href="~/items/index">Items</a>}
-        <a href="#logout"><i class="fa fa-fw fa-external-link"></i>Logout</a>
+                if (ViewBag.Section == "Inventory")
+                {<a class="active" href="~/inventory"><i class="fa fa-fw fa-wrench"></i> Inventory</a>}
+                else
+                {<a href="~/inventory/index"><i class="fa fa-fw fa-wrench"></i> Inventory</a>}
 
+                if (ViewBag.Section == "Departments")
+                {<a class="active" href="~/departments/index"><i class="fa fa-fw fa-user"></i> Departments</a>}
+                else
+                {<a href="~/departments/index"><i class="fa fa-fw fa-user"></i> Departments</a>}
+
+                if (ViewBag.Section == "Requistions")
+                {<a class="active" href="~/requisition/index">Requisitions</a>}
+                else
+                {<a href="~/requisition/index"> Requisitions</a>}
+
+                if (ViewBag.Section == "Disbursements")
+                {<a class="active" href="~/disbursements/index">Disbursements</a>}
+                else
+                {<a href="~/disbursements/index"> Disbursements</a>}
+
+                if (ViewBag.Section == "Items")
+                {<a class="active" href="~/items/index">Items</a>}
+                else
+                {<a href="~/items/index">Items</a>}
+
+                if (ViewBag.Section == "Purchases")
+                {<a class="active" href="~/purchaseorders/index">Purchases</a>}
+                else
+                {<a href="~/purchaseorders/index">Purchases</a>}
+            }
+
+            if (usergroup == "dept")
+            {
+                if (ViewBag.Section == "Dashboard")
+                {<a class="active" href="~/dashboard/index"><i class=""></i> Dashboard</a>}
+                else
+                {<a href="~/dashboard/index"><i class=""></i> Dashboard</a>}
+
+                if (ViewBag.Section == "Catalogue")
+                {<a class="active" href="~/items/index"><i class=""></i> Catalogue</a>}
+                else
+                {<a href="~/items/index"><i class=""></i> Catalogue</a>}
+
+                if (ViewBag.Section == "Requests")
+                {<a class="active" href="~/requisition/index"><i class=""></i> Requests</a>}
+                else
+                {<a href="~/requisition/index"><i class=""></i> Requests</a>}
+
+                if (usertype == "head")
+                {
+                    if (ViewBag.Section == "Delegate")
+                    {<a class="active" href="~/department/details"><i class=""></i> Delegate</a>}
+                    else
+                    {<a href="~/department/details"><i class=""></i> Delegate</a>}
+                }
+                else if (usertype == "rep")
+                {
+                    if (ViewBag.Section == "Collections")
+                    {<a class="active" href="~/collection/index"><i class=""></i> Collections</a>}
+                    else
+                    {<a href="~/collection/index"><i class=""></i> Collections</a>}
+                }
+            }
+            else if (usergroup == "store")
+            {
+                if (ViewBag.Section == "Dashboard")
+                {<a class="active" href="~/dashboard/index"><i class=""></i> Dashboard</a>}
+                else
+                {<a href="~/dashboard/index"><i class=""></i> Dashboard</a>}
+
+                if (ViewBag.Section == "Inventory")
+                {<a class="active" href="~/inventory/index"><i class=""></i> Inventory</a>}
+                else
+                {<a href="~/inventory/index"><i class=""></i> Inventory</a>}
+
+                if (ViewBag.Section == "Requisitions")
+                {<a class="active" href="~/requisition/index"><i class=""></i> Requisitions</a>}
+                else
+                {<a href="~/requisition/index"><i class=""></i> Requisitions</a>}
+
+                if (ViewBag.Section == "Departments")
+                {<a class="active" href="~/departments/index"><i class="fa fa-fw fa-user"></i> Departments</a>}
+                else
+                {<a href="~/departments/index"><i class="fa fa-fw fa-user"></i> Departments</a>}
+
+                if (ViewBag.Section == "Purchases")
+                {<a class="active" href="~/purchaseorders/index"><i class=""></i> Purchases</a>}
+                else
+                {<a href="~/purchaseorders/index"><i class=""></i> Purchases</a>}
+
+                if (ViewBag.Section == "Analytics")
+                {<a class="active" href="~/analytics/index"><i class=""></i> Analytics</a>}
+                else
+                {<a href="~/analytics/index"><i class=""></i> Analytics</a>}
+            }
+        }
     </div>
     <div class="container body-content">
         @RenderBody()
