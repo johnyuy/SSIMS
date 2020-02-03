@@ -260,17 +260,20 @@
     <Compile Include="Models\TransactionItem.cs" />
     <Compile Include="Models\UserAccount.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\IRequisitionService.cs" />
     <Compile Include="Service\ILoginService.cs" />
     <Compile Include="Service\IPurchaseOrderService.cs" />
+    <Compile Include="Service\IStaffService.cs" />
     <Compile Include="Service\LoginService.cs" />
     <Compile Include="Service\PurchaseOrderService.cs" />
+    <Compile Include="Service\RequisitionService.cs" />
     <Compile Include="Service\StaffService.cs" />
     <Compile Include="Service\DisbursementService.cs" />
     <Compile Include="ViewModels\AnalyticsListViewModel.cs" />
     <Compile Include="ViewModels\DeptRetrievalItemViewModel.cs" />
     <Compile Include="ViewModels\InventoryViewModel.cs" />
     <Compile Include="ViewModels\PurchaseOrderVM.cs" />
-    <Compile Include="ViewModels\RequisitionCreateViewModel.cs" />
+    <Compile Include="ViewModels\RequisitionItemVM.cs" />
     <Compile Include="ViewModels\RequisitionSummaryViewModel.cs" />
     <Compile Include="ViewModels\UserLogin.cs" />
     <Compile Include="ViewModels\RetrievalItemViewModel.cs" />
@@ -354,6 +357,7 @@
     <Content Include="Views\Requisition\Deal.cshtml" />
     <Content Include="Views\Requisition\Approve.cshtml" />
     <Content Include="Views\Requisition\Reject.cshtml" />
+    <Content Include="Views\Shared\_RequisitionItemsList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

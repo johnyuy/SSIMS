@@ -8,7 +8,7 @@ using SSIMS.Database;
 
 namespace SSIMS.Service
 {
-    public class StaffService
+    public class StaffService: IStaffService
     {
 
         private UnitOfWork unitOfWork = new UnitOfWork();
@@ -20,5 +20,15 @@ namespace SSIMS.Service
             return staff.ToList();
         }
 
+        public Staff GetStaffByUsername(string username)
+        {
+            if (!String.IsNullOrEmpty(username))
+            {
+                var staff = unitOfWork.StaffRepository.Get(filter: x => x.UserAccountID == username).First();
+                if (staff != null)
+                    return staff;
+            }
+            return null;
+        }
     }
 }

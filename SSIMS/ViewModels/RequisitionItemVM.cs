@@ -5,6 +5,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using SSIMS.Models;
+using SSIMS.DAL;
 
 namespace SSIMS.ViewModels
 {
@@ -13,7 +15,7 @@ namespace SSIMS.ViewModels
         Pending, Approved, Cancelled, Rejected, Completed, InProgress
     }
 
-    public class RequisitionCreateViewModel
+    public class RequisitionItemVM
     {
         [Display(Name ="Requisition ID")]
         public int ROID { get; set; }
@@ -45,5 +47,35 @@ namespace SSIMS.ViewModels
         [Display(Name = "Description")]
         public string SelectedDescription { get; set; }
         public IEnumerable<SelectListItem> Descriptions { get; set; }
+
+
+        //for display
+        public RequisitionItemVM(DocumentItem di)
+        {
+            ROID = di.Document.ID;
+            Quantity = di.Qty;
+            SelectedCategory = di.Item.Category;
+            SelectedDescription = di.Item.ID;
+            UnitOfMeasure = di.Item.UnitOfMeasure;
+            CreatedDate = di.Document.CreatedDate;
+        }
+
+        //for new entry with no category
+        public RequisitionItemVM()
+        {
+            UnitOfWork uow = new UnitOfWork();
+            Categories = uow.ItemRepository.GetCategories();
+            Descriptions = uow.ItemRepository.GetDescriptions();
+            SelectedCategory = "";
+            SelectedDescription = "";
+        }
+
+        //for new entry with catergory specified
+        public RequisitionItemVM(string category)
+        {
+            UnitOfWork uow = new UnitOfWork();
+            SelectedCategory = category;
+            Descriptions = uow.ItemRepository.GetDescriptions();
+        }
     }
 }
