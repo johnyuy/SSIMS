@@ -14,7 +14,7 @@ using System.Web.Mvc;
 namespace SSIMS.Controllers
 {
     [AuthenticationFilter]
-    
+    [AuthorizationFilter]
     public class RequisitionController : Controller
     {
         //DatabaseContext db = new DatabaseContext();
