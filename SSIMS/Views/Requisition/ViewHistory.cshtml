@@ -1,12 +1,10 @@
 ﻿@model IEnumerable<SSIMS.Models.RequisitionOrder>
+@*@model SSIMS.Models.Status*@
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "ViewHistory";
 }
 
-
-<h2>View Requisition List</h2>
-
-
+<h2>View Requisition Order History</h2>
 
 
 <table class="table">
@@ -29,7 +27,7 @@
         </th>
 
         <th>
-            My Requisition
+            Details
         </th>
 
         <th></th>
@@ -54,8 +52,14 @@
             </td>
 
             <td>
-
-                @Html.ActionLink("Details", "Details", new { id = ro.ID })
+                @if (ro.Status==SSIMS.Models.Status.Approved )
+                {
+                    @Html.ActionLink("Details", "Approve", new { id = ro.ID })
+                }
+                else
+                {
+                    @Html.ActionLink("Details", "Reject", new { id = ro.ID })
+                }
 
             </td>
         </tr>
@@ -63,6 +67,4 @@
 
 </table>
 
-<p>
-    @Html.ActionLink("Create new requisition", "Create")
-</p>
+@Html.ActionLink("View Pending Requisition", "Deal")

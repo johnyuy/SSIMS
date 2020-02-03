@@ -10,7 +10,7 @@ namespace SSIMS.ViewModels
     public class PurchaseOrderVM : PurchaseOrder
     {
 
-        public double TotalCost { get; set; }
+        public double TotalCost { get; set; }       
 
         public PurchaseOrderVM(PurchaseOrder PO) :
             base(PO.CreatedByStaff, PO.Supplier)
@@ -19,6 +19,14 @@ namespace SSIMS.ViewModels
             this.CreatedDate = PO.CreatedDate;
             this.TotalCost = GetTotalCost(PO);
             this.Status = PO.Status;
+            this.PurchaseItems = PO.PurchaseItems;
+            this.RepliedByStaff = PO.RepliedByStaff;
+            this.ResponseDate = PO.ResponseDate;
+            
+        }
+
+        public PurchaseOrderVM() : base()
+        {
         }
 
         public double GetTotalCost(PurchaseOrder PO)

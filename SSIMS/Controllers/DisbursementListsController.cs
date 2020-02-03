@@ -11,6 +11,7 @@ using SSIMS.Database;
 using SSIMS.Models;
 using SSIMS.Service;
 using SSIMS.DAL;
+using SSIMS.ViewModels;
 
 namespace SSIMS.Controllers
 {
@@ -37,6 +38,25 @@ namespace SSIMS.Controllers
 
             return View(disbursementLists.ToList());
         }
+
+        //GET: RetrievalLists
+        public ActionResult Retrieval()
+        {
+            
+            ds.GenerateDeptRetrievalList("ENGL");
+            var combinedList = ds.GenerateCombinedRetrievalList();
+            ds.InsertDeptRetrievalList("ENGL");
+            var rivm = ds.GenerateRetrievalItemViewModel(combinedList);
+            var retrievalLists = db.RetrievalLists.Include(d => d.CreatedByStaff).Include(d => d.Status);
+
+            if(retrievalLists == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(rivm.ToList());
+        }
+
 
         // GET: DisbursementLists/Details/5
         public ActionResult Details(int? id)

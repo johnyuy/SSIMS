@@ -15,6 +15,8 @@ namespace SSIMS.ViewModels
 
     public class RequisitionCreateViewModel
     {
+        [Display(Name ="Requisition ID")]
+        public int ROID { get; set; }
      
         [Display(Name = "Item Number")]
         public string ItemID { get; set; }

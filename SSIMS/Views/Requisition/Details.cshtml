@@ -1,70 +1,128 @@
 ﻿@model SSIMS.Models.RequisitionOrder
 
-    @{
-        ViewBag.Title = "Details";
-    }
+@{
+    ViewBag.Title = "Details";
+}
 
-    <h2>Details</h2>
-@*
-    <div>
-        <h4>Requisition Order Details</h4>
-        <hr />
-        <dl class="dl-horizontal">
-            <dt>
-                @Html.DisplayNameFor(model => model.Document.ID)
-            </dt>
+<h2>Details</h2>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.Document.CreatedDate)
-            </dt>
+<table>
+    <tr>
+        <td>
+            @Html.LabelFor(x => x.ID, htmlAttributes: new { @class = "control-label col-md-2" })
+        </td>
+        <td>
+            @Html.DisplayFor(x => x.ID)
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            @Html.LabelFor(x => x.CreatedByStaff.Department.DeptName, htmlAttributes: new { @class = "control-label col-md-2" })
+        </td>
+        <td>
+            @Html.DisplayFor(x => x.CreatedByStaff.Department.DeptName)
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            @Html.LabelFor(x => x.CreatedByStaff.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+        </td>
+        <td>
+            @Html.DisplayFor(x => x.CreatedByStaff.Name)
+
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            @Html.LabelFor(x => x.CreatedDate, htmlAttributes: new { @class = "control-label col-md-2" })
+        </td>
+        <td>
+            @Html.DisplayFor(x => x.CreatedDate)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(x => x.Status, htmlAttributes: new { @class = "control-label col-md-2" })
+        </td>
+        <td>
+            @Html.DisplayFor(x => x.Status)
+        </td>
+    </tr>
+</table>
 
 
-        </dl>
-    </div>
+<table class="table">
+    <tr>
+        <th>
+            Category
+        </th>
 
-*@
+        <th>
+            Description
+            @*@Html.DisplayNameFor(model => model.Item.Description)*@
+        </th>
 
+        <th>
+            Unit of Measure
+            @*@Html.DisplayNameFor(model => model.Item.UnitOfMeasure)*@
+        </th>
 
-    <table class="table">
+        <th>
+            Qty
+            @*@Html.DisplayNameFor(model => model.Qty)*@
+        </th>
+
+    </tr>
+
+    @foreach (var ro in Model.DocumentItems)
+    {
         <tr>
+            <td>
+                @Html.DisplayFor(modelItem => ro.Item.Category)
+            </td>
 
-            <th>
-                Description
-                @*@Html.DisplayNameFor(model => model.Item.Description)*@
-            </th>
+            <td>
+                @Html.DisplayFor(modelItem => ro.Item.Description)
+            </td>
 
-            <th>
-                Unit of Measure
-                @*@Html.DisplayNameFor(model => model.Item.UnitOfMeasure)*@
-            </th>
-
-            <th>
-                Qty
-                @*@Html.DisplayNameFor(model => model.Qty)*@
-            </th>
+            <td>
+                @Html.DisplayFor(modelItem => ro.Item.UnitOfMeasure)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => ro.Qty)
+            </td>
 
         </tr>
+    }
 
-        @foreach (var ro in Model.DocumentItems)
-        {
-            <tr>
+</table>
 
-                <td>
-                    @Html.DisplayFor(modelItem => ro.Item.Description)
-                </td>
+@*staff see below*@
+<p>
+    @Html.ActionLink("Back to List", "Index")
+</p>
+@*staff see below when status=pending*@
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID })
+</p>
+<p>
+    @Html.ActionLink("Cancel", "Cancel", new { id = Model.ID })
+</p>
 
-                <td>
-                    @Html.DisplayFor(modelItem => ro.Item.UnitOfMeasure)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => ro.Qty)
-                </td>
-                
-            </tr>
-        }
+@*Dep rep see below *@
+<p>
+    @Html.ActionLink("View Requisition History List", "ViewHistory")
+</p>
 
-    </table>
-
-    <p>
-        @Html.ActionLink("Back to List", "Index")
-    </p>
+<p>
+    @Html.ActionLink("Back to Pending List", "Deal")
+</p>
+<p>
+    @Html.ActionLink("Approve", "Approve", new { id = Model.ID })
+</p>
+<p>
+    @Html.ActionLink("Reject", "Reject", new { id = Model.ID })
+</p>

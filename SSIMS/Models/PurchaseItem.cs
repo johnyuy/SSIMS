@@ -10,7 +10,7 @@ namespace SSIMS.Models
     {
         public int ID { get; set; }
         public int Qty { get; set; }
- 
+
         public Tender Tender { get; set; }
 
         public PurchaseItem()
@@ -21,6 +21,10 @@ namespace SSIMS.Models
         {
             Qty = qty;
             Tender = uow.TenderRepository.Get(filter: t => t.Supplier.ID == SupplierID && t.Item.ID == itemID).FirstOrDefault();
+        }
+        public virtual double Amount
+        {
+            get { return this.Qty * this.Tender.Price; }
         }
     }
 }

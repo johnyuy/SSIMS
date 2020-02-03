@@ -58,7 +58,7 @@ namespace SSIMS.DAL
         //{
 
         //    var document = 
-        //    var doitems = Get(filter: x => x.Document.ID == ID,includeProperties:"Document");
+        //    var doitems = Get(filter: x => x..Document.ID == ID,includeProperties:"Document");
         //    if(doitems.Count()==0 || doitems == null)
         //        return (List<DocumentItem>)doitems;
         //    return null;
