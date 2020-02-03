@@ -4,7 +4,7 @@
 @{
     ViewBag.Title = "Retrieval";
 }
-    <head>
+    @*<head>
         <style>
             .displaydept .sign:after {
                 content: "+";
@@ -15,66 +15,91 @@
                 content: "-";
             }
         </style>
-    </head>
+    </head>*@
 
 <h2>Retrieval List</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.item.Description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.transactionItem.HandOverQty)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.transactionItem.TakeOverQty)
-        </th>
-
-        <th></th>
-    </tr>
-
-    @foreach (var Retrievalitem in Model)
-    {
+<form method="post">
+    <table class="table" border="1">
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => Retrievalitem.item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => Retrievalitem.transactionItem.HandOverQty)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => Retrievalitem.transactionItem.TakeOverQty)
-            </td>
+            <th>
+                @Html.DisplayNameFor(model => model.item.Description)
+            </th>
+            <th align="center">
+                @Html.DisplayNameFor(model => model.transactionItem.HandOverQty)
+            </th>
+            <th align="center">
+                @Html.DisplayNameFor(model => model.transactionItem.TakeOverQty)
+            </th>
+            <th>
+                Dept
+            </th>
+
         </tr>
 
-        <tr colspan="3" class="displaydept">
-            <td>
-                <table>
-                    @foreach (var drivm in Retrievalitem.deptRetrievalItems)
-                    {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => drivm.deptID)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => drivm.transactionItem.HandOverQty)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => drivm.transactionItem.TakeOverQty)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => drivm.transactionItem.Reason)
-                            </td>
-                        </tr>
-                    }
-                </table>
-            </td>
-        </tr>
+        @foreach (var Retrievalitem in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => Retrievalitem.item.Description)
+                </td>
+                <td align="center">
+                    @Html.DisplayFor(modelItem => Retrievalitem.transactionItem.HandOverQty)
+                </td>
+                <td align="center" style="align-content:center">
+                    <input type="number" name="TOQ" @Html.ValueFor(modelItem => Retrievalitem.transactionItem.TakeOverQty)/>
+                </td>
+                <td>
+                    <table border="1">
+                        @foreach (var drivm in Retrievalitem.deptRetrievalItems)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => drivm.deptID) DeptID
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => drivm.transactionItem.HandOverQty)  HOQ
+                                </td>
+                                <td align="center">
+                                    <input type="number" name="drivmTOQ" value=@Html.DisplayFor(modelItem => drivm.transactionItem.TakeOverQty)> TOQ
+                                </td>
+                                <td>
+                                    <input type="text" name="drivmReason" /> @Html.DisplayFor(modelItem => drivm.transactionItem.Reason) Reason
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </td>
+            </tr>
 
-    }
+            <tr class="displaydept">
+                <td colspan="3">
+                    <table>
+                        @foreach (var drivm in Retrievalitem.deptRetrievalItems)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => drivm.deptID)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => drivm.transactionItem.HandOverQty)
+                                </td>
+                                <td align="center">
+                                    <input type="number" name="drivmTOQ" value=@Html.DisplayFor(modelItem => drivm.transactionItem.TakeOverQty)>
+                                </td>
+                                <td>
+                                    <input type="text" name="drivmReason" /> @Html.DisplayFor(modelItem => drivm.transactionItem.Reason)
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </td>
+            </tr>
 
-</table>
+        }
+
+    </table>
+</form>

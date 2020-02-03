@@ -12,10 +12,13 @@ using SSIMS.Models;
 using SSIMS.Service;
 using SSIMS.DAL;
 using SSIMS.ViewModels;
+using SSIMS.Filters;
 
 namespace SSIMS.Controllers
 {
-    public class DisbursementListsController : Controller
+    [AuthenticationFilter]
+    [AuthorizationFilter]
+    public class DisbursementController : Controller
     {
         private DatabaseContext db = new DatabaseContext();
         private DisbursementService ds = new DisbursementService();
