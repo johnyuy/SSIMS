@@ -9,17 +9,19 @@ using SSIMS.ViewModels;
 
 namespace SSIMS.Controllers
 {
-    [AllowAnonymous]
     public class LoginController : Controller
     {
         readonly ILoginService LoginService = new LoginService();
         public ActionResult Index()
         {
+            Debug.WriteLine("In index now");
             if (Request.Cookies.Get("Auth") != null)
             {
+                Debug.WriteLine("Auth cookie exists");
                 //if cookie's session ID matches the sessionId in database then go to home controller
                 if (LoginService.IsStoredSession(Request.Cookies.Get("Auth")))
                 {
+                    Debug.WriteLine("Auth cookie is valid");
                     updateAuthCookie(
                         Session["username"].ToString(),
                         HttpContext.Session.SessionID);

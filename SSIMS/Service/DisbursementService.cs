@@ -36,7 +36,7 @@ namespace SSIMS.Service
                 Debug.WriteLine("RO is from dept: " + deptRO);
                 if (deptRO.Equals(deptID))
                 {
-                    UpdateRequestionOrderStatus(RO, 4); //Set Status to "Completed"
+                    //UpdateRequestionOrderStatus(RO, 4); //Set Status to "Completed"
                     ROList.Add(RO);
                 }
 
@@ -134,9 +134,9 @@ namespace SSIMS.Service
         //generate the retrieval list item for the model view using Retrieval List as input
         public List<DeptRetrievalItemViewModel> GenerateDeptRetrievalItemListByRetrievalList(RetrievalList retrievalList)
         {
-            List<TransactionItem> itemList = (List<TransactionItem>)retrievalList.ItemTransactions;
+            //List<TransactionItem> itemList = (List<TransactionItem>)retrievalList.ItemTransactions;
             List<DeptRetrievalItemViewModel> drivmList = new List<DeptRetrievalItemViewModel>();
-            foreach (TransactionItem item in itemList)
+            foreach (TransactionItem item in retrievalList.ItemTransactions)
             {
                 DeptRetrievalItemViewModel drvm = new DeptRetrievalItemViewModel(retrievalList.Department.ID, item);
                 drivmList.Add(drvm);
@@ -157,15 +157,17 @@ namespace SSIMS.Service
         }
         
         
-        //generate the combined retrieval list by item.
+        //generate the combined retrieval list by item, adding in the DRIVM List here.
         public List<RetrievalItemViewModel> GenerateRetrievalItemViewModel(List<TransactionItem> combinedRetrievalList)
         {
             List<RetrievalItemViewModel> combinedRIVMList = new List<RetrievalItemViewModel>();
             List<RetrievalItemViewModel> rivmList = GenerateRetrievalItemViewModelWithoutDRIVMList(combinedRetrievalList);
-            var retrievalListList = unitOfWork.RetrievalListRepository.Get(filter: x => x.Status.ToString() == "Approved");
+            var retrievalListList = (List<RetrievalList>)unitOfWork.RetrievalListRepository.Get(filter: x => x.Status == Models.Status.InProgress);
+            Debug.WriteLine("Retrieval List list size is: " + retrievalListList.Count);
             List<List<DeptRetrievalItemViewModel>> drivmListList = new List<List<DeptRetrievalItemViewModel>>();
             foreach (RetrievalList rl in retrievalListList)
             {
+                Debug.WriteLine("Successfully entered problematic Foreach loop...");
                 List<DeptRetrievalItemViewModel> drivmList = GenerateDeptRetrievalItemListByRetrievalList(rl);
                 drivmListList.Add(drivmList);
             }
@@ -174,13 +176,25 @@ namespace SSIMS.Service
             {
                 foreach(List<DeptRetrievalItemViewModel> drivmList in drivmListList)
                 {
-                    DeptRetrievalItemViewModel item = (DeptRetrievalItemViewModel) drivmList.Where(x => x.transactionItem.Item == rivm.item);
-                    rivm.deptRetrievalItems.Add(item);
+                    Debug.WriteLine("Adding dept Retrieval list VM into the retrieval item vm...");
+                    foreach(DeptRetrievalItemViewModel drivm in drivmList)
+                    {
+                        if (drivm.transactionItem.Item.Equals(rivm.item))
+                        {
+                            rivm.deptRetrievalItems.Add(drivm);
+                        }
+                    }
+                    //DeptRetrievalItemViewModel item = (DeptRetrievalItemViewModel) drivmList.Where(x => x.transactionItem.Item == rivm.item);
+                    //rivm.deptRetrievalItems.Add(item);
                 }
             }
             foreach(RetrievalItemViewModel rivm in rivmList)
             {
                 Debug.WriteLine("Items in Model View: " + rivm.item.Description + " Handover Qty: " + rivm.transactionItem.HandOverQty);
+                foreach (DeptRetrievalItemViewModel drivm in rivm.deptRetrievalItems)
+                {
+                    Debug.WriteLine("Items in dept retrieval item view model: " + drivm.deptID + " HOQ: " + drivm.transactionItem.HandOverQty + " TOQ: " + drivm.transactionItem.TakeOverQty);
+                }
             }
             return rivmList;
         } 
@@ -331,10 +345,7 @@ namespace SSIMS.Service
                         combinedRetrievalList.Add(transItem);
                     }
                 }
-                rl.Status = (Models.Status)4; //Set Retrieval List statue to "Completed"
-                Debug.WriteLine("Setting Retrieval List status to Completed...");
-                unitOfWork.RetrievalListRepository.Update(rl);
-                unitOfWork.Save();
+                //UpdateRetrievalListStatus(rl, 4); //Update status to completed
             }
             foreach (TransactionItem item in combinedRetrievalList)
             {
