@@ -15,7 +15,7 @@ namespace SSIMS.Filters
 
             Debug.WriteLine("\nController called: " + filterContext.ActionDescriptor.ControllerDescriptor.ControllerName);
             Debug.WriteLine("Action called: " + filterContext.ActionDescriptor.ActionName);
-            GenerateAccessGroup();
+            GenerateAccessGroup(filterContext);
             filterContext.Controller.ViewBag.usergroup = HttpContext.Current.Session["userGroup"];
             filterContext.Controller.ViewBag.usertype = HttpContext.Current.Session["userType"];
 
@@ -23,19 +23,31 @@ namespace SSIMS.Filters
 
         }
 
-        private static void GenerateAccessGroup()
+        private static void GenerateAccessGroup(AuthorizationContext filterContext)
         {
             string userGroup = "";
-            string userType = HttpContext.Current.Session["role"].ToString();
-            if (!String.IsNullOrEmpty(userType))
+            if (HttpContext.Current.Session["role"] != null)
             {
-                if (userType == "head" || userType == "rep" || userType == "staff")
-                    userGroup = "dept";
-                if (userType == "manager" || userType == "supervisor" || userType == "clerk")
-                    userGroup = "store";
-                Debug.Write("[Authorization Filter :  " + userType + "-" + userGroup + "]");
-                HttpContext.Current.Session["userGroup"] = userGroup;
-                HttpContext.Current.Session["userType"] = userType;
+                string userType = HttpContext.Current.Session["role"].ToString();
+                if (!String.IsNullOrEmpty(userType))
+                {
+                    if (userType == "head" || userType == "rep" || userType == "staff")
+                        userGroup = "dept";
+                    if (userType == "manager" || userType == "supervisor" || userType == "clerk")
+                        userGroup = "store";
+                    Debug.Write("[Authorization Filter :  " + userType + "-" + userGroup + "]");
+                    HttpContext.Current.Session["userGroup"] = userGroup;
+                    HttpContext.Current.Session["userType"] = userType;
+                }
+            }
+            else
+            {
+                filterContext.Result = new RedirectToRouteResult(
+                        new System.Web.Routing.RouteValueDictionary
+                        {
+                            {"controller", "Login" },
+                            {"action","Index" }
+                        });
             }
         }
     }
