@@ -846,6 +846,7 @@ namespace SSIMS.Database
             reqform.DocumentItems = documentItems;
             context.RequisitionOrders.Add(reqform);
 
+            //Approved Requisition Orders
             Staff staff2 = StaffRepository.GetByID(10010); //ARCH dept
             RequisitionOrder reqform2 = new RequisitionOrder(staff2);
             reqform2.RepliedByStaff = StaffRepository.GetByID(10006);

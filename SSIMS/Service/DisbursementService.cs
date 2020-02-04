@@ -31,6 +31,7 @@ namespace SSIMS.Service
             foreach (RequisitionOrder RO in approvedRO)
             {
                 Debug.WriteLine("RO ID: " + RO.ID);
+                Debug.WriteLine("RO is created by: " + RO.CreatedByStaff.Name + " from " + RO.CreatedByStaff.Department.ID);
                 string deptRO = RO.CreatedByStaff.Department.ID;
                 Debug.WriteLine("RO is from dept: " + deptRO);
                 if (deptRO.Equals(deptID))
