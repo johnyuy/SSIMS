@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using SSIMS.Models;
+using System.Web;
 
 namespace SSIMS.Service
 {
@@ -9,5 +10,6 @@ namespace SSIMS.Service
         bool AuthenticateSession(string username, string sessionId);
         bool IsStoredSession(HttpCookie AuthCookie);
         void CancelSession(string username);
+        Staff StaffFromSession { get; }
     }
 }

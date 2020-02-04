@@ -105,12 +105,17 @@
     @Html.ActionLink("Back to List", "Index")
 </p>
 @*staff see below when status=pending*@
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID })
-</p>
-<p>
-    @Html.ActionLink("Cancel", "Cancel", new { id = Model.ID })
-</p>
+
+@if (Model.Status == SSIMS.Models.Status.Pending)
+{
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.ID })
+    </p>
+    <p>
+        @Html.ActionLink("Cancel", "Cancel", new { id = Model.ID })
+    </p>
+    
+}
 
 @*Dep rep see below *@
 <p>
@@ -118,11 +123,17 @@
 </p>
 
 <p>
-    @Html.ActionLink("Back to Pending List", "Deal")
+    @Html.ActionLink("Back to Pending List", "Manage")
 </p>
-<p>
-    @Html.ActionLink("Approve", "Approve", new { id = Model.ID })
-</p>
-<p>
-    @Html.ActionLink("Reject", "Reject", new { id = Model.ID })
-</p>
+
+@if (Model.Status == SSIMS.Models.Status.Pending)
+{
+    <p>
+        @Html.ActionLink("Approve", "Approve", new { id = Model.ID })
+    </p>
+    <p>
+        @Html.ActionLink("Reject", "Reject", new { id = Model.ID })
+    </p>
+}
+
+

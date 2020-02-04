@@ -51,9 +51,10 @@ namespace SSIMS.ViewModels
             ReorderLvl = item.ReorderLvl;
             ReorderQty = item.ReorderQty;
             ImageURL = item.Item.ImageURL;
-            //get top 3 tenders using TenderService
+            //get top 3 tenders using PurchaseService
 
             //get last Purchase using PurchaseService
+
         }
 
     }

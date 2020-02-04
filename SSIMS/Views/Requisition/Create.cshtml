@@ -9,7 +9,7 @@
 
 
 
-@using (Html.BeginForm("Add","Requisition"))
+@using (Html.BeginForm("Add", "Requisition"))
 {
     @Html.AntiForgeryToken()
     <table>
@@ -41,7 +41,14 @@
 
     </table>
 }
-@Html.Partial("_RequisitionItemsList")
+
+
+
+@if (requisitionItems.Count > 1)
+{
+    @Html.Partial("_RequisitionItemsList")
+}
+
 
 
 @section Scripts {

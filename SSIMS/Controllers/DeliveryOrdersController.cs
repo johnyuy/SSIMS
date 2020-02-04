@@ -10,6 +10,7 @@ using SSIMS.Database;
 using SSIMS.ViewModels;
 using SSIMS.Models;
 using SSIMS.DAL;
+using SSIMS.Service;
 
 
 namespace SSIMS.Controllers
@@ -18,6 +19,7 @@ namespace SSIMS.Controllers
     {
         private DatabaseContext db = new DatabaseContext();
         private UnitOfWork uow = new UnitOfWork();
+        private PurchaseService ps = new PurchaseService();
 
         // GET: DeliveryOrders
         public ActionResult Index()
@@ -92,7 +94,7 @@ namespace SSIMS.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID, CreatedByStaffID, RepliedByStaffID, Comments, CreatedDate, ResponseDate, Status, PurchaseOrderID, TransactionItems")] DeliveryOrderVM deliveryOrderVM, int? id)
+        public ActionResult Edit([Bind(Include = "ID, CreatedByStaffID, RepliedByStaffID, Comments, Supplier, CreatedDate, ResponseDate, Status, PurchaseOrderID, TransactionItems")] DeliveryOrderVM deliveryOrderVM, int? id)
         {
             if (ModelState.IsValid)
             {
@@ -101,7 +103,7 @@ namespace SSIMS.Controllers
 
                 foreach (TransactionItem ti in items)
                 {
-                    DocumentItem di = new DocumentItem(ti);
+                    DocumentItem di = new DocumentItem(ti, uow);
                     deliveredItems.Add(di);
                 }
                 //if partial delivery 
@@ -114,12 +116,12 @@ namespace SSIMS.Controllers
                 Staff currentUser = uow.StaffRepository.GetByID(10003);
                 PO.Completed(currentUser);
                 uow.PurchaseOrderRepository.Update(PO);
+                uow.Save();
 
                 //create delivery order 
                 DeliveryOrder deliveryOrder = new DeliveryOrder(currentUser, PO.Supplier, PO);
                 deliveryOrder.DocumentItems = deliveredItems;
                 uow.DeliveryOrderRepository.Insert(deliveryOrder);
-
                 uow.Save();
 
             }

@@ -127,5 +127,19 @@ namespace SSIMS.Service
                 HttpContext.Current.Session["role"] = role;
             }
         }
+
+        public Staff StaffFromSession
+        {
+            get
+            {
+                //this method get up to Staff's Department property primitives
+                if (HttpContext.Current.Session["username"] == null)
+                    return null;
+                string username = HttpContext.Current.Session["username"].ToString();
+                Staff staff = uow.StaffRepository.Get(filter: x => x.UserAccountID == username, includeProperties: "Department").First();
+
+                return staff;
+            }
+        }
     }
 }

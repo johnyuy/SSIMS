@@ -890,6 +890,23 @@ namespace SSIMS.Database
             reqform4.Status = (Status)1;
             context.RequisitionOrders.Add(reqform4);
 
+
+            Staff staff5 = StaffRepository.GetByID(10024); //COMM dept
+            RequisitionOrder reqform5 = new RequisitionOrder(staff5);
+            reqform5.RepliedByStaff = StaffRepository.GetByID(10023);
+            List<DocumentItem> documentItems5 = new List<DocumentItem>
+            {
+                new DocumentItem(ItemRepository.GetByID("C001"),1),
+                new DocumentItem(ItemRepository.GetByID("H014"),4),
+                new DocumentItem(ItemRepository.GetByID("F033"),12),
+            };
+            reqform5.DocumentItems = documentItems5;
+            reqform5.Status = (Status)1;
+            context.RequisitionOrders.Add(reqform5);
+
+
+
+
             RetrievalList retrievalList = new RetrievalList(staff1, DepartmentRepository.GetByID("ARTS"));
             List<TransactionItem> transactionItems = new List<TransactionItem>
             {
@@ -899,6 +916,11 @@ namespace SSIMS.Database
             };
             retrievalList.ItemTransactions = transactionItems;
             context.RetrievalLists.Add(retrievalList);
+
+
+
+
+
 
             DisbursementList disbursementList = new DisbursementList(staff1, DepartmentRepository.GetByID("ARTS"));
             disbursementList.RepliedByStaff = StaffRepository.GetByID(10014);

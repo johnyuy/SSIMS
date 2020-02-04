@@ -1,4 +1,6 @@
-﻿@model IEnumerable<SSIMS.Models.RequisitionOrder>
+﻿@*@model IEnumerable<SSIMS.Models.RequisitionOrder>*@
+@model PagedList.IPagedList<SSIMS.Models.RequisitionOrder>
+@using PagedList.Mvc;
 @{
     ViewBag.Title = "Index";
 }
@@ -6,6 +8,23 @@
 
 <h2>View Requisition List</h2>
 
+@*<script>
+        function search() {
+
+            var searchstr = document.getElementById('searchString').value;
+            post('/Requisition/Index', { 'searchString': searchstr });
+
+        }
+    </script>
+
+    <div style="float:right">
+        @Html.TextBox("searchString")
+        <input type="submit" value="search" onclick="search()" />
+    </div>*@
+
+<p>
+    @Html.ActionLink("Create new requisition", "Create")
+</p>
 
 
 
@@ -13,19 +32,19 @@
     <tr>
 
         <th>
-            @Html.DisplayNameFor(model => model.ID)
+            Requisition ID
         </th>
 
         <th>
-            @Html.DisplayNameFor(model => model.CreatedDate)
+            Create Date
         </th>
 
         <th>
-            @Html.DisplayNameFor(model => model.Status)
+            Status
         </th>
 
         <th>
-            @Html.DisplayNameFor(model => model.ResponseDate)
+            Response Date
         </th>
 
         <th>
@@ -63,6 +82,7 @@
 
 </table>
 
-<p>
-    @Html.ActionLink("Create new requisition", "Create")
-</p>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",new { page }))
