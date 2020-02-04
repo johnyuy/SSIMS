@@ -19,6 +19,7 @@ namespace SSIMS.Models
         [DisplayName("Unit of Measure")]
         public string UnitOfMeasure { get; set; }
 
+        public string ImageURL { get; set; }
         public Item()
         {
         }
