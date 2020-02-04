@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
+using SSIMS.DAL;
 
 namespace SSIMS.Models
 {
@@ -29,10 +30,23 @@ namespace SSIMS.Models
             Document = document;
         }
 
+        public DocumentItem(string itemID, int qty, UnitOfWork uow)
+        {
+            Qty = qty;
+            Item = uow.ItemRepository.GetByID(itemID);
+        }
+
         public DocumentItem(Item item, int qty)
         {
             Item = item;
             Qty = qty;
         }
+
+        public DocumentItem(TransactionItem transactionItem)
+        {
+            Item = transactionItem.Item;
+            Qty = transactionItem.TakeOverQty;
+        }
+
     }
 }

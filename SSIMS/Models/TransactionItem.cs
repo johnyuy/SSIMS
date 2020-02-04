@@ -17,7 +17,7 @@ namespace SSIMS.Models
 
         public int HandOverQty { get; set; }
 
-        [LessThanOrEqualTo("HandOverQty")]
+        //[LessThanOrEqualTo("HandOverQty")]
         public int TakeOverQty { get; set; }
 
         public string Reason { get; set; }

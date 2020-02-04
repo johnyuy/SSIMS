@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SSIMS.ViewModels.DeliveryOrderVM>
+﻿@model IEnumerable < SSIMS.Models.DeliveryOrder>
 
 @{
     ViewBag.Title = "Index";
@@ -30,13 +30,7 @@
             @Html.DisplayNameFor(model => model.Status)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ExpectedDeliveryDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TotalCost)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PurchaseOrderID)
+            @Html.DisplayNameFor(model => model.PurchaseOrder.ID)
         </th>
         <th></th>
     </tr>
@@ -62,16 +56,10 @@
             @Html.DisplayFor(modelItem => item.Status)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.ExpectedDeliveryDate)
+            @Html.DisplayFor(modelItem => item.PurchaseOrder.ID)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.TotalCost)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PurchaseOrderID)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
+            @*@Html.ActionLink("Edit", "Edit", new { id=item.ID }) |*@
             @Html.ActionLink("Details", "Details", new { id=item.ID }) |
             @Html.ActionLink("Delete", "Delete", new { id=item.ID })
         </td>

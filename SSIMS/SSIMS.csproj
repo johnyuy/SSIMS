@@ -226,6 +226,7 @@
     <Compile Include="Controllers\RequisitionController.cs" />
     <Compile Include="Controllers\StaffsController.cs" />
     <Compile Include="DAL\CollectionPointRepository.cs" />
+    <Compile Include="DAL\DeliveryOrderRepository.cs" />
     <Compile Include="DAL\DepartmentRepository.cs" />
     <Compile Include="DAL\DisbursementListRepository.cs" />
     <Compile Include="DAL\DocumentItemRepository.cs" />
@@ -381,6 +382,8 @@
     <Content Include="Views\DeliveryOrders\Details.cshtml" />
     <Content Include="Views\DeliveryOrders\Edit.cshtml" />
     <Content Include="Views\DeliveryOrders\Index.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\TransactionItem.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\View.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

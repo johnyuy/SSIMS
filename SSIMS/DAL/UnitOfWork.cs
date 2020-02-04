@@ -22,6 +22,9 @@ namespace SSIMS.DAL
         private DisbursementListRepository disbursementListRepository;
         private TenderRepository tenderRepository;
         private PurchaseItemRepository purchaseItemRepository;
+        private DeliveryOrderRepository deliveryOrderRepository;
+
+
 
         public UnitOfWork()
         {
@@ -32,6 +35,20 @@ namespace SSIMS.DAL
         {
             this.context = context;
         }
+
+        public DeliveryOrderRepository DeliveryOrderRepository
+        {
+            get
+            {
+
+                if (this.deliveryOrderRepository == null)
+                {
+                    this.deliveryOrderRepository = new DeliveryOrderRepository(context);
+                }
+                return deliveryOrderRepository;
+            }
+        }
+
 
         public PurchaseItemRepository PurchaseItemRepository
         {

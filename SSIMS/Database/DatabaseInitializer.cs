@@ -42,6 +42,7 @@ namespace SSIMS.Database
             InitDocuments(context);
             InitPurchaseItems(context);
             InitPurchaseOrders(context);
+            InitDeliveryOrders(context);
 
             //other initializations copy:    static void Init (DatabaseContext context)
             context.SaveChanges();
@@ -996,6 +997,46 @@ namespace SSIMS.Database
             };
             PO6.PurchaseItems = purchaseItems6;
             context.PurchaseOrders.Add(PO6);
+
+            context.SaveChanges();
+        }
+
+        static void InitDeliveryOrders(DatabaseContext context)
+        {
+            UnitOfWork uow = new UnitOfWork(context);
+
+            Staff Clerk1 = uow.StaffRepository.GetByID(10004);
+
+            Debug.WriteLine("\tInitializing Delivery Orders");
+            DeliveryOrder DO1 = new DeliveryOrder(10004, "ALPA", 1, uow);
+            List<DocumentItem> documentItems = new List<DocumentItem>{
+                new DocumentItem("C005",10,uow),
+                new DocumentItem("H032",12,uow),
+                new DocumentItem("C001",10,uow),
+            };
+            DO1.DocumentItems = documentItems;
+            DO1.Completed(Clerk1);
+            context.DeliveryOrders.Add(DO1);
+
+            DeliveryOrder DO2 = new DeliveryOrder(10004, "BANE", 2, uow);
+            List<DocumentItem> documentItems2 = new List<DocumentItem>{
+                new DocumentItem("C006",10,uow),
+                new DocumentItem("E003", 9,uow),
+                new DocumentItem("C001",10,uow),
+            };
+            DO2.DocumentItems = documentItems2;
+            DO2.Completed(Clerk1);
+            context.DeliveryOrders.Add(DO2);
+
+            DeliveryOrder DO3 = new DeliveryOrder(10004, "BANE", 3, uow);
+            List<DocumentItem> documentItems3 = new List<DocumentItem>{
+                new DocumentItem("C003",10,uow),
+                new DocumentItem("P046", 9,uow),
+                new DocumentItem("R001",3,uow),
+            };
+            DO3.DocumentItems = documentItems3;
+            DO3.Completed(Clerk1);
+            context.DeliveryOrders.Add(DO3);
 
             context.SaveChanges();
         }

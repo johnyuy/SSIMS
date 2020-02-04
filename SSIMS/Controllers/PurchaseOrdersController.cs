@@ -110,16 +110,13 @@ namespace SSIMS.Controllers
             PurchaseOrder purchaseOrder = uow.PurchaseOrderRepository.Get(filter: x => x.ID == id, includeProperties: "Supplier, CreatedByStaff, RepliedByStaff, PurchaseItems.Tender.Item ").FirstOrDefault();
 
             // to change later 
-            purchaseOrder.InProgress(uow.StaffRepository.GetByID(10002));
-            uow.PurchaseOrderRepository.Update(purchaseOrder);
-            uow.Save();
             Debug.WriteLine("Delivery Order ");
             PurchaseOrderVM vm = new PurchaseOrderVM(purchaseOrder);
             if (purchaseOrder == null)
             {
                 return HttpNotFound();
             }
-            return RedirectToAction("Details", new { id = id });
+            return RedirectToAction("Edit", "DeliveryOrders", new { id = id });
         }
 
 

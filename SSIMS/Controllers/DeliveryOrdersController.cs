@@ -22,8 +22,8 @@ namespace SSIMS.Controllers
         // GET: DeliveryOrders
         public ActionResult Index()
         {
-            var deliveryOrderVMs = db.DeliveryOrderVMs.Include(d => d.CreatedByStaff).Include(d => d.RepliedByStaff);
-            return View(deliveryOrderVMs.ToList());
+            var deliveryOrders = db.DeliveryOrders.Include(d => d.CreatedByStaff).Include(d => d.RepliedByStaff);
+            return View(deliveryOrders.ToList());
         }
 
         // GET: DeliveryOrders/Details/5
@@ -54,7 +54,7 @@ namespace SSIMS.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,CreatedByStaffID,RepliedByStaffID,Comments,CreatedDate,ResponseDate,Status,ExpectedDeliveryDate,TotalCost,PurchaseOrderID")] DeliveryOrderVM deliveryOrderVM)
+        public ActionResult Create([Bind(Include = "ID,CreatedByStaffID,RepliedByStaffID,Comments,CreatedDate,ResponseDate,Status,PurchaseOrderID")] DeliveryOrderVM deliveryOrderVM)
         {
             if (ModelState.IsValid)
             {
@@ -92,20 +92,40 @@ namespace SSIMS.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include ="PurchaseItems.TransactionItem")] DeliveryOrderVM deliveryOrderVM, int? id)
+        public ActionResult Edit([Bind(Include = "ID, CreatedByStaffID, RepliedByStaffID, Comments, CreatedDate, ResponseDate, Status, PurchaseOrderID, TransactionItems")] DeliveryOrderVM deliveryOrderVM, int? id)
         {
             if (ModelState.IsValid)
             {
+                List<DocumentItem> deliveredItems = new List<DocumentItem>();
+                List<TransactionItem> items = deliveryOrderVM.TransactionItems;
+
+                foreach (TransactionItem ti in items)
+                {
+                    DocumentItem di = new DocumentItem(ti);
+                    deliveredItems.Add(di);
+                }
+                //if partial delivery 
+                //purchaseOrder.InProgress(uow.StaffRepository.GetByID(10002));
+                //uow.PurchaseOrderRepository.Update(purchaseOrder);
+                //uow.Save();
+
                 PurchaseOrder PO = uow.PurchaseOrderRepository.GetByPurchaseOrderID(id);
                 //change to session clerk later 
-                Staff CurrentUser = uow.StaffRepository.GetByID(10003);
-                PO.Completed(CurrentUser);
+                Staff currentUser = uow.StaffRepository.GetByID(10003);
+                PO.Completed(currentUser);
                 uow.PurchaseOrderRepository.Update(PO);
+
+                //create delivery order 
+                DeliveryOrder deliveryOrder = new DeliveryOrder(currentUser, PO.Supplier, PO);
+                deliveryOrder.DocumentItems = deliveredItems;
+                uow.DeliveryOrderRepository.Insert(deliveryOrder);
+
                 uow.Save();
+
             }
             ViewBag.CreatedByStaffID = new SelectList(db.Staffs, "ID", "UserAccountID", deliveryOrderVM.CreatedByStaffID);
             ViewBag.RepliedByStaffID = new SelectList(db.Staffs, "ID", "UserAccountID", deliveryOrderVM.RepliedByStaffID);
-            return View(deliveryOrderVM);
+            return RedirectToAction("Index");
         }
 
         // GET: DeliveryOrders/Delete/5

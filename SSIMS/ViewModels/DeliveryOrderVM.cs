@@ -6,6 +6,7 @@ using SSIMS.DAL;
 using SSIMS.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics;
 using SSIMS.Service;
 
 namespace SSIMS.ViewModels
@@ -34,7 +35,7 @@ namespace SSIMS.ViewModels
         public Supplier Supplier { get; set; }
 
         //[NestedListValidation]
-        public List<TransactionItem> PurchaseItems { get; set; }
+        public List<TransactionItem> TransactionItems { get; set; }
 
         public double TotalCost { get; set; }
 
@@ -46,7 +47,7 @@ namespace SSIMS.ViewModels
             this.ID = PO.ID;
             this.CreatedDate = PO.CreatedDate;
             this.Status = PO.Status;
-            this.PurchaseItems = PurchaseItemToTransactionItem(PO.PurchaseItems.ToList(), PO);
+            this.TransactionItems = PurchaseItemToTransactionItem(PO.PurchaseItems.ToList(), PO);
             this.RepliedByStaff = PO.RepliedByStaff;
             this.ResponseDate = PO.ResponseDate;
             this.CreatedByStaff = PO.CreatedByStaff;
@@ -62,6 +63,8 @@ namespace SSIMS.ViewModels
         public TransactionItem PurchaseItemToTransactionItem(PurchaseItem pi, Document document)
         {
             TransactionItem ti = new TransactionItem(pi.Qty, pi.Qty, "", pi.Tender.Item, document);
+            ti.ID = Guid.NewGuid();
+            Debug.WriteLine(ti.ID);
             return ti;
         }
 
