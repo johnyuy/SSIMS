@@ -42,8 +42,7 @@ namespace SSIMS.Controllers
         //GET: RetrievalLists
         public ActionResult Retrieval()
         {
-            
-            
+
             ds.InsertDeptRetrievalList("ENGL");
             ds.InsertDeptRetrievalList("ARCH");
             ds.InsertDeptRetrievalList("COMM");

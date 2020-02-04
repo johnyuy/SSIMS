@@ -8,8 +8,8 @@ using SSIMS.DAL;
 
 namespace SSIMS.Database
 {
-    public class DatabaseInitializer<T> : DropCreateDatabaseAlways<DatabaseContext>
-    //public class DatabaseInitializer<T> : CreateDatabaseIfNotExists<DatabaseContext>
+    //public class DatabaseInitializer<T> : DropCreateDatabaseAlways<DatabaseContext>
+    public class DatabaseInitializer<T> : CreateDatabaseIfNotExists<DatabaseContext>
 
     {
         static StaffRepository StaffRepository;
@@ -45,7 +45,7 @@ namespace SSIMS.Database
             InitDocuments(context);
             InitPurchaseItems(context);
             InitPurchaseOrders(context);
-            InitDeptHeadAuthorizations(context);
+            //InitDeptHeadAuthorizations(context);
 
 
             InitDeliveryOrders(context);
