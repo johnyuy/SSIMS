@@ -10,6 +10,7 @@ using SSIMS.Database;
 using SSIMS.ViewModels;
 using SSIMS.Models;
 using SSIMS.DAL;
+using SSIMS.Service;
 
 
 namespace SSIMS.Controllers
@@ -18,10 +19,12 @@ namespace SSIMS.Controllers
     {
         private DatabaseContext db = new DatabaseContext();
         private UnitOfWork uow = new UnitOfWork();
+        private PurchaseService ps = new PurchaseService();
 
         // GET: DeliveryOrders
         public ActionResult Index()
         {
+            ps.recentPurchaseItem(uow.ItemRepository.GetByID("C001"));
             var deliveryOrders = db.DeliveryOrders.Include(d => d.CreatedByStaff).Include(d => d.RepliedByStaff);
             return View(deliveryOrders.ToList());
         }
@@ -92,7 +95,7 @@ namespace SSIMS.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID, CreatedByStaffID, RepliedByStaffID, Comments, CreatedDate, ResponseDate, Status, PurchaseOrderID, TransactionItems")] DeliveryOrderVM deliveryOrderVM, int? id)
+        public ActionResult Edit([Bind(Include = "ID, CreatedByStaffID, RepliedByStaffID, Comments, CreatedDate, ResponseDate, Status, PurchaseOrderID, TransactionItems.TransactionItem")] DeliveryOrderVM deliveryOrderVM, int? id)
         {
             if (ModelState.IsValid)
             {

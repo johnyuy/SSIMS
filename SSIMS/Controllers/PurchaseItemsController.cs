@@ -19,7 +19,6 @@ namespace SSIMS.Controllers
     public class PurchaseItemsController : Controller
     {
         private DatabaseContext db = new DatabaseContext();
-        private PurchaseService PS = new PurchaseService();
         private UnitOfWork uow = new UnitOfWork();
 
         // GET: PurchaseItems
@@ -71,7 +70,13 @@ namespace SSIMS.Controllers
             }
             int pageSize = 15;
             int pageNumber = (page ?? 1);
-            List<PurchaseItemVM> mv = PS.InitializePurchaseItemMV(purchaseItems.ToList());
+            List<PurchaseItemVM> mv = new List<PurchaseItemVM>();
+
+            foreach(PurchaseItem pi in purchaseItems)
+            {
+                mv.Add(new PurchaseItemVM(pi, uow));
+
+            }
 
             return View(mv.ToPagedList(pageNumber, pageSize));
         }
