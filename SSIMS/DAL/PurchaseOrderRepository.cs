@@ -14,18 +14,10 @@ namespace SSIMS.DAL
         {
         }
 
-        public int extraMethod(int id)
+        public PurchaseOrder GetByPurchaseOrderID(int? id)
         {
-            Console.WriteLine("UpdateItemFullStock");
-
-            var categories = context.Database.ExecuteSqlCommand("SELECT DISTINCT Category FROM Items");
-
-            return context.Database.ExecuteSqlCommand("SELECT DISTINCT Category FROM Items");
-
-            //return 1;
-            //return context.Database.ExecuteSqlCommand("SELECT Course SET Credits = Credits * {0}", multiplier);
-
-
+            return Get(filter: x => x.ID == id, includeProperties: "Supplier, CreatedByStaff, RepliedByStaff, PurchaseItems.Tender.Item ").FirstOrDefault();
         }
+
     }
 }

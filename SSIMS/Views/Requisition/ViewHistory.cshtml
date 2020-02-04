@@ -1,4 +1,6 @@
-﻿@model IEnumerable<SSIMS.Models.RequisitionOrder>
+﻿@*@model IEnumerable<SSIMS.Models.RequisitionOrder>*@
+@model PagedList.IPagedList<SSIMS.Models.RequisitionOrder>
+@using PagedList.Mvc;
 @*@model SSIMS.Models.Status*@
 @{
     ViewBag.Title = "ViewHistory";
@@ -6,24 +8,29 @@
 
 <h2>View Requisition Order History</h2>
 
+<p>@Html.ActionLink("View Pending Requisition", "Manage")</p>
 
 <table class="table">
     <tr>
 
         <th>
-            @Html.DisplayNameFor(model => model.ID)
+            Requisition ID
+            @*@Html.DisplayNameFor(model => model.ID)*@
         </th>
 
         <th>
-            @Html.DisplayNameFor(model => model.CreatedDate)
+            Created Date
+            @*@Html.DisplayNameFor(model => model.CreatedDate)*@
         </th>
 
         <th>
-            @Html.DisplayNameFor(model => model.Status)
+            Status
+            @*@Html.DisplayNameFor(model => model.Status)*@
         </th>
 
         <th>
-            @Html.DisplayNameFor(model => model.ResponseDate)
+            Response Date
+            @*@Html.DisplayNameFor(model => model.ResponseDate)*@
         </th>
 
         <th>
@@ -52,13 +59,14 @@
             </td>
 
             <td>
-                @if (ro.Status==SSIMS.Models.Status.Approved )
+                @if (ro.Status == SSIMS.Models.Status.Rejected)
                 {
-                    @Html.ActionLink("Details", "Approve", new { id = ro.ID })
+                    @Html.ActionLink("Details", "Reject", new { id = ro.ID })
                 }
                 else
                 {
-                    @Html.ActionLink("Details", "Reject", new { id = ro.ID })
+                    @Html.ActionLink("Details", "Approve", new { id = ro.ID })
+
                 }
 
             </td>
@@ -67,4 +75,10 @@
 
 </table>
 
-@Html.ActionLink("View Pending Requisition", "Deal")
+
+
+
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page }))

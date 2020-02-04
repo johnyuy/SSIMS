@@ -36,6 +36,9 @@ namespace SSIMS.ViewModels
 
         public Status Status { get; set; }
 
+        [Display(Name = "Requisition ID")]
+        public string displayDescription { get; set; }
+
        
 
         [Required]

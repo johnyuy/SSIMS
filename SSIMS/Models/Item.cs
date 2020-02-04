@@ -19,6 +19,7 @@ namespace SSIMS.Models
         [DisplayName("Unit of Measure")]
         public string UnitOfMeasure { get; set; }
 
+        public string ImageURL { get; set; }
         public Item()
         {
         }
@@ -31,7 +32,15 @@ namespace SSIMS.Models
             UnitOfMeasure = unitOfMeasure;
         }
 
-       
+        public Item(string itemID, string category, string description, string unitOfMeasure, string imageUrl)
+        {
+            ID = itemID;
+            Category = category;
+            Description = description;
+            UnitOfMeasure = unitOfMeasure;
+            ImageURL = imageUrl;
+        }
+
 
     }
 }

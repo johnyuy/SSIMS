@@ -23,6 +23,7 @@ namespace SSIMS.Models
         public string StaffRole { get; set; }
 
         public Department Department { get; set; }
+        public string DepartmentID { get; set; }
 
         public Staff()
         {

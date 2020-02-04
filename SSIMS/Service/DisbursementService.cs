@@ -22,21 +22,22 @@ namespace SSIMS.Service
             
            
             List<DocumentItem> docItemsArray = new List<DocumentItem>();
-            ICollection<TransactionItem> retrievalList;
 
             //retrieve all RO with status approved
             List<RequisitionOrder> ROList = new List<RequisitionOrder>();
-            var approvedRO = unitOfWork.RequisitionOrderRepository.Get(includeProperties:"DocumentItems.Item,CreatedByStaff.Department" ,filter: x => x.Status.ToString() == "Approved");
-            
+            var approvedRO = (List<RequisitionOrder>)unitOfWork.RequisitionOrderRepository.Get(includeProperties:"DocumentItems.Item,CreatedByStaff.Department" ,filter: x => x.Status == Models.Status.Approved);
+            Debug.WriteLine("Number of approved ROs: " + approvedRO.Count);
             //filter by department
             foreach (RequisitionOrder RO in approvedRO)
             {
                 Debug.WriteLine("RO ID: " + RO.ID);
+                Debug.WriteLine("RO is created by: " + RO.CreatedByStaff.Name + " from " + RO.CreatedByStaff.Department.ID);
                 string deptRO = RO.CreatedByStaff.Department.ID;
                 Debug.WriteLine("RO is from dept: " + deptRO);
                 if (deptRO.Equals(deptID))
                 {
-                    //UpdateRequestionOrderStatus(RO, 4); //Set Status to "Completed"
+                    Debug.WriteLine("Setting RO status to Completed...");
+                    UpdateRequestionOrderStatus(RO, 4); //Set Status to "Completed"
                     ROList.Add(RO);
                 }
 
@@ -107,7 +108,7 @@ namespace SSIMS.Service
         public void InsertDeptRetrievalList(string deptID)
         {
             Staff clerk = unitOfWork.StaffRepository.GetByID(10003);
-            Department dept = unitOfWork.DepartmentRepository.GetByID(deptID);
+            var dept = unitOfWork.DepartmentRepository.GetByID(deptID);
             List<TransactionItem> deptRetrievalList = GenerateDeptRetrievalList(deptID);
             RetrievalList retrievalList = new RetrievalList(clerk, dept);
             retrievalList.ItemTransactions = deptRetrievalList;
@@ -122,8 +123,8 @@ namespace SSIMS.Service
         {
 
             // find transactional item using dept and item and in progress
-            List<TransactionItem> deptRetrievalList = GenerateDeptRetrievalList(d.ID);
-            TransactionItem tItem = (TransactionItem)deptRetrievalList.Where(x => x.Item == item);
+            var deptRetrievalList = (RetrievalList)unitOfWork.RetrievalListRepository.Get(includeProperties:"Department", filter:x => x.Department.ID == d.ID && x.Status == Models.Status.InProgress);
+            TransactionItem tItem = (TransactionItem)deptRetrievalList.ItemTransactions.Where(x => x.Item == item);
 
             // using found item to construct DeptRetrievalItem
             DeptRetrievalItemViewModel deptRetrievalItem = new DeptRetrievalItemViewModel(d.ID, tItem);
@@ -162,13 +163,24 @@ namespace SSIMS.Service
         {
             List<RetrievalItemViewModel> combinedRIVMList = new List<RetrievalItemViewModel>();
             List<RetrievalItemViewModel> rivmList = GenerateRetrievalItemViewModelWithoutDRIVMList(combinedRetrievalList);
-            var retrievalListList = (List<RetrievalList>)unitOfWork.RetrievalListRepository.Get(filter: x => x.Status == Models.Status.InProgress);
+            var retrievalListList = (List<RetrievalList>)unitOfWork.RetrievalListRepository.Get(includeProperties:"Department", filter: x => x.Status == Models.Status.InProgress);
             Debug.WriteLine("Retrieval List list size is: " + retrievalListList.Count);
+
             List<List<DeptRetrievalItemViewModel>> drivmListList = new List<List<DeptRetrievalItemViewModel>>();
             foreach (RetrievalList rl in retrievalListList)
             {
-                Debug.WriteLine("Successfully entered problematic Foreach loop...");
+                Debug.WriteLine("Retrieval List is from Dept: " + rl.Department.ID);
+                foreach(TransactionItem item in rl.ItemTransactions)
+                {
+                    Debug.WriteLine("Retrieval list contains: ");
+                    Debug.WriteLine(" - " + item.Item.Description + " " + item.HandOverQty);
+                }
+                Debug.WriteLine("Converting retrieval List to List<DeptRetrievalItemViewMode>...");
                 List<DeptRetrievalItemViewModel> drivmList = GenerateDeptRetrievalItemListByRetrievalList(rl);
+                foreach(DeptRetrievalItemViewModel drivm in drivmList)
+                {
+                    Debug.WriteLine("DRIVM List contains: "+ drivm.deptID + " " + drivm.transactionItem.Item.Description + " " + drivm.transactionItem.HandOverQty);
+                }
                 drivmListList.Add(drivmList);
             }
 
@@ -181,11 +193,10 @@ namespace SSIMS.Service
                     {
                         if (drivm.transactionItem.Item.Equals(rivm.item))
                         {
+                            Debug.WriteLine("Adding into RIVM: "+ drivm.deptID + " " + drivm.transactionItem.Item.Description + " " + drivm.transactionItem.HandOverQty);
                             rivm.deptRetrievalItems.Add(drivm);
                         }
                     }
-                    //DeptRetrievalItemViewModel item = (DeptRetrievalItemViewModel) drivmList.Where(x => x.transactionItem.Item == rivm.item);
-                    //rivm.deptRetrievalItems.Add(item);
                 }
             }
             foreach(RetrievalItemViewModel rivm in rivmList)
@@ -207,40 +218,44 @@ namespace SSIMS.Service
             var deptList = unitOfWork.DepartmentRepository.Get();
             foreach(Department dept in deptList)
             {
-                List<TransactionItem>deptRetrievalList = GenerateDeptRetrievalList(dept.ID);
-                if(combinedRetrievalList.Count == 0 && deptRetrievalList.Count > 0)
+                var deptRLList = (List<RetrievalList>)unitOfWork.RetrievalListRepository.Get(includeProperties: "Department", filter: x => x.Department.ID == dept.ID && x.Status == Models.Status.InProgress);
+                foreach (RetrievalList deptRL in deptRLList)
                 {
-                    foreach(TransactionItem item in deptRetrievalList)
+                    List<TransactionItem> deptRetrievalList = (List<TransactionItem>)deptRL.ItemTransactions;
+                    if (combinedRetrievalList.Count == 0 && deptRetrievalList.Count > 0)
                     {
-                        tempTransItems.Add(item);
-                        Debug.WriteLine("GenerateCombinedRetrievalList temptransItems contains: " + tempTransItems.Count);
-                    }
-                }
-
-                foreach(TransactionItem transItem in deptRetrievalList)
-                {
-                    bool isExist = false;
-                    TransactionItem temp;
-                    int index = 0;
-                    for (int i = 0; i < combinedRetrievalList.Count; i++)
-                    {
-                        temp = combinedRetrievalList[i];
-                        if (temp.Item.ID.Equals(transItem.Item.ID))
+                        foreach (TransactionItem item in deptRetrievalList)
                         {
-                            isExist = true;
-                            index = i;
-                            break;
+                            tempTransItems.Add(item);
+                            Debug.WriteLine("GenerateCombinedRetrievalList temptransItems contains: " + tempTransItems.Count);
                         }
+                    }
 
-                    }
-                    if (isExist)
+                    foreach (TransactionItem transItem in deptRetrievalList)
                     {
-                        combinedRetrievalList[index].HandOverQty += transItem.HandOverQty;
-                        combinedRetrievalList[index].TakeOverQty += transItem.TakeOverQty;
-                    }
-                    else
-                    {
-                        combinedRetrievalList.Add(transItem);
+                        bool isExist = false;
+                        TransactionItem temp;
+                        int index = 0;
+                        for (int i = 0; i < combinedRetrievalList.Count; i++)
+                        {
+                            temp = combinedRetrievalList[i];
+                            if (temp.Item.ID.Equals(transItem.Item.ID))
+                            {
+                                isExist = true;
+                                index = i;
+                                break;
+                            }
+
+                        }
+                        if (isExist)
+                        {
+                            combinedRetrievalList[index].HandOverQty += transItem.HandOverQty;
+                            combinedRetrievalList[index].TakeOverQty += transItem.TakeOverQty;
+                        }
+                        else
+                        {
+                            combinedRetrievalList.Add(transItem);
+                        }
                     }
                 }
             }

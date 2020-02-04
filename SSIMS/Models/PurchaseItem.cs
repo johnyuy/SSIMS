@@ -13,8 +13,16 @@ namespace SSIMS.Models
 
         public Tender Tender { get; set; }
 
+        public virtual PurchaseOrder PurchaseOrder {get; set;}
+
         public PurchaseItem()
         {
+        }
+
+        public PurchaseItem(Item item, Supplier supplier, int qty, UnitOfWork uow)
+        {
+            Qty = qty;
+            Tender = uow.TenderRepository.Get(filter: t => t.Supplier.ID == supplier.ID && t.Item.ID == item.ID).FirstOrDefault();
         }
 
         public PurchaseItem(string itemID, string SupplierID, int qty, UnitOfWork uow)

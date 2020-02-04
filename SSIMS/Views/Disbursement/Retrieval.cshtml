@@ -1,0 +1,101 @@
+﻿@model IEnumerable<SSIMS.ViewModels.RetrievalItemViewModel>
+
+
+@{
+    ViewBag.Title = "Retrieval";
+}
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*@<head>
+        <style>
+            tr.displaydept .sign:after {
+                content: "+";
+                display: inline-block;
+            }
+
+            tr.displaydept.expand .sign:after {
+                content: "-";
+            }
+        </style>
+    </head>*@
+
+<h2>Retrieval List</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table" border="1">
+    <tr>
+        <th width="30%">
+            @Html.DisplayNameFor(model => model.item.Description)
+        </th>
+        <th align="center" width="30%">
+            @Html.DisplayNameFor(model => model.transactionItem.HandOverQty)
+        </th>
+        <th align="center" width="30%">
+            @Html.DisplayNameFor(model => model.transactionItem.TakeOverQty)
+        </th>
+    </tr>
+</table>
+
+@foreach (var Retrievalitem in Model)
+{
+   @* @using (Html.BeginForm("Confirm", "Disbursement"))
+    {*@
+<form method="post">
+    <table class="table" border="1">
+        <tr>
+            <td width="30%">
+                @Html.DisplayFor(modelItem => Retrievalitem.item.Description)
+            </td>
+            <td align="center" width="30%">
+                @Html.DisplayFor(modelItem => Retrievalitem.transactionItem.HandOverQty)
+            </td>
+            <td align="center" width="30%">
+                <input type="number" name="TOQ" text=@Retrievalitem.transactionItem.TakeOverQty max=@Retrievalitem.transactionItem.HandOverQty value=@Retrievalitem.transactionItem.TakeOverQty />
+            </td>
+        </tr>
+
+        <tr class="displaydept">
+            <td colspan="3">
+                <table border="1" align="center">
+                    <tr>
+                        <th width="150px">Dept</th>
+                        <th width="200px" align="center">Handover Qty</th>
+                        <th width="200px" align="center">Takeover Qty</th>
+                        <th width="400px" align="center">Reason</th>
+                    </tr>
+                    @foreach (var drivm in Retrievalitem.deptRetrievalItems)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => drivm.deptID)
+                            </td>
+                            <td align="center">
+                                @Html.DisplayFor(modelItem => drivm.transactionItem.HandOverQty)
+                            </td>
+                            <td align="center">
+                                <input type="number" name="drivmTOQ" max="10" width="50" value=@drivm.transactionItem.TakeOverQty />
+                            </td>
+                            <td>
+                                <input type="text" name="drivmReason" value=@drivm.transactionItem.Reason />
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3" align="right">
+                <button type="submit" value="Submit">Confirm</button>
+            </td>
+        </tr>
+    </table>
+</form>
+    
+    }
+
+
+
+

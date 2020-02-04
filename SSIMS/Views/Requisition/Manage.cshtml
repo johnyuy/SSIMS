@@ -1,0 +1,86 @@
+﻿@*@model IEnumerable<SSIMS.Models.RequisitionOrder>*@
+@model PagedList.IPagedList<SSIMS.Models.RequisitionOrder>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Manage";
+}
+
+<h2>Deal Requisition Order</h2>
+
+<p>
+    @Html.ActionLink("See Requisition History List", "ViewHistory")
+</p>
+
+<table class="table">
+    <tr>
+
+        <th>
+            Requisition ID
+            @*@Html.DisplayNameFor(model => model.ID)*@
+        </th>
+
+        <th>
+            Created by Staff
+            @*@Html.DisplayNameFor(model => model.CreatedByStaff)*@
+        </th>
+
+        <th>
+            Created Date
+            @*@Html.DisplayNameFor(model => model.CreatedDate)*@
+        </th>
+
+        <th>
+            Status
+            @*@Html.DisplayNameFor(model => model.Status)*@
+        </th>
+
+        @*<th>
+                @Html.DisplayNameFor(model => model.ResponseDate)
+            </th>*@
+
+        <th>
+            Details
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var ro in Model)
+    {
+        <tr>
+
+            <td>
+                @Html.DisplayFor(modelItem => ro.ID)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => ro.CreatedByStaff.Name)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => ro.CreatedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => ro.Status)
+            </td>
+            @*<td>
+                    @Html.DisplayFor(modelItem => ro.ResponseDate)
+                </td>*@
+
+            <td>
+
+                @Html.ActionLink("Details", "Details", new { id = ro.ID })
+
+            </td>
+        </tr>
+    }
+
+</table>
+
+
+
+
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page }))

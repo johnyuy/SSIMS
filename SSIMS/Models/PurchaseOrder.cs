@@ -9,6 +9,7 @@ namespace SSIMS.Models
     public class PurchaseOrder : Document
     {
         
+
         public DateTime? ExpectedDeliveryDate { get; set; }
 
         public Supplier Supplier { get; set; }
