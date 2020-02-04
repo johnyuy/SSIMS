@@ -59,6 +59,9 @@ namespace SSIMS.Controllers
             return View(rivm.ToList());
         }
 
+        [HttpPost]
+       // public ActionResult Confirm ()
+
 
         // GET: DisbursementLists/Details/5
         public ActionResult Details(int? id)

@@ -163,14 +163,24 @@ namespace SSIMS.Service
         {
             List<RetrievalItemViewModel> combinedRIVMList = new List<RetrievalItemViewModel>();
             List<RetrievalItemViewModel> rivmList = GenerateRetrievalItemViewModelWithoutDRIVMList(combinedRetrievalList);
-            var retrievalListList = (List<RetrievalList>)unitOfWork.RetrievalListRepository.Get(filter: x => x.Status == Models.Status.InProgress);
+            var retrievalListList = (List<RetrievalList>)unitOfWork.RetrievalListRepository.Get(includeProperties:"Department", filter: x => x.Status == Models.Status.InProgress);
             Debug.WriteLine("Retrieval List list size is: " + retrievalListList.Count);
 
             List<List<DeptRetrievalItemViewModel>> drivmListList = new List<List<DeptRetrievalItemViewModel>>();
             foreach (RetrievalList rl in retrievalListList)
             {
-                Debug.WriteLine("Successfully entered problematic Foreach loop...");
+                Debug.WriteLine("Retrieval List is from Dept: " + rl.Department.ID);
+                foreach(TransactionItem item in rl.ItemTransactions)
+                {
+                    Debug.WriteLine("Retrieval list contains: ");
+                    Debug.WriteLine(" - " + item.Item.Description + " " + item.HandOverQty);
+                }
+                Debug.WriteLine("Converting retrieval List to List<DeptRetrievalItemViewMode>...");
                 List<DeptRetrievalItemViewModel> drivmList = GenerateDeptRetrievalItemListByRetrievalList(rl);
+                foreach(DeptRetrievalItemViewModel drivm in drivmList)
+                {
+                    Debug.WriteLine("DRIVM List contains: "+ drivm.deptID + " " + drivm.transactionItem.Item.Description + " " + drivm.transactionItem.HandOverQty);
+                }
                 drivmListList.Add(drivmList);
             }
 
@@ -183,6 +193,7 @@ namespace SSIMS.Service
                     {
                         if (drivm.transactionItem.Item.Equals(rivm.item))
                         {
+                            Debug.WriteLine("Adding into RIVM: "+ drivm.deptID + " " + drivm.transactionItem.Item.Description + " " + drivm.transactionItem.HandOverQty);
                             rivm.deptRetrievalItems.Add(drivm);
                         }
                     }
