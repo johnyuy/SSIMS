@@ -1,0 +1,214 @@
+﻿@model SSIMS.ViewModels.DeliveryOrderVM
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>DeliveryOrderVM</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.ID)
+
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.ID)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.ID)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Supplier.SupplierName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Supplier.SupplierName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Supplier.Address)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Supplier.Address)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Supplier.PhoneNumber)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Supplier.PhoneNumber)
+            </dd>
+
+            <dt>
+                Attn:
+                @Html.DisplayNameFor(model => model.CreatedByStaff.Name)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.CreatedByStaff.Name)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.CreatedDate)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.CreatedDate)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.RepliedByStaff.Name)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.RepliedByStaff.Name)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.ResponseDate)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.ResponseDate)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Status)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Status)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.PurchaseOrderID)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.PurchaseOrderID)
+            </dd>
+        </dl>
+        <table class="table">
+
+            <tr>
+                <th>
+                    Item Code
+                </th>
+                <th>
+                    Item Description
+                </th>
+                <th>
+                    Expected Quantity
+                </th>
+                <th>
+                    Actual Quantity
+                </th>
+                <th></th>
+            </tr>
+            @foreach (var item in Model.TransactionItems)
+            {
+
+                @Html.EditorFor(x => item , "TransactionalItem")
+            }
+        </table>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" id="save" />
+            </div>
+        </div>
+    </div>
+}
+<div>
+    @Html.ActionLink("Back to List", "PurchaseOrders/Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+
+        $("input").change( function () {
+            var guid = $(this).data("target");
+            var handOverQty = parseInt($('#'+"HandOverQty" + guid).val());
+            var takeOverQty = parseInt($(this).val());
+            if (handOverQty < takeOverQty) {
+                $('#' + guid).css('display', 'block');
+                console.log(handOverQty);
+                console.log(takeOverQty);
+                console.log('true');
+                disableSave();
+            }
+            else {
+                $('#' + guid).css('display', 'none');
+                console.log(handOverQty);
+                console.log(takeOverQty);
+                console.log('false');
+                disableSave();
+            }
+        });
+
+        function disableSave() {
+            if (notValid()) {
+                $("#save").attr("disabled", true);
+            }
+            else {
+                $("#save").attr("disabled", false);
+            }
+        }
+
+        function notValid() {
+            var result = false;
+             $('.text-danger').each(function (i, obj) {
+                if ($(this).css('display') == 'block') {
+                    console.log('not valid');
+                    result = true;
+                    return;
+                }
+             });
+            return result;
+        }
+
+        $("#save").on('click', function () {
+            if (notValid()) {
+                console.log('here ' + notValid());
+                return false;
+            }
+            console.log('out ' + notValid());
+        });
+
+
+        $('.Home').change(function () {
+            var takeOverQty = ($(this).val());
+            var identity = ($(this).attr("id"));
+            var handOverQty = ($(this).id('targetelement'));
+                var selectedCategory = $("#Category").val();
+                var descriptionSelect = $('#Description');
+                descriptionSelect.empty();
+                if ( selectedCategory != null &&  selectedCategory != '') {
+                    $.getJSON('@Url.Action("GetDescription")', { category:  selectedCategory }, function (descriptions) {
+                        if (descriptions != null && !jQuery.isEmptyObject(descriptions))
+                        {
+                            descriptionSelect.append($('<option/>', {
+                                value: null,
+                                text: ""
+                            }));
+                            $.each(descriptions, function (index, description) {
+                                descriptionSelect.append($('<option/>', {
+                                    value: description.Value,
+                                    text: description.Text
+                                }));
+                            });
+                        };
+                    });
+                }
+            });
+    </script>
+}

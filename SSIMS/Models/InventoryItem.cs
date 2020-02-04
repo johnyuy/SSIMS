@@ -23,7 +23,8 @@ namespace SSIMS.Models
 
         public Item Item { get; set; }
 
-        //public virtual ICollection<Tender> Tenders { get; set; }
+        // include this 
+        //public virtual ICollection<Supplier> Supplier { get; set; }
 
         public InventoryItem()
         {

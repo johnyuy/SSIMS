@@ -42,5 +42,6 @@ namespace SSIMS.Database
         public DbSet<TransactionItem> TransactionItems { get; set; }
         public DbSet<UserAccount> UserAccounts { get; set; }
 
+        public System.Data.Entity.DbSet<SSIMS.ViewModels.DeliveryOrderVM> DeliveryOrderVMs { get; set; }
     }
 }

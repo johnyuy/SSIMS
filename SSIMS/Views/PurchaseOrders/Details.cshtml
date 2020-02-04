@@ -131,6 +131,14 @@
                 </td>
             </tr>
         }
+
+    <tr>
+        <td>@Html.ActionLink("Reject", "Reject", new { id = Model.ID } )</td>
+        <td></td>
+        <td>@Html.ActionLink("Create Delivery Order", "DeliveryOrder", new { id = Model.ID })</td>
+        <td>@Html.ActionLink("Cancel", "Cancel" ,new { id = Model.ID })</td>
+        <td>@Html.ActionLink("Approve", "Approve" ,new { id = Model.ID })</td>
+    </tr>
     </table>
 </div>
 <p>

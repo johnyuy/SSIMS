@@ -20,10 +20,8 @@
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
     <IISExpressSSLPort>44386</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>
-    </IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>
-    </IISExpressWindowsAuthentication>
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
@@ -53,6 +51,9 @@
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>packages\EntityFramework.6.4.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="FoolproofValidation, Version=0.9.5851.39121, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Foolproof.0.9.4518\lib\net45\FoolproofValidation.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Bcl.AsyncInterfaces.1.1.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
@@ -211,16 +212,19 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AnalyticsController.cs" />
+    <Compile Include="Controllers\DeliveryOrdersController.cs" />
     <Compile Include="Controllers\DepartmentsController.cs" />
     <Compile Include="Controllers\DisbursementController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InventoryController.cs" />
     <Compile Include="Controllers\ItemsController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\PurchaseItemsController.cs" />
     <Compile Include="Controllers\PurchaseOrdersController.cs" />
     <Compile Include="Controllers\RequisitionController.cs" />
     <Compile Include="Controllers\StaffsController.cs" />
     <Compile Include="DAL\CollectionPointRepository.cs" />
+    <Compile Include="DAL\DeliveryOrderRepository.cs" />
     <Compile Include="DAL\DepartmentRepository.cs" />
     <Compile Include="DAL\DeptHeadAuthorizationRepository.cs" />
     <Compile Include="DAL\DisbursementListRepository.cs" />
@@ -228,6 +232,7 @@
     <Compile Include="DAL\IPurchaseOrderRepository.cs" />
     <Compile Include="DAL\ItemRepository.cs" />
     <Compile Include="DAL\IUnitOfWork.cs" />
+    <Compile Include="DAL\PurchaseItemRepository.cs" />
     <Compile Include="DAL\PurchaseOrderRepository.cs" />
     <Compile Include="DAL\RequisitionOrderRepository.cs" />
     <Compile Include="DAL\RetrievalListRepository.cs" />
@@ -269,18 +274,25 @@
     <Compile Include="Models\UserAccount.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\AnalyticsService.cs" />
+    <Compile Include="Service\InventoryService.cs" />
     <Compile Include="Service\IRequisitionService.cs" />
     <Compile Include="Service\ILoginService.cs" />
     <Compile Include="Service\IPurchaseOrderService.cs" />
     <Compile Include="Service\IStaffService.cs" />
     <Compile Include="Service\LoginService.cs" />
+    <Compile Include="Service\NestedListValidationAttribute.cs" />
+    <Compile Include="Service\NestedListValidationResult.cs" />
     <Compile Include="Service\PurchaseOrderService.cs" />
-    <Compile Include="Service\RequisitionService.cs" />
     <Compile Include="Service\StaffService.cs" />
     <Compile Include="Service\DisbursementService.cs" />
+    <Compile Include="Service\RequisitionService.cs" />
+    <Compile Include="Service\PurchaseService.cs" />
     <Compile Include="ViewModels\AnalyticsListViewModel.cs" />
+    <Compile Include="ViewModels\DeliveryOrderVM.cs" />
     <Compile Include="ViewModels\DeptRetrievalItemViewModel.cs" />
+    <Compile Include="ViewModels\InventoryItemDetailsVM.cs" />
     <Compile Include="ViewModels\InventoryViewModel.cs" />
+    <Compile Include="ViewModels\PurchaseItemVM.cs" />
     <Compile Include="ViewModels\PurchaseOrderVM.cs" />
     <Compile Include="ViewModels\RequisitionItemVM.cs" />
     <Compile Include="ViewModels\RequisitionSummaryViewModel.cs" />
@@ -288,6 +300,12 @@
     <Compile Include="ViewModels\RetrievalItemViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Client Scripts\mvcfoolproof.unobtrusive.js" />
+    <Content Include="Client Scripts\mvcfoolproof.unobtrusive.min.js" />
+    <Content Include="Client Scripts\MvcFoolproofJQueryValidation.js" />
+    <Content Include="Client Scripts\MvcFoolproofJQueryValidation.min.js" />
+    <Content Include="Client Scripts\MvcFoolproofValidation.js" />
+    <Content Include="Client Scripts\MvcFoolproofValidation.min.js" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -297,6 +315,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Resources\Items\A3.png" />
+    <Content Include="Resources\Items\A4.png" />
     <Content Include="Resources\Items\brownenvelope.png" />
     <Content Include="Resources\Items\clips.png" />
     <Content Include="Resources\Items\eraser.png" />
@@ -309,8 +329,11 @@
     <Content Include="Resources\Items\holepuncher3.png" />
     <Content Include="Resources\Items\paperphotostats.png" />
     <Content Include="Resources\Items\pencils.png" />
+    <Content Include="Resources\Items\pencilsdozen.png" />
+    <Content Include="Resources\Items\penmarkers.png" />
     <Content Include="Resources\Items\pensballpoint.png" />
     <Content Include="Resources\Items\pensfelttip.png" />
+    <Content Include="Resources\Items\pentransparency.png" />
     <Content Include="Resources\Items\postits.png" />
     <Content Include="Resources\Items\ruler12.png" />
     <Content Include="Resources\Items\ruler6.png" />
@@ -365,11 +388,11 @@
     <Content Include="Views\Staffs\Details.cshtml" />
     <Content Include="Views\Staffs\Edit.cshtml" />
     <Content Include="Views\Staffs\Index.cshtml" />
-    <Content Include="Views\DisbursementLists\Create.cshtml" />
-    <Content Include="Views\DisbursementLists\Delete.cshtml" />
-    <Content Include="Views\DisbursementLists\Details.cshtml" />
-    <Content Include="Views\DisbursementLists\Edit.cshtml" />
-    <Content Include="Views\DisbursementLists\Index.cshtml" />
+    <Content Include="Views\Disbursement\Create.cshtml" />
+    <Content Include="Views\Disbursement\Delete.cshtml" />
+    <Content Include="Views\Disbursement\Details.cshtml" />
+    <Content Include="Views\Disbursement\Edit.cshtml" />
+    <Content Include="Views\Disbursement\Index.cshtml" />
     <Content Include="Views\Departments\Create.cshtml" />
     <Content Include="Views\Departments\Delete.cshtml" />
     <Content Include="Views\Departments\Details.cshtml" />

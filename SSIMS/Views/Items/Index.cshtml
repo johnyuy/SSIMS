@@ -1,56 +1,63 @@
-﻿@model IEnumerable<SSIMS.Models.Item>
+﻿@model PagedList.IPagedList<SSIMS.Models.Item>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Items";
 }
 
-<h2>Index</h2>
+<h2>Items</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("Index", "Items", FormMethod.Get))
 {
     <p>
-        Find Item: @Html.TextBox("SearchString")
-        <input type="submit" value="search" />
-
+        Find by name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+        <input type="submit" value="Search" />
     </p>
 }
 <table class="table">
     <tr>
         <th>
             @*Html.DisplayNameFor(model => model.Category)*@
-            @Html.ActionLink("Category", "Index", new { sortOrder = ViewBag.CategorySortParm})
+            @Html.ActionLink("Category", "Index", new { sortOrder = ViewBag.CategorySortParm })
         </th>
         <th>
             @*@Html.DisplayNameFor(model => model.Description)*@
-            @Html.ActionLink("Category", "Index", new { sortOrder = ViewBag.ItemDescriptionSortParm })
+            @Html.ActionLink("Discription", "Index", new { sortOrder = ViewBag.ItemDescriptionSortParm })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.UnitOfMeasure)
+            @*@Html.DisplayNameFor(model => model.UnitOfMeasure)*@
+            Unit Of Measure
         </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Category)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.UnitOfMeasure)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UnitOfMeasure)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+            </td>
+        </tr>
+    }
 
 </table>
+<br/>
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
