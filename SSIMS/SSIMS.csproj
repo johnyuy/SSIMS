@@ -283,8 +283,6 @@
     <Compile Include="Service\NestedListValidationAttribute.cs" />
     <Compile Include="Service\NestedListValidationResult.cs" />
     <Compile Include="Service\PurchaseOrderService.cs" />
-    <Compile Include="Service\PurchaseService.cs" />
-    <Compile Include="Service\RequisitionService.cs" />
     <Compile Include="Service\StaffService.cs" />
     <Compile Include="Service\DisbursementService.cs" />
     <Compile Include="ViewModels\AnalyticsListViewModel.cs" />
@@ -415,26 +413,6 @@
     <Content Include="Views\Requisition\Details.cshtml" />
     <Content Include="Views\Shared\_Login_Layout.cshtml" />
     <Content Include="Views\Login\Authentication.cshtml" />
-    <Content Include="Views\PurchaseItems\Create.cshtml" />
-    <Content Include="Views\PurchaseItems\Delete.cshtml" />
-    <Content Include="Views\PurchaseItems\Details.cshtml" />
-    <Content Include="Views\PurchaseItems\Edit.cshtml" />
-    <Content Include="Views\PurchaseItems\Index.cshtml" />
-    <Content Include="Views\DeliveryOrders\Create.cshtml" />
-    <Content Include="Views\DeliveryOrders\Delete.cshtml" />
-    <Content Include="Views\DeliveryOrders\Details.cshtml" />
-    <Content Include="Views\DeliveryOrders\Edit.cshtml" />
-    <Content Include="Views\DeliveryOrders\Index.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\TransactionItem.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\View.cshtml" />
-    <Content Include="Views\Disbursement\Retrieval.cshtml" />
-    <Content Include="Views\Requisition\Cancel.cshtml" />
-    <Content Include="Views\Requisition\Edit.cshtml" />
-    <Content Include="Views\Requisition\ViewHistory.cshtml" />
-    <Content Include="Views\Requisition\Deal.cshtml" />
-    <Content Include="Views\Requisition\Approve.cshtml" />
-    <Content Include="Views\Requisition\Reject.cshtml" />
-    <Content Include="Views\Shared\_RequisitionItemsList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
