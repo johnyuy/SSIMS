@@ -28,13 +28,16 @@ namespace SSIMS.Models
         {
         }
 
-        public Department(string deptId, string deptName, string phoneNumber, string faxNumber, CollectionPoint collectionPoint)
+        public Department(string deptId, string deptName, string phoneNumber, string faxNumber, CollectionPoint collectionPoint,DeptHeadAuthorization deptHeadAuthorization,Staff deptHead,Staff deptRep)
         {
             ID = deptId;
             DeptName = deptName;
             PhoneNumber = phoneNumber;
             FaxNumber = faxNumber;
             CollectionPoint = collectionPoint;
+            DeptHeadAuthorization = deptHeadAuthorization;
+            DeptHead = deptHead;
+            DeptRep = deptRep;
         }
     }
 }

@@ -1,9 +1,18 @@
 ﻿@model IEnumerable<SSIMS.ViewModels.RequisitionSummaryViewModel>
+@using SSIMS.ViewModels
 @{
 
     ViewBag.Title = "AnalyticsList";
-   //DatabaseContext db = new DatabaseContext();
+
+    //DatabaseContext db = new DatabaseContext();
     //var selectQueryString = "select DocumentItems.Qty,Items.Category,RequisitionOrders.CreatedDate,Staffs.Department_ID ,MONTH(RequisitionOrders.CreatedDate) AS MONTHfrom Staffs, RequisitionOrders, DocumentItems, Items where Items.ID=DocumentItems.Item_ID and Staffs.ID=RequisitionOrders.CreatedByStaffID";
+    /*  var myChart = new Chart(width: 600, height: 400)
+          .AddTitle("Chart1")
+          .AddSeries(chartType:"column",xValue:SummaryList.CreatedDate, xField: "CreatDate",
+  yValues: SummaryList.Qty, yFields: "Qty")
+  .Write();
+  */
+    List<RequisitionSummaryViewModel> summarylist = ViewBag.SummaryList;
 
 }
 <!DOCTYPE html>
@@ -21,30 +30,76 @@
     </style>
 </head>
 <body>
-    <h1>Orders</h1>
+    <h1>SummaryList</h1>
     <table>
         <thead>
             <tr>
-                <th>Qty</th>
-                <th>Category</th>
-                <th>CreatDate</th>
-                <th>Department_ID</th>
-                <th>MONTH</th>
+                @if (summarylist[0].Qty != 0)
+                {<th>Qty</th>}
+                @if (summarylist[0].Category != "") { <th>Category</th>}
+                
+                @if (summarylist[0].CreatedDate.ToString("yyyy") != "0001")
+                {
+                    <th>CreateDate</th>
+}
+                @if (summarylist[0].Department != null)
+                {
+                    <th>Department_ID</th>
+}
+                @if (summarylist[0].Month != 0)
+                {
+                    <th>MONTH</th>
+}
+                @if (summarylist[0].count != 0)
+                {
+                    <th>COUNT</th>
+}
+
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
             <tr>
-                <td>@Html.DisplayFor(modelItem => item.Qty)</td>
-                <td>@Html.DisplayFor(modelItem => item.Category)</td>
-                <td>@Html.DisplayFor(modelItem => item.CreatedDate)</td>
-                <td>@Html.DisplayFor(modelItem => item.Department)</td>
-                <td>@Html.DisplayFor(modelItem => item.Month)</td>
+                @if (summarylist[0].Qty != 0) { 
+                    <td>@Html.DisplayFor(modelItem => item.Qty)</td>
+                    }
+                    
+                @if (summarylist[0].Category != "") { 
+                    <td>@Html.DisplayFor(modelItem => item.Category)</td>
+                    }
+                    
+                @if (summarylist[0].CreatedDate.ToString("yyyy") != "0001")
+                {
+                    <td>@Html.DisplayFor(modelItem => item.CreatedDate)</td>
+                }
+                @if (summarylist[0].Department != null)
+                {
+                    <td>@Html.DisplayFor(modelItem => item.Department)</td>
+                }
+                @if (summarylist[0].Month != 0)
+                {
+                    <td>@Html.DisplayFor(modelItem => item.Month)</td>
+                }
+                @if (summarylist[0].count != 0)
+                {
+                    <td>@Html.DisplayFor(modelItem => item.count)</td>
+                }
 
             </tr>
             }
         </tbody>
     </table>
+    <div>
+        <h1>Chart</h1>
+    </div>
+    <div>
+        <img src=" @Url.Action("Chart1")" alt="Chart" />
+    </div>
+    <div>
+        <img src=" @Url.Action("Chart2")" alt="Chart" />
+    </div>
+
+
 </body>
 </html>
