@@ -1,14 +1,15 @@
 ﻿@*@model IEnumerable<SSIMS.Models.RequisitionOrder>*@
 @model PagedList.IPagedList<SSIMS.Models.RequisitionOrder>
 @using PagedList.Mvc;
-@*@model SSIMS.Models.Status*@
 @{
-    ViewBag.Title = "ViewHistory";
+    ViewBag.Title = "Manage";
 }
 
-<h2>View Requisition Order History</h2>
+<h2>Deal Requisition Order</h2>
 
-<p>@Html.ActionLink("View Pending Requisition", "Manage")</p>
+<p>
+    @Html.ActionLink("See Requisition History List", "ViewHistory")
+</p>
 
 <table class="table">
     <tr>
@@ -16,6 +17,11 @@
         <th>
             Requisition ID
             @*@Html.DisplayNameFor(model => model.ID)*@
+        </th>
+
+        <th>
+            Created by Staff
+            @*@Html.DisplayNameFor(model => model.CreatedByStaff)*@
         </th>
 
         <th>
@@ -28,10 +34,9 @@
             @*@Html.DisplayNameFor(model => model.Status)*@
         </th>
 
-        <th>
-            Response Date
-            @*@Html.DisplayNameFor(model => model.ResponseDate)*@
-        </th>
+        @*<th>
+                @Html.DisplayNameFor(model => model.ResponseDate)
+            </th>*@
 
         <th>
             Details
@@ -49,25 +54,22 @@
             </td>
 
             <td>
+                @Html.DisplayFor(modelItem => ro.CreatedByStaff.Name)
+            </td>
+
+            <td>
                 @Html.DisplayFor(modelItem => ro.CreatedDate)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => ro.Status)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => ro.ResponseDate)
-            </td>
+            @*<td>
+                    @Html.DisplayFor(modelItem => ro.ResponseDate)
+                </td>*@
 
             <td>
-                @if (ro.Status == SSIMS.Models.Status.Rejected)
-                {
-                    @Html.ActionLink("Details", "Reject", new { id = ro.ID })
-                }
-                else
-                {
-                    @Html.ActionLink("Details", "Approve", new { id = ro.ID })
 
-                }
+                @Html.ActionLink("Details", "Details", new { id = ro.ID })
 
             </td>
         </tr>

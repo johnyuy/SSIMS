@@ -6,23 +6,29 @@
 }
 
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("SubmitRequisition", "Requisition"))
 {
+    @Html.AntiForgeryToken()
 
     <table id="tblCust" class="table table-bordered">
         <tr>
             <th>Category</th>
             <th>Description</th>
+            <th>Unit of Measure</th>
             <th>Quantity</th>
         </tr>
         @foreach (RequisitionItemVM rivm in requisitionItems)
         {
+            if (rivm.Quantity != 0) { 
             <tr>
                 <td>@rivm.SelectedCategory</td>
-                <td>@rivm.SelectedDescription</td>
+                <td>@rivm.displayDescription</td>
+                <td>@rivm.UnitOfMeasure</td>
                 <td>@rivm.Quantity</td>
             </tr>
+            }
         }
     </table>
-    <input type="submit" value="SubmitRequisition" class="btn btn-primary" />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <input type="submit" value="Submit" class="btn btn-primary" />
 } 

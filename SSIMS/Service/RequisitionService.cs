@@ -39,5 +39,38 @@ namespace SSIMS.Service
             }
                 
         }
+
+        public List<RequisitionOrder> GetRequisitionOrdersbyStatus(Staff staff, Models.Status status)
+        {
+            List<RequisitionOrder> ros = new List<RequisitionOrder>();
+            List<RequisitionOrder> allros = uow.RequisitionOrderRepository.Get(filter: x => x.CreatedByStaff == staff).ToList();
+            if (status != null)
+            {
+                foreach (RequisitionOrder ro in allros)
+                {
+                    if (ro.Status == status)
+                    {
+                        ros.Add(ro);
+                    }
+                }
+                return ros;
+            }
+
+            return allros;
+        }
+
+        public List<RequisitionOrder> GetRequisitionOrdersbyCreatedDate(Staff staff,DateTime dateTime)
+        {
+            List<RequisitionOrder> ros = new List<RequisitionOrder>();
+            List<RequisitionOrder> allros = uow.RequisitionOrderRepository.Get(filter: x => x.CreatedByStaff == staff).ToList();
+            foreach(RequisitionOrder ro in allros)
+            {
+                if (ro.CreatedDate.Day == dateTime.Day) {
+                    ros.Add(ro);
+                }
+            }
+            return ros;
+        }
+
     }
 }
