@@ -3,24 +3,35 @@
 
 @{
     ViewBag.Title = "Retrieval";
+    ViewBag.Header = "Retrieval List";
+    ViewBag.Section = "Disbursement";
 }
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@*@<head>
+    @*<head>
         <style>
-            tr.displaydept .sign:after {
-                content: "+";
-                display: inline-block;
+            tr.header {
+                cursor: pointer;
+                display: table-row;
             }
 
-            tr.displaydept.expand .sign:after {
-                content: "-";
+            tr {
+                display: none;
             }
         </style>
+        <script>
+
+            var $headers = $('.header').click(function () {
+                console.log("Clicked");
+                $(this).find('span').text(function (_, value) {
+                    return value == '-' ? '+' : '-'
+                });
+                $(this).nextUntil('tr.header').slideToggle(100, function () { });
+            });
+        </script>
     </head>*@
 
-<h2>Retrieval List</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -44,11 +55,11 @@
    @* @using (Html.BeginForm("Confirm", "Disbursement"))
     {*@
 <form method="post">
-    <table class="table" border="1">
-        <tr>
-            <td width="30%">
-                @Html.DisplayFor(modelItem => Retrievalitem.item.Description)
-            </td>
+    <table border="1" class="table">
+        <tr class="header">
+            <th width="30%">
+                <span>+</span>    @Html.DisplayFor(modelItem => Retrievalitem.item.Description)
+            </th>
             <td align="center" width="30%">
                 @Html.DisplayFor(modelItem => Retrievalitem.transactionItem.HandOverQty)
             </td>
@@ -57,7 +68,7 @@
             </td>
         </tr>
 
-        <tr class="displaydept">
+        <tr>
             <td colspan="3">
                 <table border="1" align="center">
                     <tr>
@@ -76,7 +87,7 @@
                                 @Html.DisplayFor(modelItem => drivm.transactionItem.HandOverQty)
                             </td>
                             <td align="center">
-                                <input type="number" name="drivmTOQ" max="10" width="50" value=@drivm.transactionItem.TakeOverQty />
+                                <input type="number" name="drivmTOQ" max=@drivm.transactionItem.HandOverQty width="50" value=@drivm.transactionItem.TakeOverQty />
                             </td>
                             <td>
                                 <input type="text" name="drivmReason" value=@drivm.transactionItem.Reason />

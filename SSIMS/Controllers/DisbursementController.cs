@@ -16,8 +16,8 @@ using SSIMS.Filters;
 
 namespace SSIMS.Controllers
 {
-    //[AuthenticationFilter]
-    //[AuthorizationFilter]
+    [AuthenticationFilter]
+    [AuthorizationFilter]
     public class DisbursementController : Controller
     {
         private DatabaseContext db = new DatabaseContext();
@@ -42,13 +42,9 @@ namespace SSIMS.Controllers
         //GET: RetrievalLists
         public ActionResult Retrieval()
         {
-            
-            
-            ds.InsertDeptRetrievalList("ENGL");
-            ds.InsertDeptRetrievalList("ARCH");
-            ds.InsertDeptRetrievalList("COMM");
-            var combinedList = ds.GenerateCombinedRetrievalList();
-            var rivm = ds.GenerateRetrievalItemViewModel(combinedList);
+
+            List<TransactionItem> combinedRL = ds.ViewCombinedRetrievalList();
+            var rivm = ds.ViewRetrievalItemViewModel(combinedRL);
             var retrievalLists = db.RetrievalLists.Include(d => d.CreatedByStaff).Include(d => d.Status);
 
             if(retrievalLists == null)
