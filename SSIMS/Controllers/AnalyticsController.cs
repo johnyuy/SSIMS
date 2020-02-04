@@ -36,7 +36,7 @@ namespace SSIMS.Controllers
                 {
                     Debug.WriteLine("\t" + di.Item.ID + " x " + di.Qty);
                 }
-            }*/
+            }*/ 
 
             List<RequisitionSummaryViewModel> categorylist = AnalyticsService.GroupSummaryListByCategory(analyticsListViewModel.SummaryList);
             List<RequisitionSummaryViewModel> categorylist2 = AnalyticsService.GroupSummaryListByDepartment(analyticsListViewModel.SummaryList);
