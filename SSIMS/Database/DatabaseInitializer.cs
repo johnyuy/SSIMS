@@ -8,8 +8,8 @@ using SSIMS.DAL;
 
 namespace SSIMS.Database
 {
-    //public class DatabaseInitializer<T> : DropCreateDatabaseAlways<DatabaseContext>
-    public class DatabaseInitializer<T> : CreateDatabaseIfNotExists<DatabaseContext>
+    public class DatabaseInitializer<T> : DropCreateDatabaseAlways<DatabaseContext>
+    //public class DatabaseInitializer<T> : CreateDatabaseIfNotExists<DatabaseContext>
 
     {
         static StaffRepository StaffRepository;
@@ -33,20 +33,20 @@ namespace SSIMS.Database
 
 
             //Seed data
-            InitStaffs(context);
-            InitDeptHeadAuthorizations(context);
+            
             InitCollectionPoints(context);
             InitDepartments(context);
+            InitStaffs(context);
             InitItems(context);
             InitSuppliers(context);
-            //context.Database.ExecuteSqlCommand("INSERT INTO Tenders SELECT * FROM OPENROWSET('Microsoft.Jet.OLEDB.4.0', 'Excel 8.0;Database=\\Mac\\Home\\Downloads\\Tendertest.xlsx', 'SELECT * FROM [Sheet1$]')");
             InitTenders(context);
             InitUserAccounts(context);
             InitInventoryItems(context);
             InitDocuments(context);
             InitPurchaseOrders(context);
-       
-           
+            InitDeptHeadAuthorizations(context);
+
+
             //other initializations copy:    static void Init (DatabaseContext context)
             context.SaveChanges();
             base.Seed(context);
@@ -71,28 +71,29 @@ namespace SSIMS.Database
             context.SaveChanges();
         }
 
-        static void InitDeptHeadAuthorizations(DatabaseContext context)
+        static void InitDepartments(DatabaseContext context)
         {
-            Debug.WriteLine("\tInitializing DeptHeadAuthorizations");
-            List<DeptHeadAuthorization> deptHeadAuthorizations = new List<DeptHeadAuthorization>
+            Debug.WriteLine("\tInitializing Departments");
+            List<Department> departments = new List<Department>
             {
-               new DeptHeadAuthorization(StaffRepository.GetStaffbyID(10006),1,DateTime.Now,DateTime.Now.AddDays(365)),
-               new DeptHeadAuthorization(StaffRepository.GetStaffbyID(10013),2,DateTime.Now,DateTime.Now.AddDays(365)),
-               new DeptHeadAuthorization(StaffRepository.GetStaffbyID(10020),3,DateTime.Now,DateTime.Now.AddDays(365)),
-               new DeptHeadAuthorization(StaffRepository.GetStaffbyID(10027),4,DateTime.Now,DateTime.Now.AddDays(365)),
-               new DeptHeadAuthorization(StaffRepository.GetStaffbyID(10034),5,DateTime.Now,DateTime.Now.AddDays(365)),
-               new DeptHeadAuthorization(StaffRepository.GetStaffbyID(10041),6,DateTime.Now,DateTime.Now.AddDays(365)),
-               new DeptHeadAuthorization(StaffRepository.GetStaffbyID(10048),7,DateTime.Now,DateTime.Now.AddDays(365)),
-               new DeptHeadAuthorization(StaffRepository.GetStaffbyID(10055),8,DateTime.Now,DateTime.Now.AddDays(365)),
-               new DeptHeadAuthorization(StaffRepository.GetStaffbyID(10062),9,DateTime.Now,DateTime.Now.AddDays(365)),
-               new DeptHeadAuthorization(StaffRepository.GetStaffbyID(10069),11,DateTime.Now,DateTime.Now.AddDays(365)),
+                new Department("ARCH", "Architecture","68901257","68921001", CollectionPointRepository.GetByID(1),null,null,null),
+                new Department("ARTS", "Arts","68901226", "68921011", CollectionPointRepository.GetByID(1),null,null,null),
+                new Department("COMM", "Commerce","68741284","68921256", CollectionPointRepository.GetByID(2),null,null,null),
+                new Department("CPSC", "Computer Science","68901235","68921457", CollectionPointRepository.GetByID(2),null,null,null),
+                new Department("ENGG", "Engineering","68901776","68922395", CollectionPointRepository.GetByID(3),null,null,null),
+                new Department("ENGL", "English","68742234","68921456", CollectionPointRepository.GetByID(3),null,null,null),
+                new Department("MEDI", "Medicine","67848808","68928106", CollectionPointRepository.GetByID(4),null,null,null),
+                new Department("REGR", "Registrar","68901266","68921465", CollectionPointRepository.GetByID(4),null,null,null),
+                new Department("SCIE", "Science","68907191","68921992", CollectionPointRepository.GetByID(5),null,null,null),
+                new Department("ZOOL", "Zoology","68901266","68921465", CollectionPointRepository.GetByID(5),null,null,null),
+                new Department("STOR", "Store","","",null,null,null,null)
             };
-            foreach (DeptHeadAuthorization dha in deptHeadAuthorizations)
-                context.DeptHeadAuthorizations.Add(dha);
+            foreach (Department dept in departments)
+                context.Departments.Add(dept);
             context.SaveChanges();
         }
 
-        static void InitDepartments(DatabaseContext context)
+        static void InitDepartments2(DatabaseContext context)
         {
             Debug.WriteLine("\tInitializing Departments");
             List<Department> departments = new List<Department>
@@ -969,7 +970,27 @@ namespace SSIMS.Database
 
             context.SaveChanges();
         }
-
+        
+        static void InitDeptHeadAuthorizations(DatabaseContext context)
+        {
+            Debug.WriteLine("\tInitializing DeptHeadAuthorizations");
+            List<DeptHeadAuthorization> deptHeadAuthorizations = new List<DeptHeadAuthorization>
+            {
+               new DeptHeadAuthorization(StaffRepository.GetStaffbyID(10006),1,DateTime.Now,DateTime.Now.AddDays(365)),
+               new DeptHeadAuthorization(StaffRepository.GetStaffbyID(10013),2,DateTime.Now,DateTime.Now.AddDays(365)),
+               new DeptHeadAuthorization(StaffRepository.GetStaffbyID(10020),3,DateTime.Now,DateTime.Now.AddDays(365)),
+               new DeptHeadAuthorization(StaffRepository.GetStaffbyID(10027),4,DateTime.Now,DateTime.Now.AddDays(365)),
+               new DeptHeadAuthorization(StaffRepository.GetStaffbyID(10034),5,DateTime.Now,DateTime.Now.AddDays(365)),
+               new DeptHeadAuthorization(StaffRepository.GetStaffbyID(10041),6,DateTime.Now,DateTime.Now.AddDays(365)),
+               new DeptHeadAuthorization(StaffRepository.GetStaffbyID(10048),7,DateTime.Now,DateTime.Now.AddDays(365)),
+               new DeptHeadAuthorization(StaffRepository.GetStaffbyID(10055),8,DateTime.Now,DateTime.Now.AddDays(365)),
+               new DeptHeadAuthorization(StaffRepository.GetStaffbyID(10062),9,DateTime.Now,DateTime.Now.AddDays(365)),
+               new DeptHeadAuthorization(StaffRepository.GetStaffbyID(10069),11,DateTime.Now,DateTime.Now.AddDays(365)),
+            };
+            foreach (DeptHeadAuthorization dha in deptHeadAuthorizations)
+                context.DeptHeadAuthorizations.Add(dha);
+            context.SaveChanges();
+        }
 
     }
 }

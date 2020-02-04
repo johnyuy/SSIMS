@@ -2,7 +2,10 @@
 
 @{
     ViewBag.Header = "Store Inventory";
+    ViewBag.Section = "Inventory";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    string lowStockMode = ViewBag.LowStock;
+    
 }
 <style>
     .switch {
@@ -71,9 +74,9 @@ input:focus + .slider {
         var x = document.getElementById('lowstocktoggle');
         var searchstr = document.getElementById('searchString').value;
         if (x.checked == true) {
-            post('/inventory/index', { 'searchString': searchstr, 'lowStock':'false' });
+            post('/inventory/index', { 'searchString': searchstr, 'lowStock': 'false' });
         } else {
-            post('/inventory/index', { 'searchString': searchstr, 'lowStock':'true' });
+            post('/inventory/index', { 'searchString': searchstr, 'lowStock': 'true' });
         }
     }
     function search() {
@@ -106,7 +109,7 @@ input:focus + .slider {
 
 <div>
     <div style="float:left">
-        @if (ViewBag.LowStock == "true")
+        @if (lowStockMode == "true")
         {
             <label class="switch">
                 <input id="lowstocktoggle" type="checkbox" checked>
@@ -184,5 +187,6 @@ input:focus + .slider {
 
         </tr>
     }
-
+    
 </table>
+

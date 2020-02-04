@@ -1,67 +1,44 @@
-﻿@model SSIMS.Models.InventoryItem
+﻿@model SSIMS.ViewModels.InventoryItemDetailsVM
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Section = "Inventory";
+    ViewBag.Header = "Item Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Details</h2>
-
 <div>
-    <h4>InventoryItem</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Item.Category)
-        </dt>
+   <div id="item-information" style="margin:20px 20px 5px 20px">
+       <table style="font-size:18px">
+           <tr>
+               <td colspan="2" align="center" height="50px" style="font-size:22px">Item Information</td>
+               <td align="center"> navigation with index </td>
+           </tr>
+           <tr>
+               <td align="center" width="200px" height="50px">@Html.DisplayNameFor(model => model.ItemCode)</td>
+               <td align="center" width="400px">@Html.DisplayFor(model => model.ItemCode)</td>
+               <td rowspan="4" align="center" valign="middle" width="300px">img here</td>
+           </tr>
+           <tr>
+               <td align="center" height="50px">@Html.DisplayNameFor(model => model.Category)</td>
+               <td align="center">@Html.DisplayFor(model => model.Category)</td>
+           </tr>
+           <tr>
+               <td align="center" height="50px">@Html.DisplayNameFor(model => model.Description)</td>
+               <td align="center">@Html.DisplayFor(model => model.Description)</td>
+           </tr>
+           <tr>
+               <td align="center" height="50px">@Html.DisplayNameFor(model => model.UOM)</td>
+               <td align="center">@Html.DisplayFor(model => model.UOM)</td>
+           </tr>
+       </table>
+   </div>
+    <div id="stock-details">
 
-        <dd>
-            @Html.DisplayFor(model => model.Item.Category)
-        </dd>
+    </div>
+    <div id="supplier-information">
 
-        <dt>
-            @Html.DisplayNameFor(model => model.InStoreQty)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.InStoreQty)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.InTransitQty)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.InTransitQty)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ReorderLvl)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ReorderLvl)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ReorderQty)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ReorderQty)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.StockCheck)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.StockCheck)
-        </dd>
-
-    </dl>
+    </div>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
