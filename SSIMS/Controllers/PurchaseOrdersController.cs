@@ -38,6 +38,89 @@ namespace SSIMS.Controllers
 
         }
 
+        public ActionResult Approve(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            PurchaseOrder purchaseOrder = uow.PurchaseOrderRepository.Get(filter: x => x.ID == id, includeProperties: "Supplier, CreatedByStaff, RepliedByStaff, PurchaseItems.Tender.Item ").FirstOrDefault();
+
+            // to change later 
+            purchaseOrder.Approve(uow.StaffRepository.GetByID(10002));
+            uow.PurchaseOrderRepository.Update(purchaseOrder);
+            uow.Save();
+            Debug.WriteLine("Purchase Order Approved");
+            PurchaseOrderVM vm = new PurchaseOrderVM(purchaseOrder);
+            if (purchaseOrder == null)
+            {
+                return HttpNotFound();
+            }
+            return RedirectToAction("Details", new { id = id });
+        }
+
+        public ActionResult Reject(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            PurchaseOrder purchaseOrder = uow.PurchaseOrderRepository.Get(filter: x => x.ID == id, includeProperties: "Supplier, CreatedByStaff, RepliedByStaff, PurchaseItems.Tender.Item ").FirstOrDefault();
+
+            // to change later 
+            purchaseOrder.Rejected(uow.StaffRepository.GetByID(10002));
+            uow.PurchaseOrderRepository.Update(purchaseOrder);
+            uow.Save();
+            Debug.WriteLine("Purchase Order Rejected");
+            PurchaseOrderVM vm = new PurchaseOrderVM(purchaseOrder);
+            if (purchaseOrder == null)
+            {
+                return HttpNotFound();
+            }
+            return RedirectToAction("Details", new { id = id });
+        }
+
+        public ActionResult Cancel(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            PurchaseOrder purchaseOrder = uow.PurchaseOrderRepository.Get(filter: x => x.ID == id, includeProperties: "Supplier, CreatedByStaff, RepliedByStaff, PurchaseItems.Tender.Item ").FirstOrDefault();
+
+            // to change later 
+            purchaseOrder.Cancelled(uow.StaffRepository.GetByID(10002));
+            uow.PurchaseOrderRepository.Update(purchaseOrder);
+            uow.Save();
+            Debug.WriteLine("Purchase Order Cancelled");
+            PurchaseOrderVM vm = new PurchaseOrderVM(purchaseOrder);
+            if (purchaseOrder == null)
+            {
+                return HttpNotFound();
+            }
+            return RedirectToAction("Details", new { id = id });
+        }
+
+        public ActionResult DeliveryOrder(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            PurchaseOrder purchaseOrder = uow.PurchaseOrderRepository.Get(filter: x => x.ID == id, includeProperties: "Supplier, CreatedByStaff, RepliedByStaff, PurchaseItems.Tender.Item ").FirstOrDefault();
+
+            // to change later 
+            Debug.WriteLine("Delivery Order ");
+            PurchaseOrderVM vm = new PurchaseOrderVM(purchaseOrder);
+            if (purchaseOrder == null)
+            {
+                return HttpNotFound();
+            }
+            return RedirectToAction("Edit", "DeliveryOrders", new { id = id });
+        }
+
+
+
         // GET: PurchaseOrders/Details/5
         public ActionResult Details(int? id)
         {

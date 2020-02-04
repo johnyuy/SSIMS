@@ -6,11 +6,12 @@ using SSIMS.DAL;
 using SSIMS.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics;
+using SSIMS.Service;
 
 namespace SSIMS.ViewModels
 {
-
-    public class PurchaseOrderVM 
+    public class DeliveryOrderVM
     {
 
         [Key]
@@ -32,40 +33,50 @@ namespace SSIMS.ViewModels
         public DateTime? ExpectedDeliveryDate { get; set; }
 
         public Supplier Supplier { get; set; }
-        public virtual ICollection<PurchaseItem> PurchaseItems { get; set; }
 
-        public double TotalCost { get; set; }       
+        //[NestedListValidation]
+        public List<TransactionItem> TransactionItems { get; set; }
 
-        public PurchaseOrderVM(PurchaseOrder PO) 
+        public double TotalCost { get; set; }
+
+        public int PurchaseOrderID { get; set; }
+
+
+        public DeliveryOrderVM(PurchaseOrder PO)
         {
             this.ID = PO.ID;
             this.CreatedDate = PO.CreatedDate;
-            this.TotalCost = GetTotalCost(PO);
             this.Status = PO.Status;
-            this.PurchaseItems = PO.PurchaseItems;
+            this.TransactionItems = PurchaseItemToTransactionItem(PO.PurchaseItems.ToList(), PO);
             this.RepliedByStaff = PO.RepliedByStaff;
             this.ResponseDate = PO.ResponseDate;
             this.CreatedByStaff = PO.CreatedByStaff;
             this.Supplier = PO.Supplier;
-            
+            this.PurchaseOrderID = PO.ID;
         }
 
-        public PurchaseOrderVM() : base()
+        public DeliveryOrderVM() : base()
         {
             CreatedDate = DateTime.Now;
         }
 
-        public double GetTotalCost(PurchaseOrder PO)
+        public TransactionItem PurchaseItemToTransactionItem(PurchaseItem pi, Document document)
         {
-            double total = 0;
-            foreach (PurchaseItem p in PO.PurchaseItems)
+            TransactionItem ti = new TransactionItem(pi.Qty, pi.Qty, "", pi.Tender.Item, document);
+            ti.ID = Guid.NewGuid();
+            Debug.WriteLine(ti.ID);
+            return ti;
+        }
+
+        public List<TransactionItem> PurchaseItemToTransactionItem(List<PurchaseItem> PIList, Document document)
+        {
+            List<TransactionItem> list = new List<TransactionItem>();
+            foreach (PurchaseItem pi in PIList)
             {
-                total = total + (p.Qty * p.Tender.Price);
+                list.Add(PurchaseItemToTransactionItem(pi, document));
+
             }
-            return total;
+            return list;
         }
     }
-
-
-
 }

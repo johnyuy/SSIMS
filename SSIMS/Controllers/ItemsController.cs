@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using SSIMS.Database;
 using SSIMS.Models;
 using SSIMS.DAL;
+using PagedList;
 
 namespace SSIMS.Controllers
 {
@@ -17,12 +18,23 @@ namespace SSIMS.Controllers
         private UnitOfWork unitOfWork = new UnitOfWork();
 
         // GET: Items
-        public ActionResult Index(string sortOrder, string searchString)
+        public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
             //ViewBag.ItemDescriptionSortParm = String.IsNullOrEmpty(sortOrder) ? "Item_desc" : "";
             ViewBag.ItemDescriptionSortParm = String.IsNullOrEmpty(sortOrder) ? "Item_desc" : "";
             ViewBag.CategorySortParm = sortOrder == "Category" ? "Category_desc" : "Category";
             var items = unitOfWork.ItemRepository.Get();
+
+            if ( searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
 
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -46,8 +58,9 @@ namespace SSIMS.Controllers
                     items = items.OrderBy(i => i.Description);
                     break;
             }
-
-            return View(items.ToList());
+            int pageSize = 15;
+            int pageNumber = (page ?? 1);
+            return View(items.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: Items/Details/5

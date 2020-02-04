@@ -43,9 +43,12 @@ namespace SSIMS.Database
             InitUserAccounts(context);
             InitInventoryItems(context);
             InitDocuments(context);
+            InitPurchaseItems(context);
             InitPurchaseOrders(context);
             InitDeptHeadAuthorizations(context);
 
+
+            InitDeliveryOrders(context);
 
             //other initializations copy:    static void Init (DatabaseContext context)
             context.SaveChanges();
@@ -342,7 +345,7 @@ namespace SSIMS.Database
 
             };
 
-            foreach ( Tender t in banetender)
+            foreach (Tender t in banetender)
             {
                 context.Tenders.Add(t);
             }
@@ -829,7 +832,7 @@ namespace SSIMS.Database
                     inventoryItem.InStoreQty /= 5;
                 context.InventoryItems.Add(inventoryItem);
             }
-                
+
             context.SaveChanges();
         }
 
@@ -871,7 +874,7 @@ namespace SSIMS.Database
                 new DocumentItem(ItemRepository.GetByID("F033"),20),
             };
             reqform3.DocumentItems = documentItems3;
-            reqform3.Status =(Status)1;
+            reqform3.Status = (Status)1;
             context.RequisitionOrders.Add(reqform3);
 
             Staff staff4 = StaffRepository.GetByID(10024); //COMM dept
@@ -909,6 +912,61 @@ namespace SSIMS.Database
             context.DisbursementLists.Add(disbursementList);
             context.SaveChanges();
         }
+
+        static void InitPurchaseItems(DatabaseContext context)
+        {
+            UnitOfWork uow = new UnitOfWork(context);
+            List<PurchaseItem> purchaseItems = new List<PurchaseItem>{
+                new PurchaseItem("P043", "BANE", 12, uow),
+                new PurchaseItem("P044", "BANE", 4, uow),
+                new PurchaseItem("P045", "BANE", 3, uow),
+                new PurchaseItem("P046", "BANE", 4, uow),
+                new PurchaseItem("R001", "BANE", 7, uow),
+                new PurchaseItem("R002", "BANE", 9, uow),
+                new PurchaseItem("S100", "BANE", 29, uow),
+                new PurchaseItem("C005","ALPA",10,uow),
+                new PurchaseItem("H032","ALPA",12,uow),
+                new PurchaseItem("C001","ALPA",10,uow),
+                new PurchaseItem("S022", "ALPA", 25, uow),
+                new PurchaseItem("S023", "ALPA", 5, uow),
+                new PurchaseItem("T001", "ALPA", 15, uow),
+                new PurchaseItem("T002", "ALPA", 9, uow),
+                new PurchaseItem("T003", "ALPA", 9, uow),
+                new PurchaseItem("T020", "ALPA", 5, uow),
+                new PurchaseItem("T021", "ALPA", 5, uow),
+                new PurchaseItem("T022", "ALPA", 8, uow),
+                new PurchaseItem("T023", "ALPA", 3, uow),
+                new PurchaseItem("E006", "CHEP", 2, uow),
+                new PurchaseItem("E007", "CHEP", 3, uow),
+                new PurchaseItem("E008", "CHEP", 4, uow),
+                new PurchaseItem("E020", "CHEP", 6, uow),
+                new PurchaseItem("E021", "CHEP", 7, uow),
+                new PurchaseItem("E030", "CHEP", 21, uow),
+                new PurchaseItem("E031", "CHEP", 3, uow),
+                new PurchaseItem("E032", "CHEP", 5, uow),
+                new PurchaseItem("E033", "CHEP", 8, uow),
+                new PurchaseItem("H032", "OMEG", 8, uow),
+                new PurchaseItem("H033", "OMEG", 10, uow),
+                new PurchaseItem("P010", "OMEG", 5, uow),
+                new PurchaseItem("P011", "OMEG", 11, uow),
+                new PurchaseItem("P012", "OMEG", 12, uow),
+                new PurchaseItem("P013", "OMEG", 13, uow),
+                new PurchaseItem("P014", "OMEG", 5, uow),
+                new PurchaseItem("P015", "OMEG", 6, uow),
+                new PurchaseItem("P016", "OMEG", 7, uow),
+                new PurchaseItem("P020", "OMEG", 9, uow),
+            };
+
+            foreach (PurchaseItem p in purchaseItems)
+            {
+                context.PurchaseItems.Add(p);
+            }
+
+            context.SaveChanges();
+
+        }
+
+
 
         static void InitPurchaseOrders(DatabaseContext context)
         {
@@ -984,27 +1042,47 @@ namespace SSIMS.Database
 
             context.SaveChanges();
         }
-        
-        static void InitDeptHeadAuthorizations(DatabaseContext context)
+
+        static void InitDeliveryOrders(DatabaseContext context)
         {
-            Debug.WriteLine("\tInitializing DeptHeadAuthorizations");
-            List<DeptHeadAuthorization> deptHeadAuthorizations = new List<DeptHeadAuthorization>
-            {
-               new DeptHeadAuthorization(StaffRepository.GetStaffbyID(10006),1,DateTime.Now,DateTime.Now.AddDays(365)),
-               new DeptHeadAuthorization(StaffRepository.GetStaffbyID(10013),2,DateTime.Now,DateTime.Now.AddDays(365)),
-               new DeptHeadAuthorization(StaffRepository.GetStaffbyID(10020),3,DateTime.Now,DateTime.Now.AddDays(365)),
-               new DeptHeadAuthorization(StaffRepository.GetStaffbyID(10027),4,DateTime.Now,DateTime.Now.AddDays(365)),
-               new DeptHeadAuthorization(StaffRepository.GetStaffbyID(10034),5,DateTime.Now,DateTime.Now.AddDays(365)),
-               new DeptHeadAuthorization(StaffRepository.GetStaffbyID(10041),6,DateTime.Now,DateTime.Now.AddDays(365)),
-               new DeptHeadAuthorization(StaffRepository.GetStaffbyID(10048),7,DateTime.Now,DateTime.Now.AddDays(365)),
-               new DeptHeadAuthorization(StaffRepository.GetStaffbyID(10055),8,DateTime.Now,DateTime.Now.AddDays(365)),
-               new DeptHeadAuthorization(StaffRepository.GetStaffbyID(10062),9,DateTime.Now,DateTime.Now.AddDays(365)),
-               new DeptHeadAuthorization(StaffRepository.GetStaffbyID(10069),11,DateTime.Now,DateTime.Now.AddDays(365)),
+            UnitOfWork uow = new UnitOfWork(context);
+
+            Staff Clerk1 = uow.StaffRepository.GetByID(10004);
+
+            Debug.WriteLine("\tInitializing Delivery Orders");
+            DeliveryOrder DO1 = new DeliveryOrder(10004, "ALPA", 1, uow);
+            List<DocumentItem> documentItems = new List<DocumentItem>{
+                new DocumentItem("C005",10,uow),
+                new DocumentItem("H032",12,uow),
+                new DocumentItem("C001",10,uow),
             };
-            foreach (DeptHeadAuthorization dha in deptHeadAuthorizations)
-                context.DeptHeadAuthorizations.Add(dha);
+            DO1.DocumentItems = documentItems;
+            DO1.Completed(Clerk1);
+            context.DeliveryOrders.Add(DO1);
+
+            DeliveryOrder DO2 = new DeliveryOrder(10004, "BANE", 2, uow);
+            List<DocumentItem> documentItems2 = new List<DocumentItem>{
+                new DocumentItem("C006",10,uow),
+                new DocumentItem("E003", 9,uow),
+                new DocumentItem("C001",10,uow),
+            };
+            DO2.DocumentItems = documentItems2;
+            DO2.Completed(Clerk1);
+            context.DeliveryOrders.Add(DO2);
+
+            DeliveryOrder DO3 = new DeliveryOrder(10004, "BANE", 3, uow);
+            List<DocumentItem> documentItems3 = new List<DocumentItem>{
+                new DocumentItem("C003",10,uow),
+                new DocumentItem("P046", 9,uow),
+                new DocumentItem("R001",3,uow),
+            };
+            DO3.DocumentItems = documentItems3;
+            DO3.Completed(Clerk1);
+            context.DeliveryOrders.Add(DO3);
+
             context.SaveChanges();
         }
+
 
     }
 }
