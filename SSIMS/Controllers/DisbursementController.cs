@@ -16,8 +16,8 @@ using SSIMS.Filters;
 
 namespace SSIMS.Controllers
 {
-    [AuthenticationFilter]
-    [AuthorizationFilter]
+    //[AuthenticationFilter]
+    //[AuthorizationFilter]
     public class DisbursementController : Controller
     {
         private DatabaseContext db = new DatabaseContext();
@@ -29,10 +29,7 @@ namespace SSIMS.Controllers
             var disbursementLists = db.DisbursementLists.Include(d => d.CreatedByStaff).Include(d => d.RepliedByStaff);
 
             //my code for testing
-            ds.GenerateDeptRetrievalList("ENGL");
-            var combinedList = ds.GenerateCombinedRetrievalList();
-            ds.InsertDeptRetrievalList("ENGL");
-            ds.GenerateRetrievalItemViewModel(combinedList);
+            
             if (disbursementLists == null)
             {
                 return HttpNotFound();
@@ -46,9 +43,11 @@ namespace SSIMS.Controllers
         public ActionResult Retrieval()
         {
             
-            ds.GenerateDeptRetrievalList("ENGL");
-            var combinedList = ds.GenerateCombinedRetrievalList();
+            
             ds.InsertDeptRetrievalList("ENGL");
+            ds.InsertDeptRetrievalList("ARCH");
+            ds.InsertDeptRetrievalList("COMM");
+            var combinedList = ds.GenerateCombinedRetrievalList();
             var rivm = ds.GenerateRetrievalItemViewModel(combinedList);
             var retrievalLists = db.RetrievalLists.Include(d => d.CreatedByStaff).Include(d => d.Status);
 

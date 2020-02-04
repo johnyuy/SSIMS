@@ -4,14 +4,14 @@
 @{
     ViewBag.Title = "Retrieval";
 }
-    @*<head>
+    @*@<head>
         <style>
-            .displaydept .sign:after {
+            tr.displaydept .sign:after {
                 content: "+";
                 display: inline-block;
             }
 
-            .displaydept.expand .sign:after {
+            tr.displaydept.expand .sign:after {
                 content: "-";
             }
         </style>
@@ -34,10 +34,6 @@
             <th align="center">
                 @Html.DisplayNameFor(model => model.transactionItem.TakeOverQty)
             </th>
-            <th>
-                Dept
-            </th>
-
         </tr>
 
         @foreach (var Retrievalitem in Model)
@@ -50,34 +46,19 @@
                     @Html.DisplayFor(modelItem => Retrievalitem.transactionItem.HandOverQty)
                 </td>
                 <td align="center" style="align-content:center">
-                    <input type="number" name="TOQ" @Html.ValueFor(modelItem => Retrievalitem.transactionItem.TakeOverQty)/>
-                </td>
-                <td>
-                    <table border="1">
-                        @foreach (var drivm in Retrievalitem.deptRetrievalItems)
-                        {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => drivm.deptID) DeptID
-                                </td>
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => drivm.transactionItem.HandOverQty)  HOQ
-                                </td>
-                                <td align="center">
-                                    <input type="number" name="drivmTOQ" value=@Html.DisplayFor(modelItem => drivm.transactionItem.TakeOverQty)> TOQ
-                                </td>
-                                <td>
-                                    <input type="text" name="drivmReason" /> @Html.DisplayFor(modelItem => drivm.transactionItem.Reason) Reason
-                                </td>
-                            </tr>
-                        }
-                    </table>
+                    <input type="number" name="TOQ" text=@Retrievalitem.transactionItem.TakeOverQty max=@Retrievalitem.transactionItem.HandOverQty value=@Retrievalitem.transactionItem.TakeOverQty/>
                 </td>
             </tr>
 
             <tr class="displaydept">
                 <td colspan="3">
-                    <table>
+                    <table border="1" align="center">
+                        <tr>
+                            <th width="100px">Dept</th>
+                            <th width="200px" align="center">Handover Qty</th>
+                            <th width="200px" align="center">Takeover Qty</th>
+                            <th width="300px" align="center">Reason</th>
+                        </tr>
                         @foreach (var drivm in Retrievalitem.deptRetrievalItems)
                         {
                             <tr>
@@ -88,10 +69,10 @@
                                     @Html.DisplayFor(modelItem => drivm.transactionItem.HandOverQty)
                                 </td>
                                 <td align="center">
-                                    <input type="number" name="drivmTOQ" value=@Html.DisplayFor(modelItem => drivm.transactionItem.TakeOverQty)>
+                                    <input type="number" name="drivmTOQ" max="10" width="50" value=@drivm.transactionItem.TakeOverQty/>
                                 </td>
                                 <td>
-                                    <input type="text" name="drivmReason" /> @Html.DisplayFor(modelItem => drivm.transactionItem.Reason)
+                                    <input type="text" name="drivmReason" value=@drivm.transactionItem.Reason />
                                 </td>
                             </tr>
                         }
@@ -100,6 +81,11 @@
             </tr>
 
         }
+        <tr>
+            <td colspan="3" align="right">
+                <button type="submit" value="Submit">Submit</button>
+            </td>
+        </tr>
 
     </table>
 </form>
