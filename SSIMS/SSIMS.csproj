@@ -356,11 +356,11 @@
     <Content Include="Views\Staffs\Details.cshtml" />
     <Content Include="Views\Staffs\Edit.cshtml" />
     <Content Include="Views\Staffs\Index.cshtml" />
-    <Content Include="Views\DisbursementLists\Create.cshtml" />
-    <Content Include="Views\DisbursementLists\Delete.cshtml" />
-    <Content Include="Views\DisbursementLists\Details.cshtml" />
-    <Content Include="Views\DisbursementLists\Edit.cshtml" />
-    <Content Include="Views\DisbursementLists\Index.cshtml" />
+    <Content Include="Views\Disbursement\Create.cshtml" />
+    <Content Include="Views\Disbursement\Delete.cshtml" />
+    <Content Include="Views\Disbursement\Details.cshtml" />
+    <Content Include="Views\Disbursement\Edit.cshtml" />
+    <Content Include="Views\Disbursement\Index.cshtml" />
     <Content Include="Views\Departments\Create.cshtml" />
     <Content Include="Views\Departments\Delete.cshtml" />
     <Content Include="Views\Departments\Details.cshtml" />
@@ -383,7 +383,7 @@
     <Content Include="Views\Requisition\Details.cshtml" />
     <Content Include="Views\Shared\_Login_Layout.cshtml" />
     <Content Include="Views\Login\Authentication.cshtml" />
-    <Content Include="Views\DisbursementLists\Retrieval.cshtml" />
+    <Content Include="Views\Disbursement\Retrieval.cshtml" />
     <Content Include="Views\Requisition\Cancel.cshtml" />
     <Content Include="Views\Requisition\Edit.cshtml" />
     <Content Include="Views\Requisition\ViewHistory.cshtml" />
