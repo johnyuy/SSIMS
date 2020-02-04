@@ -20,14 +20,13 @@ namespace SSIMS.Filters
             HttpContext.Current.Response.AddHeader("Expires", "0");
 
             ILoginService loginService = new LoginService();
-            string sessionid = HttpContext.Current.Session.SessionID;
             if(HttpContext.Current.Session.Count > 0)
             {
-                string username = HttpContext.Current.Session["username"].ToString();
-                
-                if (loginService.AuthenticateSession(username, sessionid))
+                if (loginService.AuthenticateSession(
+                    HttpContext.Current.Session["username"].ToString(), 
+                    HttpContext.Current.Session.SessionID))
                 {
-                    Debug.WriteLine("\n[Authentication Filter:\t" + username + "/" + sessionid +"]\n");
+                    Debug.WriteLine("\n[Authentication Filter :\tSUCCESS!]\n");
                     authenticated = true;
                 }
             }
@@ -43,7 +42,7 @@ namespace SSIMS.Filters
                         new System.Web.Routing.RouteValueDictionary
                         {
                             {"controller", "Login" },
-                            {"action","Authentication" }
+                            {"action","Index" }
                         });
             }
         }

@@ -79,7 +79,7 @@ namespace SSIMS.DAL
             }
         }
         //get selectlist for dynamic dropdownlist
-        public IEnumerable<SelectListItem> GetDescription()
+        public IEnumerable<SelectListItem> GetDescriptions()
         {
             List<SelectListItem> items = new List<SelectListItem>()
             {
@@ -92,7 +92,7 @@ namespace SSIMS.DAL
             return items;
         }
         //get selectlist for dynamic dropdownlist
-        public IEnumerable<SelectListItem> GetDescription(string category)
+        public IEnumerable<SelectListItem> GetDescriptions(string category)
         {
             if (!String.IsNullOrWhiteSpace(category))
             {

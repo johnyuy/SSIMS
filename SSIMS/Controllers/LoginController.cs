@@ -14,49 +14,73 @@ namespace SSIMS.Controllers
         readonly ILoginService LoginService = new LoginService();
         public ActionResult Index()
         {
+            Debug.WriteLine("In index now");
             if (Request.Cookies.Get("Auth") != null)
             {
+                Debug.WriteLine("Auth cookie exists");
                 //if cookie's session ID matches the sessionId in database then go to home controller
                 if (LoginService.IsStoredSession(Request.Cookies.Get("Auth")))
                 {
+                    Debug.WriteLine("Auth cookie is valid");
+                    updateAuthCookie(
+                        Session["username"].ToString(),
+                        HttpContext.Session.SessionID);
+                    Logger(Session["username"].ToString(),true);
                     return RedirectToAction("Index", "Home");
                 }
             }
             //go to login
             return RedirectToAction("Authentication");
         }
-        
         // GET: Login
         public ActionResult Authentication()
         {
             return View();
         }
-
         [HttpPost]
         public ActionResult Authenticate(UserLogin userLogin)
         {
             
             if(LoginService.VerifyPassword(userLogin.Username, userLogin.Password))
             {
-                String sessionId = LoginService.CreateNewSession(userLogin.Username, HttpContext.Session.SessionID);
-                HttpCookie AuthCookie = new HttpCookie("Auth", userLogin.Username+"#"+sessionId);
-                AuthCookie.Expires = DateTime.Now.AddDays(7d);
-                Response.Cookies.Add(AuthCookie);
+                LoginService.UpdateSession(userLogin.Username, HttpContext.Session.SessionID);
+                updateAuthCookie(userLogin.Username, HttpContext.Session.SessionID);
+                Logger(userLogin.Username, true);
                 return RedirectToAction("Index", "Home");
             }
                 
             return RedirectToAction("Authentication", userLogin);
         }
 
+        private void updateAuthCookie(string username, string sessionid)
+        {
+            HttpCookie AuthCookie = Request.Cookies.Get("Auth");
+            if (AuthCookie == null)
+                AuthCookie = new HttpCookie("Auth");
+            AuthCookie.Value = username + "#" + sessionid;
+            AuthCookie.Expires = DateTime.Now.AddDays(7d);
+            Response.Cookies.Add(AuthCookie);
+        }
+
         public ActionResult Logout(string username)
         {
             LoginService.CancelSession(username);
-            Response.Cookies["SessionID"].Expires = DateTime.Now.AddDays(-100);
-            Response.Cookies["Username"].Expires = DateTime.Now.AddDays(-100);
+            if(Request.Cookies.Get("Auth")!=null)
+                Response.Cookies["Auth"].Expires = DateTime.Now.AddDays(-100);
             HttpContext.Session.Clear();
             HttpContext.Session.Abandon();
-            Debug.WriteLine("\n[" + username + " logged out]");
+            Logger(username, false);
             return RedirectToAction("Authentication", "");
+        }
+
+        private static void Logger(string username, bool login)
+        {
+            string log = "\n[Logger: "+ username + " logged ";
+            if (login) log += "in"; else log += "out";
+            log +=  " at " + DateTime.Now.ToString("HH:mm:ss")
+                    + " on " + DateTime.Now.ToString("dd/MM/yyyy")
+                    + "]";
+            Debug.WriteLine(log);
         }
     }
 }

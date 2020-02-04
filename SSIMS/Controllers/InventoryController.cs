@@ -12,22 +12,26 @@ using SSIMS.Database;
 using SSIMS.Models;
 using SSIMS.ViewModels;
 using SSIMS.Filters;
+using SSIMS.Service;
 
 namespace SSIMS.Controllers
 {
     [AuthenticationFilter]
+    [AuthorizationFilter]
     public class InventoryController : Controller
     {
-        private DatabaseContext db = new DatabaseContext();
-
-        // GET: Inventory
+        private UnitOfWork uow = new UnitOfWork();
+        private InventoryService InventoryService = new InventoryService();
         public ActionResult Index(string searchString, string lowStock)
         {
-            Debug.WriteLine("searchString = " + searchString + "\nlowStock = " + lowStock);
+            Debug.WriteLine("searchString = " + searchString + "\tlowStock = " + lowStock);
             bool low = lowStock == "true" ? true : false;
             InventoryViewModel inventoryViewModel =  new InventoryViewModel(searchString, low);
             ViewBag.LowStock = lowStock;
             ViewBag.SearchString = searchString;
+            Session["InventoryLowStockMode"] = lowStock;
+            Session["InventorySearchString"] = searchString;
+            Session["InventorySearchList"] = inventoryViewModel;
             return View(inventoryViewModel.inventoryItems.ToList());
         }
 
@@ -35,43 +39,42 @@ namespace SSIMS.Controllers
         public ActionResult Details(int? id)
         {
             if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            InventoryItem inventoryItem = db.InventoryItems.Find(id);
+                return RedirectToAction("Index");
+
+            InventoryItem inventoryItem = uow.InventoryItemRepository.Get(filter:x=>x.ID==id, includeProperties:"Item").First();
+            InventoryItemDetailsVM inventoryItemDetailsVM = new InventoryItemDetailsVM(inventoryItem);
+
             if (inventoryItem == null)
+                return RedirectToAction("Index");
+            
+            InventoryViewModel inventoryViewModel = (InventoryViewModel)Session["InventorySearchList"];
+
+            if(inventoryViewModel != null)
             {
-                return HttpNotFound();
+                ViewBag.MaxItemsCount = inventoryViewModel.inventoryItems.Count();
+                ViewBag.CurrentItemIndex = InventoryService.GetItemIndexFromSearchList(inventoryItem.ID, inventoryViewModel);
+            } else
+            {
+                ViewBag.MaxItemsCount = 1;
+                ViewBag.CurrentItemIndex = 1;
             }
-            return View(inventoryItem);
+            
+
+
+            return View(inventoryItemDetailsVM);
         }
 
         // GET: Inventory/Create
-        public ActionResult Create()
+/*        public ActionResult Create()
         {
             ViewBag.ItemID = new SelectList(db.Items, "ID", "Category");
             return View();
-        }
+        }*/
 
-        // POST: Inventory/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,ItemID,InStoreQty,InTransitQty,ReorderLvl,ReorderQty,StockCheck")] InventoryItem inventoryItem)
-        {
-            if (ModelState.IsValid)
-            {
-                db.InventoryItems.Add(inventoryItem);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
 
-            ViewBag.ItemID = new SelectList(db.Items, "ID", "Category", inventoryItem.ItemID);
-            return View(inventoryItem);
-        }
+        
 
-        // GET: Inventory/Edit/5
+/*        // GET: Inventory/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -85,12 +88,10 @@ namespace SSIMS.Controllers
             }
             ViewBag.ItemID = new SelectList(db.Items, "ID", "Category", inventoryItem.ItemID);
             return View(inventoryItem);
-        }
+        }*/
 
-        // POST: Inventory/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+
+/*        [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ID,ItemID,InStoreQty,InTransitQty,ReorderLvl,ReorderQty,StockCheck")] InventoryItem inventoryItem)
         {
@@ -102,39 +103,14 @@ namespace SSIMS.Controllers
             }
             ViewBag.ItemID = new SelectList(db.Items, "ID", "Category", inventoryItem.ItemID);
             return View(inventoryItem);
-        }
+        }*/
 
-        // GET: Inventory/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            InventoryItem inventoryItem = db.InventoryItems.Find(id);
-            if (inventoryItem == null)
-            {
-                return HttpNotFound();
-            }
-            return View(inventoryItem);
-        }
-
-        // POST: Inventory/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            InventoryItem inventoryItem = db.InventoryItems.Find(id);
-            db.InventoryItems.Remove(inventoryItem);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                db.Dispose();
+                uow.Dispose();
             }
             base.Dispose(disposing);
         }

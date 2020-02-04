@@ -10,9 +10,13 @@ using SSIMS.Database;
 using SSIMS.DAL;
 using SSIMS.Models;
 using System.Diagnostics;
+using SSIMS.Filters;
+
 
 namespace SSIMS.Controllers
 {
+    [AuthenticationFilter]
+    [AuthorizationFilter]
     public class DepartmentsController : Controller
     {
 
@@ -20,6 +24,8 @@ namespace SSIMS.Controllers
         // GET: Departments
         public ActionResult Index()
         {
+            Debug.WriteLine("Hey drake , user type = " + Session["usertype"]);
+            Debug.WriteLine("Hey drake , user group = " + Session["usergroup"]);
             var departments = unitOfWork.DepartmentRepository.Get(includeProperties: "CollectionPoint");
             ViewBag.RepList = unitOfWork.StaffRepository.GetDeptRepList();
             Debug.WriteLine("number of heads: " + unitOfWork.StaffRepository.GetDeptHeadList().Count());
@@ -202,19 +208,26 @@ namespace SSIMS.Controllers
             ViewBag.CollectionPointID = new SelectList(unitOfWork.CollectionPointRepository.Get(), "ID", "Location", department.CollectionPoint.ID);
             return View(department);
         }
-        
-        public ActionResult DelegateAuthority (string id)
+
+        public ActionResult DelegateAuthority(string id)
         {
+            if (String.IsNullOrEmpty(id))
+                return RedirectToAction("Index");
+
+            Department department = unitOfWork.DepartmentRepository.Get(filter: x => x.ID == id, includeProperties: "DeptHeadAuthorization").First();
+            Staff selected = department.DeptHead;
+            ViewBag.StaffList = unitOfWork.StaffRepository.Get(filter: x => x.Department.DeptName == department.DeptName);
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Department department = unitOfWork.DepartmentRepository.GetByID(id);
             if (department == null)
             {
                 return HttpNotFound();
             }
-            return View(department);
+            ViewBag.Department = department;
+            Session["CurrentDepartmentID"] = department.ID;
+            return View();
         }
     }
 }

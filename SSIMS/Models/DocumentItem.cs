@@ -16,7 +16,7 @@ namespace SSIMS.Models
 
         public Document Document { get; set; }
         public Item Item { get; set; }
-
+        [Display(Name = "Quantity")]
         public int Qty { get; set; }
 
         public DocumentItem()

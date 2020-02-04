@@ -47,18 +47,22 @@
                 @Html.DisplayFor(modelItem => ro.CreatedDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => ro.Status)    
+                @Html.DisplayFor(modelItem => ro.Status)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => ro.ResponseDate)
             </td>
 
             <td>
-               
-                @Html.ActionLink("Details", "Details", new { id =ro.ID }) 
-                   
+
+                @Html.ActionLink("Details", "Details", new { id = ro.ID })
+
             </td>
         </tr>
     }
 
 </table>
+
+<p>
+    @Html.ActionLink("Create new requisition", "Create")
+</p>

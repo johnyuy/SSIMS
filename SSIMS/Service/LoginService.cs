@@ -19,6 +19,7 @@ namespace SSIMS.Service
             UserAccount account = uow.UserAccountRepository.GetByID(username);
             if (account != null && password == account.Password) {
                 Debug.WriteLine("\tACCESS GRANTED: " + account.ID);
+
                 GenerateIdentity(account);
                 return true;
             }
@@ -26,7 +27,7 @@ namespace SSIMS.Service
             return false;
         }
 
-        public string CreateNewSession(string username, string sessionId)
+        public string UpdateSession(string username, string sessionId)
         {
             UserAccount account = uow.UserAccountRepository.GetByID(username);
             if(account != null)
@@ -45,7 +46,11 @@ namespace SSIMS.Service
             if(account != null)
             {
                 if (sessionId == account.SessionID)
+                {
+                    
                     return true;
+                }
+                    
             }
             return false;
         }
@@ -72,62 +77,54 @@ namespace SSIMS.Service
                 if (sessionid == account.SessionID)
                 {
                     Debug.WriteLine("\n[Resume Session : " + username + "/" + sessionid+"]");
+                    UpdateSession(username, HttpContext.Current.Session.SessionID);
                     GenerateIdentity(account);
                     return true;
                 }
             }
             return false;
         }
+
+       
         private static void GenerateIdentity(UserAccount userAccount)
         {
-            List<string> roles = new List<string>();
+            string role = "";
             int storeaccess = userAccount.StoreAccess;
             int deptaccess = userAccount.DeptAccess;
             if(storeaccess + deptaccess == 6)
             {
-                roles.Add("manager");
-                roles.Add("supervisor");
-                roles.Add("clerk");
-                roles.Add("head");
-                roles.Add("rep");
-                roles.Add("staff");
+                role="admin";
             }
             else if (storeaccess == 3 && deptaccess ==0)
             {
-                roles.Add("manager");
-                roles.Add("supervisor");
-                roles.Add("clerk");
+                role="manager";
             }
             else if (storeaccess == 2 && deptaccess == 0)
             {
-                roles.Add("supervisor");
-                roles.Add("clerk");
+                role="supervisor";
             }
             else if (storeaccess == 1 && deptaccess == 0)
             {
-                roles.Add("clerk");
+                role="clerk";
 
             }
             else if (storeaccess == 0 && deptaccess == 3)
             {
-                roles.Add("head");
-                roles.Add("rep");
-                roles.Add("staff");
+                role="head";
             }
             else if (storeaccess == 0 && deptaccess == 2)
             {
-                roles.Add("rep");
-                roles.Add("staff");
+                role="rep";
             }
             else if (storeaccess == 0 && deptaccess == 1)
             {
-                roles.Add("staff");
+                role="staff";
             }
 
-            if (roles.Count>0)
+            if (role!="")
             {
                 HttpContext.Current.Session["username"] = userAccount.ID;
-                HttpContext.Current.Session["roles"] = roles;
+                HttpContext.Current.Session["role"] = role;
             }
         }
     }

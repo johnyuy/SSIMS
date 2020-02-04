@@ -11,10 +11,14 @@ using SSIMS.Database;
 using SSIMS.Models;
 using SSIMS.Service;
 using SSIMS.DAL;
+using SSIMS.ViewModels;
+using SSIMS.Filters;
 
 namespace SSIMS.Controllers
 {
-    public class DisbursementListsController : Controller
+    //[AuthenticationFilter]
+    //[AuthorizationFilter]
+    public class DisbursementController : Controller
     {
         private DatabaseContext db = new DatabaseContext();
         private DisbursementService ds = new DisbursementService();
@@ -25,10 +29,7 @@ namespace SSIMS.Controllers
             var disbursementLists = db.DisbursementLists.Include(d => d.CreatedByStaff).Include(d => d.RepliedByStaff);
 
             //my code for testing
-            ds.GenerateDeptRetrievalList("ENGL");
-            var combinedList = ds.GenerateCombinedRetrievalList();
-            ds.InsertDeptRetrievalList("ENGL");
-            ds.GenerateRetrievalItemViewModel(combinedList);
+            
             if (disbursementLists == null)
             {
                 return HttpNotFound();
@@ -37,6 +38,30 @@ namespace SSIMS.Controllers
 
             return View(disbursementLists.ToList());
         }
+
+        //GET: RetrievalLists
+        public ActionResult Retrieval()
+        {
+            
+            
+            ds.InsertDeptRetrievalList("ENGL");
+            ds.InsertDeptRetrievalList("ARCH");
+            ds.InsertDeptRetrievalList("COMM");
+            var combinedList = ds.GenerateCombinedRetrievalList();
+            var rivm = ds.GenerateRetrievalItemViewModel(combinedList);
+            var retrievalLists = db.RetrievalLists.Include(d => d.CreatedByStaff).Include(d => d.Status);
+
+            if(retrievalLists == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(rivm.ToList());
+        }
+
+        [HttpPost]
+       // public ActionResult Confirm ()
+
 
         // GET: DisbursementLists/Details/5
         public ActionResult Details(int? id)

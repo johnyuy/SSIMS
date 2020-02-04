@@ -16,8 +16,15 @@ namespace SSIMS.DAL
         {
         }
 
-        
-        
+        //delete requisitionOrder by id
+        public void DeleteRObyID(int ID)
+        {
+            var requisitionOrder = Get(filter: x => x.ID == ID).First();
+            //context.RequisitionOrders.Remove(requisitionOrder);
+            dbSet.Remove(requisitionOrder);
+        }
+      
+
 
 
     }

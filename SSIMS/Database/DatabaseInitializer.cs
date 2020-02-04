@@ -8,8 +8,8 @@ using SSIMS.DAL;
 
 namespace SSIMS.Database
 {
-    //public class DatabaseInitializer<T> : DropCreateDatabaseAlways<DatabaseContext>
-    public class DatabaseInitializer<T> : CreateDatabaseIfNotExists<DatabaseContext>
+    public class DatabaseInitializer<T> : DropCreateDatabaseAlways<DatabaseContext>
+    //public class DatabaseInitializer<T> : CreateDatabaseIfNotExists<DatabaseContext>
 
     {
         static StaffRepository StaffRepository;
@@ -18,6 +18,7 @@ namespace SSIMS.Database
         static CollectionPointRepository CollectionPointRepository;
         static RequisitionOrderRepository RequisitionOrderRepository;
         static DocumentItemRepository DocumentItemRepository;
+        static DeptHeadAuthorizationRepository DeptHeadAuthorizationRepository;
 
         protected override void Seed(DatabaseContext context)
         {
@@ -28,20 +29,25 @@ namespace SSIMS.Database
             CollectionPointRepository = new CollectionPointRepository(context);
             RequisitionOrderRepository = new RequisitionOrderRepository(context);
             DocumentItemRepository = new DocumentItemRepository(context);
+            DeptHeadAuthorizationRepository = new DeptHeadAuthorizationRepository(context);
+
 
             //Seed data
+            
             InitCollectionPoints(context);
             InitDepartments(context);
+            InitStaffs(context);
             InitItems(context);
             InitSuppliers(context);
-            //context.Database.ExecuteSqlCommand("INSERT INTO Tenders SELECT * FROM OPENROWSET('Microsoft.Jet.OLEDB.4.0', 'Excel 8.0;Database=\\Mac\\Home\\Downloads\\Tendertest.xlsx', 'SELECT * FROM [Sheet1$]')");
             InitTenders(context);
-            InitStaffs(context);
             InitUserAccounts(context);
             InitInventoryItems(context);
             InitDocuments(context);
             InitPurchaseItems(context);
             InitPurchaseOrders(context);
+            InitDeptHeadAuthorizations(context);
+
+
             InitDeliveryOrders(context);
 
             //other initializations copy:    static void Init (DatabaseContext context)
@@ -73,17 +79,39 @@ namespace SSIMS.Database
             Debug.WriteLine("\tInitializing Departments");
             List<Department> departments = new List<Department>
             {
-                new Department("ARCH", "Architecture","68901257","68921001", CollectionPointRepository.GetByID(1)),
-                new Department("ARTS", "Arts","68901226", "68921011", CollectionPointRepository.GetByID(1)),
-                new Department("COMM", "Commerce","68741284","68921256", CollectionPointRepository.GetByID(2)),
-                new Department("CPSC", "Computer Science","68901235","68921457", CollectionPointRepository.GetByID(2)),
-                new Department("ENGG", "Engineering","68901776","68922395", CollectionPointRepository.GetByID(3)),
-                new Department("ENGL", "English","68742234","68921456", CollectionPointRepository.GetByID(3)),
-                new Department("MEDI", "Medicine","67848808","68928106", CollectionPointRepository.GetByID(4)),
-                new Department("REGR", "Registrar","68901266","68921465", CollectionPointRepository.GetByID(4)),
-                new Department("SCIE", "Science","68907191","68921992", CollectionPointRepository.GetByID(5)),
-                new Department("ZOOL", "Zoology","68901266","68921465", CollectionPointRepository.GetByID(5)),
-                new Department("STOR", "Store","","",null)
+                new Department("ARCH", "Architecture","68901257","68921001", CollectionPointRepository.GetByID(1),null,null,null),
+                new Department("ARTS", "Arts","68901226", "68921011", CollectionPointRepository.GetByID(1),null,null,null),
+                new Department("COMM", "Commerce","68741284","68921256", CollectionPointRepository.GetByID(2),null,null,null),
+                new Department("CPSC", "Computer Science","68901235","68921457", CollectionPointRepository.GetByID(2),null,null,null),
+                new Department("ENGG", "Engineering","68901776","68922395", CollectionPointRepository.GetByID(3),null,null,null),
+                new Department("ENGL", "English","68742234","68921456", CollectionPointRepository.GetByID(3),null,null,null),
+                new Department("MEDI", "Medicine","67848808","68928106", CollectionPointRepository.GetByID(4),null,null,null),
+                new Department("REGR", "Registrar","68901266","68921465", CollectionPointRepository.GetByID(4),null,null,null),
+                new Department("SCIE", "Science","68907191","68921992", CollectionPointRepository.GetByID(5),null,null,null),
+                new Department("ZOOL", "Zoology","68901266","68921465", CollectionPointRepository.GetByID(5),null,null,null),
+                new Department("STOR", "Store","","",null,null,null,null)
+            };
+            foreach (Department dept in departments)
+                context.Departments.Add(dept);
+            context.SaveChanges();
+        }
+
+        static void InitDepartments2(DatabaseContext context)
+        {
+            Debug.WriteLine("\tInitializing Departments");
+            List<Department> departments = new List<Department>
+            {
+                new Department("ARCH", "Architecture","68901257","68921001", CollectionPointRepository.GetByID(1),DeptHeadAuthorizationRepository.GetByID(1),StaffRepository.GetStaffbyID(10006),StaffRepository.GetStaffbyID(10007)),
+                new Department("ARTS", "Arts","68901226", "68921011", CollectionPointRepository.GetByID(1),DeptHeadAuthorizationRepository.GetByID(2),StaffRepository.GetStaffbyID(10013),StaffRepository.GetStaffbyID(10014)),
+                new Department("COMM", "Commerce","68741284","68921256", CollectionPointRepository.GetByID(2),DeptHeadAuthorizationRepository.GetByID(3),StaffRepository.GetStaffbyID(10020),StaffRepository.GetStaffbyID(10021)),
+                new Department("CPSC", "Computer Science","68901235","68921457", CollectionPointRepository.GetByID(2),DeptHeadAuthorizationRepository.GetByID(4),StaffRepository.GetStaffbyID(10027),StaffRepository.GetStaffbyID(10028)),
+                new Department("ENGG", "Engineering","68901776","68922395", CollectionPointRepository.GetByID(3),DeptHeadAuthorizationRepository.GetByID(5),StaffRepository.GetStaffbyID(10034),StaffRepository.GetStaffbyID(10035)),
+                new Department("ENGL", "English","68742234","68921456", CollectionPointRepository.GetByID(3),DeptHeadAuthorizationRepository.GetByID(6),StaffRepository.GetStaffbyID(10041),StaffRepository.GetStaffbyID(10042)),
+                new Department("MEDI", "Medicine","67848808","68928106", CollectionPointRepository.GetByID(4),DeptHeadAuthorizationRepository.GetByID(7),StaffRepository.GetStaffbyID(10048),StaffRepository.GetStaffbyID(10049)),
+                new Department("REGR", "Registrar","68901266","68921465", CollectionPointRepository.GetByID(4),DeptHeadAuthorizationRepository.GetByID(8),StaffRepository.GetStaffbyID(10055),StaffRepository.GetStaffbyID(10056)),
+                new Department("SCIE", "Science","68907191","68921992", CollectionPointRepository.GetByID(5),DeptHeadAuthorizationRepository.GetByID(9),StaffRepository.GetStaffbyID(10062),StaffRepository.GetStaffbyID(10063)),
+                new Department("ZOOL", "Zoology","68901266","68921465", CollectionPointRepository.GetByID(5),DeptHeadAuthorizationRepository.GetByID(10),StaffRepository.GetStaffbyID(10069),StaffRepository.GetStaffbyID(10070)),
+                new Department("STOR", "Store","","",null,null,null,null)
             };
             foreach (Department dept in departments)
                 context.Departments.Add(dept);
@@ -95,95 +123,95 @@ namespace SSIMS.Database
             Debug.WriteLine("\tInitializing Items");
             List<Item> items = new List<Item>
             {
-                new Item("C001","Clip","Clips Double 1\"","Dozen"),
-                new Item("C002","Clip","Clips Double 2\"","Dozen"),
-                new Item("C003","Clip","Clips Double 3/4\"","Dozen"),
-                new Item("C004","Clip","Clips Paper Large","Box"),
-                new Item("C005","Clip","Clips Paper Medium","Box"),
-                new Item("C006","Clip","Clips Paper Small","Box"),
-                new Item("E001","Envelope","Envelope Brown (3\"x6\")","Each"),
-                new Item("E002","Envelope","Envelope Brown (3\"x6\") w/Window","Each"),
-                new Item("E003","Envelope","Envelope Brown (5\"x7\")","Each"),
-                new Item("E004","Envelope","Envelope Brown (5\"x7\") w/Window","Each"),
-                new Item("E005","Envelope","Envelope White (3\"x6\")","Each"),
-                new Item("E006","Envelope","Envelope White (3\"x6\") w/Window","Each"),
-                new Item("E007","Envelope","Envelope White (5\"x7\")","Each"),
-                new Item("E008","Envelope","Envelope White (5\"x7\") w/Window","Each"),
-                new Item("E020","Eraser","Eraser (hard)","Each"),
-                new Item("E021","Eraser","Eraser (soft)","Each"),
-                new Item("E030","Exercise","Exercise Book (100 pg)","Each"),
-                new Item("E031","Exercise","Exercise Book (120 pg)","Each"),
-                new Item("E032","Exercise","Exercise Book A4 Hardcover (100 pg)","Each"),
-                new Item("E033","Exercise","Exercise Book A4 Hardcover (120 pg)","Each"),
-                new Item("E034","Exercise","Exercise Book A4 Hardcover (200 pg)","Each"),
-                new Item("E035","Exercise","Exercise Book Hardcover (100 pg)","Each"),
-                new Item("E036","Exercise","Exercise Book Hardcover (120 pg)","Each"),
-                new Item("F020","File","File Separator","Set"),
-                new Item("F021","File","File-Blue Plain","Each"),
-                new Item("F022","File","File-Blue with Logo","Each"),
-                new Item("F023","File","File-Brown w/o Logo","Each"),
-                new Item("F024","File","File-Brown with Logo","Each"),
-                new Item("F031","File","Folder Plastic Blue","Each"),
-                new Item("F032","File","Folder Plastic Clear","Each"),
-                new Item("F033","File","Folder Plastic Green","Each"),
-                new Item("F034","File","Folder Plastic Pink","Each"),
-                new Item("F035","File","Folder Plastic Yellow","Each"),
-                new Item("H011","Pen","Highlighter Blue","Box"),
-                new Item("H012","Pen","Highlighter Green","Box"),
-                new Item("H013","Pen","Highlighter Pink","Box"),
-                new Item("H014","Pen","Highlighter Yellow","Box"),
-                new Item("H031","Puncher","Hole Puncher 2 holes","Each"),
-                new Item("H032","Puncher","Hole Puncher 3 holes","Each"),
-                new Item("H033","Puncher","Hole Puncher Adjustable","Each"),
-                new Item("P010","Pad","Pad Postit Memo 1\"x2\"","Packet"),
-                new Item("P011","Pad","Pad Postit Memo 1/2\"x1\"","Packet"),
-                new Item("P012","Pad","Pad Postit Memo 1/2\"x2\"","Packet"),
-                new Item("P013","Pad","Pad Postit Memo 2\"x3\"","Packet"),
-                new Item("P014","Pad","Pad Postit Memo 2\"x4\"","Packet"),
-                new Item("P015","Pad","Pad Postit Memo 2\"x4\"","Packet"),
-                new Item("P016","Pad","Pad Postit Memo 3/4\"x2\"","Packet"),
-                new Item("P020","Paper","Paper Photostat A3","Box"),
-                new Item("P021","Paper","Paper Photostat A4","Box"),
-                new Item("P030","Pen","Pen Ballpoint Black","Dozen"),
-                new Item("P031","Pen","Pen Ballpoint Blue","Dozen"),
-                new Item("P032","Pen","Pen Ballpoint Red","Dozen"),
-                new Item("P033","Pen","Pen Felt Tip Black","Dozen"),
-                new Item("P034","Pen","Pen Felt Tip Blue","Dozen"),
-                new Item("P035","Pen","Pen Felt Tip Red","Dozen"),
-                new Item("P036","Pen","Pen Transparency Permanent","Packet"),
-                new Item("P037","Pen","Pen Transparency Soluble","Packet"),
-                new Item("P038","Pen","Pen Whiteboard Marker Black","Box"),
-                new Item("P039","Pen","Pen Whiteboard Marker Blue","Box"),
-                new Item("P040","Pen","Pen Whiteboard Marker Green","Box"),
-                new Item("P041","Pen","Pen Whiteboard Marker Red","Box"),
-                new Item("P042","Pen","Pencil 2B","Dozen"),
-                new Item("P043","Pen","Pencil 2B With Eraser End","Dozen"),
-                new Item("P044","Pen","Pencil 4H","Dozen"),
-                new Item("P045","Pen","Pencil B","Dozen"),
-                new Item("P046","Pen","Pencil B With Eraser End","Dozen"),
-                new Item("R001","Ruler","Ruler 6\"","Dozen"),
-                new Item("R002","Ruler","Ruler 12\"","Dozen"),
-                new Item("S100","Scissors","Scissors","Each"),
-                new Item("S040","Tape","Scotch Tape","Each"),
-                new Item("S041","Tape","Scotch Tape Dispenser","Each"),
-                new Item("S101","Sharpener","Sharpener","Each"),
-                new Item("S010","Shorthand","Shorthand Book (100 pg)","Each"),
-                new Item("S011","Shorthand","Shorthand Book (120 pg)","Each"),
-                new Item("S012","Shorthand","Shorthand Book (80 pg)","Each"),
-                new Item("S020","Stapler","Stapler No.28","Each"),
-                new Item("S021","Stapler","Stapler No.36","Each"),
-                new Item("S022","Stapler","Stapler No.28","Box"),
-                new Item("S023","Stapler","Stapler No.36","Box"),
-                new Item("T001","Tacks","Thumb Tacks Large","Box"),
-                new Item("T002","Tacks","Thumb Tacks Medium","Box"),
-                new Item("T003","Tacks","Thumb Tacks Small","Box"),
-                new Item("T020","Tparency","Transparency Blue","Box"),
-                new Item("T021","Tparency","Transparency Clear","Box"),
-                new Item("T022","Tparency","Transparency Green","Box"),
-                new Item("T023","Tparency","Transparency Red","Box"),
-                new Item("T024","Tparency","Transparency Reverse Blue","Box"),
-                new Item("T025","Tparency","Transparency Cover 3M","Box"),
-                new Item("T100","Tray","Trays In/Out","Box"),
+                new Item("C001","Clip","Clips Double 1\"","Dozen","~/Resources/Items/clips.png"),
+                new Item("C002","Clip","Clips Double 2\"","Dozen","~/Resources/Items/clips.png"),
+                new Item("C003","Clip","Clips Double 3/4\"","Dozen","~/Resources/Items/clips.png"),
+                new Item("C004","Clip","Clips Paper Large","Box","~/Resources/Items/clips.png"),
+                new Item("C005","Clip","Clips Paper Medium","Box","~/Resources/Items/clips.png"),
+                new Item("C006","Clip","Clips Paper Small","Box","~/Resources/Items/clips.png"),
+                new Item("E001","Envelope","Envelope Brown (3\"x6\")","Each","~/Resources/Items/brownenvelope.png"),
+                new Item("E002","Envelope","Envelope Brown (3\"x6\") w/Window","Each","~/Resources/Items/brownenvelope.png"),
+                new Item("E003","Envelope","Envelope Brown (5\"x7\")","Each","~/Resources/Items/brownenvelope.png"),
+                new Item("E004","Envelope","Envelope Brown (5\"x7\") w/Window","Each","~/Resources/Items/brownenvelope.png"),
+                new Item("E005","Envelope","Envelope White (3\"x6\")","Each","~/Resources/Items/whiteenvelope.png"),
+                new Item("E006","Envelope","Envelope White (3\"x6\") w/Window","Each","~/Resources/Items/whiteenvelope.png"),
+                new Item("E007","Envelope","Envelope White (5\"x7\")","Each","~/Resources/Items/whiteenvelope.png"),
+                new Item("E008","Envelope","Envelope White (5\"x7\") w/Window","Each","~/Resources/Items/whiteenvelope.png"),
+                new Item("E020","Eraser","Eraser (hard)","Each","~/Resources/Items/eraser.png"),
+                new Item("E021","Eraser","Eraser (soft)","Each","~/Resources/Items/eraser.png"),
+                new Item("E030","Exercise","Exercise Book (100 pg)","Each","~/Resources/Items/exercisebk.png"),
+                new Item("E031","Exercise","Exercise Book (120 pg)","Each","~/Resources/Items/exercisebk.png"),
+                new Item("E032","Exercise","Exercise Book A4 Hardcover (100 pg)","Each","~/Resources/Items/exercisebk.png"),
+                new Item("E033","Exercise","Exercise Book A4 Hardcover (120 pg)","Each","~/Resources/Items/exercisebk.png"),
+                new Item("E034","Exercise","Exercise Book A4 Hardcover (200 pg)","Each","~/Resources/Items/exercisebk.png"),
+                new Item("E035","Exercise","Exercise Book Hardcover (100 pg)","Each","~/Resources/Items/exercisebk.png"),
+                new Item("E036","Exercise","Exercise Book Hardcover (120 pg)","Each","~/Resources/Items/exercisebk.png"),
+                new Item("F020","File","File Separator","Set","~/Resources/Items/fileseparator.png"),
+                new Item("F021","File","File-Blue Plain","Each","~/Resources/Items/files.png"),
+                new Item("F022","File","File-Blue with Logo","Each","~/Resources/Items/files.png"),
+                new Item("F023","File","File-Brown w/o Logo","Each","~/Resources/Items/files.png"),
+                new Item("F024","File","File-Brown with Logo","Each","~/Resources/Items/files.png"),
+                new Item("F031","File","Folder Plastic Blue","Each","~/Resources/Items/folder.png"),
+                new Item("F032","File","Folder Plastic Clear","Each","~/Resources/Items/folder.png"),
+                new Item("F033","File","Folder Plastic Green","Each","~/Resources/Items/folder.png"),
+                new Item("F034","File","Folder Plastic Pink","Each","~/Resources/Items/folder.png"),
+                new Item("F035","File","Folder Plastic Yellow","Each","~/Resources/Items/folder.png"),
+                new Item("H011","Pen","Highlighter Blue","Box","~/Resources/Items/highlighter.png"),
+                new Item("H012","Pen","Highlighter Green","Box","~/Resources/Items/highlighter.png"),
+                new Item("H013","Pen","Highlighter Pink","Box","~/Resources/Items/highlighter.png"),
+                new Item("H014","Pen","Highlighter Yellow","Box","~/Resources/Items/highlighter.png"),
+                new Item("H031","Puncher","Hole Puncher 2 holes","Each","~/Resources/Items/holepuncher2.png"),
+                new Item("H032","Puncher","Hole Puncher 3 holes","Each","~/Resources/Items/holepuncher3.png"),
+                new Item("H033","Puncher","Hole Puncher Adjustable","Each","~/Resources/Items/holepuncher2.png"),
+                new Item("P010","Pad","Pad Postit Memo 1\"x2\"","Packet","~/Resources/Items/postits.png"),
+                new Item("P011","Pad","Pad Postit Memo 1/2\"x1\"","Packet","~/Resources/Items/postits.png"),
+                new Item("P012","Pad","Pad Postit Memo 1/2\"x2\"","Packet","~/Resources/Items/postits.png"),
+                new Item("P013","Pad","Pad Postit Memo 2\"x3\"","Packet","~/Resources/Items/postits.png"),
+                new Item("P014","Pad","Pad Postit Memo 2\"x4\"","Packet","~/Resources/Items/postits.png"),
+                new Item("P015","Pad","Pad Postit Memo 2\"x4\"","Packet","~/Resources/Items/postits.png"),
+                new Item("P016","Pad","Pad Postit Memo 3/4\"x2\"","Packet","~/Resources/Items/postits.png"),
+                new Item("P020","Paper","Paper Photostat A3","Box","~/Resources/Items/A3.png"),
+                new Item("P021","Paper","Paper Photostat A4","Box","~/Resources/Items/A4.png"),
+                new Item("P030","Pen","Pen Ballpoint Black","Dozen","~/Resources/Items/pensballpoint.png"),
+                new Item("P031","Pen","Pen Ballpoint Blue","Dozen","~/Resources/Items/pensballpoint.png"),
+                new Item("P032","Pen","Pen Ballpoint Red","Dozen","~/Resources/Items/pensballpoint.png"),
+                new Item("P033","Pen","Pen Felt Tip Black","Dozen","~/Resources/Items/pensfelttip.png"),
+                new Item("P034","Pen","Pen Felt Tip Blue","Dozen","~/Resources/Items/pensfelttip.png"),
+                new Item("P035","Pen","Pen Felt Tip Red","Dozen","~/Resources/Items/pensfelttip.png"),
+                new Item("P036","Pen","Pen Transparency Permanent","Packet","~/Resources/Items/pentransparency.png"),
+                new Item("P037","Pen","Pen Transparency Soluble","Packet","~/Resources/Items/pentransparency.png"),
+                new Item("P038","Pen","Pen Whiteboard Marker Black","Box","~/Resources/Items/penmarkers.png"),
+                new Item("P039","Pen","Pen Whiteboard Marker Blue","Box","~/Resources/Items/penmarkers.png"),
+                new Item("P040","Pen","Pen Whiteboard Marker Green","Box","~/Resources/Items/penmarkers.png"),
+                new Item("P041","Pen","Pen Whiteboard Marker Red","Box","~/Resources/Items/penmarkers.png"),
+                new Item("P042","Pen","Pencil 2B","Dozen","~/Resources/Items/pencils.png"),
+                new Item("P043","Pen","Pencil 2B With Eraser End","Dozen","~/Resources/Items/pencilsdozen.png"),
+                new Item("P044","Pen","Pencil 4H","Dozen","~/Resources/Items/pencils.png"),
+                new Item("P045","Pen","Pencil B","Dozen","~/Resources/Items/pencils.png"),
+                new Item("P046","Pen","Pencil B With Eraser End","Dozen","~/Resources/Items/pencilsdozen.png"),
+                new Item("R001","Ruler","Ruler 6\"","Dozen","~/Resources/Items/ruler6.png"),
+                new Item("R002","Ruler","Ruler 12\"","Dozen","~/Resources/Items/ruler12.png"),
+                new Item("S100","Scissors","Scissors","Each","~/Resources/Items/scissors.png"),
+                new Item("S040","Tape","Scotch Tape","Each","~/Resources/Items/scotchtape.png"),
+                new Item("S041","Tape","Scotch Tape Dispenser","Each","~/Resources/Items/scotchtapedispenser.png"),
+                new Item("S101","Sharpener","Sharpener","Each","~/Resources/LogicUIcon.png"),
+                new Item("S010","Shorthand","Shorthand Book (100 pg)","Each","~/Resources/Items/shorthand.png"),
+                new Item("S011","Shorthand","Shorthand Book (120 pg)","Each","~/Resources/Items/shorthand.png"),
+                new Item("S012","Shorthand","Shorthand Book (80 pg)","Each","~/Resources/Items/shorthand.png"),
+                new Item("S020","Stapler","Stapler No.28","Each","~/Resources/Items/staplers.png"),
+                new Item("S021","Stapler","Stapler No.36","Each","~/Resources/Items/staplers.png"),
+                new Item("S022","Stapler","Stapler No.28","Box","~/Resources/Items/staplers.png"),
+                new Item("S023","Stapler","Stapler No.36","Box","~/Resources/Items/staplers.png"),
+                new Item("T001","Tacks","Thumb Tacks Large","Box","~/Resources/Items/thumbtacks.png"),
+                new Item("T002","Tacks","Thumb Tacks Medium","Box","~/Resources/Items/thumbtacks.png"),
+                new Item("T003","Tacks","Thumb Tacks Small","Box","~/Resources/Items/thumbtacks.png"),
+                new Item("T020","Tparency","Transparency Blue","Box","~/Resources/LogicUIcon.png"),
+                new Item("T021","Tparency","Transparency Clear","Box","~/Resources/LogicUIcon.png"),
+                new Item("T022","Tparency","Transparency Green","Box","~/Resources/LogicUIcon.png"),
+                new Item("T023","Tparency","Transparency Red","Box","~/Resources/LogicUIcon.png"),
+                new Item("T024","Tparency","Transparency Reverse Blue","Box","~/Resources/LogicUIcon.png"),
+                new Item("T025","Tparency","Transparency Cover 3M","Box","~/Resources/LogicUIcon.png"),
+                new Item("T100","Tray","Trays In/Out","Box","~/Resources/Items/trays.png"),
             };
             foreach (Item item in items)
                 context.Items.Add(item);
@@ -822,6 +850,7 @@ namespace SSIMS.Database
             reqform.DocumentItems = documentItems;
             context.RequisitionOrders.Add(reqform);
 
+            //Approved Requisition Orders
             Staff staff2 = StaffRepository.GetByID(10010); //ARCH dept
             RequisitionOrder reqform2 = new RequisitionOrder(staff2);
             reqform2.RepliedByStaff = StaffRepository.GetByID(10006);
@@ -837,7 +866,7 @@ namespace SSIMS.Database
 
             Staff staff3 = StaffRepository.GetByID(10044); //ENGL dept
             RequisitionOrder reqform3 = new RequisitionOrder(staff3);
-            reqform2.RepliedByStaff = StaffRepository.GetByID(10041);
+            reqform3.RepliedByStaff = StaffRepository.GetByID(10041);
             List<DocumentItem> documentItems3 = new List<DocumentItem>
             {
                 new DocumentItem(ItemRepository.GetByID("C001"),10),
@@ -847,6 +876,19 @@ namespace SSIMS.Database
             reqform3.DocumentItems = documentItems3;
             reqform3.Status = (Status)1;
             context.RequisitionOrders.Add(reqform3);
+
+            Staff staff4 = StaffRepository.GetByID(10024); //COMM dept
+            RequisitionOrder reqform4 = new RequisitionOrder(staff4);
+            reqform4.RepliedByStaff = StaffRepository.GetByID(10020);
+            List<DocumentItem> documentItems4 = new List<DocumentItem>
+            {
+                new DocumentItem(ItemRepository.GetByID("C001"),5),
+                new DocumentItem(ItemRepository.GetByID("H014"),15),
+                new DocumentItem(ItemRepository.GetByID("P010"),20),
+            };
+            reqform4.DocumentItems = documentItems4;
+            reqform4.Status = (Status)1;
+            context.RequisitionOrders.Add(reqform4);
 
             RetrievalList retrievalList = new RetrievalList(staff1, DepartmentRepository.GetByID("ARTS"));
             List<TransactionItem> transactionItems = new List<TransactionItem>

@@ -12,6 +12,12 @@ namespace SSIMS.ViewModels
         {
         }
 
+        public RequisitionSummaryViewModel(int qty, string category)
+        {
+            Qty = qty;
+            Category = category;
+        }
+
         public RequisitionSummaryViewModel(int qty, string category, DateTime createdDate, string department)
         {
             Qty = qty;
@@ -19,6 +25,7 @@ namespace SSIMS.ViewModels
             CreatedDate = createdDate;
             Department = department;
             Month = createdDate.Month;
+          
         }
 
         [DisplayName("Quantity")]
@@ -31,6 +38,8 @@ namespace SSIMS.ViewModels
         public string Department { get; set; }
         [DisplayName("Month")]
         public int Month { get; set; }
+        [DisplayName("OrderCoount")]
+        public int count { get; set; }
 
 
     }

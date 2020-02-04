@@ -9,9 +9,11 @@ namespace SSIMS.Models
 {
     public class Staff
     {
+        [Display(Name = "Staff ID")]
         public int ID { get; set; }
         //public string DepartmentID { get; set; }
         public string UserAccountID { get; set; }
+        [Display(Name = "Staff Name")]
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
         [Required]
@@ -21,6 +23,7 @@ namespace SSIMS.Models
         public string StaffRole { get; set; }
 
         public Department Department { get; set; }
+        public string DepartmentID { get; set; }
 
         public Staff()
         {

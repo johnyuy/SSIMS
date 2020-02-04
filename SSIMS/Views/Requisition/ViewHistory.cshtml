@@ -1,0 +1,70 @@
+﻿@model IEnumerable<SSIMS.Models.RequisitionOrder>
+@*@model SSIMS.Models.Status*@
+@{
+    ViewBag.Title = "ViewHistory";
+}
+
+<h2>View Requisition Order History</h2>
+
+
+<table class="table">
+    <tr>
+
+        <th>
+            @Html.DisplayNameFor(model => model.ID)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.ResponseDate)
+        </th>
+
+        <th>
+            Details
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var ro in Model)
+    {
+        <tr>
+
+            <td>
+                @Html.DisplayFor(modelItem => ro.ID)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => ro.CreatedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => ro.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => ro.ResponseDate)
+            </td>
+
+            <td>
+                @if (ro.Status==SSIMS.Models.Status.Approved )
+                {
+                    @Html.ActionLink("Details", "Approve", new { id = ro.ID })
+                }
+                else
+                {
+                    @Html.ActionLink("Details", "Reject", new { id = ro.ID })
+                }
+
+            </td>
+        </tr>
+    }
+
+</table>
+
+@Html.ActionLink("View Pending Requisition", "Deal")
