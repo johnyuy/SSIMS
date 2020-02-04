@@ -290,6 +290,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Resources\Items\A3.png" />
+    <Content Include="Resources\Items\A4.png" />
     <Content Include="Resources\Items\brownenvelope.png" />
     <Content Include="Resources\Items\clips.png" />
     <Content Include="Resources\Items\eraser.png" />
@@ -302,8 +304,11 @@
     <Content Include="Resources\Items\holepuncher3.png" />
     <Content Include="Resources\Items\paperphotostats.png" />
     <Content Include="Resources\Items\pencils.png" />
+    <Content Include="Resources\Items\pencilsdozen.png" />
+    <Content Include="Resources\Items\penmarkers.png" />
     <Content Include="Resources\Items\pensballpoint.png" />
     <Content Include="Resources\Items\pensfelttip.png" />
+    <Content Include="Resources\Items\pentransparency.png" />
     <Content Include="Resources\Items\postits.png" />
     <Content Include="Resources\Items\ruler12.png" />
     <Content Include="Resources\Items\ruler6.png" />

@@ -39,7 +39,7 @@ namespace SSIMS.ViewModels
 
         public string ItemNumber;
 
-        public string ImageAddress;
+        public string ImageURL;
 
         public InventoryItemDetailsVM(InventoryItem item)
         {
@@ -50,7 +50,7 @@ namespace SSIMS.ViewModels
             InStoreQty = item.InStoreQty;
             ReorderLvl = item.ReorderLvl;
             ReorderQty = item.ReorderQty;
-
+            ImageURL = item.Item.ImageURL;
             //get top 3 tenders using TenderService
 
             //get last Purchase using PurchaseService

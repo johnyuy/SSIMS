@@ -14,20 +14,20 @@
                <td align="center"> navigation with index </td>
            </tr>
            <tr>
-               <td align="center" width="200px" height="50px">@Html.DisplayNameFor(model => model.ItemCode)</td>
+               <td align="center" width="200px" height="30px">@Html.DisplayNameFor(model => model.ItemCode)</td>
                <td align="center" width="400px">@Html.DisplayFor(model => model.ItemCode)</td>
-               <td rowspan="4" align="center" valign="middle" width="300px">img here</td>
+               <td rowspan="4" align="center" valign="middle" width="300px"><img src=@Url.Content(Model.ImageURL) style="width:300px;border:ridge" /></td>
            </tr>
            <tr>
-               <td align="center" height="50px">@Html.DisplayNameFor(model => model.Category)</td>
+               <td align="center" height="30px">@Html.DisplayNameFor(model => model.Category)</td>
                <td align="center">@Html.DisplayFor(model => model.Category)</td>
            </tr>
            <tr>
-               <td align="center" height="50px">@Html.DisplayNameFor(model => model.Description)</td>
+               <td align="center" height="30px">@Html.DisplayNameFor(model => model.Description)</td>
                <td align="center">@Html.DisplayFor(model => model.Description)</td>
            </tr>
            <tr>
-               <td align="center" height="50px">@Html.DisplayNameFor(model => model.UOM)</td>
+               <td align="center" height="30px">@Html.DisplayNameFor(model => model.UOM)</td>
                <td align="center">@Html.DisplayFor(model => model.UOM)</td>
            </tr>
        </table>
