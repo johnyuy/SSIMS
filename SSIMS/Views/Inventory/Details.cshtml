@@ -5,14 +5,65 @@
     ViewBag.Header = "Item Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
     bool isLow = Model.InStoreQty <= Model.ReorderLvl ? true : false;
+    string cI = "", mI = "", Index = "";
+    bool hasPrev = false, hasNext = false;
+    if (ViewBag.CurrentItemIndex != null)
+    {
+        cI = ViewBag.CurrentItemIndex.ToString();
+        mI = ViewBag.MaxItemsCount.ToString();
+        Index = cI + " / " + mI;
+        hasPrev = int.Parse(cI) > 1 ? true : false;
+        hasNext = int.Parse(cI) == int.Parse(mI) ? false : true;
+    }
+    string searchString = Session["InventorySearchString"]==null? "":Session["InventorySearchString"].ToString();
+    string lowStock = Session["InventoryLowStockMode"]==null? "":Session["InventoryLowStockMode"].ToString();
 }
+<script>
+    function goPrev() {
+        post('/inventory/details', { 'id': ViewBag.PrevItemID});
+    }
+
+    function goNext() {
+        post('/inventory/details', { 'id': ViewBag.NextItemID});
+    }
+
+    function post(path, params, method='post') {
+      const form = document.createElement('form');
+      form.method = method;
+      form.action = path;
+
+      for (const key in params) {
+        if (params.hasOwnProperty(key)) {
+          const hiddenField = document.createElement('input');
+          hiddenField.type = 'hidden';
+          hiddenField.name = key;
+          hiddenField.value = params[key];
+          form.appendChild(hiddenField);
+        }
+      }
+      document.body.appendChild(form);
+      form.submit();
+    }
+</script>
+
+
 
 <div style="height:800px">
    <div id="item-information" style="margin:20px 0px 5px 10px;width:900px;border:1px solid lightgray">
        <table style="font-size:17px">
            <tr style="background-color:white">
                <td colspan="2" align="center" height="50px" style="font-size:22px">Item Information</td>
-               <td align="center"> navigation with index </td>
+               <td align="center">
+                   @if (hasPrev)
+                   {
+                       <a style="text-decoration:none" href="~/inventory/details/@ViewBag.PrevItemID"><<</a>
+                   }
+                   &nbsp; @Index &nbsp;
+                   @if (hasNext)
+                   {
+                       <a style="text-decoration:none" href="~/inventory/details/@ViewBag.NextItemID">>></a>
+                   }
+               </td>
            </tr>
            <tr><td height="10px"></td><td></td><td rowspan="6" align="left" valign="middle" width="280px"><img src=@Url.Content(Model.ImageURL) style="width:280px;" /></td></tr>
            <tr>
@@ -91,6 +142,6 @@
         </table>
     </div>
 </div>
-<div style="bottom:100px; position:absolute">
-    @Html.ActionLink("Back to List", "Index")
+<div style="bottom:200px; position:absolute">
+    @Html.ActionLink("Back to List", "Index",  new {searchString = searchString, lowStock = lowStock})
 </div>

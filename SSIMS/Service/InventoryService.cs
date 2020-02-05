@@ -26,6 +26,35 @@ namespace SSIMS.Service
             }
             return 1;
         }
+        public static int GetNextIndexFromSearchList(int currentID, InventoryViewModel inventoryViewModel)
+        {
+            if (inventoryViewModel == null)
+                return 0;
+            List<InventoryItem> list = inventoryViewModel.inventoryItems;
+            if (list.Count == 0)
+                return 0;
 
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (currentID == list[i].ID && i<list.Count-1)
+                    return list[i + 1].ID;
+            }
+            return 0;
+        }
+        public static int GetPrevIndexFromSearchList(int currentID, InventoryViewModel inventoryViewModel)
+        {
+            if (inventoryViewModel == null)
+                return 0;
+            List<InventoryItem> list = inventoryViewModel.inventoryItems;
+            if (list.Count == 0)
+                return 0;
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (currentID == list[i].ID && i > 0)
+                    return list[i - 1].ID;
+            }
+            return 0;
+        }
     }
 }

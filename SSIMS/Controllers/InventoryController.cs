@@ -48,17 +48,17 @@ namespace SSIMS.Controllers
                 return RedirectToAction("Index");
             
             InventoryViewModel inventoryViewModel = (InventoryViewModel)Session["InventorySearchList"];
-
-            if(inventoryViewModel != null)
+            ViewBag.MaxItemsCount = 1;
+            ViewBag.CurrentItemIndex = 1;
+            ViewBag.PrevItemID = "";
+            ViewBag.NextItemID = "";
+            if (inventoryViewModel != null)
             {
                 ViewBag.MaxItemsCount = inventoryViewModel.inventoryItems.Count();
                 ViewBag.CurrentItemIndex = InventoryService.GetItemIndexFromSearchList(inventoryItem.ID, inventoryViewModel);
-            } else
-            {
-                ViewBag.MaxItemsCount = 1;
-                ViewBag.CurrentItemIndex = 1;
+                ViewBag.PrevItemID = InventoryService.GetPrevIndexFromSearchList(inventoryItem.ID, inventoryViewModel);
+                ViewBag.NextItemID = InventoryService.GetNextIndexFromSearchList(inventoryItem.ID, inventoryViewModel); ;
             }
-            
             return View(inventoryItemDetailsVM);
         }
 
