@@ -6,9 +6,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div>
-   <div id="item-information" style="margin:20px 20px 5px 20px">
-       <table style="font-size:18px">
+<div style="height:800px">
+   <div id="item-information" style="margin:20px 0px 5px 10px;width:1000px;">
+       <table style="font-size:18px" border="1">
            <tr>
                <td colspan="2" align="center" height="50px" style="font-size:22px">Item Information</td>
                <td align="center"> navigation with index </td>
@@ -32,13 +32,38 @@
            </tr>
        </table>
    </div>
-    <div id="stock-details">
-
+    <div id="stock-details" style="width:450px;margin-left:10px;height:200px; float:left;">
+        <table style="font-size:18px;width:100%" border="1" >
+            <tr align="center">
+                <td colspan="2" height="50px" style="font-size:22px">Stock Information</td>
+            </tr>
+            <tr align="center">
+                <td colspan="2" height="30px">@Html.DisplayNameFor(model => model.InStoreQty)</td>
+            </tr>
+            <tr align="center">
+                <td colspan="2" height="30px">@Html.DisplayFor(model => model.InStoreQty)</td>
+            </tr>
+            <tr align="center">
+                <td height="30px">@Html.DisplayNameFor(model => model.ReorderLvl)</td>
+                <td width="50%">@Html.DisplayFor(model => model.ReorderLvl)</td>
+            </tr>
+            <tr align="center">
+                <td height="30px">@Html.DisplayNameFor(model => model.ReorderQty)</td>
+                <td>@Html.DisplayFor(model => model.ReorderQty)</td>
+            </tr>
+        </table>
     </div>
-    <div id="supplier-information">
-
+    <div id="supplier-information" style="width:450px;height:auto;  float:left;">
+        <table style="font-size:18px;width:100%" border="1">
+            <tr align="center"><td height="50px" style="font-size:22px">Suppliers</td></tr>
+            <tr align="center"><td height="30px">@Html.DisplayFor(model=>model.Supplier1)</td></tr>
+            <tr align="center"><td height="30px">@Html.DisplayFor(model=>model.Supplier2)</td></tr>
+            <tr align="center"><td height="30px">@Html.DisplayFor(model=>model.Supplier3)</td></tr>
+            <tr align="center" style="font-size:12px"><td height="30px">@Html.DisplayFor(model=>model.LastOrder)</td></tr>
+            
+        </table>
     </div>
 </div>
-<p>
+<div style="bottom:100px; position:absolute">
     @Html.ActionLink("Back to List", "Index")
-</p>
+</div>

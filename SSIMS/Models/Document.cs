@@ -39,7 +39,7 @@ namespace SSIMS.Models
             RepliedByStaff = null;
             CreatedDate = DateTime.Now;
             ResponseDate = null;
-            Status = Status.Pending;
+            Status = 0;
         }
         public Document() {
             CreatedDate = DateTime.Now;

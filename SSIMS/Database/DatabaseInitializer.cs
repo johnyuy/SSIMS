@@ -998,6 +998,7 @@ namespace SSIMS.Database
 
             Staff staff1 = StaffRepository.GetByID(10003);
 
+
             Debug.WriteLine("\tInitializing Purchase Orders");
             // Clerk 1
             PurchaseOrder PO1 = new PurchaseOrder(10003, "ALPA", uow);
@@ -1062,6 +1063,17 @@ namespace SSIMS.Database
             PO6.PurchaseItems = purchaseItems6;
             context.PurchaseOrders.Add(PO6);
 
+
+            //convert pending PO PurchaseItems into a PO
+            PurchaseOrder P07 = new PurchaseOrder(10004, "CHEP", uow);
+            List<PurchaseItem> purchaseItems7 = new List<PurchaseItem>{
+                uow.PurchaseItemRepository.GetByID(5),
+                uow.PurchaseItemRepository.GetByID(9),
+                uow.PurchaseItemRepository.GetByID(13),
+                uow.PurchaseItemRepository.GetByID(20),
+            };
+            P07.PurchaseItems = purchaseItems7;
+            context.PurchaseOrders.Add(P07);
             context.SaveChanges();
         }
 
