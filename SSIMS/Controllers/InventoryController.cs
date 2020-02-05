@@ -59,8 +59,6 @@ namespace SSIMS.Controllers
                 ViewBag.CurrentItemIndex = 1;
             }
             
-
-
             return View(inventoryItemDetailsVM);
         }
 

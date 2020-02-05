@@ -29,10 +29,12 @@ namespace SSIMS.ViewModels
         [Display(Name = "Tender Price")]
         public string TenderPrice { get; set; }
         public string Supplier1 { get; set; }
+        public string Supplier1Tender { get; set; }
         public string Supplier2 { get; set; }
+        public string Supplier2Tender { get; set; }
         public string Supplier3 { get; set; }
+        public string Supplier3Tender { get; set; }
         public string LastOrder { get; set; }
-        public string ItemNumber { get; set; }
         public string ImageURL { get; set; }
 
         public InventoryItemDetailsVM(InventoryItem item)
@@ -57,6 +59,10 @@ namespace SSIMS.ViewModels
                 Supplier1 = top[0].Supplier.ID ?? "";
                 Supplier2 = top[1].Supplier.ID ?? "";
                 Supplier3 = top[2].Supplier.ID ?? "";
+                Supplier1Tender = top[0].Price.ToString($"${0:0.00}") ?? "na";
+                Supplier2Tender = top[1].Price.ToString($"${0:0.00}") ?? "na";
+                Supplier3Tender = top[2].Price.ToString($"${0:0.00}") ?? "na";
+
             }
             PurchaseItem purchaseItem = purchaseService.recentPurchaseItem(item.Item) ?? null;
            
@@ -67,22 +73,20 @@ namespace SSIMS.ViewModels
                 PurchaseOrder PO = purchase.PurchaseOrder;
                 if (PO != null)
                 {
-                    string POID = PO.ID.ToString();
+                    string POID = PO.ID.ToString($"PO-{0:1000000}");
                     string POStatus = PO.Status.ToString();
                     string OrderedBy = PO.CreatedByStaff.Name;
                     string OrderDate = PO.CreatedDate.ToString("dd/MM/yyyy");
-                    LastOrder = "Last Purchase Order (" + POID + " / " + POStatus + ") to " + Supplier + " created by " + OrderedBy + " on " + OrderDate;
+                    LastOrder = "Last Purchase " + POID + " (" + POStatus + ") to " + Supplier + " created by " + OrderedBy + " on " + OrderDate;
                 }
                 else
                 {
                     if(purchase.Qty>0)
-                        LastOrder = "Item currently in Cart for " + Supplier;
+                        LastOrder = "Item currently in Purchase Cart for " + Supplier;
                 }
                 
             }
             Debug.WriteLine(LastOrder);
-
-            ItemNumber = "1";
         }
 
     }
