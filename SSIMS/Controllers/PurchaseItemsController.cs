@@ -121,7 +121,7 @@ namespace SSIMS.Controllers
         {
 
             Tender tender = uow.TenderRepository.Get(filter: x => x.ID == id, includeProperties: "Item, Supplier").FirstOrDefault();
-            InventoryItem inventoryItem = uow.InventoryItemRepository.GetByID(tender.Item.ID);
+            InventoryItem inventoryItem = uow.InventoryItemRepository.Get(filter: x => x.Item.ID == tender.Item.ID).FirstOrDefault();
             PurchaseItem purchaseItem = new PurchaseItem();
             purchaseItem  = uow.PurchaseItemRepository.Get(filter: x => x.PurchaseOrder == null & x.Tender.ID == id, includeProperties: "Tender.Item").FirstOrDefault();
 
@@ -136,7 +136,7 @@ namespace SSIMS.Controllers
                 uow.PurchaseItemRepository.Update(purchaseItem);
                 uow.Save();
             }
-            return View("Index");
+            return RedirectToAction("Index");
         }
 
 
