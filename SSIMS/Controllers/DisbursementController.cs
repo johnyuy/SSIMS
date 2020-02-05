@@ -16,8 +16,8 @@ using SSIMS.Filters;
 
 namespace SSIMS.Controllers
 {
-    [AuthenticationFilter]
-    [AuthorizationFilter]
+    //[AuthenticationFilter]
+    //[AuthorizationFilter]
     public class DisbursementController : Controller
     {
         private DatabaseContext db = new DatabaseContext();

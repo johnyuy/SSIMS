@@ -1,43 +1,34 @@
 ﻿@model IEnumerable<SSIMS.ViewModels.RetrievalItemViewModel>
-
+@using SSIMS.ViewModels;
 
 @{
     ViewBag.Title = "Retrieval";
     ViewBag.Header = "Retrieval List";
-    ViewBag.Section = "Disbursement";
-}
-@{
+    ViewBag.Section = "Disbursements";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    List<RetrievalItemViewModel> vm = Model.ToList();
 }
-@*<head>
-    <style>
-        [data-toggle="toggle"] {
-            display: none;
+
+<style>
+
+</style>
+<script>
+
+    function hide(i) {
+        
+        var element = document.getElementById(i);
+        var isHidden = element.hidden;
+        if (isHidden) {
+            element.hidden = false;
+            
+        } else {
+            element.hidden = true;
         }
-    </style>
-    <script>
-            $(document).ready(function () {
-                $('[data-toggle="toggle"]').change(function () {
-                    $(this).parents().next('.hideme').toggle();
-                });
-            });
+    }
+</script>
 
 
-            @*var $headers = $('.header').click(function () {
-                console.log("Clicked");
-                $(this).find('span').text(function (_, value) {
-                    return value == '-' ? '+' : '-'
-                });
-                $(this).nextUntil('tr.header').slideToggle(100, function () { });
-            });
-    </script>
-</head>*@
-
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table" style="border-bottom: 1px solid; border-bottom-color: lightslategrey">
+<table class="table" id="one" style="border-bottom: 1px solid; border-bottom-color: lightslategrey">
     <tr class="description">
         <th width="30%">
             @Html.DisplayNameFor(model => model.item.Description)
@@ -51,18 +42,20 @@
     </tr>
 </table>
 
-@foreach (var Retrievalitem in Model)
+@for (int i = 0; i < vm.Count(); i++)
 {
-    @* @using (Html.BeginForm("Confirm", "Disbursement"))
-        {*@
+
+    RetrievalItemViewModel Retrievalitem = vm[i];
+    string index = "item" + (i+1).ToString();
+
     <form method="post">
         <table class="table" style="border:1px solid; border-color:lightgray; border-radius: 5px">
             
             <tbody class="labels">
                 <tr>
                     <th width="30%">
-                        <input type="checkbox" data-toggle="toggle">
-                        <span>+</span>    @Html.DisplayFor(modelItem => Retrievalitem.item.Description)
+                        <input type="checkbox" onclick=hide("@index")>
+                         @Html.DisplayFor(modelItem => Retrievalitem.item.Description)
                     </th>
                     <td style="text-align:center" width="30%">
                         @Html.DisplayFor(modelItem => Retrievalitem.transactionItem.HandOverQty)
@@ -72,7 +65,8 @@
                     </td>
                 </tr>
             </tbody>
-            <tbody class="hideme">
+            
+            <tbody id="@index" >
                 <tr>
                     <td colspan="3">
                         <table align="center" style="border:1px solid; border-color:lightgray; border-radius: 5px;">
@@ -104,14 +98,14 @@
                 </tr>
                 <tr>
                     <td colspan="3" align="right">
-                        <button type="submit" value="Submit">Confirm</button>
+                        <button  value="">Confirm</button>
                     </td>
                 </tr>
             </tbody>
             
         </table>
     </form>
-
+    
 }
 
 
