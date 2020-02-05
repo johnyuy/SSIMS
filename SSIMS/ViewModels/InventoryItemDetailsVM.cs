@@ -7,6 +7,8 @@ using SSIMS.DAL;
 using SSIMS.Service;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using SSIMS.Service;
+using System.Diagnostics;
 
 namespace SSIMS.ViewModels
 {
@@ -43,6 +45,8 @@ namespace SSIMS.ViewModels
 
         public InventoryItemDetailsVM(InventoryItem item)
         {
+            PurchaseService purchaseService = new PurchaseService();
+
             ItemCode = item.ItemID;
             Category = item.Item.Category;
             Description = item.Item.Description;
@@ -52,7 +56,10 @@ namespace SSIMS.ViewModels
             ReorderQty = item.ReorderQty;
             ImageURL = item.Item.ImageURL;
             //get top 3 tenders using PurchaseService
-
+            Tender[] top = purchaseService.topTender(item.Item);
+            Debug.WriteLine("tender 1 = " + top[0].Supplier.SupplierName + " x $" + top[0].Price);
+            Debug.WriteLine("tender 2 = " + top[1].Supplier.SupplierName + " x $" + top[1].Price);
+            Debug.WriteLine("tender 3 = " + top[2].Supplier.SupplierName + " x $" + top[2].Price);
             //get last Purchase using PurchaseService
 
         }

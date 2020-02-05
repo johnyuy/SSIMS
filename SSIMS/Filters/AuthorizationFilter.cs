@@ -35,7 +35,7 @@ namespace SSIMS.Filters
                         userGroup = "dept";
                     if (userType == "manager" || userType == "supervisor" || userType == "clerk")
                         userGroup = "store";
-                    Debug.Write("[Authorization Filter :  " + userType + "-" + userGroup + "]");
+                    Debug.WriteLine("[Authorization Filter :  " + userType + "-" + userGroup + "]");
                     HttpContext.Current.Session["userGroup"] = userGroup;
                     HttpContext.Current.Session["userType"] = userType;
                 }
