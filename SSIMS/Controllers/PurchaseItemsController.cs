@@ -116,6 +116,30 @@ namespace SSIMS.Controllers
             return RedirectToAction("Index", "PurchaseOrders");
         }
 
+
+        public ActionResult AddPurchaseItem(int id)
+        {
+
+            Tender tender = uow.TenderRepository.Get(filter: x => x.ID == id, includeProperties: "Item, Supplier").FirstOrDefault();
+            InventoryItem inventoryItem = uow.InventoryItemRepository.GetByID(tender.Item.ID);
+            PurchaseItem purchaseItem = new PurchaseItem();
+            purchaseItem  = uow.PurchaseItemRepository.Get(filter: x => x.PurchaseOrder == null & x.Tender.ID == id, includeProperties: "Tender.Item").FirstOrDefault();
+
+            if (purchaseItem == null)
+            {
+                PurchaseItem PI = new PurchaseItem(tender.Item, tender.Supplier, inventoryItem.ReorderQty, uow);
+                uow.PurchaseItemRepository.Insert(PI);
+                uow.Save();
+            } else
+            {
+                purchaseItem.Qty = purchaseItem.Qty + inventoryItem.ReorderQty;
+                uow.PurchaseItemRepository.Update(purchaseItem);
+                uow.Save();
+            }
+            return View("Index");
+        }
+
+
         // GET: PurchaseItems/AddAllLowStockToPurchaseItems
         public ActionResult AddAllLowStockToPurchaseItems()
         {
