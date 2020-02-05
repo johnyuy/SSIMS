@@ -1080,6 +1080,11 @@ namespace SSIMS.Database
             };
             DO1.DocumentItems = documentItems;
             DO1.Completed(Clerk1);
+
+            PurchaseOrder PO1 = uow.PurchaseOrderRepository.GetByID(1);
+            PO1.Completed();
+
+            uow.PurchaseOrderRepository.Update(PO1);
             context.DeliveryOrders.Add(DO1);
 
             DeliveryOrder DO2 = new DeliveryOrder(10004, "BANE", 2, uow);
@@ -1090,16 +1095,26 @@ namespace SSIMS.Database
             };
             DO2.DocumentItems = documentItems2;
             DO2.Completed(Clerk1);
+
+            PurchaseOrder PO2 = uow.PurchaseOrderRepository.GetByID(2);
+            PO2.Completed();
+
+            uow.PurchaseOrderRepository.Update(PO2);
             context.DeliveryOrders.Add(DO2);
 
             DeliveryOrder DO3 = new DeliveryOrder(10004, "BANE", 3, uow);
             List<DocumentItem> documentItems3 = new List<DocumentItem>{
-                new DocumentItem("C003",10,uow),
+                new DocumentItem("C003",5,uow),
                 new DocumentItem("P046", 9,uow),
                 new DocumentItem("R001",3,uow),
             };
             DO3.DocumentItems = documentItems3;
             DO3.Completed(Clerk1);
+
+            PurchaseOrder PO3 = uow.PurchaseOrderRepository.GetByID(3);
+            PO3.InProgress();
+
+            uow.PurchaseOrderRepository.Update(PO3);
             context.DeliveryOrders.Add(DO3);
 
             context.SaveChanges();

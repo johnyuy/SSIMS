@@ -58,12 +58,6 @@ namespace SSIMS.Controllers
                 case "Desc":
                     purchaseItems = purchaseItems.OrderByDescending(i => i.Tender.Item.Description);
                     break;
-                //case "Item_Supplier":
-                //    purchaseItems = purchaseItems.OrderBy(i => i.Tender.Supplier.ID);
-                //    break;
-                //case "Supplier":
-                //    purchaseItems = purchaseItems.OrderByDescending(i => i.Tender.Supplier.ID);
-                //    break;
                 default:
                     purchaseItems = purchaseItems.OrderBy(i => i.Tender.Item.ID);
                     break;

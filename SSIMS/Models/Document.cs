@@ -73,10 +73,20 @@ namespace SSIMS.Models
             Status = Status.Completed;
         }
 
+        public void Completed()
+        {
+            Status = Status.Completed;
+        }
+
         public void InProgress(Staff RepliedByStaffID)
         {
             RepliedByStaff = RepliedByStaffID;
             ResponseDate = DateTime.Now;
+            Status = Status.InProgress;
+        }
+
+        public void InProgress()
+        {
             Status = Status.InProgress;
         }
     }

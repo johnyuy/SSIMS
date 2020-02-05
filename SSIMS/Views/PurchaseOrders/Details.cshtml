@@ -11,10 +11,17 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.ID)
+            Purchase Order ID
+            @*@Html.DisplayNameFor(model => model.ID)*@
         </dt>
 
         <dd>
+
+            @*@{
+                var id = Convert.ToInt32(@Html.ValueFor(model => model.ID).ToString()) + 100000;
+                var fullid = "PO" + id.ToString();
+                @Html.Raw(fullid);
+            }*@
             @Html.DisplayFor(model => model.ID)
         </dd>
 
@@ -27,7 +34,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Supplier.Address)
+            @*@Html.DisplayNameFor(model => model.Supplier.Address)*@
         </dt>
 
         <dd>
@@ -35,7 +42,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Supplier.PhoneNumber)
+            @*@Html.DisplayNameFor(model => model.Supplier.PhoneNumber)*@
         </dt>
 
         <dd>
@@ -43,8 +50,8 @@
         </dd>
 
         <dt>
-            Attn:
-            @Html.DisplayNameFor(model => model.CreatedByStaff.Name)
+            Submitted By
+            @*@Html.DisplayNameFor(model => model.CreatedByStaff.Name)*@
         </dt>
 
         <dd>
@@ -52,14 +59,16 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.CreatedDate)
+            Date Submitted
+            @*@Html.DisplayNameFor(model => model.CreatedDate)*@
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.CreatedDate)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.RepliedByStaff.Name)
+            Approved by
+            @*@Html.DisplayNameFor(model => model.RepliedByStaff.Name)*@
         </dt>
 
         <dd>
@@ -67,7 +76,8 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.ResponseDate)
+            Approved On
+            @*@Html.DisplayNameFor(model => model.ResponseDate)*@
         </dt>
 
         <dd>
@@ -77,17 +87,29 @@
         <dt>
             @Html.DisplayNameFor(model => model.Status)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.Status)
         </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.TotalCost)
-        </dt>
+        @if (Html.ValueFor(model => model.Status).ToString() == "InProgress" || Html.ValueFor(model => model.Status).ToString() == "Completed")
+        {
+            <dt>
+                Delivery Orders
+            </dt>
+            <dd></dd>
+            foreach (var item in Model.DeliveryOrders)
+            {
+                <dt></dt>
+                <dd>
+                    @{
 
-        <dd>
-            @Html.DisplayFor(model => model.TotalCost)
-        </dd>
+                        var id = Convert.ToInt32(@Html.ValueFor(ModelItem => item.ID).ToString()) + 100000;
+                        var fullid = "DO" + id.ToString();
+
+                        @Html.Raw(fullid); @Html.Raw("|"); @Html.ActionLink("View", "ViewDeliveryOrder", new { id = item.ID })
+                    }
+                </dd>
+            }
+    }
 
     </dl>
     <table class="table">
@@ -131,14 +153,57 @@
                 </td>
             </tr>
         }
+        <tr>
+            <th>
+               
+            </th>
+            <th>
+                
+            </th>
+            <th>
+                
+            </th>
+            <th>
+                Total Cost
+            </th>
+            <th>
+                @Html.DisplayFor(model => model.TotalCost)
+            </th>
+            <th></th>
+        </tr>
 
-    <tr>
-        <td>@Html.ActionLink("Reject", "Reject", new { id = Model.ID } )</td>
-        <td></td>
-        <td>@Html.ActionLink("Create Delivery Order", "DeliveryOrder", new { id = Model.ID })</td>
-        <td>@Html.ActionLink("Cancel", "Cancel" ,new { id = Model.ID })</td>
-        <td>@Html.ActionLink("Approve", "Approve" ,new { id = Model.ID })</td>
-    </tr>
+        <tr>
+            <td>
+                @if (Html.ValueFor(model => model.Status).ToString() == "Pending")
+                {
+                    @Html.ActionLink("Reject", "Reject", new { id = Model.ID })
+                }
+            </td>
+            <td></td>
+
+            <td>
+                @if (Html.ValueFor(model => model.Status).ToString() == "InProgress")
+                {
+                    @Html.ActionLink("Continue Delivery Order", "DeliveryOrder", new { id = Model.ID })
+                }
+                @if (Html.ValueFor(model => model.Status).ToString() == "Approved")
+                {
+                    @Html.ActionLink("Create Delivery Order", "DeliveryOrder", new { id = Model.ID })
+                }
+            </td>
+            <td>
+                @if (Html.ValueFor(model => model.Status).ToString() == "Pending")
+                {
+                    @Html.ActionLink("Cancel", "Cancel", new { id = Model.ID })
+                }
+            </td>
+            <td>
+                @if (Html.ValueFor(model => model.Status).ToString() == "Pending")
+                {
+                    @Html.ActionLink("Approve", "Approve", new { id = Model.ID })
+                }
+            </td>
+        </tr>
     </table>
 </div>
 <p>
