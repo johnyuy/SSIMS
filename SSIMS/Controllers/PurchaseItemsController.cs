@@ -20,6 +20,7 @@ namespace SSIMS.Controllers
     {
         private DatabaseContext db = new DatabaseContext();
         private UnitOfWork uow = new UnitOfWork();
+        private ILoginService loginService = new LoginService();
 
         // GET: PurchaseItems
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
@@ -98,7 +99,7 @@ namespace SSIMS.Controllers
                 "From Suppliers, Tenders, PurchaseItems where Suppliers.ID = Tenders.Supplier_ID AND PurchaseItems.Tender_ID = Tenders.ID AND PurchaseItems.PurchaseOrder_ID IS NULL");
 
             // use session data later 
-            Staff clerk = uow.StaffRepository.GetByID(10003);
+            Staff clerk = loginService.StaffFromSession;
 
             Debug.WriteLine("GeneratePurchaseOrders");
 
