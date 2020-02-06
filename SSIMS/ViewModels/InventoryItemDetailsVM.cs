@@ -11,7 +11,6 @@ namespace SSIMS.ViewModels
 {
     public class InventoryItemDetailsVM
     {
-        
         [Display(Name="Item Code")]
         public string ItemCode { get; set; }
         [Display(Name="Category")]
@@ -27,6 +26,9 @@ namespace SSIMS.ViewModels
         [Display(Name = "Reorder Quantity")]
         public int ReorderQty { get; set; }
         [Display(Name = "Tender Price")]
+        public int Tender1 { get; set; }
+        public int Tender2 { get; set; }
+        public int Tender3 { get; set; }
         public string TenderPrice { get; set; }
         public string Supplier1 { get; set; }
         public string Supplier1Tender { get; set; }
@@ -34,9 +36,10 @@ namespace SSIMS.ViewModels
         public string Supplier2Tender { get; set; }
         public string Supplier3 { get; set; }
         public string Supplier3Tender { get; set; }
-        public string LastOrder { get; set; }
+        public string LastOrderLine1 { get; set; }
+        public string LastOrderLine2 { get; set; }
         public string ImageURL { get; set; }
-
+        public string UnitDisplay { get; set; }
         public InventoryItemDetailsVM(InventoryItem item)
         {
             PurchaseService purchaseService = new PurchaseService();
@@ -51,11 +54,19 @@ namespace SSIMS.ViewModels
             ReorderQty = item.ReorderQty;
             ImageURL = item.Item.ImageURL;
 
-            LastOrder = "No purchases in record";
+            LastOrderLine1 = "No purchases in record";
+            LastOrderLine2 = "";
+            if (UOM == "Each")
+                UnitDisplay = "Units";
+            else
+                UnitDisplay = UOM;
 
             Tender[] top = purchaseService.topTender(item.Item);
             if (top != null)
             {
+                Tender1 = top[0].ID;
+                Tender2 = top[1].ID;
+                Tender3 = top[2].ID;
                 Supplier1 = top[0].Supplier.ID ?? "";
                 Supplier2 = top[1].Supplier.ID ?? "";
                 Supplier3 = top[2].Supplier.ID ?? "";
@@ -77,17 +88,19 @@ namespace SSIMS.ViewModels
                     string POStatus = PO.Status.ToString();
                     string OrderedBy = PO.CreatedByStaff.Name;
                     string OrderDate = PO.CreatedDate.ToString("dd/MM/yyyy");
-                    LastOrder = "Last Purchase " + POID + " (" + POStatus + ") to " + Supplier + " created by " + OrderedBy + " on " + OrderDate;
+                    LastOrderLine1 = "Last Purchase " + POID + " (" + POStatus + ") to " + Supplier ;
+                    LastOrderLine2 = "Created by " + OrderedBy + " on " + OrderDate;
                 }
                 else
                 {
-                    if(purchase.Qty>0)
-                        LastOrder = "Item currently in Purchase Cart for " + Supplier;
+                    if (purchase.Qty > 0)
+                    {
+                        LastOrderLine1 = "Item currently in Purchase Cart for " + Supplier;
+                        LastOrderLine2 = "Quantity Requested = " + purchase.Qty + " " + UnitDisplay;
+                    }
                 }
-                
             }
-            Debug.WriteLine(LastOrder);
+            Debug.WriteLine(LastOrderLine1 + ", " + LastOrderLine2);
         }
-
     }
 }
