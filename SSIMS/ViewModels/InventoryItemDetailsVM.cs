@@ -84,7 +84,7 @@ namespace SSIMS.ViewModels
                 PurchaseOrder PO = purchase.PurchaseOrder;
                 if (PO != null)
                 {
-                    string POID = PO.ID.ToString($"PO-{0:1000000}");
+                    string POID = PO.ID.ToString($"PO{0:1000000}");
                     string POStatus = PO.Status.ToString();
                     string OrderedBy = PO.CreatedByStaff.Name;
                     string OrderDate = PO.CreatedDate.ToString("dd/MM/yyyy");

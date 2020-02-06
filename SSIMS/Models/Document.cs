@@ -88,11 +88,6 @@ namespace SSIMS.Models
 
         public void InProgress()
         {
-            Status = Status.InProgress;
-        }
-
-        public void InProgress()
-        {
             ResponseDate = DateTime.Now;
             Status = Status.InProgress;
         }
