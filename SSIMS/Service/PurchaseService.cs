@@ -63,7 +63,7 @@ namespace SSIMS.Service
         public Tender[] topTender(Item item)
         {
             Tender[] top = new Tender[3];
-            List<Tender> tenders = unitOfWork.TenderRepository.GetWithRawSql("SELECT TOP (3) ID, Price, Item_ID, Supplier_ID  FROM Tenders WHERE Item_ID = 'C001' Order By Price").ToList();
+            List<Tender> tenders = unitOfWork.TenderRepository.GetWithRawSql("SELECT TOP (3) ID, Price, Item_ID, Supplier_ID  FROM Tenders WHERE Item_ID = '" + item.ID +"' Order By Price").ToList();
             if (tenders != null)
             {
                 for (int i = 0; i < 3; i++)

@@ -890,6 +890,23 @@ namespace SSIMS.Database
             reqform4.Status = (Status)1;
             context.RequisitionOrders.Add(reqform4);
 
+
+            Staff staff5 = StaffRepository.GetByID(10024); //COMM dept
+            RequisitionOrder reqform5 = new RequisitionOrder(staff5);
+            reqform5.RepliedByStaff = StaffRepository.GetByID(10023);
+            List<DocumentItem> documentItems5 = new List<DocumentItem>
+            {
+                new DocumentItem(ItemRepository.GetByID("C001"),1),
+                new DocumentItem(ItemRepository.GetByID("H014"),4),
+                new DocumentItem(ItemRepository.GetByID("F033"),12),
+            };
+            reqform5.DocumentItems = documentItems5;
+            reqform5.Status = (Status)1;
+            context.RequisitionOrders.Add(reqform5);
+
+
+
+
             RetrievalList retrievalList = new RetrievalList(staff1, DepartmentRepository.GetByID("ARTS"));
             List<TransactionItem> transactionItems = new List<TransactionItem>
             {
@@ -899,6 +916,11 @@ namespace SSIMS.Database
             };
             retrievalList.ItemTransactions = transactionItems;
             context.RetrievalLists.Add(retrievalList);
+
+
+
+
+
 
             DisbursementList disbursementList = new DisbursementList(staff1, DepartmentRepository.GetByID("ARTS"));
             disbursementList.RepliedByStaff = StaffRepository.GetByID(10014);
@@ -976,6 +998,7 @@ namespace SSIMS.Database
 
             Staff staff1 = StaffRepository.GetByID(10003);
 
+
             Debug.WriteLine("\tInitializing Purchase Orders");
             // Clerk 1
             PurchaseOrder PO1 = new PurchaseOrder(10003, "ALPA", uow);
@@ -1040,6 +1063,17 @@ namespace SSIMS.Database
             PO6.PurchaseItems = purchaseItems6;
             context.PurchaseOrders.Add(PO6);
 
+
+            //convert pending PO PurchaseItems into a PO
+            PurchaseOrder P07 = new PurchaseOrder(10004, "CHEP", uow);
+            List<PurchaseItem> purchaseItems7 = new List<PurchaseItem>{
+                uow.PurchaseItemRepository.GetByID(5),
+                uow.PurchaseItemRepository.GetByID(9),
+                uow.PurchaseItemRepository.GetByID(13),
+                uow.PurchaseItemRepository.GetByID(20),
+            };
+            P07.PurchaseItems = purchaseItems7;
+            context.PurchaseOrders.Add(P07);
             context.SaveChanges();
         }
 
@@ -1058,6 +1092,11 @@ namespace SSIMS.Database
             };
             DO1.DocumentItems = documentItems;
             DO1.Completed(Clerk1);
+
+            PurchaseOrder PO1 = uow.PurchaseOrderRepository.GetByID(1);
+            PO1.Completed();
+
+            uow.PurchaseOrderRepository.Update(PO1);
             context.DeliveryOrders.Add(DO1);
 
             DeliveryOrder DO2 = new DeliveryOrder(10004, "BANE", 2, uow);
@@ -1068,16 +1107,26 @@ namespace SSIMS.Database
             };
             DO2.DocumentItems = documentItems2;
             DO2.Completed(Clerk1);
+
+            PurchaseOrder PO2 = uow.PurchaseOrderRepository.GetByID(2);
+            PO2.Completed();
+
+            uow.PurchaseOrderRepository.Update(PO2);
             context.DeliveryOrders.Add(DO2);
 
             DeliveryOrder DO3 = new DeliveryOrder(10004, "BANE", 3, uow);
             List<DocumentItem> documentItems3 = new List<DocumentItem>{
-                new DocumentItem("C003",10,uow),
+                new DocumentItem("C003",5,uow),
                 new DocumentItem("P046", 9,uow),
                 new DocumentItem("R001",3,uow),
             };
             DO3.DocumentItems = documentItems3;
             DO3.Completed(Clerk1);
+
+            PurchaseOrder PO3 = uow.PurchaseOrderRepository.GetByID(3);
+            PO3.InProgress();
+
+            uow.PurchaseOrderRepository.Update(PO3);
             context.DeliveryOrders.Add(DO3);
 
             context.SaveChanges();

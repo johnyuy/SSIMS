@@ -58,12 +58,6 @@ namespace SSIMS.Controllers
                 case "Desc":
                     purchaseItems = purchaseItems.OrderByDescending(i => i.Tender.Item.Description);
                     break;
-                //case "Item_Supplier":
-                //    purchaseItems = purchaseItems.OrderBy(i => i.Tender.Supplier.ID);
-                //    break;
-                //case "Supplier":
-                //    purchaseItems = purchaseItems.OrderByDescending(i => i.Tender.Supplier.ID);
-                //    break;
                 default:
                     purchaseItems = purchaseItems.OrderBy(i => i.Tender.Item.ID);
                     break;
@@ -121,6 +115,30 @@ namespace SSIMS.Controllers
             }
             return RedirectToAction("Index", "PurchaseOrders");
         }
+
+
+        public ActionResult AddPurchaseItem(int id)
+        {
+
+            Tender tender = uow.TenderRepository.Get(filter: x => x.ID == id, includeProperties: "Item, Supplier").FirstOrDefault();
+            InventoryItem inventoryItem = uow.InventoryItemRepository.Get(filter: x => x.Item.ID == tender.Item.ID).FirstOrDefault();
+            PurchaseItem purchaseItem = new PurchaseItem();
+            purchaseItem  = uow.PurchaseItemRepository.Get(filter: x => x.PurchaseOrder == null & x.Tender.ID == id, includeProperties: "Tender.Item").FirstOrDefault();
+
+            if (purchaseItem == null)
+            {
+                PurchaseItem PI = new PurchaseItem(tender.Item, tender.Supplier, inventoryItem.ReorderQty, uow);
+                uow.PurchaseItemRepository.Insert(PI);
+                uow.Save();
+            } else
+            {
+                purchaseItem.Qty = purchaseItem.Qty + inventoryItem.ReorderQty;
+                uow.PurchaseItemRepository.Update(purchaseItem);
+                uow.Save();
+            }
+            return RedirectToAction("Index");
+        }
+
 
         // GET: PurchaseItems/AddAllLowStockToPurchaseItems
         public ActionResult AddAllLowStockToPurchaseItems()

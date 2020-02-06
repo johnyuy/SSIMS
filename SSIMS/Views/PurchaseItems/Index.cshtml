@@ -3,43 +3,34 @@
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
-    ViewBag.Title = "PurchaseItems";
+    ViewBag.Title = "Purchase Cart";
 }
 
-<h2>Index</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+<h2>Purchase Cart</h2>
 
 @using (Html.BeginForm("Index", "PurchaseItems", FormMethod.Get))
 {
     <p>
-        Find by name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+        Search: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
         <input type="submit" value="Search" />
     </p>
 }
 <table class="table">
     <tr>
         <th>
-            @*@Html.DisplayNameFor(model => model.Tender.Item.ID)*@
             @Html.ActionLink("Item ID", "Index", new { sortOrder = ViewBag.ItemIDSortParm })
         </th>
         <th>
-            @*@Html.DisplayNameFor(model => model.Tender.Item.Description)*@
             @Html.ActionLink("Discription", "Index", new { sortOrder = ViewBag.ItemDescSortParm })
 
         </th>
         <th>
-            @*@Html.DisplayNameFor(model => model.Tender.Supplier.ID)*@
             Supplier ID
         </th>
         <th>
-            @*@Html.DisplayNameFor(model => model.StoreQty)*@
             Current Store Qty
         </th>
         <th>
-            @*@Html.DisplayNameFor(model => .Qty)*@
             Purchasing Qty
         </th>
         <th></th>
@@ -65,9 +56,7 @@
             </td>
 
             <td>
-                @*@Html.ActionLink("Edit", "Edit", new { id = item.ID }) |*@
-                @*@Html.ActionLink("Details", "Details", new { id = item.ID }) |*@
-                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+                @Html.ActionLink("Remove", "Delete", new { id = item.ID }) 
             </td>
         </tr>
 

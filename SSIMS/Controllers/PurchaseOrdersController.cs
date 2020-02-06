@@ -11,6 +11,7 @@ using SSIMS.Models;
 using SSIMS.Service;
 using SSIMS.DAL;
 using SSIMS.ViewModels;
+using PagedList;
 
 
 namespace SSIMS.Controllers
@@ -21,11 +22,52 @@ namespace SSIMS.Controllers
         private UnitOfWork uow = new UnitOfWork();
 
         // GET: PurchaseOrders
-        public ActionResult Index()
+        public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
-
+            ViewBag.Dates = String.IsNullOrEmpty(sortOrder) ? "do_date" : "";
+            ViewBag.Cost = sortOrder == "cost" ? "do_cost" : "cost";
 
             var purchaseOrders = uow.PurchaseOrderRepository.Get(includeProperties: "Supplier, PurchaseItems.Tender");
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                purchaseOrders = purchaseOrders.Where(i => i.ID.ToString().Contains(searchString.ToUpper())
+                                       || i.Supplier.ID.ToUpper().Contains(searchString.ToUpper()) 
+                                       || i.CreatedDate.ToString().Contains(searchString.ToUpper())
+                                       || i.TotalCost().ToString().Contains(searchString.ToUpper())
+                                       || i.Status.ToString().ToUpper().Contains(searchString.ToUpper()));
+            }
+
+            switch (sortOrder)
+            {
+                case "do_date":
+                    purchaseOrders = purchaseOrders.OrderByDescending(i => i.CreatedDate);
+                    break;
+                case "do_cost":
+                    purchaseOrders = purchaseOrders.OrderBy(i => i.TotalCost());
+                    break;
+                case "cost":
+                    purchaseOrders = purchaseOrders.OrderByDescending(i => i.TotalCost());
+                    break;
+                default:
+                    purchaseOrders = purchaseOrders.OrderBy(i => i.CreatedDate);
+                    break;
+            }
+
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
+
             List<PurchaseOrderVM> vm = new List<PurchaseOrderVM>();
 
             foreach (PurchaseOrder PO in purchaseOrders)
@@ -33,9 +75,7 @@ namespace SSIMS.Controllers
                 vm.Add(new PurchaseOrderVM(PO));
             }
 
-            return View(vm);
-
-
+            return View(vm.ToPagedList(pageNumber, pageSize));
         }
 
         public ActionResult Approve(int? id)
@@ -121,6 +161,13 @@ namespace SSIMS.Controllers
 
 
 
+        public ActionResult ViewDeliveryOrder(int? id)
+        {
+            return RedirectToAction("Details", "DeliveryOrders", new { id = id });
+        }
+
+
+
         // GET: PurchaseOrders/Details/5
         public ActionResult Details(int? id)
         {
@@ -130,6 +177,13 @@ namespace SSIMS.Controllers
             }
             PurchaseOrder purchaseOrder = uow.PurchaseOrderRepository.Get(filter: x => x.ID == id, includeProperties: "Supplier, CreatedByStaff, RepliedByStaff, PurchaseItems.Tender.Item ").FirstOrDefault();
             PurchaseOrderVM vm = new PurchaseOrderVM(purchaseOrder);
+
+            if (vm.Status.ToString() == "InProgress" || vm.Status.ToString() == "Completed")
+            {
+                List<DeliveryOrder> deliveryOrders = uow.DeliveryOrderRepository.Get(x => x.PurchaseOrder.ID == vm.ID).ToList();
+                vm.DeliveryOrders = deliveryOrders;
+            }
+
             if (purchaseOrder == null)
             {
                 return HttpNotFound();

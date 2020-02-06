@@ -1,0 +1,40 @@
+﻿@model List<SSIMS.ViewModels.RetrievalListVM>
+@using SSIMS.ViewModels
+@{
+    
+    ViewBag.Section = "Disbursements";
+    ViewBag.Header = "Retrieval List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+    <table border="1">
+        <tr>
+            <th width="30%">
+                ItemID
+            </th>
+            <th align="center" width="30%">
+                HandOver Qty
+            </th>
+            <th align="center" width="30%">
+                TakeOver Qty
+            </th>
+        </tr>
+        @foreach (var deptRL in Model)
+        {
+            <tr>
+                <td align="center"  colspan="3">@deptRL.Department Department</td>
+            </tr>
+            foreach (RetrievalListItemVM item in deptRL.DepartmentRetrievalList)
+            {
+                <tr>
+                    <td align="center">@item.ItemID</td>
+                    <td align="center">@item.HandoverQty</td>
+                    <td align="center">@item.TakeoverQty</td>
+                </tr>
+            }
+        }
+
+
+    </table>

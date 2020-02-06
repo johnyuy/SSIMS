@@ -15,6 +15,7 @@ namespace SSIMS.ViewModels
     {
 
         [Key]
+        [DisplayFormat(DataFormatString = "DO{0:1000000}", ApplyFormatInEditMode = true)]
         public int ID { get; set; }
 
         [ForeignKey("CreatedByStaff")]
@@ -37,8 +38,11 @@ namespace SSIMS.ViewModels
         //[NestedListValidation]
         public List<TransactionItem> TransactionItems { get; set; }
 
+        public List <DocumentItem> DocumentItems { get; set; }
+
         public double TotalCost { get; set; }
 
+        [DisplayFormat(DataFormatString = "PO{0:1000000}", ApplyFormatInEditMode = true)]
         public int PurchaseOrderID { get; set; }
 
 
@@ -53,6 +57,15 @@ namespace SSIMS.ViewModels
             this.CreatedByStaff = PO.CreatedByStaff;
             this.Supplier = PO.Supplier;
             this.PurchaseOrderID = PO.ID;
+        }
+
+        public DeliveryOrderVM(DeliveryOrder DO)
+        {
+            this.ID = DO.ID;
+            this.CreatedDate = DO.CreatedDate;
+            this.CreatedByStaff = DO.CreatedByStaff;
+            this.DocumentItems = DO.DocumentItems.ToList();
+            this.PurchaseOrderID = DO.PurchaseOrder.ID;
         }
 
         public DeliveryOrderVM() : base()

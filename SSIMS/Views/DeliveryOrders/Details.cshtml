@@ -4,87 +4,64 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2>Delivery Order Details</h2>
 
 <div>
-    <h4>DeliveryOrderVM</h4>
+    <h4>@Html.DisplayFor(model => model.ID)</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.CreatedByStaff.UserAccountID)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CreatedByStaff.UserAccountID)
-        </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.RepliedByStaff.UserAccountID)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.RepliedByStaff.UserAccountID)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Comments)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Comments)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CreatedDate)
+            Date Delivered 
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.CreatedDate)
         </dd>
-
         <dt>
-            @Html.DisplayNameFor(model => model.ResponseDate)
+            Recieved By
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.ResponseDate)
+            @Html.DisplayFor(model => model.CreatedByStaff.Name)
         </dd>
-
         <dt>
-            @Html.DisplayNameFor(model => model.Status)
+            Purchase Order 
         </dt>
-
         <dd>
-            @Html.DisplayFor(model => model.Status)
+            @Html.DisplayFor(model => model.PurchaseOrderID) | @Html.ActionLink("View", "ViewPurchaseOrder", new { id = Model.PurchaseOrderID })
         </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ExpectedDeliveryDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ExpectedDeliveryDate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.TotalCost)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.TotalCost)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.PurchaseOrderID)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.PurchaseOrderID)
-        </dd>
-
     </dl>
+    <table class="table">
+        <tr>
+            <th>
+                Item Code
+            </th>
+            <th>
+                Item Description
+            </th>
+            <th>
+                Quantity
+            </th>
+        </tr>
+
+
+        @foreach (var item in Model.DocumentItems)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Item.ID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Qty)
+                </td>
+            </tr>
+        }
+        </table>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
     @Html.ActionLink("Back to List", "Index")
 </p>

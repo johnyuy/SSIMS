@@ -10,7 +10,9 @@ using SSIMS.Database;
 using SSIMS.ViewModels;
 using SSIMS.Models;
 using SSIMS.DAL;
+using System.Diagnostics;
 using SSIMS.Service;
+using PagedList;
 
 
 namespace SSIMS.Controllers
@@ -22,11 +24,57 @@ namespace SSIMS.Controllers
         private PurchaseService ps = new PurchaseService();
 
         // GET: DeliveryOrders
-        public ActionResult Index()
+        public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
-            ps.recentPurchaseItem(uow.ItemRepository.GetByID("C001"));
-            var deliveryOrders = db.DeliveryOrders.Include(d => d.CreatedByStaff).Include(d => d.RepliedByStaff);
-            return View(deliveryOrders.ToList());
+            ViewBag.Dates = String.IsNullOrEmpty(sortOrder) ? "do_date" : "";
+
+            var deliveryOrders = uow.DeliveryOrderRepository.Get(includeProperties: "CreatedByStaff, DocumentItems, PurchaseOrder");
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                deliveryOrders = deliveryOrders.Where(i => i.ID.ToString().Contains(searchString.ToUpper())
+                                       || i.CreatedByStaff.Name.ToUpper().Contains(searchString.ToUpper())
+                                       || i.CreatedDate.ToString().Contains(searchString.ToUpper())
+                                       || i.PurchaseOrder.ID.ToString().Contains(searchString.ToUpper()));
+            }
+
+            switch (sortOrder)
+            {
+                case "do_date":
+                    deliveryOrders = deliveryOrders.OrderByDescending(i => i.CreatedDate);
+                    break;
+                default:
+                    deliveryOrders = deliveryOrders.OrderBy(i => i.CreatedDate);
+                    break;
+            }
+
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
+
+            List<DeliveryOrderVM> vms = new List<DeliveryOrderVM>();
+
+            foreach (DeliveryOrder DO in deliveryOrders)
+            {
+                vms.Add(new DeliveryOrderVM(DO));
+            }
+
+            return View(vms.ToPagedList(pageNumber, pageSize));
+        }
+
+        public ActionResult ViewPurchaseOrder(int id)
+        {
+            return RedirectToAction("Details", "PurchaseOrders", new { id = id });
         }
 
         // GET: DeliveryOrders/Details/5
@@ -36,12 +84,15 @@ namespace SSIMS.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            DeliveryOrderVM deliveryOrderVM = db.DeliveryOrderVMs.Find(id);
-            if (deliveryOrderVM == null)
+
+            DeliveryOrder deliveryOrder = uow.DeliveryOrderRepository.Get(filter: x => x.ID == id, includeProperties: "CreatedByStaff, DocumentItems.Item, PurchaseOrder").FirstOrDefault();
+            DeliveryOrderVM vm = new DeliveryOrderVM(deliveryOrder);
+
+            if (vm == null)
             {
                 return HttpNotFound();
             }
-            return View(deliveryOrderVM);
+            return View(vm);
         }
 
         // GET: DeliveryOrders/Create
@@ -79,6 +130,24 @@ namespace SSIMS.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             PurchaseOrder PO = uow.PurchaseOrderRepository.GetByPurchaseOrderID(id);
+
+            //If PO in progress create a form for the remainder items 
+            if(PO.Status.ToString() == "InProgress")
+            {
+                foreach (DeliveryOrder DO in PO.DeliveryOrders)
+                {
+                    foreach(DocumentItem di in DO.DocumentItems)
+                    {
+                        foreach(PurchaseItem pi in PO.PurchaseItems)
+                        {
+                            if(pi.Tender.Item.ID == di.Item.ID)
+                            {
+                                pi.Qty = pi.Qty - di.Qty;
+                            }
+                        }
+                    }
+                }
+            }
                 
             DeliveryOrderVM deliveryOrderVM = new DeliveryOrderVM(PO);
             if (deliveryOrderVM == null)
@@ -95,34 +164,48 @@ namespace SSIMS.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID, CreatedByStaffID, RepliedByStaffID, Comments, CreatedDate, ResponseDate, Status, PurchaseOrderID, TransactionItems.TransactionItem")] DeliveryOrderVM deliveryOrderVM, int? id)
+        public ActionResult Edit([Bind(Include = "ID, CreatedByStaffID, RepliedByStaffID, Comments, Supplier, CreatedDate, ResponseDate, Status, PurchaseOrderID, TransactionItems")] DeliveryOrderVM deliveryOrderVM, int? id)
         {
             if (ModelState.IsValid)
             {
+
                 List<DocumentItem> deliveredItems = new List<DocumentItem>();
                 List<TransactionItem> items = deliveryOrderVM.TransactionItems;
 
+                //Check if Delivery Incomplete
+                bool incomplete = false;
                 foreach (TransactionItem ti in items)
                 {
-                    DocumentItem di = new DocumentItem(ti);
+                    if (ti.TakeOverQty < ti.HandOverQty)
+                    {
+                        incomplete = true;
+                    }
+                    DocumentItem di = new DocumentItem(ti, uow);
                     deliveredItems.Add(di);
                 }
-                //if partial delivery 
-                //purchaseOrder.InProgress(uow.StaffRepository.GetByID(10002));
-                //uow.PurchaseOrderRepository.Update(purchaseOrder);
-                //uow.Save();
-
+                
+                //Update PurchaseOrder Status
                 PurchaseOrder PO = uow.PurchaseOrderRepository.GetByPurchaseOrderID(id);
-                //change to session clerk later 
-                Staff currentUser = uow.StaffRepository.GetByID(10003);
-                PO.Completed(currentUser);
-                uow.PurchaseOrderRepository.Update(PO);
+                if (incomplete)
+                {
+                    Debug.WriteLine("Incomplete True");
+                    PO.InProgress();
+                    uow.PurchaseOrderRepository.Update(PO);
+                    uow.Save();
+                }
+                else
+                {
+                    Debug.WriteLine("Complete True");
+                    PO.Completed();
+                    uow.PurchaseOrderRepository.Update(PO);
+                    uow.Save();
+                }
+                Staff currentUser = uow.StaffRepository.GetByID(10004);
 
-                //create delivery order 
+                //Create DeliveryOrder
                 DeliveryOrder deliveryOrder = new DeliveryOrder(currentUser, PO.Supplier, PO);
                 deliveryOrder.DocumentItems = deliveredItems;
                 uow.DeliveryOrderRepository.Insert(deliveryOrder);
-
                 uow.Save();
 
             }

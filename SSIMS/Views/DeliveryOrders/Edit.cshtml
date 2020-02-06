@@ -4,15 +4,14 @@
     ViewBag.Title = "Edit";
 }
 
-<h2>Edit</h2>
-
+<h2>Create Delivery Order</h2>
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>DeliveryOrderVM</h4>
+        <h4>Create Delivery Order for Purcahase Order (@Html.DisplayFor(model => model.PurchaseOrderID)) </h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.ID)
@@ -21,80 +20,73 @@
             <dt>
                 @Html.DisplayNameFor(model => model.ID)
             </dt>
-
             <dd>
                 @Html.DisplayFor(model => model.ID)
+                @Html.HiddenFor(model => model.ID, new { htmlAttributes = new { @class = "form-control" } })
             </dd>
-
             <dt>
                 @Html.DisplayNameFor(model => model.Supplier.SupplierName)
             </dt>
-
             <dd>
                 @Html.DisplayFor(model => model.Supplier.SupplierName)
+                @Html.HiddenFor(model => model.Supplier.SupplierName, new { htmlAttributes = new { @class = "form-control" } })
             </dd>
-
             <dt>
                 @Html.DisplayNameFor(model => model.Supplier.Address)
             </dt>
-
             <dd>
                 @Html.DisplayFor(model => model.Supplier.Address)
+                @Html.HiddenFor(model => model.Supplier.Address)
             </dd>
-
             <dt>
                 @Html.DisplayNameFor(model => model.Supplier.PhoneNumber)
             </dt>
-
             <dd>
                 @Html.DisplayFor(model => model.Supplier.PhoneNumber)
+                @Html.HiddenFor(model => model.Supplier.PhoneNumber)
             </dd>
-
             <dt>
                 Attn:
                 @Html.DisplayNameFor(model => model.CreatedByStaff.Name)
             </dt>
-
             <dd>
                 @Html.DisplayFor(model => model.CreatedByStaff.Name)
+                @Html.HiddenFor(model => model.CreatedByStaff.Name, new { htmlAttributes = new { @class = "form-control" } })
             </dd>
-
             <dt>
                 @Html.DisplayNameFor(model => model.CreatedDate)
             </dt>
-
             <dd>
                 @Html.DisplayFor(model => model.CreatedDate)
+                @Html.HiddenFor(model => model.CreatedDate, new { htmlAttributes = new { @class = "form-control" } })
             </dd>
             <dt>
                 @Html.DisplayNameFor(model => model.RepliedByStaff.Name)
             </dt>
-
             <dd>
                 @Html.DisplayFor(model => model.RepliedByStaff.Name)
+                @Html.HiddenFor(model => model.RepliedByStaff.Name)
             </dd>
-
             <dt>
                 @Html.DisplayNameFor(model => model.ResponseDate)
             </dt>
-
             <dd>
                 @Html.DisplayFor(model => model.ResponseDate)
+                @Html.HiddenFor(model => model.ResponseDate, new { htmlAttributes = new { @class = "form-control" } })
             </dd>
-
             <dt>
                 @Html.DisplayNameFor(model => model.Status)
             </dt>
-
             <dd>
                 @Html.DisplayFor(model => model.Status)
+                @Html.HiddenFor(model => model.Status, new { htmlAttributes = new { @class = "form-control" } })
             </dd>
             <dt>
                 @Html.DisplayNameFor(model => model.PurchaseOrderID)
             </dt>
-
             <dd>
                 @Html.DisplayFor(model => model.PurchaseOrderID)
+                @Html.HiddenFor(model => model.PurchaseOrderID, new { htmlAttributes = new { @class = "form-control" } })
             </dd>
         </dl>
         <table class="table">
@@ -107,17 +99,27 @@
                     Item Description
                 </th>
                 <th>
-                    Expected Quantity
+                    @if (Html.ValueFor(model => model.Status).ToString() == "InProgress")
+                    {
+                        var text = "Remainder To Be Delivered";
+                        @Html.Raw(text);
+                    } else
+                    {
+                        var text = "Expected Quantity";
+                        @Html.Raw(text);
+                    }
+
                 </th>
                 <th>
-                    Actual Quantity
+                    Delivered Quantity
                 </th>
                 <th></th>
             </tr>
-            @foreach (var item in Model.TransactionItems)
+            @*@foreach (var item in Model.TransactionItems)*@
+            @for (var i = 0; i < Model.TransactionItems.Count; i++)
             {
 
-                @Html.EditorFor(x => item , "TransactionalItem")
+                @Html.EditorFor(m => Model.TransactionItems[i], "TransactionalItem")
             }
         </table>
         <div class="form-group">

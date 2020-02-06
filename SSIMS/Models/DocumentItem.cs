@@ -23,23 +23,29 @@ namespace SSIMS.Models
         {
         }
 
-        public DocumentItem( int qty, Item item, Document document)
+        public DocumentItem( int qty, Item item, Document document, UnitOfWork uow)
         {
             Qty = qty;
-            Item = item;
+            Item = uow.ItemRepository.GetByID(item.ID); 
             Document = document;
         }
 
         public DocumentItem(string itemID, int qty, UnitOfWork uow)
         {
-            Qty = qty;
             Item = uow.ItemRepository.GetByID(itemID);
+            Qty = qty;
         }
 
         public DocumentItem(Item item, int qty)
         {
             Item = item;
             Qty = qty;
+        }
+
+        public DocumentItem(TransactionItem transactionItem, UnitOfWork uow)
+        {
+            Item = uow.ItemRepository.GetByID(transactionItem.Item.ID);
+            Qty = transactionItem.TakeOverQty;
         }
 
         public DocumentItem(TransactionItem transactionItem)

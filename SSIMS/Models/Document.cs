@@ -39,7 +39,7 @@ namespace SSIMS.Models
             RepliedByStaff = null;
             CreatedDate = DateTime.Now;
             ResponseDate = null;
-            Status = Status.Pending;
+            Status = 0;
         }
         public Document() {
             CreatedDate = DateTime.Now;
@@ -73,10 +73,20 @@ namespace SSIMS.Models
             Status = Status.Completed;
         }
 
+        public void Completed()
+        {
+            Status = Status.Completed;
+        }
+
         public void InProgress(Staff RepliedByStaffID)
         {
             RepliedByStaff = RepliedByStaffID;
             ResponseDate = DateTime.Now;
+            Status = Status.InProgress;
+        }
+
+        public void InProgress()
+        {
             Status = Status.InProgress;
         }
     }

@@ -5,53 +5,53 @@
     ViewBag.Section = "Inventory";
     Layout = "~/Views/Shared/_Layout.cshtml";
     string lowStockMode = ViewBag.LowStock;
-    
+
 }
 <style>
     .switch {
-    position: relative;
-    display: inline-block;
-    width: 40px;
-    height: 18px;
-}
+        position: relative;
+        display: inline-block;
+        width: 40px;
+        height: 18px;
+    }
 
-.switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
 
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    -webkit-transition: .4s;
-    transition: .4s;
-}
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
 
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 15px;
-    width: 15px;
-    left: 0px;
-    bottom: 1px;
-    background-color: white;
-    -webkit-transition: .4s;
-    transition: .4s;
-}
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 15px;
+            width: 15px;
+            left: 0px;
+            bottom: 1px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
 
-input:checked + .slider {
-    background-color: maroon;
-}
+    input:checked + .slider {
+        background-color: maroon;
+    }
 
-input:focus + .slider {
-    box-shadow: 0 0 1px maroon;
-}
+    input:focus + .slider {
+        box-shadow: 0 0 1px maroon;
+    }
 
     input:checked + .slider:before {
         -webkit-transform: translateX(26px);
@@ -60,16 +60,16 @@ input:focus + .slider {
     }
 
     /* Rounded sliders */
-.slider.round {
-    border-radius: 34px;
-}
+    .slider.round {
+        border-radius: 34px;
+    }
 
-.slider.round:before {
-    border-radius: 50%;
-}
+        .slider.round:before {
+            border-radius: 50%;
+        }
 </style>
 <script>
-    
+
     function lowstockfilter() {
         var x = document.getElementById('lowstocktoggle');
         var searchstr = document.getElementById('searchString').value;
@@ -83,56 +83,54 @@ input:focus + .slider {
         var x = document.getElementById('lowstocktoggle');
         var searchstr = document.getElementById('searchString').value;
         if (x.checked == false) {
-            post('/inventory/index', { 'searchString': searchstr, 'lowStock':'false' });
+            post('/inventory/index', { 'searchString': searchstr, 'lowStock': 'false' });
         } else {
-            post('/inventory/index', { 'searchString': searchstr, 'lowStock':'true' });
+            post('/inventory/index', { 'searchString': searchstr, 'lowStock': 'true' });
         }
     }
-    function post(path, params, method='post') {
-      const form = document.createElement('form');
-      form.method = method;
-      form.action = path;
+    function post(path, params, method = 'post') {
+        const form = document.createElement('form');
+        form.method = method;
+        form.action = path;
 
-      for (const key in params) {
-        if (params.hasOwnProperty(key)) {
-          const hiddenField = document.createElement('input');
-          hiddenField.type = 'hidden';
-          hiddenField.name = key;
-          hiddenField.value = params[key];
-          form.appendChild(hiddenField);
+        for (const key in params) {
+            if (params.hasOwnProperty(key)) {
+                const hiddenField = document.createElement('input');
+                hiddenField.type = 'hidden';
+                hiddenField.name = key;
+                hiddenField.value = params[key];
+                form.appendChild(hiddenField);
+            }
         }
-      }
-      document.body.appendChild(form);
-      form.submit();
+        document.body.appendChild(form);
+        form.submit();
     }
 </script>
-
-<div>
-    <div style="float:left">
-        @if (lowStockMode == "true")
-        {
-            <label class="switch">
-                <input id="lowstocktoggle" type="checkbox" checked>
-                <span class="slider round" onclick="lowstockfilter()"></span>
-            </label>
-        }
-        else
-        {
-            <label class="switch">
-                <input id="lowstocktoggle" type="checkbox" unchecked>
-                <span class="slider round" onclick="lowstockfilter()"></span>
-            </label>
-        }
-        <span style="margin-left:10px">Low Stock Only</span>
+<form>
+    <div>
+        <div style="float:left">
+            @if (lowStockMode == "true")
+            {
+                <label class="switch">
+                    <input id="lowstocktoggle" type="checkbox" checked>
+                    <span class="slider round" onclick="lowstockfilter()"></span>
+                </label>
+            }
+            else
+            {
+                <label class="switch">
+                    <input id="lowstocktoggle" type="checkbox" unchecked>
+                    <span class="slider round" onclick="lowstockfilter()"></span>
+                </label>
+            }
+            <span style="margin-left:10px">Low Stock Only</span>
+        </div>
+        <div style="float:right">
+            @Html.TextBox("searchString")
+            <input type="submit" value="search" onclick="search()" />
+        </div>
     </div>
-    <div style="float:right">
-        @Html.TextBox("searchString")
-        <input type="submit" value="search" onclick="search()" />
-    </div>
-
-
-
-</div>
+</form>
 <table class="table">
     <tr>
         <th>
@@ -171,12 +169,13 @@ input:focus + .slider {
             <td>
                 @Html.DisplayFor(modelItem => item.Item.UnitOfMeasure)
             </td>
-            
+
             <td>
                 @if (item.InStoreQty < item.ReorderLvl)
                 {
                     <span style="color:maroon"><b>@item.InStoreQty</b></span>
-                } else
+                }
+                else
                 {
                     @item.InStoreQty;
                 }
@@ -187,6 +186,6 @@ input:focus + .slider {
 
         </tr>
     }
-    
+
 </table>
 
