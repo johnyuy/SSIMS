@@ -10,10 +10,11 @@
 
 <p>@Html.ActionLink("View Pending Requisition", "Manage")</p>
 
-       <label> Sort by status: </label>
-        @Html.ActionLink("Approved", "ViewHistory", new { id=SSIMS.Models.Status.Approved})
-        @Html.ActionLink("Rejected", "ViewHistory", new { id = SSIMS.Models.Status.Rejected })
-        @Html.ActionLink("Completed", "ViewHistory", new { id = SSIMS.Models.Status.Completed })
+<label> See by status: </label>
+@Html.ActionLink("Approved", "ViewHistory", new { status = "Approved" })
+@Html.ActionLink("Rejected", "ViewHistory", new { status = "Rejected" })
+@Html.ActionLink("Completed", "ViewHistory", new { status = "Completed" })
+@Html.ActionLink("See All", "ViewHistory", new { status = "All" })
 
 
 

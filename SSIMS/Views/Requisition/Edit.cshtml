@@ -50,7 +50,7 @@
                     @*@Html.HiddenFor(model => model.SelectedDescription)*@
                     @*@Html.TextBoxFor(model => model.Quantity, new { @Value = Model.DocumentItems[i].Qty, @type = "number", @min = "0", @max = "100" })*@
                     @Html.HiddenFor(m => Model.DocumentItems[i].Item.ID)
-                    @Html.EditorFor(m => Model.DocumentItems[i].Qty, new { htmlAttributes = new { @type = "number", @min = "0", @max = "100" } })
+                    @Html.EditorFor(m => Model.DocumentItems[i].Qty, new { htmlAttributes = new { @type = "number", @min = "1", @max = "100" } })
 
                 </td>
                 @*<td>
