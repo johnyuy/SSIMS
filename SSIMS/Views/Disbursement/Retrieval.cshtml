@@ -1,113 +1,206 @@
-﻿@model IEnumerable<SSIMS.ViewModels.RetrievalItemViewModel>
-@using SSIMS.ViewModels;
+﻿@model SSIMS.ViewModels.RetrivalVM
+@*@using SSIMS.ViewModels;*@
 
 @{
     ViewBag.Title = "Retrieval";
     ViewBag.Header = "Retrieval List";
     ViewBag.Section = "Disbursements";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    List<RetrievalItemViewModel> vm = Model.ToList();
+    //List<RetrievalItemViewModel> vm = Model.rivmlist;
 }
 
-<style>
+<!DOCTYPE html>
 
-</style>
-<script>
+<html>
+<head>
+    <script>
 
-    function hide(i) {
-        
-        var element = document.getElementById(i);
-        var isHidden = element.hidden;
-        if (isHidden) {
-            element.hidden = false;
-            
-        } else {
-            element.hidden = true;
+        function hide(indexx) {
+            console.log(indexx);
+                var element = document.getElementById(i);
+                var isHidden = element.hidden;
+                if (isHidden) {
+                    element.hidden = false;
+
+                } else {
+                    element.hidden = true;
+                }
         }
-    }
-</script>
-
-
-<table class="table" id="one" style="border-bottom: 1px solid; border-bottom-color: lightslategrey">
-    <tr class="description">
-        <th width="30%">
-            @Html.DisplayNameFor(model => model.item.Description)
-        </th>
-        <th style="text-align: center" width="30%">
-            @Html.DisplayNameFor(model => model.transactionItem.HandOverQty)
-        </th>
-        <th style="text-align:center" width="30%">
-            @Html.DisplayNameFor(model => model.transactionItem.TakeOverQty)
-        </th>
-    </tr>
-</table>
-
-@for (int i = 0; i < vm.Count(); i++)
+    </script>
+</head>
+@using (Html.BeginForm())
 {
+    @Html.AntiForgeryToken()
 
-    RetrievalItemViewModel Retrievalitem = vm[i];
-    string index = "item" + (i+1).ToString();
+<body>
+    <div class="table-responsive">
+        <form>
+            <table class="table" id="one" style="border-bottom: 1px solid; border-bottom-color: lightslategrey">
+                <tr>
+                    <th>Item  @Html.HiddenFor(model => model.ROList)</th>
+                    <th>Dept</th>
+                    <th>HandOver Qty</th>
+                    <th>TakeOver Qty</th>
+                    <th>Reason</th>
+                </tr>
+                @for (int i = 0; i < Model.rivmlist.Count; i++)
+                //@for (int i = 0; i < vm.Count; i++)
+                {
+                    //RetrievalItemViewModel Retrievalitem = [i];
+                    string index = "item" + (i + 1).ToString();
+                    int rowNo = Model.rivmlist[i].deptRetrievalItems.Count + 2;
+                    List<string> indexx = new List<string>();
+                    <tr>
+                        <td rowspan=@rowNo>
+                            <span onclick=hide("@indexx")>+</span> @Html.DisplayFor(model => model.rivmlist[i].item.Description)
+                            @Html.HiddenFor(model => model.rivmlist[i].item.Description)
+                        </td>
+                    </tr>
+                    for (int j = 0; j < Model.rivmlist[i].deptRetrievalItems.Count; j++)
+                    {
+                        //DeptRetrievalItemViewModel drivm = Retrievalitem.deptRetrievalItems[j];
+                        string newindex = index + j;
+                        indexx.Add(newindex);
+                        <tr id="@newindex">
+                            <td>
+                                @Html.DisplayFor(model => model.rivmlist[i].deptRetrievalItems[j].deptID)
+                                @Html.HiddenFor(model => model.rivmlist[i].deptRetrievalItems[j].deptID)
+                            </td>
+                            <td>@Html.DisplayFor(model => model.rivmlist[i].deptRetrievalItems[j].transactionItem.HandOverQty)</td>
+                            <td>@Html.EditorFor(model => model.rivmlist[i].deptRetrievalItems[j].transactionItem.TakeOverQty, new { htmlAttributes = new { @class = "form-control" , max=@Model.rivmlist[i].deptRetrievalItems[j].transactionItem.HandOverQty}, })
+                            @*<input type="number" name="drivmTOQ" max=@Model.ToList()[i].deptRetrievalItems[j].transactionItem.HandOverQty style="border:1px solid; border-color:lightgray; border-radius:5px; width: 60px; text-align:center" value=@Model.ToList()[i].deptRetrievalItems[j].transactionItem.TakeOverQty />*@</td>
+                            <td>@Html.EditorFor(model => model.rivmlist[i].deptRetrievalItems[j].transactionItem.Reason, new { htmlAttributes = new { @class = "form-control" }, })
+                            @*<input type="text" name="drivmReason" style="border:1px solid; border-color:lightgray; border-radius: 5px; width: 380px" maxlength="300" value=@Model.ToList()[i].deptRetrievalItems[j].transactionItem.Reason />*@</td>
+                        </tr>
+                    }
+                    <tr>
+                        <td><strong>Total</strong></td>
+                        <td><strong>@Html.DisplayFor(model => model.rivmlist[i].transactionItem.HandOverQty)</strong></td>
+                        <td><strong>@Html.EditorFor(model => model.rivmlist[i].transactionItem.TakeOverQty, new { htmlAttributes = new { @class = "form-control" }, max=@Model.rivmlist[i].transactionItem.HandOverQty})
+                            @*<input type="number" name="TOQ" style="border:1px solid; border-color:lightgray; border-radius:5px; width: 60px; text-align:center" text=@Model.ToList()[i].transactionItem.TakeOverQty max=@Model.ToList()[i].transactionItem.HandOverQty value=@Model.ToList()[i].transactionItem.TakeOverQty />*@</strong></td>
+                    </tr>
 
-    <form method="post">
-        <table class="table" style="border:1px solid; border-color:lightgray; border-radius: 5px">
-            
-            <tbody class="labels">
+                }
                 <tr>
-                    <th width="30%">
-                        <input type="checkbox" onclick=hide("@index")>
-                         @Html.DisplayFor(modelItem => Retrievalitem.item.Description)
-                    </th>
-                    <td style="text-align:center" width="30%">
-                        @Html.DisplayFor(modelItem => Retrievalitem.transactionItem.HandOverQty)
-                    </td>
-                    <td style="text-align:center" width="30%">
-                        <input type="number" name="TOQ" style="border:1px solid; border-color:lightgray; border-radius:5px; width: 60px; text-align:center" text=@Retrievalitem.transactionItem.TakeOverQty max=@Retrievalitem.transactionItem.HandOverQty value=@Retrievalitem.transactionItem.TakeOverQty />
-                    </td>
+                    <td colspan="5" align="right"><button type="submit" value="Submit">Submit</button></td>
                 </tr>
-            </tbody>
+            </table>
             
-            <tbody id="@index" >
-                <tr>
-                    <td colspan="3">
-                        <table align="center" style="border:1px solid; border-color:lightgray; border-radius: 5px;">
-                            <tr>
-                                <th width="150px" style="padding-left:10px; border-bottom:1px solid; border-bottom-color:lightgray">Dept</th>
-                                <th width="200px" style="text-align:center; border-bottom:1px solid; border-bottom-color:lightgray">Handover Qty</th>
-                                <th width="200px" style="text-align:center; border-bottom:1px solid; border-bottom-color:lightgray">Takeover Qty</th>
-                                <th width="400px" style="padding-left:10px; border-bottom:1px solid; border-bottom-color:lightgray">Reason</th>
-                            </tr>
-                            @foreach (var drivm in Retrievalitem.deptRetrievalItems)
-                            {
-                                <tr>
-                                    <td style="padding-left:10px">
-                                        @Html.DisplayFor(modelItem => drivm.deptID)
-                                    </td>
-                                    <td align="center">
-                                        @Html.DisplayFor(modelItem => drivm.transactionItem.HandOverQty)
-                                    </td>
-                                    <td align="center">
-                                        <input type="number" name="drivmTOQ" max=@drivm.transactionItem.HandOverQty style="border:1px solid; border-color:lightgray; border-radius:5px; width: 60px; text-align:center" value=@drivm.transactionItem.TakeOverQty />
-                                    </td>
-                                    <td style="padding-left: 10px">
-                                        <input type="text" name="drivmReason" style="border:1px solid; border-color:lightgray; border-radius: 5px; width: 380px" maxlength="300" value=@drivm.transactionItem.Reason />
-                                    </td>
-                                </tr>
-                            }
-                        </table>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="3" align="right">
-                        <button  value="">Confirm</button>
-                    </td>
-                </tr>
-            </tbody>
-            
-        </table>
-    </form>
-    
+        </form>
+    </div>
+</body>
 }
+</html>
 
 
 
+@*@model IEnumerable<SSIMS.ViewModels.RetrievalItemViewModel>
+    @using SSIMS.ViewModels;
 
+    @{
+        ViewBag.Title = "Retrieval";
+        ViewBag.Header = "Retrieval List";
+        ViewBag.Section = "Disbursements";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+        List<RetrievalItemViewModel> vm = Model.ToList();
+    }
+
+    <style>
+
+    </style>
+    <script>
+
+        function hide(i) {
+
+            var element = document.getElementById(i);
+            var isHidden = element.hidden;
+            if (isHidden) {
+                element.hidden = false;
+
+            } else {
+                element.hidden = true;
+            }
+        }
+    </script>
+
+
+    <table class="table" id="one" style="border-bottom: 1px solid; border-bottom-color: lightslategrey">
+        <tr class="description">
+            <th width="30%">
+                @Html.DisplayNameFor(model => model.item.Description)
+            </th>
+            <th style="text-align: center" width="30%">
+                @Html.DisplayNameFor(model => model.transactionItem.HandOverQty)
+            </th>
+            <th style="text-align:center" width="30%">
+                @Html.DisplayNameFor(model => model.transactionItem.TakeOverQty)
+            </th>
+        </tr>
+    </table>
+
+    @for (int i = 0; i < vm.Count(); i++)
+    {
+
+        RetrievalItemViewModel Retrievalitem = vm[i];
+        string index = "item" + (i+1).ToString();
+
+        <form method="post">
+            <table class="table" style="border:1px solid; border-color:lightgray; border-radius: 5px">
+
+                <tbody class="labels">
+                    <tr>
+                        <th width="30%">
+                            <input type="checkbox" onclick=hide("@index")>
+                             @Html.DisplayFor(modelItem => Retrievalitem.item.Description)
+                        </th>
+                        <td style="text-align:center" width="30%">
+                            @Html.DisplayFor(modelItem => Retrievalitem.transactionItem.HandOverQty)
+                        </td>
+                        <td style="text-align:center" width="30%">
+                            <input type="number" name="TOQ" style="border:1px solid; border-color:lightgray; border-radius:5px; width: 60px; text-align:center" text=@Retrievalitem.transactionItem.TakeOverQty max=@Retrievalitem.transactionItem.HandOverQty value=@Retrievalitem.transactionItem.TakeOverQty />
+                        </td>
+                    </tr>
+                </tbody>
+
+                <tbody id="@index" >
+                    <tr>
+                        <td colspan="3">
+                            <table align="center" style="border:1px solid; border-color:lightgray; border-radius: 5px;">
+                                <tr>
+                                    <th width="150px" style="padding-left:10px; border-bottom:1px solid; border-bottom-color:lightgray">Dept</th>
+                                    <th width="200px" style="text-align:center; border-bottom:1px solid; border-bottom-color:lightgray">Handover Qty</th>
+                                    <th width="200px" style="text-align:center; border-bottom:1px solid; border-bottom-color:lightgray">Takeover Qty</th>
+                                    <th width="400px" style="padding-left:10px; border-bottom:1px solid; border-bottom-color:lightgray">Reason</th>
+                                </tr>
+                                @foreach (var drivm in Retrievalitem.deptRetrievalItems)
+                                {
+                                    <tr>
+                                        <td style="padding-left:10px">
+                                            @Html.DisplayFor(modelItem => drivm.deptID)
+                                        </td>
+                                        <td align="center">
+                                            @Html.DisplayFor(modelItem => drivm.transactionItem.HandOverQty)
+                                        </td>
+                                        <td align="center">
+                                            <input type="number" name="drivmTOQ" max=@drivm.transactionItem.HandOverQty style="border:1px solid; border-color:lightgray; border-radius:5px; width: 60px; text-align:center" value=@drivm.transactionItem.TakeOverQty />
+                                        </td>
+                                        <td style="padding-left: 10px">
+                                            <input type="text" name="drivmReason" style="border:1px solid; border-color:lightgray; border-radius: 5px; width: 380px" maxlength="300" value=@drivm.transactionItem.Reason />
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" align="right">
+                            <button  value="">Confirm</button>
+                        </td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </form>
+
+    }
+*@

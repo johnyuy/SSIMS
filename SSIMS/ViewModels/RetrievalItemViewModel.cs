@@ -21,6 +21,10 @@ namespace SSIMS.ViewModels
             this.deptRetrievalItems = new List<DeptRetrievalItemViewModel>();
         }
 
+        public RetrievalItemViewModel()
+        {
+        }
+
         public Item item { get; set; }
         public TransactionItem transactionItem { get; set; }
         public List<DeptRetrievalItemViewModel> deptRetrievalItems { get; set; }

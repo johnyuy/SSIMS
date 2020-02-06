@@ -14,6 +14,7 @@ namespace SSIMS.Service
     public class DisbursementService
     {
         static UnitOfWork unitOfWork = new UnitOfWork();
+        ILoginService loginService = new LoginService();
 
         //returns a list of TransactionIems from approved Request Orders of a given dept
         public List<TransactionItem> GenerateDeptRetrievalList(string deptID, bool toSave)
@@ -35,8 +36,8 @@ namespace SSIMS.Service
                 Debug.WriteLine("RO is from dept: " + deptRO);
                 if (deptRO.Equals(deptID))
                 {
-                    
-                    if(toSave == true)
+
+                    if (toSave == true)
                     {
                         Debug.WriteLine("Setting RO status to Completed...");
                         UpdateRequestionOrderStatus(RO, 4); //Set Status to "Completed"
@@ -48,21 +49,21 @@ namespace SSIMS.Service
 
             //get all ROs DI into a combined list
             List<DocumentItem> combinedDocList = new List<DocumentItem>();
-            for (int i=0; i<ROList.Count; i++)
+            for (int i = 0; i < ROList.Count; i++)
             {
                 var docList = ROList[i].DocumentItems;
                 foreach (DocumentItem doc in docList)
                 {
-                   combinedDocList.Add(doc);
+                    combinedDocList.Add(doc);
                 }
             }
             Debug.WriteLine("Combined Doc List size: " + combinedDocList.Count);
             List<TransactionItem> tempTransItems = new List<TransactionItem>();
             List<TransactionItem> transItemList = new List<TransactionItem>();
 
-            if (transItemList.Count == 0 && combinedDocList.Count>0)
+            if (transItemList.Count == 0 && combinedDocList.Count > 0)
             {
-                TransactionItem item = new TransactionItem(0,0, null, combinedDocList[0].Item);
+                TransactionItem item = new TransactionItem(0, 0, null, combinedDocList[0].Item);
                 tempTransItems.Add(item);
                 Debug.WriteLine("first temp trans item");
             }
@@ -73,17 +74,17 @@ namespace SSIMS.Service
                 bool isExist = false;
                 TransactionItem temp;
                 int index = 0;
-                    for (int i = 0; i < transItemList.Count; i++)
+                for (int i = 0; i < transItemList.Count; i++)
+                {
+                    temp = transItemList[i];
+                    if (temp.Item.ID.Equals(doc.Item.ID))
                     {
-                        temp = transItemList[i];
-                        if (temp.Item.ID.Equals(doc.Item.ID))
-                        {
-                            isExist = true;
-                            index = i;
-                            break;
-                        }
-                      
+                        isExist = true;
+                        index = i;
+                        break;
                     }
+
+                }
                 if (isExist)
                 {
                     transItemList[index].HandOverQty += doc.Qty;
@@ -104,14 +105,14 @@ namespace SSIMS.Service
             return transItemList;
         }
 
-              
+
 
         //generate the retrieval list item for the model view
         public DeptRetrievalItemViewModel GenerateDeptRetrievalItem(Department d, Item item)
         {
 
             // find transactional item using dept and item and in progress
-            var deptRetrievalList = (RetrievalList)unitOfWork.RetrievalListRepository.Get(includeProperties:"Department", filter:x => x.Department.ID == d.ID && x.Status == Models.Status.InProgress);
+            var deptRetrievalList = (RetrievalList)unitOfWork.RetrievalListRepository.Get(includeProperties: "Department", filter: x => x.Department.ID == d.ID && x.Status == Models.Status.InProgress);
             TransactionItem tItem = (TransactionItem)deptRetrievalList.ItemTransactions.Where(x => x.Item == item);
 
             // using found item to construct DeptRetrievalItem
@@ -137,24 +138,24 @@ namespace SSIMS.Service
         public List<RetrievalItemViewModel> GenerateRetrievalItemViewModelWithoutDRIVMList(List<TransactionItem> combinedRetrievalList)
         {
             List<RetrievalItemViewModel> combinedRetrievalItemVMList = new List<RetrievalItemViewModel>();
-            foreach(TransactionItem item in combinedRetrievalList)
+            foreach (TransactionItem item in combinedRetrievalList)
             {
                 RetrievalItemViewModel itemVM = new RetrievalItemViewModel(item.Item, item);
                 combinedRetrievalItemVMList.Add(itemVM);
             }
             return combinedRetrievalItemVMList;
         }
-        
-        
+
+
         //generate the combined retrieval list by item, adding in the DRIVM List here.
-        public List<RetrievalItemViewModel> ViewRetrievalItemViewModel(List<TransactionItem> combinedRetrievalList)
+        public RetrivalVM ViewRetrievalItemViewModel(List<TransactionItem> combinedRetrievalList)
         {
             Debug.WriteLine("In ViewRetrievalItemViewModel...");
             List<RetrievalItemViewModel> combinedRIVMList = new List<RetrievalItemViewModel>();
             List<RetrievalItemViewModel> rivmList = GenerateRetrievalItemViewModelWithoutDRIVMList(combinedRetrievalList);
             List<List<DeptRetrievalItemViewModel>> drivmListList = new List<List<DeptRetrievalItemViewModel>>();
             var deptList = unitOfWork.DepartmentRepository.Get();
-            foreach(Department dept in deptList)
+            foreach (Department dept in deptList)
             {
                 RetrievalList deptRL = ViewDeptRetrievalList(dept.ID);
                 List<DeptRetrievalItemViewModel> drivmList = GenerateDeptRetrievalItemListByRetrievalList(deptRL);
@@ -183,8 +184,15 @@ namespace SSIMS.Service
                     Debug.WriteLine("Items in dept retrieval item view model: " + drivm.deptID + " HOQ: " + drivm.transactionItem.HandOverQty + " TOQ: " + drivm.transactionItem.TakeOverQty);
                 }
             }
+
+            List<RequisitionOrder> requisitionOrderList = (List<RequisitionOrder>)unitOfWork.RequisitionOrderRepository.Get(filter: x => x.Status == Models.Status.Approved);
+
+            Debug.WriteLine("Number of Approved ROs: " + requisitionOrderList.Count);
+            RetrivalVM retrivalVM = new RetrivalVM();
+            retrivalVM.ROList = requisitionOrderList;
+            retrivalVM.rivmlist = rivmList;
             Debug.WriteLine("Exiting ViewRetrievalItemViewModel...");
-            return rivmList;
+            return retrivalVM;
 
         }
 
@@ -250,14 +258,14 @@ namespace SSIMS.Service
             Debug.WriteLine("Exiting ViewCombinedRetrievalList");
             return combinedRetrievalList;
         }
-        
+
         public void UpdateRequestionOrderStatus(RequisitionOrder RO, int status)
         {
             RO.Status = (Models.Status)status;
             unitOfWork.RequisitionOrderRepository.Update(RO);
             unitOfWork.Save();
         }
-        
+
         public void UpdateRetrievalListStatus(RetrievalList RL, int status)
         {
             RL.Status = (Models.Status)status;
@@ -265,14 +273,14 @@ namespace SSIMS.Service
             unitOfWork.Save();
         }
 
-        public void UpdateTransactionItemTakeoverQty(DeptRetrievalItemViewModel drivm, int  qty)
+        public void UpdateTransactionItemTakeoverQty(DeptRetrievalItemViewModel drivm, int qty)
         {
             var transItem = unitOfWork.TransactionItemRepository.GetByID(drivm.transactionItem.ID);
             transItem.TakeOverQty = qty;
             unitOfWork.TransactionItemRepository.Update(transItem);
             unitOfWork.Save();
         }
-        
+
         //Generates dept disbursement list using the combined dept retrieval list
         public DisbursementList GenerateDisbursementList(string deptID)
         {
@@ -281,15 +289,14 @@ namespace SSIMS.Service
             List<TransactionItem> retrievalListTransItem = (List<TransactionItem>)retrievalList.ItemTransactions;
             List<TransactionItem> disbursementTransItemList = new List<TransactionItem>();
 
-            foreach(TransactionItem transItem in retrievalListTransItem)
+            foreach (TransactionItem transItem in retrievalListTransItem)
             {
                 TransactionItem disbursementListTransItem = new TransactionItem(transItem.TakeOverQty, transItem.TakeOverQty, "Disbursement", transItem.Item);
                 disbursementTransItemList.Add(disbursementListTransItem);
             }
 
-            Staff clerk = unitOfWork.StaffRepository.GetByID(10003);
             Department dept = unitOfWork.DepartmentRepository.GetByID(deptID);
-            DisbursementList disbursementList = new DisbursementList(clerk, dept);
+            DisbursementList disbursementList = new DisbursementList(loginService.StaffFromSession, dept);
             disbursementList.ItemTransactions = disbursementTransItemList;
             disbursementList.Status = (Models.Status)5; //Set Status to "InProgress"
             Debug.WriteLine("Saving Disbursement List into database...");
@@ -307,7 +314,7 @@ namespace SSIMS.Service
             List<TransactionItem> combinedRetrievalList = new List<TransactionItem>();
             List<TransactionItem> tempTransItems = new List<TransactionItem>();
 
-            foreach(RetrievalList rl in completedRetrievals)
+            foreach (RetrievalList rl in completedRetrievals)
             {
                 List<TransactionItem> transItemList = (List<TransactionItem>)rl.ItemTransactions;
                 if (combinedRetrievalList.Count == 0 && transItemList.Count > 0)
@@ -354,6 +361,47 @@ namespace SSIMS.Service
             RetrievalList combinedDeptRetrievalList = new RetrievalList(combinedRetrievalList, unitOfWork.DepartmentRepository.GetByID(deptID));
             Debug.WriteLine("Combined Dept Retrieval List successfully created!!");
             return combinedDeptRetrievalList;
-        }       
+        }
+
+        public void InsertRetrievalList(List<RetrievalItemViewModel> rivmList)
+        {
+            var deptRetrievalItemViewModel = new List<DeptRetrievalItemViewModel>();
+
+            // consolidate all dept retrival item to a single list 
+            foreach (RetrievalItemViewModel rivm in rivmList)
+            {
+                foreach (DeptRetrievalItemViewModel drvm in rivm.deptRetrievalItems)
+                {
+                    deptRetrievalItemViewModel.Add(drvm);
+                }
+            }
+            var temp = from x in deptRetrievalItemViewModel select new { x.deptID };
+
+            var deptIdList = temp.GroupBy(i => i.deptID).Select(y => y.First());
+            //Unique Departments with in deptRetrievalItemViewModel
+            List<string> deptids = new List<string>();
+
+            foreach (var x in deptIdList)
+            {
+                deptids.Add(x.deptID);
+            }
+
+            foreach (string deptid in deptids)
+            {
+                RetrievalList rl = new RetrievalList(loginService.StaffFromSession, unitOfWork.DepartmentRepository.GetByID(deptid));
+                List<TransactionItem> transactionItems = new List<TransactionItem>();
+                foreach (DeptRetrievalItemViewModel drvm in deptRetrievalItemViewModel)
+                {
+                    if (drvm.deptID == deptid)
+                    {
+                        transactionItems.Add(drvm.transactionItem);
+                    }
+                }
+                rl.ItemTransactions = transactionItems;
+                rl.InProgress();
+                unitOfWork.RetrievalListRepository.Insert(rl);
+                unitOfWork.Save();
+            }
+        }
     }
 }
