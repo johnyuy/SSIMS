@@ -21,6 +21,7 @@ namespace SSIMS.Controllers
     {
         private DatabaseContext db = new DatabaseContext();
         private UnitOfWork uow = new UnitOfWork();
+        private ILoginService loginService = new LoginService();
         private PurchaseService ps = new PurchaseService();
 
         // GET: DeliveryOrders
@@ -181,7 +182,10 @@ namespace SSIMS.Controllers
                         incomplete = true;
                     }
                     DocumentItem di = new DocumentItem(ti, uow);
-                    deliveredItems.Add(di);
+                    if(di.Qty != 0)
+                    {
+                        deliveredItems.Add(di);
+                    }
                 }
                 
                 //Update PurchaseOrder Status
@@ -200,7 +204,7 @@ namespace SSIMS.Controllers
                     uow.PurchaseOrderRepository.Update(PO);
                     uow.Save();
                 }
-                Staff currentUser = uow.StaffRepository.GetByID(10004);
+                Staff currentUser = loginService.StaffFromSession;
 
                 //Create DeliveryOrder
                 DeliveryOrder deliveryOrder = new DeliveryOrder(currentUser, PO.Supplier, PO);

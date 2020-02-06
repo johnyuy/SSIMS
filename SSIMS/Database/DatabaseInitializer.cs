@@ -8,8 +8,8 @@ using SSIMS.DAL;
 
 namespace SSIMS.Database
 {
-    //public class DatabaseInitializer<T> : DropCreateDatabaseAlways<DatabaseContext>
-    public class DatabaseInitializer<T> : CreateDatabaseIfNotExists<DatabaseContext>
+    public class DatabaseInitializer<T> : DropCreateDatabaseAlways<DatabaseContext>
+    //public class DatabaseInitializer<T> : CreateDatabaseIfNotExists<DatabaseContext>
 
     {
         static StaffRepository StaffRepository;
@@ -755,9 +755,7 @@ namespace SSIMS.Database
         static void InitUserAccounts(DatabaseContext context)
         {
             Debug.WriteLine("\tInitializing UserAccounts");
-            Debug.WriteLine("\t\tAdding system admin account");
             context.UserAccounts.Add(new UserAccount("ssims", "admin", 3, 3));
-            Debug.WriteLine("\t\tAdding store accounts");
             List<UserAccount> accounts = new List<UserAccount>();
             List<List<string>> namelist = StaffRepository.GetStaffAccountNames();
             foreach (string name in namelist[3])
@@ -766,13 +764,10 @@ namespace SSIMS.Database
                 accounts.Add(new UserAccount(name, "supervisor", 2, 0));
             foreach (string name in namelist[5])
                 accounts.Add(new UserAccount(name, "manager", 3, 0));
-            Debug.WriteLine("\t\tAdding department staff accounts");
             foreach (string name in namelist[0])
                 accounts.Add(new UserAccount(name, "password", 0, 1));
-            Debug.WriteLine("\t\tAdding department rep accounts");
             foreach (string name in namelist[1])
                 accounts.Add(new UserAccount(name, "password", 0, 2));
-            Debug.WriteLine("\t\tAdding department head accounts");
             foreach (string name in namelist[2])
                 accounts.Add(new UserAccount(name, "password", 0, 3));
 
@@ -831,6 +826,7 @@ namespace SSIMS.Database
                 if (inventoryItem.Item.ID.Contains("3"))
                     inventoryItem.InStoreQty /= 5;
                 context.InventoryItems.Add(inventoryItem);
+                context.StockCardEntries.Add(new StockCardEntry(inventoryItem.Item, inventoryItem.InStoreQty));
             }
 
             context.SaveChanges();
@@ -838,10 +834,11 @@ namespace SSIMS.Database
 
         static void InitDocuments(DatabaseContext context)
         {
+            UnitOfWork uow = new UnitOfWork(context);
             Debug.WriteLine("\tInitializing Documents");
-            Staff staff1 = StaffRepository.GetByID(10005);
+            //PENDING RO
+            Staff staff1 = StaffRepository.GetByID(10059); //REGR Department
             RequisitionOrder reqform = new RequisitionOrder(staff1);
-            reqform.RepliedByStaff = staff1;
             List<DocumentItem> documentItems = new List<DocumentItem>{
                 new DocumentItem(ItemRepository.GetByID("C001"),2),
                 new DocumentItem(ItemRepository.GetByID("E031"),5),
@@ -850,7 +847,7 @@ namespace SSIMS.Database
             reqform.DocumentItems = documentItems;
             context.RequisitionOrders.Add(reqform);
 
-            //Approved Requisition Orders
+            //APPROVED Requisition Orders
             Staff staff2 = StaffRepository.GetByID(10010); //ARCH dept
             RequisitionOrder reqform2 = new RequisitionOrder(staff2);
             reqform2.RepliedByStaff = StaffRepository.GetByID(10006);
@@ -905,7 +902,7 @@ namespace SSIMS.Database
             context.RequisitionOrders.Add(reqform5);
 
 
-
+            Staff clerk1 = StaffRepository.GetByID(10003);
 
             RetrievalList retrievalList = new RetrievalList(staff1, DepartmentRepository.GetByID("ARTS"));
             List<TransactionItem> transactionItems = new List<TransactionItem>
@@ -915,12 +912,8 @@ namespace SSIMS.Database
                 new TransactionItem(7,7,"Retrieval",ItemRepository.GetByID("P039")),
             };
             retrievalList.ItemTransactions = transactionItems;
+            retrievalList.Completed(clerk1);
             context.RetrievalLists.Add(retrievalList);
-
-
-
-
-
 
             DisbursementList disbursementList = new DisbursementList(staff1, DepartmentRepository.GetByID("ARTS"));
             disbursementList.RepliedByStaff = StaffRepository.GetByID(10014);
@@ -933,6 +926,10 @@ namespace SSIMS.Database
             disbursementList.ItemTransactions = disbursedItems;
             context.DisbursementLists.Add(disbursementList);
             context.SaveChanges();
+
+            
+            uow.StockCardEntryRepository.ProcessRetrivalListCompletion(retrievalList);
+
         }
 
         static void InitPurchaseItems(DatabaseContext context)
@@ -1091,6 +1088,7 @@ namespace SSIMS.Database
                 new DocumentItem("C001",10,uow),
             };
             DO1.DocumentItems = documentItems;
+            uow.StockCardEntryRepository.ProcessDeliveryOrderAcceptance(DO1);
             DO1.Completed(Clerk1);
 
             PurchaseOrder PO1 = uow.PurchaseOrderRepository.GetByID(1);
@@ -1106,6 +1104,7 @@ namespace SSIMS.Database
                 new DocumentItem("C001",10,uow),
             };
             DO2.DocumentItems = documentItems2;
+            uow.StockCardEntryRepository.ProcessDeliveryOrderAcceptance(DO2);
             DO2.Completed(Clerk1);
 
             PurchaseOrder PO2 = uow.PurchaseOrderRepository.GetByID(2);
@@ -1121,6 +1120,7 @@ namespace SSIMS.Database
                 new DocumentItem("R001",3,uow),
             };
             DO3.DocumentItems = documentItems3;
+            uow.StockCardEntryRepository.ProcessDeliveryOrderAcceptance(DO3);
             DO3.Completed(Clerk1);
 
             PurchaseOrder PO3 = uow.PurchaseOrderRepository.GetByID(3);

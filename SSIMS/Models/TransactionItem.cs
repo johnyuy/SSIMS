@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using SSIMS.DAL;
 using System.Web;
 using Foolproof;
 
@@ -45,6 +46,14 @@ namespace SSIMS.Models
             Reason = reason;
             Item = item;
             Document = document;
+        }
+
+        public TransactionItem(int handOverQty, int takeOverQty, string reason, string itemID, UnitOfWork uow)
+        {
+            Item = uow.ItemRepository.Get(filter: i => i.ID == itemID).FirstOrDefault();
+            HandOverQty = handOverQty;
+            TakeOverQty = takeOverQty;
+            Reason = reason;
         }
 
     }

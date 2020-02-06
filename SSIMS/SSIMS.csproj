@@ -20,8 +20,10 @@
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
     <IISExpressSSLPort>44386</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
+    <IISExpressAnonymousAuthentication>
+    </IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>
+    </IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
@@ -221,6 +223,7 @@
     <Compile Include="Controllers\PurchaseItemsController.cs" />
     <Compile Include="Controllers\PurchaseOrdersController.cs" />
     <Compile Include="Controllers\RequisitionController.cs" />
+    <Compile Include="Controllers\RetrievalListsController.cs" />
     <Compile Include="Controllers\StaffsController.cs" />
     <Compile Include="DAL\CollectionPointRepository.cs" />
     <Compile Include="DAL\DeliveryOrderRepository.cs" />
@@ -236,6 +239,7 @@
     <Compile Include="DAL\RequisitionOrderRepository.cs" />
     <Compile Include="DAL\RetrievalListRepository.cs" />
     <Compile Include="DAL\StaffRepository.cs" />
+    <Compile Include="DAL\StockCardEntryRepository.cs" />
     <Compile Include="DAL\SupplierRepository.cs" />
     <Compile Include="DAL\TenderRepository.cs" />
     <Compile Include="DAL\TransactionItemRepository.cs" />
@@ -299,10 +303,12 @@
     <Compile Include="ViewModels\RequisitionSummaryViewModel.cs" />
     <Compile Include="ViewModels\RetrievalListItemVM.cs" />
     <Compile Include="ViewModels\RetrievalListVM.cs" />
+    <Compile Include="ViewModels\RetrivalVM.cs" />
     <Compile Include="ViewModels\UserLogin.cs" />
     <Compile Include="ViewModels\RetrievalItemViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Client Scripts\gen_validatorv4.js" />
     <Content Include="Client Scripts\mvcfoolproof.unobtrusive.js" />
     <Content Include="Client Scripts\mvcfoolproof.unobtrusive.min.js" />
     <Content Include="Client Scripts\MvcFoolproofJQueryValidation.js" />
@@ -440,6 +446,11 @@
     <Content Include="Views\Requisition\Create.cshtml" />
     <Content Include="Views\Requisition\Index.cshtml" />
     <Content Include="Views\Requisition\Details.cshtml" />
+    <Content Include="Views\RetrievalLists\Create.cshtml" />
+    <Content Include="Views\RetrievalLists\Delete.cshtml" />
+    <Content Include="Views\RetrievalLists\Details.cshtml" />
+    <Content Include="Views\RetrievalLists\Edit.cshtml" />
+    <Content Include="Views\RetrievalLists\Index.cshtml" />
     <Content Include="Views\Analytics\AnalyticsList2.cshtml" />
   </ItemGroup>
   <ItemGroup>
