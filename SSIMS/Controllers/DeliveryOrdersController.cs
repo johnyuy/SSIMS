@@ -181,7 +181,10 @@ namespace SSIMS.Controllers
                         incomplete = true;
                     }
                     DocumentItem di = new DocumentItem(ti, uow);
-                    deliveredItems.Add(di);
+                    if(di.Qty != 0)
+                    {
+                        deliveredItems.Add(di);
+                    }
                 }
                 
                 //Update PurchaseOrder Status

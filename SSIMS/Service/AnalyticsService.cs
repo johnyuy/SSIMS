@@ -55,7 +55,7 @@ namespace SSIMS.Service
             ArrayList output = new ArrayList();
             foreach (RequisitionSummaryViewModel rvsm in SummaryList)
             {
-                output.Add(rvsm.Qty);
+                output.Add(rvsm.count);
             }
             if (output.Count > 0)
                 return output;

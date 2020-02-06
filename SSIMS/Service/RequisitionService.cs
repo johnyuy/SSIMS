@@ -19,6 +19,32 @@ namespace SSIMS.Service
             return null;
         }
 
+        public List<RequisitionItemVM> ConvertDocumentItemsToRequisitionItems(List<DocumentItem> documentItems)
+        {
+            List<RequisitionItemVM> ritems = new List<RequisitionItemVM>();
+           
+            if (documentItems != null)
+            {
+                foreach(DocumentItem ditem in documentItems)
+                {
+                    RequisitionItemVM rtem = new RequisitionItemVM();
+                    rtem.DoitemID = ditem.ID;
+                    rtem.Quantity = ditem.Qty;
+                    rtem.SelectedCategory = ditem.Item.Category;
+                    rtem.SelectedDescription = ditem.Item.ID;
+                    rtem.displayDescription = ditem.Item.Description;
+                    rtem.UnitOfMeasure = ditem.Item.UnitOfMeasure;
+                    
+                    ritems.Add(rtem);
+                    
+                }
+
+                return ritems;
+            }
+
+            return null;
+        }
+
         public void CreateNewRequistionOrder(List<RequisitionItemVM> requisitionItems, Staff creator)
         {
             if(requisitionItems != null)
