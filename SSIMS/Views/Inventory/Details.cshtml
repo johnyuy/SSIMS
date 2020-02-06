@@ -4,66 +4,146 @@
     ViewBag.Section = "Inventory";
     ViewBag.Header = "Item Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    bool isLow = Model.InStoreQty <= Model.ReorderLvl ? true : false;
+    string cI = "", mI = "", Index = "";
+    bool hasPrev = false, hasNext = false;
+    if (ViewBag.CurrentItemIndex != null)
+    {
+        cI = ViewBag.CurrentItemIndex.ToString();
+        mI = ViewBag.MaxItemsCount.ToString();
+        Index = cI + " / " + mI;
+        hasPrev = int.Parse(cI) > 1 ? true : false;
+        hasNext = int.Parse(cI) == int.Parse(mI) ? false : true;
+    }
+    string searchString = Session["InventorySearchString"]==null? "":Session["InventorySearchString"].ToString();
+    string lowStock = Session["InventoryLowStockMode"]==null? "":Session["InventoryLowStockMode"].ToString();
 }
+<script>
+    function goPrev() {
+        post('/inventory/details', { 'id': ViewBag.PrevItemID});
+    }
 
-<div style="height:800px">
-   <div id="item-information" style="margin:20px 0px 5px 10px;width:1000px;">
-       <table style="font-size:18px" border="1">
-           <tr>
+    function goNext() {
+        post('/inventory/details', { 'id': ViewBag.NextItemID});
+    }
+
+    function post(path, params, method='post') {
+      const form = document.createElement('form');
+      form.method = method;
+      form.action = path;
+
+      for (const key in params) {
+        if (params.hasOwnProperty(key)) {
+          const hiddenField = document.createElement('input');
+          hiddenField.type = 'hidden';
+          hiddenField.name = key;
+          hiddenField.value = params[key];
+          form.appendChild(hiddenField);
+        }
+      }
+      document.body.appendChild(form);
+      form.submit();
+    }
+</script>
+
+<div style="margin-left:15px;margin-top:10px;position:relative;top:10px">
+    @Html.ActionLink("Back to List", "Index", new { searchString = searchString, lowStock = lowStock })
+</div>
+
+<div style="height:700px;width:920px; box-shadow: 2px 4px 8px 0px rgba(47,79,79,0.2);">
+   <div id="item-information" style="margin:20px 0px 5px 10px;width:900px;">
+       <table style="font-size:17px">
+           <tr style="background-color:white">
                <td colspan="2" align="center" height="50px" style="font-size:22px">Item Information</td>
-               <td align="center"> navigation with index </td>
+               <td align="center">
+                   @if (hasPrev)
+                   {
+                       <a style="text-decoration:none" href="~/inventory/details/@ViewBag.PrevItemID"><<</a>
+                   }
+                   &nbsp; @Index &nbsp;
+                   @if (hasNext)
+                   {
+                       <a style="text-decoration:none" href="~/inventory/details/@ViewBag.NextItemID">>></a>
+                   }
+               </td>
+           </tr>
+           <tr><td height="10px"></td><td></td><td rowspan="6" align="left" valign="middle" width="280px"><img src=@Url.Content(Model.ImageURL) style="width:280px;" /></td></tr>
+           <tr>
+               <td align="right" width="200px" height="15px">@Html.DisplayNameFor(model => model.ItemCode) :</td>
+               <td align="center" width="400px"><div style="width:300px;background-color:floralwhite;border:solid 1px lightgray">@Html.DisplayFor(model => model.ItemCode)</div></td>
            </tr>
            <tr>
-               <td align="center" width="200px" height="30px">@Html.DisplayNameFor(model => model.ItemCode)</td>
-               <td align="center" width="400px">@Html.DisplayFor(model => model.ItemCode)</td>
-               <td rowspan="4" align="center" valign="middle" width="300px"><img src=@Url.Content(Model.ImageURL) style="width:300px;border:ridge" /></td>
+               <td align="right" height="15px">@Html.DisplayNameFor(model => model.Category) :</td>
+               <td align="center"><div style="width:300px;background-color:floralwhite;border:solid 1px lightgray">@Html.DisplayFor(model => model.Category)</div></td>
            </tr>
            <tr>
-               <td align="center" height="30px">@Html.DisplayNameFor(model => model.Category)</td>
-               <td align="center">@Html.DisplayFor(model => model.Category)</td>
+               <td align="right" height="15px">@Html.DisplayNameFor(model => model.Description) :</td>
+               <td align="center"><div style="width:300px;background-color:floralwhite;border:solid 1px lightgray">@Html.DisplayFor(model => model.Description)</div></td>
            </tr>
            <tr>
-               <td align="center" height="30px">@Html.DisplayNameFor(model => model.Description)</td>
-               <td align="center">@Html.DisplayFor(model => model.Description)</td>
+               <td align="right" height="15px">@Html.DisplayNameFor(model => model.UOM) :</td>
+               <td align="center"><div style="width:300px;background-color:floralwhite;border:solid 1px lightgray">@Html.DisplayFor(model => model.UOM)</div></td>
            </tr>
-           <tr>
-               <td align="center" height="30px">@Html.DisplayNameFor(model => model.UOM)</td>
-               <td align="center">@Html.DisplayFor(model => model.UOM)</td>
-           </tr>
+           <tr><td height="15px"></td><td></td></tr>
        </table>
    </div>
-    <div id="stock-details" style="width:450px;margin-left:10px;height:200px; float:left;">
-        <table style="font-size:18px;width:100%" border="1" >
+    <div style="        width: 450px;
+        margin-left: 10px;
+        height: 350px;
+        float: left;
+        background-color: #efefef;
+        padding-bottom: 40px">
+        <table style="font-size:17px;width:100%;" >
             <tr align="center">
-                <td colspan="2" height="50px" style="font-size:22px">Stock Information</td>
+                <td colspan="2" height="70px" style="font-size: 22px ">Stock Information</td>
             </tr>
             <tr align="center">
                 <td colspan="2" height="30px">@Html.DisplayNameFor(model => model.InStoreQty)</td>
             </tr>
             <tr align="center">
-                <td colspan="2" height="30px">@Html.DisplayFor(model => model.InStoreQty)</td>
+                @if (isLow)
+                {
+                    <td colspan="2" height="80px" style="font-size: 25px; color: maroon;"><div style="        width: 200px;
+        background-color: floralwhite;
+        font-weight: bold;
+        border: solid 1px lightgray;
+">@Html.DisplayFor(model => model.InStoreQty)</div></td>
+                }
+                else
+                {
+                    <td colspan="2" height="80px" style="font-size:25px;"><div style="        width: 200px;
+        background-color: floralwhite;
+        font-weight: bold;
+        border: solid 1px lightgray;
+">@Html.DisplayFor(model => model.InStoreQty)</div></td>
+                }
+
+            </tr>
+            <tr>
+                <td align="center" style="height: 50px"><button style="width:180px">Adjust</button></td>
+                <td align="center" style="height:50px"><button style="width:180px"> Stock Card</button></td>
             </tr>
             <tr align="center">
                 <td height="30px">@Html.DisplayNameFor(model => model.ReorderLvl)</td>
-                <td width="50%">@Html.DisplayFor(model => model.ReorderLvl)</td>
+                <td width="50%"><div style="width:100px;background-color:floralwhite;border:solid 1px lightgray;">@Html.DisplayFor(model => model.ReorderLvl)</div></td>
             </tr>
             <tr align="center">
                 <td height="30px">@Html.DisplayNameFor(model => model.ReorderQty)</td>
-                <td>@Html.DisplayFor(model => model.ReorderQty)</td>
+                <td ><div style="width:100px;background-color:floralwhite;border:solid 1px lightgray;">@Html.DisplayFor(model => model.ReorderQty)</div></td>
             </tr>
         </table>
     </div>
-    <div id="supplier-information" style="width:450px;height:auto;  float:left;">
-        <table style="font-size:18px;width:100%" border="1">
-            <tr align="center"><td height="50px" style="font-size:22px">Suppliers</td></tr>
-            <tr align="center"><td height="30px">@Html.DisplayFor(model=>model.Supplier1)</td></tr>
-            <tr align="center"><td height="30px">@Html.DisplayFor(model=>model.Supplier2)</td></tr>
-            <tr align="center"><td height="30px">@Html.DisplayFor(model=>model.Supplier3)</td></tr>
-            <tr align="center" style="font-size:12px"><td height="30px">@Html.DisplayFor(model=>model.LastOrder)</td></tr>
-            
+    <div id="supplier-information" style="width:450px;height:350px;float:left;background-color:#efefef;padding-bottom:40px">
+        <table style="font-size:18px;width:100%">
+            <tr align="center"><td height="70px" style="font-size:22px">Purchase from Supplier</td></tr>
+            <tr align="center"><td height="15px" style="font-size:11px">Click to add @Html.DisplayFor(model=>model.ReorderQty) @Html.DisplayFor(model=>model.UnitDisplay) to Purchase Cart</td></tr>
+            <tr align="center"><td height="45px"><form action="~/PurchaseItems/AddPurchaseItem/@Model.Tender1"><button style="width:200px">@Html.DisplayFor(model => model.Supplier1) &nbsp;-&nbsp;  @Html.DisplayFor(model => model.Supplier1Tender)</button></form></td></tr>
+            <tr align="center"><td height="45px"><form action="~/PurchaseItems/AddPurchaseItem/@Model.Tender2"><button style="width:200px">@Html.DisplayFor(model => model.Supplier2) &nbsp;-&nbsp;  @Html.DisplayFor(model => model.Supplier2Tender)</button></form></td></tr>
+            <tr align="center"><td height="45px"><form action="~/PurchaseItems/AddPurchaseItem/@Model.Tender3"><button style="width:200px">@Html.DisplayFor(model => model.Supplier3) &nbsp;-&nbsp;  @Html.DisplayFor(model => model.Supplier3Tender)</button></form></td></tr>
+            <tr align="center"><td height="50px" valign="bottom"><form action="~/PurchaseItems/Index"><button style="width:200px;font-size:15px;">View Purchase Cart</button></form></td></tr>
+            <tr align="center" style="font-size:11px"><td height="20px" valign="bottom">@Html.DisplayFor(model => model.LastOrderLine1)</td></tr>
+            <tr align="center" style="font-size:11px"><td height="15px">@Html.DisplayFor(model => model.LastOrderLine2)</td></tr>
         </table>
     </div>
 </div>
-<div style="bottom:100px; position:absolute">
-    @Html.ActionLink("Back to List", "Index")
-</div>
+

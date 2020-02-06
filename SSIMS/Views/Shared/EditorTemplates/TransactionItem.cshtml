@@ -13,15 +13,32 @@
         </td>
         <td>
             <div>
-                @Html.HiddenFor(model => model.TakeOverQty, new { @class = "form-control", id = "HandOverQty" + guid, data_target = guid })
-                @Html.DisplayFor(model => model.HandOverQty)
+                @if (Convert.ToInt32(Html.ValueFor(model => model.HandOverQty).ToString()) == 0)
+                {
+                    @Html.Raw("Completed");
+                    @Html.HiddenFor(model => model.HandOverQty, new { @class = "form-control", id = "HandOverQty" + guid, data_target = guid })
+
+                }
+
+                else
+                {
+                    @Html.HiddenFor(model => model.HandOverQty, new { @class = "form-control", id = "HandOverQty" + guid, data_target = guid })
+                    @Html.DisplayFor(model => model.HandOverQty)
+                }
             </div>
         </td>
         <td>
             <div>
-                @Html.EditorFor(model => model.TakeOverQty, new { htmlAttributes = new { @class = "form-control", id = "TakeOverQty" + guid, data_target = guid }, })
-            @*@Html.ValidationMessageFor(modelItem => item.TakeOverQty, "", new { @class = "text-danger" })*@
-            <div class="text-danger" id=@Html.ValueFor(model => model.ID) style="display:none;">This field cannot be more than it's Expected Quantity</div>
-        </td>
+                @if (Convert.ToInt32(Html.ValueFor(model => model.HandOverQty).ToString()) == 0)
+                {
+                    @Html.HiddenFor(model => model.TakeOverQty, new { @class = "form-control", id = "HandOverQty" + guid, data_target = guid })
+                }
+                else
+                {
+                    @Html.EditorFor(model => model.TakeOverQty, new { htmlAttributes = new { @class = "form-control", id = "TakeOverQty" + guid, data_target = guid }, })
+
+                }
+                <div class="text-danger" id=@Html.ValueFor(model => model.ID) style="display:none;">This field cannot be more than it's Expected Quantity</div>
+</td>
     </tr>
 }

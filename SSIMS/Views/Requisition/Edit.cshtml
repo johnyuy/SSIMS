@@ -1,50 +1,113 @@
-﻿@model SSIMS.ViewModels.RequisitionCreateViewModel
+﻿@model SSIMS.ViewModels.RequisitionItemVM
+@using SSIMS.ViewModels;
+
+@*@{
+    List<RequisitionItemVM> requisitionItems = ViewBag.RequisitionItems;
+
+}*@
+
+
 @{
     ViewBag.Title = "Edit";
 }
 
 <h2>Edit</h2>
 
-
-
-@using (Html.BeginForm())
+@using (Html.BeginForm("Save", "Requisition", new { id = Model.ROID }))
 {
     @Html.AntiForgeryToken()
+    <table>
+        <tr>
+            <td> </td>
+            <td>Category</td>
+            <td>Description</td>
+            <td>Unit of Measure</td>
+            <td>Quantity</td>
+            @*<td>Reomove</td>*@
+        </tr>
 
-    @Html.HiddenFor(x=>x.ROID)
+        @for (var i = 0; i < Model.DocumentItems.Count; i++)
+        {
 
-    <div class="form-group">
-        @Html.LabelFor(x => x.SelectedCategory, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-5">
-            @Html.DropDownListFor(x => Model.SelectedCategory, new SelectList(Model.Categories, "Value", "Text"), htmlAttributes: new { @class = "form-control", @id = "Category" })
-            @Html.ValidationMessageFor(x => x.SelectedCategory, "", new { @class = "text-danger" })
-        </div>
-    </div>
+            <tr>
 
-    <div class="form-group">
-        @Html.LabelFor(x => x.SelectedDescription, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-5">
-            @Html.DropDownListFor(x => Model.SelectedDescription, new SelectList(Model.Descriptions, "Value", "Text"), htmlAttributes: new { @class = "form-control", @id = "Description" })
-            @Html.ValidationMessageFor(x => x.SelectedDescription, "", new { @class = "text-danger" })
-        </div>
-    </div>
+                <td>
+                @Html.DisplayFor(m => Model.DocumentItems[i].Item.Category)
+                @Html.HiddenFor(m => Model.DocumentItems[i].Item.Category)
+                </td>
+                <td>
+                    @Html.DisplayFor(m => Model.DocumentItems[i].Item.Description)
+                    @Html.HiddenFor(m => Model.DocumentItems[i].Item.Description)   
+                </td>
+                <td>
+                    @Html.DisplayFor(m => Model.DocumentItems[i].Item.UnitOfMeasure)
+                    @Html.HiddenFor(m => Model.DocumentItems[i].Item.UnitOfMeasure)
+                </td>
+                <td>
+                    @*@rivm.Quantity*@
+                    @*@Html.Editor(x => rivm.Quantity, new { type = "number", min = "0", max = "100" })*@
+                    @*@Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @type = "number", @min = "0", @max = "100", @value = rivm.Quantity } })*@
+                    @*@Html.HiddenFor(model => model.SelectedDescription)*@
+                    @*@Html.TextBoxFor(model => model.Quantity, new { @Value = Model.DocumentItems[i].Qty, @type = "number", @min = "0", @max = "100" })*@
+                    @Html.HiddenFor(m => Model.DocumentItems[i].Item.ID)
+                    @Html.EditorFor(m => Model.DocumentItems[i].Qty, new { htmlAttributes = new { @type = "number", @min = "0", @max = "100" } })
 
-    <div class="form-group">
-        @Html.LabelFor(x => x.Quantity, htmlAttributes: new { @class = "control-label col-md-2" })
-        @Html.TextBoxFor(model => model.Quantity, new { type = "number", min = "0", max = "100" })
-        @Html.ValidationMessageFor(x => x.Quantity, "", new { @class = "text-danger" })
-    </div>
+                </td>
+                @*<td>
+
+                        <input type="submit" value="Remove" class="btn btn-primary" />
+                    </td>*@
+                }
+            </tr>
+
+        }
 
 
-
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Save" class="btn btn-primary" />
-        </div>
-    </div>
-
+    </table>
+    <input type="submit" value="Save" class="btn btn-primary" />
 }
+
+
+
+
+@*@using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.HiddenFor(x => x.ROID)
+
+        <div class="form-group">
+            @Html.LabelFor(x => x.SelectedCategory, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-5">
+                @Html.DropDownListFor(x => Model.SelectedCategory, new SelectList(Model.Categories, "Value", "Text"), htmlAttributes: new { @class = "form-control", @id = "Category" })
+                @Html.ValidationMessageFor(x => x.SelectedCategory, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+@*<div class="form-group">
+            @Html.LabelFor(x => x.SelectedDescription, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-5">
+                @Html.DropDownListFor(x => Model.SelectedDescription, new SelectList(Model.Descriptions, "Value", "Text"), htmlAttributes: new { @class = "form-control", @id = "Description" })
+                @Html.ValidationMessageFor(x => x.SelectedDescription, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(x => x.Quantity, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.TextBoxFor(model => model.Quantity, new { type = "number", min = "0", max = "100" })
+            @Html.ValidationMessageFor(x => x.Quantity, "", new { @class = "text-danger" })
+        </div>
+
+
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </div>
+
+    }*@
 
 
 

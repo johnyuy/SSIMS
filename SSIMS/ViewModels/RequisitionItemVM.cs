@@ -19,6 +19,9 @@ namespace SSIMS.ViewModels
     {
         [Display(Name ="Requisition ID")]
         public int ROID { get; set; }
+
+        [Display(Name ="DocumentItem ID")]
+        public Guid DoitemID { get; set; }
      
         [Display(Name = "Item Number")]
         public string ItemID { get; set; }
@@ -50,6 +53,8 @@ namespace SSIMS.ViewModels
         [Display(Name = "Description")]
         public string SelectedDescription { get; set; }
         public IEnumerable<SelectListItem> Descriptions { get; set; }
+
+        public List<DocumentItem> DocumentItems { get; set; }
 
 
         //for display

@@ -14,6 +14,7 @@ namespace SSIMS.ViewModels
     {
 
         [Key]
+        [DisplayFormat(DataFormatString = "PO{0:1000000}", ApplyFormatInEditMode = true)]
         public int ID { get; set; }
 
         [ForeignKey("CreatedByStaff")]
@@ -33,6 +34,7 @@ namespace SSIMS.ViewModels
 
         public Supplier Supplier { get; set; }
         public virtual ICollection<PurchaseItem> PurchaseItems { get; set; }
+        public virtual ICollection<DeliveryOrder> DeliveryOrders { get; set; }
 
         public double TotalCost { get; set; }       
 

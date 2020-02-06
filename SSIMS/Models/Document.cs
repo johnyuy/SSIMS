@@ -17,6 +17,7 @@ namespace SSIMS.Models
     public abstract class Document
     {
         [Key]
+        [DisplayFormat(DataFormatString ="ID{0:100000}",ApplyFormatInEditMode =true)]
         [Display(Name = "Requisition ID")]
         public int ID { get; set; }
 
@@ -73,10 +74,20 @@ namespace SSIMS.Models
             Status = Status.Completed;
         }
 
+        public void Completed()
+        {
+            Status = Status.Completed;
+        }
+
         public void InProgress(Staff RepliedByStaffID)
         {
             RepliedByStaff = RepliedByStaffID;
             ResponseDate = DateTime.Now;
+            Status = Status.InProgress;
+        }
+
+        public void InProgress()
+        {
             Status = Status.InProgress;
         }
 

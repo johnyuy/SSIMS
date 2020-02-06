@@ -13,7 +13,10 @@ namespace SSIMS.Models
         public DateTime? ExpectedDeliveryDate { get; set; }
 
         public Supplier Supplier { get; set; }
+
         public virtual ICollection<PurchaseItem> PurchaseItems { get; set; }
+
+        public virtual ICollection<DeliveryOrder> DeliveryOrders { get; set; }
 
         public PurchaseOrder() : base()
         {

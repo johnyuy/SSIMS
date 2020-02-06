@@ -23,7 +23,7 @@ namespace SSIMS.DAL
         private TenderRepository tenderRepository;
         private PurchaseItemRepository purchaseItemRepository;
         private DeliveryOrderRepository deliveryOrderRepository;
-
+        private StockCardEntryRepository stockCardEntryRepository;
 
 
         public UnitOfWork()
@@ -34,6 +34,19 @@ namespace SSIMS.DAL
         public UnitOfWork(DatabaseContext context)
         {
             this.context = context;
+        }
+
+        public StockCardEntryRepository StockCardEntryRepository
+        {
+            get
+            {
+
+                if (this.stockCardEntryRepository == null)
+                {
+                    this.stockCardEntryRepository = new StockCardEntryRepository(context);
+                }
+                return stockCardEntryRepository;
+            }
         }
 
         public DeliveryOrderRepository DeliveryOrderRepository
@@ -247,7 +260,26 @@ namespace SSIMS.DAL
 
         public void Save()
         {
-            context.SaveChanges();
+            try {
+                context.SaveChanges();
+            }
+            catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
+            {
+                Exception raise = dbEx;
+                foreach (var validationErrors in dbEx.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        string message = string.Format("{0}:{1}",
+                            validationErrors.Entry.Entity.ToString(),
+                            validationError.ErrorMessage);
+                        // raise a new exception nesting
+                        // the current instance as InnerException
+                        raise = new InvalidOperationException(message, raise);
+                    }
+                }
+                throw raise;
+            }
         }
 
         private bool disposed = false;
