@@ -35,61 +35,142 @@
         <thead>
             <tr>
                 @if (summarylist[0].Qty != 0)
-                {<th>Qty</th>}
-                @if (summarylist[0].Category != "") { <th>Category</th>}
-                
+                {
+                    <th>Qty</th>
+                }
+                @if (summarylist[0].Category != "")
+                {
+                    <th>Category</th>
+                }
+
                 @if (summarylist[0].CreatedDate.ToString("yyyy") != "0001")
                 {
                     <th>CreateDate</th>
-}
+                }
                 @if (summarylist[0].Department != null)
                 {
                     <th>Department_ID</th>
-}
+                }
                 @if (summarylist[0].Month != 0)
                 {
                     <th>MONTH</th>
-}
+                }
                 @if (summarylist[0].count != 0)
                 {
                     <th>COUNT</th>
-}
+                }
 
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
+                <tr>
+                    @if (summarylist[0].Qty != 0)
+                    {
+                        <td>@Html.DisplayFor(modelItem => item.Qty)</td>
+                    }
+
+                    @if (summarylist[0].Category != "")
+                    {
+                        <td>@Html.DisplayFor(modelItem => item.Category)</td>
+                    }
+
+                    @if (summarylist[0].CreatedDate.ToString("yyyy") != "0001")
+                    {
+                        <td>@Html.DisplayFor(modelItem => item.CreatedDate)</td>
+                    }
+                    @if (summarylist[0].Department != null)
+                    {
+                        <td>@Html.DisplayFor(modelItem => item.Department)</td>
+                    }
+                    @if (summarylist[0].Month != 0)
+                    {
+                        <td>@Html.DisplayFor(modelItem => item.Month)</td>
+                    }
+                    @if (summarylist[0].count != 0)
+                    {
+                        <td>@Html.DisplayFor(modelItem => item.count)</td>
+                    }
+
+                </tr>
+            }
+
+        </tbody>
+    </table>
+
+
+    <table>
+        <thead>
             <tr>
-                @if (summarylist[0].Qty != 0) { 
-                    <td>@Html.DisplayFor(modelItem => item.Qty)</td>
-                    }
-                    
-                @if (summarylist[0].Category != "") { 
-                    <td>@Html.DisplayFor(modelItem => item.Category)</td>
-                    }
-                    
+                @if (summarylist[0].Qty != 0)
+                {
+                    <th>Qty</th>
+                }
+                @if (summarylist[0].Category != "")
+                {
+                    <th>Category</th>
+                }
+
                 @if (summarylist[0].CreatedDate.ToString("yyyy") != "0001")
                 {
-                    <td>@Html.DisplayFor(modelItem => item.CreatedDate)</td>
+                    <th>CreateDate</th>
                 }
                 @if (summarylist[0].Department != null)
                 {
-                    <td>@Html.DisplayFor(modelItem => item.Department)</td>
+                    <th>Department_ID</th>
                 }
                 @if (summarylist[0].Month != 0)
                 {
-                    <td>@Html.DisplayFor(modelItem => item.Month)</td>
+                    <th>MONTH</th>
                 }
                 @if (summarylist[0].count != 0)
                 {
-                    <td>@Html.DisplayFor(modelItem => item.count)</td>
+                    <th>COUNT</th>
                 }
 
             </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    @if (summarylist[0].Qty != 0)
+                    {
+                        <td>@Html.DisplayFor(modelItem => item.Qty)</td>
+                    }
+
+                    @if (summarylist[0].Category != "")
+                    {
+                        <td>@Html.DisplayFor(modelItem => item.Category)</td>
+                    }
+
+                    @if (summarylist[0].CreatedDate.ToString("yyyy") != "0001")
+                    {
+                        <td>@Html.DisplayFor(modelItem => item.CreatedDate)</td>
+                    }
+                    @if (summarylist[0].Department != null)
+                    {
+                        <td>@Html.DisplayFor(modelItem => item.Department)</td>
+                    }
+                    @if (summarylist[0].Month != 0)
+                    {
+                        <td>@Html.DisplayFor(modelItem => item.Month)</td>
+                    }
+                    @if (summarylist[0].count != 0)
+                    {
+                        <td>@Html.DisplayFor(modelItem => item.count)</td>
+                    }
+
+                </tr>
             }
+
         </tbody>
     </table>
+
+
+
+
     <div>
         <h1>Chart</h1>
     </div>
