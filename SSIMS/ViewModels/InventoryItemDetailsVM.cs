@@ -6,6 +6,7 @@ using SSIMS.Service;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 namespace SSIMS.ViewModels
 {
@@ -40,11 +41,13 @@ namespace SSIMS.ViewModels
         public string LastOrderLine2 { get; set; }
         public string ImageURL { get; set; }
         public string UnitDisplay { get; set; }
+        public List<InventoryStockCardVM> StockCard { get; set; }
+
         public InventoryItemDetailsVM(InventoryItem item)
         {
             PurchaseService purchaseService = new PurchaseService();
             UnitOfWork unitOfWork = new UnitOfWork();
-
+            StockCard = new List<InventoryStockCardVM>();
             ItemCode = item.ItemID;
             Category = item.Item.Category;
             Description = item.Item.Description;
@@ -53,7 +56,6 @@ namespace SSIMS.ViewModels
             ReorderLvl = item.ReorderLvl;
             ReorderQty = item.ReorderQty;
             ImageURL = item.Item.ImageURL;
-
             LastOrderLine1 = "No purchases in record";
             LastOrderLine2 = "";
             if (UOM == "Each")
@@ -87,7 +89,7 @@ namespace SSIMS.ViewModels
                     string POID = PO.ID.ToString($"PO{0:1000000}");
                     string POStatus = PO.Status.ToString();
                     string OrderedBy = PO.CreatedByStaff.Name;
-                    string OrderDate = PO.CreatedDate.ToString("dd/MM/yyyy");
+                    string OrderDate = PO.CreatedDate.ToString("dd/MM/yyyy HH:mm tt");
                     LastOrderLine1 = "Last Purchase " + POID + " (" + POStatus + ") to " + Supplier ;
                     LastOrderLine2 = "Created by " + OrderedBy + " on " + OrderDate;
                 }
@@ -101,6 +103,66 @@ namespace SSIMS.ViewModels
                 }
             }
             Debug.WriteLine(LastOrderLine1 + ", " + LastOrderLine2);
+
+            List<StockCardEntry> entries = unitOfWork.StockCardEntryRepository
+                .Get(filter: x => x.Item.ID.Equals(ItemCode), includeProperties: "Item,DeliveryOrder.Supplier,RetrievalList.RepliedByStaff,AdjustmentVoucher").ToList();
+
+            int balance = 0;
+            for(int i = 0; i < entries.Count; i++)
+            {
+                DateTime date;
+                string dateString = "";
+                string movement = "";
+                string ID = "";
+                int qtychange = entries[i].QtyChanged;
+                if (i == 0)
+                {
+                    balance = entries[i].QtyChanged;
+                }
+                else
+                {
+                    balance += entries[i].QtyChanged;
+                }
+                    
+                if (entries[i].AdjustmentVoucher != null)
+                {
+                    ID = entries[i].AdjustmentVoucher.ID.ToString($"AD{0:1000000}");
+                    date = (DateTime) entries[i].AdjustmentVoucher.CreatedDate;
+                    dateString = date.ToString("dd/MM/yyyy");
+                    movement = "Adjustment " + ID + ", " + entries[i].AdjustmentVoucher.Comments;
+                }
+                else if (entries[i].DeliveryOrder != null)
+                {
+                    ID = entries[i].DeliveryOrder.ID.ToString($"DO{0:1000000}");
+                    date = (DateTime)entries[i].DeliveryOrder.ResponseDate;
+                    dateString = date.ToString("dd/MM/yyyy");
+                    movement = "Delivery " + ID + " from " + entries[i].DeliveryOrder.Supplier.ID;
+                }
+                else if (entries[i].RetrievalList != null)
+                {
+                    ID = entries[i].RetrievalList.ID.ToString($"RL{0:1000000}");
+                    date = (DateTime)entries[i].RetrievalList.ResponseDate;
+                    dateString = date.ToString("dd/MM/yyyy");
+                    movement = "Retrieval " + ID + " - " + entries[i].RetrievalList.RepliedByStaff.Name;
+                } else
+                {
+                    dateString = "na";
+                    movement = "na";
+                }
+                InventoryStockCardVM card = new InventoryStockCardVM(dateString, movement, qtychange, balance);
+                StockCard.Add(card);
+            }
+
+            foreach(InventoryStockCardVM card in StockCard)
+            {
+                Debug.WriteLine(card.ToString());
+            }
+
+            if (StockCard.Count > 50)
+            {
+                StockCard.RemoveRange(0, StockCard.Count - 50);
+            }
+
         }
     }
 }
