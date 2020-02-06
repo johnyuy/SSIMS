@@ -17,6 +17,7 @@ namespace SSIMS.Models
     public abstract class Document
     {
         [Key]
+        [DisplayFormat(DataFormatString ="ID{0:100000}",ApplyFormatInEditMode =true)]
         [Display(Name = "Requisition ID")]
         public int ID { get; set; }
 
