@@ -18,10 +18,10 @@
 
     <tr>
         <td>
-            @Html.LabelFor(x => Model.CreatedByStaff.Department.DeptName, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(x => Model.CreatedByStaff.Department, htmlAttributes: new { @class = "control-label col-md-2" })
         </td>
         <td>
-            @Html.DisplayFor(x => Model.CreatedByStaff.Department.DeptName)
+            @Html.DisplayFor(x => Model.CreatedByStaff.DepartmentID)
         </td>
     </tr>
 
@@ -101,22 +101,26 @@
 </table>
 
 @*staff see below*@
-<p>
-    @Html.ActionLink("Back to List", "Index")
-</p>
-@*staff see below when status=pending*@
-
-@if (Model.Status == SSIMS.Models.Status.Pending)
+@if (ViewBag.staffrole == "Staff")
 {
+    <p>
+    @Html.ActionLink("Back to List", "Index")
+    </p>
+    @*staff see below when status=pending*@
+
+    if (Model.Status == SSIMS.Models.Status.Pending)
+    {
     <p>
         @Html.ActionLink("Edit", "Edit", new { id = Model.ID })
     </p>
     <p>
         @Html.ActionLink("Cancel", "Cancel", new { id = Model.ID })
     </p>
-    
-}
 
+    }
+}
+else
+{
 @*Dep rep see below *@
 <p>
     @Html.ActionLink("View Requisition History List", "ViewHistory")
@@ -126,14 +130,14 @@
     @Html.ActionLink("Back to Pending List", "Manage")
 </p>
 
-@if (Model.Status == SSIMS.Models.Status.Pending)
-{
+    if (Model.Status == SSIMS.Models.Status.Pending)
+    {
     <p>
         @Html.ActionLink("Approve", "Approve", new { id = Model.ID })
     </p>
     <p>
         @Html.ActionLink("Reject", "Reject", new { id = Model.ID })
     </p>
+     }
 }
-
 
