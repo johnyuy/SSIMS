@@ -14,7 +14,7 @@ namespace SSIMS.ViewModels
     public class DeliveryOrderVM
     {
 
-        [Key]
+        
         [DisplayFormat(DataFormatString = "DO{0:1000000}", ApplyFormatInEditMode = true)]
         public int ID { get; set; }
 

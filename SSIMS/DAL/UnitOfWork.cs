@@ -23,7 +23,7 @@ namespace SSIMS.DAL
         private TenderRepository tenderRepository;
         private PurchaseItemRepository purchaseItemRepository;
         private DeliveryOrderRepository deliveryOrderRepository;
-
+        private StockCardEntryRepository stockCardEntryRepository;
 
 
         public UnitOfWork()
@@ -34,6 +34,19 @@ namespace SSIMS.DAL
         public UnitOfWork(DatabaseContext context)
         {
             this.context = context;
+        }
+
+        public StockCardEntryRepository StockCardEntryRepository
+        {
+            get
+            {
+
+                if (this.stockCardEntryRepository == null)
+                {
+                    this.stockCardEntryRepository = new StockCardEntryRepository(context);
+                }
+                return stockCardEntryRepository;
+            }
         }
 
         public DeliveryOrderRepository DeliveryOrderRepository

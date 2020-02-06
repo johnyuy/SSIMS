@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -7,26 +9,52 @@ namespace SSIMS.Models
 {
     public class StockCardEntry
     {
-        public int ID { get; set; }
-        public int ItemID { get; set; }
-        public int DocumentID { get; set; }
-        public int Qty { get; set; }
-        public int Balance { get; set; }
-
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
+        public Guid ID { get; set; }
+        public virtual DeliveryOrder DeliveryOrder { get; set; }
+        public virtual RetrievalList RetrievalList { get; set; }
+        public virtual AdjustmentVoucher AdjustmentVoucher { get; set; }
         public Item Item { get; set; }
-
-        public Document Document { get; set; }
-
-        public StockCardEntry(int itemID, int documentID, int qty, int balance)
-        {
-            ItemID = itemID;
-            DocumentID = documentID;
-            Qty = qty;
-            Balance = balance;
-        }
+        public int QtyChanged { get; set; }
 
         public StockCardEntry()
         {
+        }
+
+        public StockCardEntry(Item item, int QuantityChanged, DeliveryOrder deliveryOrder)
+        {
+            Item = item;
+            QtyChanged = QuantityChanged;
+            RetrievalList = null;
+            DeliveryOrder = deliveryOrder;
+            AdjustmentVoucher = null;
+        }
+        public StockCardEntry(Item item, int QuantityChanged, RetrievalList retrievalList)
+        {
+            Item = item;
+            QtyChanged = QuantityChanged;
+            RetrievalList = retrievalList;
+            DeliveryOrder = null;
+            AdjustmentVoucher = null;
+        }
+
+        public StockCardEntry(Item item, int QuantityChanged, AdjustmentVoucher adjustmentVoucher)
+        {
+            Item = item;
+            QtyChanged = QuantityChanged;
+            RetrievalList = null; ;
+            DeliveryOrder = null;
+            AdjustmentVoucher = adjustmentVoucher;
+        }
+
+        public StockCardEntry(Item item, int QuantityChanged)
+        {
+            Item = item;
+            QtyChanged = QuantityChanged;
+            RetrievalList = null; ;
+            DeliveryOrder = null;
+            AdjustmentVoucher = null;
         }
     }
 }
