@@ -2,8 +2,8 @@
 @using SSIMS.ViewModels
 @{
 
-    ViewBag.Title = "AnalyticsList";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "AnalyticsList2";
+    Layout = "~/Views/Shared/_Layout.cshtml"; 
     //DatabaseContext db = new DatabaseContext();
     //var selectQueryString = "select DocumentItems.Qty,Items.Category,RequisitionOrders.CreatedDate,Staffs.Department_ID ,MONTH(RequisitionOrders.CreatedDate) AS MONTHfrom Staffs, RequisitionOrders, DocumentItems, Items where Items.ID=DocumentItems.Item_ID and Staffs.ID=RequisitionOrders.CreatedByStaffID";
     /*  var myChart = new Chart(width: 600, height: 400)
@@ -12,7 +12,7 @@
   yValues: SummaryList.Qty, yFields: "Qty")
   .Write();
   */
-    List<RequisitionSummaryViewModel> summarylist = ViewBag.SummaryList;
+    List<RequisitionSummaryViewModel> summarylist = ViewBag.SummaryList1;
 
 }
 <!DOCTYPE html>
@@ -30,7 +30,7 @@
     </style>
 </head>
 <body>
-    <h3> Category and Quantity</h3>
+    <h3>Department and the number of their orders</h3>
     <table>
         <thead>
             <tr>
@@ -102,10 +102,10 @@
     <div>
         <h1>Chart</h1>
     </div>
-    <div>
-        <img src=" @Url.Action("Chart1")" alt="Chart" />
-    </div>
    
-    @Html.ActionLink("Go to check Department and Orders ", "index2")
+    <div>
+        <img src=" @Url.Action("Chart2")" alt="Chart" />
+    </div>
+    @Html.ActionLink("Go to check Quantity and Category ", "index")
 </body>
 </html>

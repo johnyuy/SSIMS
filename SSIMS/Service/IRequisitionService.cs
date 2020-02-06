@@ -16,6 +16,8 @@ namespace SSIMS.Service
 
         List<RequisitionOrder> GetRequisitionOrdersbyCreatedDate(Staff staff, DateTime dateTime);
 
+        List<RequisitionItemVM> ConvertDocumentItemsToRequisitionItems(List<DocumentItem> documentItems);
+
 
 
 
