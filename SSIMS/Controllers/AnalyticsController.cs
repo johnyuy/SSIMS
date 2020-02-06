@@ -41,8 +41,9 @@ namespace SSIMS.Controllers
             List<RequisitionSummaryViewModel> categorylist = AnalyticsService.GroupSummaryListByCategory(analyticsListViewModel.SummaryList);
             List<RequisitionSummaryViewModel> categorylist2 = AnalyticsService.GroupSummaryListByDepartment(analyticsListViewModel.SummaryList);
             // Debug.WriteLine("hello :" + categorylist.First().CreatedDate.ToString("yyyy"));
-            Analytics TABLE = new Analytics(categorylist, categorylist2);
+           // Analytics TABLE = new Analytics(categorylist, categorylist2);
             ViewBag.Summarylist= categorylist;
+            
             return View("AnalyticsList", categorylist);
         }
 
@@ -57,14 +58,12 @@ namespace SSIMS.Controllers
             // Debug.WriteLine("hello :" + categorylist.First().CreatedDate.ToString("yyyy"));
             ViewBag.Summarylist1 = categorylist2;
 
-            return View("AnalyticsList", categorylist2);
+            return View("AnalyticsList2", categorylist2);
         }
         public ActionResult Chart1()
         {  AnalyticsListViewModel analyticsListViewModel = new AnalyticsListViewModel();
             List<RequisitionSummaryViewModel> categorylist = AnalyticsService.GroupSummaryListByCategory(analyticsListViewModel.SummaryList);
-           
-
-            
+             
           // RequisitionSummaryViewModel clipCategory = AnalyticsService.GroupByCategory("Clip", summaryList);
 
 
@@ -80,8 +79,10 @@ namespace SSIMS.Controllers
         public ActionResult Chart2()
         {
             AnalyticsListViewModel analyticsListViewModel = new AnalyticsListViewModel();
-            ArrayList xValue = AnalyticsService.GetQtyCategoryChart2X(analyticsListViewModel.SummaryList);
-            ArrayList yValue = AnalyticsService.GetQtyCategoryChart2Y(analyticsListViewModel.SummaryList);
+            List<RequisitionSummaryViewModel> categorylist = AnalyticsService.GroupSummaryListByDepartment(analyticsListViewModel.SummaryList);
+
+            ArrayList xValue = AnalyticsService.GetQtyCategoryChart2X(categorylist);
+            ArrayList yValue = AnalyticsService.GetQtyCategoryChart2Y(categorylist);
             new Chart(width: 600, height: 400, theme: ChartTheme.Green)
                 .AddTitle("Chart for Quantity and Category")
                 .AddSeries("Default", chartType: "Column", xValue: xValue, yValues: yValue)
