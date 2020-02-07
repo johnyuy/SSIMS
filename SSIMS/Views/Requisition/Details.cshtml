@@ -3,8 +3,36 @@
 @{
     ViewBag.Title = "Details";
 }
+<script>
+    function post(path, params, method = 'post') {
+        const form = document.createElement('form');
+        form.method = method;
+        form.action = path;
 
-<h2>Details</h2>
+        for (const key in params) {
+            if (params.hasOwnProperty(key)) {
+                const hiddenField = document.createElement('input');
+                hiddenField.type = 'hidden';
+                hiddenField.name = key;
+                hiddenField.value = params[key];
+                form.appendChild(hiddenField);
+            }
+        }
+        document.body.appendChild(form);
+        form.submit();
+    }
+
+    approve(){
+        var comment = document.getElementById("comment").value;
+        post('/requisition/approve', { 'id': @Model.ID, 'comment': comment });
+    }
+
+    reject(){
+        var comment = document.getElementById("comment").value;
+        post('/requisition/reject', { 'id': @Model.ID, 'comment': comment });
+    }
+</script>
+
 
 <table>
     <tr>
@@ -104,40 +132,55 @@
 @if (ViewBag.staffrole == "Staff")
 {
     <p>
-    @Html.ActionLink("Back to List", "Index")
+        @Html.ActionLink("Back to List", "Index")
     </p>
     @*staff see below when status=pending*@
 
     if (Model.Status == SSIMS.Models.Status.Pending)
     {
-    <p>
-        @Html.ActionLink("Edit", "Edit", new { id = Model.ID })
-    </p>
-    <p>
-        @Html.ActionLink("Cancel", "Cancel", new { id = Model.ID })
-    </p>
+        <p>
+            @Html.ActionLink("Edit", "Edit", new { id = Model.ID })
+        </p>
+        <p>
+            @Html.ActionLink("Cancel", "Cancel", new { id = Model.ID })
+        </p>
 
     }
 }
 else
 {
-@*Dep rep see below *@
-<p>
-    @Html.ActionLink("View Requisition History List", "ViewHistory")
-</p>
+    @*Dep rep see below *@
+    <p>
+        @Html.ActionLink("View Requisition History List", "ViewHistory")
+    </p>
 
-<p>
-    @Html.ActionLink("Back to Pending List", "Manage")
-</p>
+    <p>
+        @Html.ActionLink("Back to Pending List", "Manage")
+    </p>
 
     if (Model.Status == SSIMS.Models.Status.Pending)
     {
-    <p>
-        @Html.ActionLink("Approve", "Approve", new { id = Model.ID })
-    </p>
-    <p>
-        @Html.ActionLink("Reject", "Reject", new { id = Model.ID })
-    </p>
-     }
+        @*<p>
+            @Html.ActionLink("Approve", "Approve", new { id = Model.ID })
+        </p>
+
+        <p>
+            @Html.ActionLink("Reject", "Reject", new { id = Model.ID })
+        </p>*@
+
+        <form action="/requisition/approve">
+            <input type="text" name="comment" value=@Model.Comments />
+            <input type="hidden" name="id" value="@Model.ID" />
+            <button>Approve</button>
+        </form>
+
+        <form action="/requisition/reject">
+            <input type="text" name="comment" value=@Model.Comments />
+            <input type="hidden" name="id" value="@Model.ID" />
+            <button>Reject</button>
+        </form>
+
+
+    }
 }
 

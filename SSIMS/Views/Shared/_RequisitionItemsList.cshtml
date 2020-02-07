@@ -29,7 +29,7 @@
             }
         }
     </table>
-    <p>Commments: @Html.TextBox("comments", (String)ViewBag.comments)</p>
+    @*<p>Commments: @Html.TextBox("comments", (String)ViewBag.comments)</p>*@
    
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <input type="submit" value="Submit" class="btn btn-primary" />
