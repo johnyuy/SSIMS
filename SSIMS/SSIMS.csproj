@@ -20,8 +20,10 @@
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
     <IISExpressSSLPort>44386</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
+    <IISExpressAnonymousAuthentication>
+    </IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>
+    </IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
@@ -285,6 +287,7 @@
     <Compile Include="Service\LoginService.cs" />
     <Compile Include="Service\NestedListValidationAttribute.cs" />
     <Compile Include="Service\NestedListValidationResult.cs" />
+    <Compile Include="Service\NotificationService.cs" />
     <Compile Include="Service\PurchaseOrderService.cs" />
     <Compile Include="Service\StaffService.cs" />
     <Compile Include="Service\DisbursementService.cs" />
@@ -449,6 +452,7 @@
     <Content Include="Views\RetrievalLists\Edit.cshtml" />
     <Content Include="Views\RetrievalLists\Index.cshtml" />
     <Content Include="Views\Analytics\AnalyticsList2.cshtml" />
+    <Content Include="Views\Requisition\SendEmail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

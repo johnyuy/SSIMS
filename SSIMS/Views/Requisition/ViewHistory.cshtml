@@ -9,18 +9,25 @@
 
 }
 
-@if (ViewBag.staffrole == "head") {
+    <p style="margin:10px">    </p>
+@if (ViewBag.staffrole == "DeptHead") {
 <p>@Html.ActionLink("View Pending Requisition", "Manage")</p>
 }
 
-<label> Filter by status: </label>
-@Html.ActionLink("Approved", "ViewHistory", new { status = "Approved" })
-@Html.ActionLink("Rejected", "ViewHistory", new { status = "Rejected" })
-@Html.ActionLink("Completed", "ViewHistory", new { status = "Completed" })
-@Html.ActionLink("See All", "ViewHistory", new { status = "All" })
+<p style="margin:20px">    </p>
+<table class="table table-striped">
+    <tr>
+        <th>Filter by status:</th>
+        <td>@Html.ActionLink("Approved", "ViewHistory", new { status = "Approved" })</td>
+        <td>@Html.ActionLink("Rejected", "ViewHistory", new { status = "Rejected" })</td>
+        <td>@Html.ActionLink("Completed", "ViewHistory", new { status = "Completed" })</td>
+        <td>@Html.ActionLink("See All", "ViewHistory", new { status = "All" })</td>
+    </tr>
+</table>
 
 
 
+<p style="margin:50px">    </p>
 <table class="table">
     <tr>
 
