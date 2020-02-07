@@ -9,8 +9,9 @@
 
 }
 
-
+@if (ViewBag.staffrole == "head") {
 <p>@Html.ActionLink("View Pending Requisition", "Manage")</p>
+}
 
 <label> Filter by status: </label>
 @Html.ActionLink("Approved", "ViewHistory", new { status = "Approved" })
@@ -93,4 +94,4 @@
 <br />
 Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
-@Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+@Html.PagedListPager(Model, page => Url.Action("ViewHistory", new { page, sortOrder = ViewBag.CurrentSort,status = ViewBag.CurrentStatus }))

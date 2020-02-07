@@ -9,9 +9,11 @@
 
 @{
     ViewBag.Title = "Edit";
+    ViewBag.Header = "Edit Requisition Order";
+    ViewBag.Section="Requisitions";
 }
 
-<h2>Edit</h2>
+
 
 @using (Html.BeginForm("Save", "Requisition", new { id = Model.ROID }))
 {

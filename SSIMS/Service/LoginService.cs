@@ -145,7 +145,9 @@ namespace SSIMS.Service
         public static bool IsAuthorizedRoles(string authorizedRole)
         {
             string actualrole = HttpContext.Current.Session["role"].ToString();
-            if (actualrole.Equals(authorizedRole) || actualrole.Equals("Admin"))
+            if (actualrole.Equals(authorizedRole)
+                || actualrole.Equals("Admin")
+                || authorizedRole.Equals("All"))
                 return true;
 
             return false;

@@ -53,6 +53,9 @@ namespace SSIMS.Controllers
         // GET: Requisition/Create
         public ActionResult Create()
         {
+            if (!LoginService.IsAuthorizedRoles("staff", "rep"))
+                return RedirectToAction("Index", "Home");
+
             Debug.WriteLine("Hello im in create now");
             
             RequisitionItemVM vm = new RequisitionItemVM();
@@ -115,8 +118,7 @@ namespace SSIMS.Controllers
                 RequisitionOrder rq = new RequisitionOrder(unitofwork.StaffRepository.GetByID(staff.ID));
 
                 rq.DocumentItems = doitems;
-                rq.Comments = ViewBag.comments;
-                //Debug.WriteLine(ViewBag.comments);
+                
                 unitofwork.RequisitionOrderRepository.Insert(rq);
 
                 unitofwork.Save();
@@ -135,6 +137,11 @@ namespace SSIMS.Controllers
         // GET: Requisition
         public ActionResult Index(Staff staff, int? page)
         {
+            if (LoginService.IsAuthorizedRoles("head"))
+                return RedirectToAction("Manage", "Requisition");
+            if (LoginService.IsAuthorizedRoles("manager", "supervisor", "clerk"))
+                return RedirectToAction("ViewHistory", "Requisition");
+
             staff = loginService.StaffFromSession;
 
             Debug.WriteLine(staff.Name + staff.ID);
@@ -164,14 +171,21 @@ namespace SSIMS.Controllers
         // GET: Requisition/ViewHistory
         public ActionResult ViewHistory(int? page, string status, string sortOrder)
         {
+            if (LoginService.IsAuthorizedRoles("staff"))
+                return RedirectToAction("Index", "Home");
+            ViewBag.CurrentSort = sortOrder;
             ViewBag.CreDates = String.IsNullOrEmpty(sortOrder) ? "cre_date" : "";
             ViewBag.ResDates = String.IsNullOrEmpty(sortOrder) ? "res_date" : "";
+
+            ViewBag.CurrentStatus = status;
 
             var unitofwork = new UnitOfWork();
             var reqList = new List<RequisitionOrder>();
             //reqList = unitofwork.RequisitionOrderRepository.Get().ToList();
 
             Staff staff= loginService.StaffFromSession;
+            ViewBag.staffrole = staff.StaffRole;
+
             Debug.WriteLine("staff role "+staff.StaffRole);
             Debug.WriteLine("session role "+ Session["role"]);
 
@@ -223,7 +237,7 @@ namespace SSIMS.Controllers
                 Debug.WriteLine(staff.StaffRole);
                 reqList = unitofwork.RequisitionOrderRepository.Get(filter: x => x.Status == Models.Status.Approved || x.Status == Models.Status.Rejected || x.Status == Models.Status.Completed).ToList();
 
-
+                Debug.WriteLine(reqList.Count);
 
                 switch (status)
                 {
@@ -255,6 +269,7 @@ namespace SSIMS.Controllers
                         reqList = (List<RequisitionOrder>)reqList.OrderByDescending(i => i.ResponseDate).ToList();
                         break;
                 }
+                Debug.WriteLine(reqList.Count);
 
             }
 
@@ -270,7 +285,12 @@ namespace SSIMS.Controllers
         //GET:Requisition/Manage
         public ActionResult Manage(int? page)
         {
+            if (!LoginService.IsAuthorizedRoles("head"))
+                return RedirectToAction("Index", "Home");
+
             Staff staff = loginService.StaffFromSession;
+           
+
             Debug.WriteLine(staff.DepartmentID);
             var unitofwork = new UnitOfWork();
             var reqList = unitofwork.RequisitionOrderRepository.Get(filter: x => x.Status == Models.Status.Pending && x.CreatedByStaff.DepartmentID==staff.DepartmentID);
@@ -341,6 +361,10 @@ namespace SSIMS.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
+            Staff staff = loginService.StaffFromSession;
+            ViewBag.staffrole = staff.StaffRole;
+            //Debug.WriteLine(ViewBag.staffrole);
 
             var unitofwork = new UnitOfWork();
 
@@ -574,9 +598,8 @@ namespace SSIMS.Controllers
             return View(requisitionOrder);
         }
 
-
         //GET: Requisition/Reject/4
-        public ActionResult Reject(int id,string comment)
+        public ActionResult Reject(int id, string comment)
         {
             if (id == null)
             {
@@ -598,6 +621,54 @@ namespace SSIMS.Controllers
 
             return View(requisitionOrder);
         }
+
+        public ActionResult Approvequick(int id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+           
+            var unitofwork = new UnitOfWork();
+
+            RequisitionOrder requisitionOrder = unitofwork.RequisitionOrderRepository.Get(filter: x => x.ID == id, includeProperties: "DocumentItems.Item").FirstOrDefault();
+            if (requisitionOrder == null)
+            {
+                return HttpNotFound();
+            }
+            requisitionOrder.Approve(loginService.StaffFromSession);
+           
+            unitofwork.RequisitionOrderRepository.Update(requisitionOrder);
+            unitofwork.Save();
+
+
+            return RedirectToAction("Manage", "Requisition");
+        }
+        public ActionResult Rejectquick(int id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var unitofwork = new UnitOfWork();
+
+            RequisitionOrder requisitionOrder = unitofwork.RequisitionOrderRepository.Get(filter: x => x.ID == id, includeProperties: "DocumentItems.Item").FirstOrDefault();
+            if (requisitionOrder == null)
+            {
+                return HttpNotFound();
+            }
+            requisitionOrder.Rejected(loginService.StaffFromSession);
+
+            unitofwork.RequisitionOrderRepository.Update(requisitionOrder);
+            unitofwork.Save();
+
+
+            return RedirectToAction("Manage", "Requisition");
+        }
+
+
+        
 
 
 
