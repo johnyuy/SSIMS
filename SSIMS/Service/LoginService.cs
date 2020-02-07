@@ -142,19 +142,35 @@ namespace SSIMS.Service
             }
         }
 
-        public bool  AuthorizeRole(string role)
+        public static bool IsAuthorizedRoles(string authorizedRole)
         {
+            string actualrole = HttpContext.Current.Session["role"].ToString();
+            if (actualrole.Equals(authorizedRole) || actualrole.Equals("Admin"))
+                return true;
+
             return false;
         }
 
-        public bool AuthorizeRole(string role1, string role2)
+        public static bool IsAuthorizedRoles(string authorizedRole1, string authorizedRole2)
         {
+            string actualrole = HttpContext.Current.Session["role"].ToString();
+            if (actualrole.Equals(authorizedRole1)
+                || actualrole.Equals(authorizedRole2)
+                || actualrole.Equals("Admin"))
+                return true;
             return false;
         }
 
-        public bool AuthorizeRole(string role1, string role2, string role3)
+        public static bool IsAuthorizedRoles(string authorizedRole1, string authorizedRole2, string authorizedRole3)
         {
+            string actualrole = HttpContext.Current.Session["role"].ToString();
+            if (actualrole.Equals(authorizedRole1)
+                || actualrole.Equals(authorizedRole2)
+                || actualrole.Equals(authorizedRole3)
+                || actualrole.Equals("Admin"))
+                return true;
             return false;
         }
+
     }
 }

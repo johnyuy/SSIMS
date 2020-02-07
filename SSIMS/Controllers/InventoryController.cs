@@ -22,8 +22,13 @@ namespace SSIMS.Controllers
     {
         private UnitOfWork uow = new UnitOfWork();
         private InventoryService InventoryService = new InventoryService();
+
         public ActionResult Index(string searchString, string lowStock)
         {
+            if (!LoginService.IsAuthorizedRoles("manager", "supervisor", "clerk"))
+                return RedirectToAction("Index", "Home");
+
+
             Debug.WriteLine("searchString = " + searchString + "\tlowStock = " + lowStock);
             bool low = lowStock == "true" ? true : false;
             InventoryViewModel inventoryViewModel =  new InventoryViewModel(searchString, low);
@@ -37,6 +42,8 @@ namespace SSIMS.Controllers
 
         public ActionResult Details(int? id, string stockcard)
         {
+            if (!LoginService.IsAuthorizedRoles("manager", "supervisor", "clerk"))
+                return RedirectToAction("Index", "Home");
             if (id == null)
                 return RedirectToAction("Index");
 
