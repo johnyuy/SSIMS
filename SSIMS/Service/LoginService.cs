@@ -27,6 +27,21 @@ namespace SSIMS.Service
             return false;
         }
 
+        public bool VerifyPasswordApi(string username, string password)
+        {
+            Debug.WriteLine("\n[Login Attempt]");
+            UserAccount account = uow.UserAccountRepository.GetByID(username);
+            if (account != null && password == account.Password)
+            {
+                Debug.WriteLine("\tACCESS GRANTED: " + account.ID);
+
+                //GenerateIdentity(account);
+                return true;
+            }
+            Debug.WriteLine("\tACCESS DENIED!\n");
+            return false;
+        }
+
         public string UpdateSession(string username, string sessionId)
         {
             UserAccount account = uow.UserAccountRepository.GetByID(username);
