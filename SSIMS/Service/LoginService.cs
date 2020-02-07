@@ -136,10 +136,25 @@ namespace SSIMS.Service
                 if (HttpContext.Current.Session["username"] == null)
                     return null;
                 string username = HttpContext.Current.Session["username"].ToString();
-                Staff staff = uow.StaffRepository.Get(filter: x => x.UserAccountID == username, includeProperties: "Department").First();
+                Staff staff = uow.StaffRepository.Get(filter: x => x.UserAccountID == username).FirstOrDefault();
 
                 return staff;
             }
+        }
+
+        public bool  AuthorizeRole(string role)
+        {
+            return false;
+        }
+
+        public bool AuthorizeRole(string role1, string role2)
+        {
+            return false;
+        }
+
+        public bool AuthorizeRole(string role1, string role2, string role3)
+        {
+            return false;
         }
     }
 }
