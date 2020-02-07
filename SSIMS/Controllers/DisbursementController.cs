@@ -23,7 +23,7 @@ namespace SSIMS.Controllers
         private DatabaseContext db = new DatabaseContext();
         private UnitOfWork unitOfWork = new UnitOfWork();
         private DisbursementService ds = new DisbursementService();
-
+        private readonly ILoginService loginService = new LoginService();
         // GET: DisbursementLists
         public ActionResult Index()
         {
@@ -58,13 +58,17 @@ namespace SSIMS.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Retrieval([Bind(Include = "rivmlist, ROList")] RetrivalVM model)
+        public ActionResult Retrieval([Bind(Include = "ROList, rivmlist")] RetrivalVM model)
         {
+            
+            //model.ROList[i].ID;
+            //rivmlist.deptRetrievalItems.transactionItem.Item,
+            //model.rivmlist[1].deptRetrievalItems[i].transactionItem.Item
             List<RequisitionOrder> ROList = model.ROList;
             foreach(RequisitionOrder RO in ROList)
             {
                 RequisitionOrder NewRO = unitOfWork.RequisitionOrderRepository.GetByID(RO.ID);
-                NewRO.Status = Models.Status.Completed;
+                NewRO.Completed(loginService.StaffFromSession);
                 unitOfWork.RequisitionOrderRepository.Update(NewRO);
                 unitOfWork.Save();
             }

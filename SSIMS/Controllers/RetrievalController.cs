@@ -13,7 +13,7 @@ using PagedList;
 
 namespace SSIMS.Controllers
 {
-    public class RetrievalListsController : Controller
+    public class RetrievalController : Controller
     {
         private DatabaseContext db = new DatabaseContext();
         private UnitOfWork uow = new UnitOfWork();
@@ -21,7 +21,7 @@ namespace SSIMS.Controllers
         // GET: RetrievalLists
         public ActionResult Index(int? page, string status)
         {
-            var retrievalList = uow.RetrievalListRepository.Get(includeProperties: "CreatedByStaff, ItemTransactions, Department").ToList();
+            var retrievalList = uow.RetrievalListRepository.Get(includeProperties: "CreatedByStaff, ItemTransactions.Item, Department").ToList();
             int pageSize = 15;
             int pageNumber = (page ?? 1);
 
@@ -36,7 +36,7 @@ namespace SSIMS.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            RetrievalList retrievalList = db.RetrievalLists.Find(id);
+            var retrievalList = (RetrievalList)uow.RetrievalListRepository.Get(filter:x => x.ID == id, includeProperties: "CreatedByStaff, Department, ItemTransactions.Item").FirstOrDefault();
             if (retrievalList == null)
             {
                 return HttpNotFound();

@@ -6,6 +6,7 @@ using System.Linq;
 using SSIMS.DAL;
 using System.Web;
 using Foolproof;
+using SSIMS.ViewModels;
 
 
 namespace SSIMS.Models
@@ -26,6 +27,8 @@ namespace SSIMS.Models
         public Item Item { get; set; }
 
         public virtual Document Document { get; set; }
+
+        UnitOfWork uow = new UnitOfWork();
 
         public TransactionItem()
         {
@@ -54,6 +57,17 @@ namespace SSIMS.Models
             HandOverQty = handOverQty;
             TakeOverQty = takeOverQty;
             Reason = reason;
+        }
+
+        public TransactionItem(DeptRetrievalItemViewModel drvm)
+        {
+            string itemID = drvm.transactionItem.Item.ID;
+            Item = uow.ItemRepository.GetByID(itemID);
+            HandOverQty = drvm.transactionItem.HandOverQty;
+            TakeOverQty = drvm.transactionItem.TakeOverQty;
+            Reason = drvm.transactionItem.Reason;
+
+
         }
 
     }

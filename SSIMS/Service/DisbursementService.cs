@@ -112,7 +112,7 @@ namespace SSIMS.Service
         {
 
             // find transactional item using dept and item and in progress
-            var deptRetrievalList = (RetrievalList)unitOfWork.RetrievalListRepository.Get(includeProperties: "Department", filter: x => x.Department.ID == d.ID && x.Status == Models.Status.InProgress);
+            var deptRetrievalList = (RetrievalList)unitOfWork.RetrievalListRepository.Get(includeProperties: "Department, ItemTransactions.Item", filter: x => x.Department.ID == d.ID && x.Status == Models.Status.InProgress);
             TransactionItem tItem = (TransactionItem)deptRetrievalList.ItemTransactions.Where(x => x.Item == item);
 
             // using found item to construct DeptRetrievalItem
@@ -370,8 +370,13 @@ namespace SSIMS.Service
             // consolidate all dept retrival item to a single list 
             foreach (RetrievalItemViewModel rivm in rivmList)
             {
+                // find item from database
+                Debug.WriteLine("rivm items are: " + rivm.item.Description);
                 foreach (DeptRetrievalItemViewModel drvm in rivm.deptRetrievalItems)
                 {
+                    //construct full transactionitem with referencee to db 
+                    
+                    Debug.WriteLine("drvm items are: " + drvm.transactionItem.Item.ID);
                     deptRetrievalItemViewModel.Add(drvm);
                 }
             }
@@ -394,7 +399,8 @@ namespace SSIMS.Service
                 {
                     if (drvm.deptID == deptid)
                     {
-                        transactionItems.Add(drvm.transactionItem);
+                        TransactionItem transItem = new TransactionItem(drvm);
+                        transactionItems.Add(transItem);
                     }
                 }
                 rl.ItemTransactions = transactionItems;
