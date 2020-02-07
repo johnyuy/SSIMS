@@ -22,8 +22,13 @@ namespace SSIMS.Controllers
     {
         private UnitOfWork uow = new UnitOfWork();
         private InventoryService InventoryService = new InventoryService();
+
         public ActionResult Index(string searchString, string lowStock)
         {
+            if (!LoginService.IsAuthorizedRoles("manager", "supervisor", "clerk"))
+                return RedirectToAction("Index", "Home");
+
+
             Debug.WriteLine("searchString = " + searchString + "\tlowStock = " + lowStock);
             bool low = lowStock == "true" ? true : false;
             InventoryViewModel inventoryViewModel =  new InventoryViewModel(searchString, low);
@@ -35,9 +40,10 @@ namespace SSIMS.Controllers
             return View(inventoryViewModel.inventoryItems.ToList());
         }
 
-        // GET: Inventory/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(int? id, string stockcard)
         {
+            if (!LoginService.IsAuthorizedRoles("manager", "supervisor", "clerk"))
+                return RedirectToAction("Index", "Home");
             if (id == null)
                 return RedirectToAction("Index");
 
@@ -52,6 +58,7 @@ namespace SSIMS.Controllers
             ViewBag.CurrentItemIndex = 1;
             ViewBag.PrevItemID = "";
             ViewBag.NextItemID = "";
+            ViewBag.StockCard = stockcard == "true" ? "true" : "";
             if (inventoryViewModel != null)
             {
                 ViewBag.MaxItemsCount = inventoryViewModel.inventoryItems.Count();
@@ -61,47 +68,6 @@ namespace SSIMS.Controllers
             }
             return View(inventoryItemDetailsVM);
         }
-
-        // GET: Inventory/Create
-/*        public ActionResult Create()
-        {
-            ViewBag.ItemID = new SelectList(db.Items, "ID", "Category");
-            return View();
-        }*/
-
-
-        
-
-/*        // GET: Inventory/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            InventoryItem inventoryItem = db.InventoryItems.Find(id);
-            if (inventoryItem == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.ItemID = new SelectList(db.Items, "ID", "Category", inventoryItem.ItemID);
-            return View(inventoryItem);
-        }*/
-
-
-/*        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,ItemID,InStoreQty,InTransitQty,ReorderLvl,ReorderQty,StockCheck")] InventoryItem inventoryItem)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(inventoryItem).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            ViewBag.ItemID = new SelectList(db.Items, "ID", "Category", inventoryItem.ItemID);
-            return View(inventoryItem);
-        }*/
 
 
         protected override void Dispose(bool disposing)

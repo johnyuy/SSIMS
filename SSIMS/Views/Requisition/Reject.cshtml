@@ -1,95 +1,98 @@
 ﻿@model SSIMS.Models.RequisitionOrder
 @{
     ViewBag.Title = "Reject";
+    ViewBag.Header = "Requisition Order Details";
+    ViewBag.Section = "Requisitions";
 }
 
-<h2>Reject Details</h2>
 
 
-<table>
+
+
+<table class="table table-bordered">
     <tr>
-        <td>
-            @Html.LabelFor(x => x.ID, htmlAttributes: new { @class = "control-label col-md-2" })
-        </td>
+        <th>
+            Requisition ID
+            @*@Html.LabelFor(x => x.ID, htmlAttributes: new { @class = "control-label col-md-2" })*@
+        </th>
         <td>
             @Html.DisplayFor(x => x.ID)
         </td>
-    </tr>
 
-
-    <tr>
+        <th>
+            Department
+            @*@Html.LabelFor(x => x.CreatedByStaff.Department, htmlAttributes: new { @class = "control-label col-md-2" })*@
+        </th>
         <td>
-            @Html.LabelFor(x => x.CreatedByStaff.Department.DeptName, htmlAttributes: new { @class = "control-label col-md-2" })
-        </td>
-        <td>
-            @Html.DisplayFor(x => x.CreatedByStaff.Department.DeptName)
+            @Html.DisplayFor(x => x.CreatedByStaff.DepartmentID)
         </td>
     </tr>
 
     <tr>
-        <td>
-            @Html.LabelFor(x => x.CreatedDate, htmlAttributes: new { @class = "control-label col-md-2" })
-
-        </td>
-        <td>
+        <th>
+            Created Date
+            @*@Html.LabelFor(x => x.CreatedDate, htmlAttributes: new { @class = "control-label col-md-2" })*@
+        </th>
+        <td class="noBorder">
             @Html.DisplayFor(x => x.CreatedDate)
 
         </td>
-    </tr>
 
-    <tr>
-        <td>
-            @Html.LabelFor(x => x.Status, htmlAttributes: new { @class = "control-label col-md-2" })
+        <th>
+            Status
+            @*@Html.LabelFor(x => x.Status, htmlAttributes: new { @class = "control-label col-md-2" })*@
 
-        </td>
+        </th>
         <td>
             @Html.DisplayFor(x => x.Status)
         </td>
     </tr>
 
     <tr>
-        <td>
-            @Html.LabelFor(x => x.CreatedByStaffID, htmlAttributes: new { @class = "control-label col-md-2" })
-        </td>
+        <th>
+            Staff ID
+            @*@Html.LabelFor(x => x.CreatedByStaffID, htmlAttributes: new { @class = "control-label col-md-2" })*@
+        </th>
         <td>
             @Html.DisplayFor(x => x.CreatedByStaff.ID)
 
         </td>
-    </tr>
-    <tr>
-        <td>
-            @Html.LabelFor(x => x.CreatedByStaff, htmlAttributes: new { @class = "control-label col-md-2" })
 
-        </td>
+        <th>
+            Staff Name
+            @*@Html.LabelFor(x => x.CreatedByStaff, htmlAttributes: new { @class = "control-label col-md-2" })*@
+
+        </th>
         <td>
             @Html.DisplayFor(x => x.CreatedByStaff.Name)
 
         </td>
     </tr>
     <tr>
-        <td>
-            @Html.LabelFor(x => x.RepliedByStaff, htmlAttributes: new { @class = "control-label col-md-2" })
-        </td>
+        <th>
+            Replied By Staff
+            @*@Html.LabelFor(x => x.RepliedByStaff, htmlAttributes: new { @class = "control-label col-md-2" })*@
+        </th>
         <td>
             @Html.DisplayFor(x => x.RepliedByStaff.Name)
 
         </td>
-    </tr>
 
-    <tr>
-        <td>
-            @Html.LabelFor(x => x.ResponseDate, htmlAttributes: new { @class = "control-label col-md-2" })
-        </td>
+        <th>
+            Response Date
+            @*@Html.LabelFor(x => x.ResponseDate, htmlAttributes: new { @class = "control-label col-md-2" })*@
+        </th>
         <td>
             @Html.DisplayFor(x => x.ResponseDate)
         </td>
     </tr>
 
     <tr>
-        <td>
-            @Html.LabelFor(x => x.Comments, htmlAttributes: new { @class = "control-label col-md-2" })
-        </td>
-        <td>
+        <th>
+            Comments
+            @*@Html.LabelFor(x => x.Comments, htmlAttributes: new { @class = "control-label col-md-2" })*@
+        </th>
+        <td colspan="3">
             @Html.DisplayFor(x => x.Comments)
         </td>
     </tr>
@@ -97,51 +100,52 @@
 </table>
 
 
+
 @*
-<div class="form-group">
-    @Html.LabelFor(x => x.CreatedDate, htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-5">
-        @Html.DisplayFor(x => x.CreatedDate)
+    <div class="form-group">
+        @Html.LabelFor(x => x.CreatedDate, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-5">
+            @Html.DisplayFor(x => x.CreatedDate)
+        </div>
     </div>
-</div>
 
 
-<div class="form-group">
-    @Html.LabelFor(x => x.Status, htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-5">
-        @Html.DisplayFor(x => x.Status)
+    <div class="form-group">
+        @Html.LabelFor(x => x.Status, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-5">
+            @Html.DisplayFor(x => x.Status)
+        </div>
     </div>
-</div>
 
-<div class="form-group">
-    @Html.LabelFor(x => x.CreatedByStaff, htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-5">
-        @Html.DisplayFor(x => x.CreatedByStaff.Name)
+    <div class="form-group">
+        @Html.LabelFor(x => x.CreatedByStaff, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-5">
+            @Html.DisplayFor(x => x.CreatedByStaff.Name)
+        </div>
     </div>
-</div>
 
-<div class="form-group">
-    @Html.LabelFor(x => x.RepliedByStaff, htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-5">
-        @Html.DisplayFor(x => x.RepliedByStaff.Name)
+    <div class="form-group">
+        @Html.LabelFor(x => x.RepliedByStaff, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-5">
+            @Html.DisplayFor(x => x.RepliedByStaff.Name)
+        </div>
     </div>
-</div>
 
 
 
-<div class="form-group">
-    @Html.LabelFor(x => x.ResponseDate, htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-5">
-        @Html.DisplayFor(x => x.ResponseDate)
+    <div class="form-group">
+        @Html.LabelFor(x => x.ResponseDate, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-5">
+            @Html.DisplayFor(x => x.ResponseDate)
+        </div>
     </div>
-</div>
 
-<div class="form-group">
-    @Html.LabelFor(x => x.Comments, htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-5">
-        @Html.DisplayFor(x => x.Comments)
+    <div class="form-group">
+        @Html.LabelFor(x => x.Comments, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-5">
+            @Html.DisplayFor(x => x.Comments)
+        </div>
     </div>
-</div>
 *@
 
 <table class="table">

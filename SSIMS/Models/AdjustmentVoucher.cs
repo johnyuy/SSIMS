@@ -13,6 +13,8 @@ namespace SSIMS.Models
         {
         }
 
+        public AdjustmentVoucher() : base() { } 
+
         public Boolean UpdateInventoryItem()
         {
             Console.WriteLine("UpdateInventoryItem()");

@@ -2,33 +2,65 @@
 
 @{
     ViewBag.Title = "Details";
+    ViewBag.Header = "Requisition Order Details";
+    ViewBag.Section="Requisitions";
 }
+<script>
+    function post(path, params, method = 'post') {
+        const form = document.createElement('form');
+        form.method = method;
+        form.action = path;
 
-<h2>Details</h2>
+        for (const key in params) {
+            if (params.hasOwnProperty(key)) {
+                const hiddenField = document.createElement('input');
+                hiddenField.type = 'hidden';
+                hiddenField.name = key;
+                hiddenField.value = params[key];
+                form.appendChild(hiddenField);
+            }
+        }
+        document.body.appendChild(form);
+        form.submit();
+    }
 
-<table>
+    approve(){
+        var comment = document.getElementById("comment").value;
+        post('/requisition/approve', { 'id': @Model.ID, 'comment': comment });
+    }
+
+    reject(){
+        var comment = document.getElementById("comment").value;
+        post('/requisition/reject', { 'id': @Model.ID, 'comment': comment });
+    }
+</script>
+
+
+<table  class="table table-bordered" >
     <tr>
-        <td>
-            @Html.LabelFor(x => x.ID, htmlAttributes: new { @class = "control-label col-md-2" })
-        </td>
+        <th>
+            Requisition ID
+            @*@Html.LabelFor(x => x.ID, htmlAttributes: new { @class = "control-label col-md-2" })*@
+        </th>
         <td>
             @Html.DisplayFor(x => x.ID)
         </td>
     </tr>
 
     <tr>
+        <th>
+            Department
+            @*@Html.LabelFor(x => Model.CreatedByStaff.Department, htmlAttributes: new { @class = "control-label col-md-2" })*@
+        </th>
         <td>
-            @Html.LabelFor(x => Model.CreatedByStaff.Department.DeptName, htmlAttributes: new { @class = "control-label col-md-2" })
-        </td>
-        <td>
-            @Html.DisplayFor(x => Model.CreatedByStaff.Department.DeptName)
+            @Html.DisplayFor(x => Model.CreatedByStaff.DepartmentID)
         </td>
     </tr>
 
     <tr>
-        <td>
-            @Html.LabelFor(x => x.CreatedByStaff.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-        </td>
+        <th>Staff Name
+            @*@Html.LabelFor(x => x.CreatedByStaff.Name, htmlAttributes: new { @class = "control-label col-md-2" })*@
+        </th>
         <td>
             @Html.DisplayFor(x => x.CreatedByStaff.Name)
 
@@ -36,17 +68,17 @@
     </tr>
 
     <tr>
-        <td>
-            @Html.LabelFor(x => x.CreatedDate, htmlAttributes: new { @class = "control-label col-md-2" })
-        </td>
+        <th>Created Date
+            @*@Html.LabelFor(x => x.CreatedDate, htmlAttributes: new { @class = "control-label col-md-2" })*@
+        </th>
         <td>
             @Html.DisplayFor(x => x.CreatedDate)
         </td>
     </tr>
     <tr>
-        <td>
-            @Html.LabelFor(x => x.Status, htmlAttributes: new { @class = "control-label col-md-2" })
-        </td>
+        <th>Status
+            @*@Html.LabelFor(x => x.Status, htmlAttributes: new { @class = "control-label col-md-2" })*@
+        </th>
         <td>
             @Html.DisplayFor(x => x.Status)
         </td>
@@ -101,39 +133,58 @@
 </table>
 
 @*staff see below*@
-<p>
-    @Html.ActionLink("Back to List", "Index")
-</p>
-@*staff see below when status=pending*@
-
-@if (Model.Status == SSIMS.Models.Status.Pending)
+@if (ViewBag.staffrole == "Staff")
 {
     <p>
-        @Html.ActionLink("Edit", "Edit", new { id = Model.ID })
+        @Html.ActionLink("Back to List", "Index")
     </p>
-    <p>
-        @Html.ActionLink("Cancel", "Cancel", new { id = Model.ID })
-    </p>
-    
+    @*staff see below when status=pending*@
+
+    if (Model.Status == SSIMS.Models.Status.Pending)
+    {
+        <p>
+            @Html.ActionLink("Edit", "Edit", new { id = Model.ID })
+        </p>
+        <p>
+            @Html.ActionLink("Cancel", "Cancel", new { id = Model.ID })
+        </p>
+
+    }
 }
-
-@*Dep rep see below *@
-<p>
-    @Html.ActionLink("View Requisition History List", "ViewHistory")
-</p>
-
-<p>
-    @Html.ActionLink("Back to Pending List", "Manage")
-</p>
-
-@if (Model.Status == SSIMS.Models.Status.Pending)
+else
 {
+    @*Dep rep see below *@
     <p>
-        @Html.ActionLink("Approve", "Approve", new { id = Model.ID })
+        @Html.ActionLink("View Requisition History List", "ViewHistory")
     </p>
-    <p>
-        @Html.ActionLink("Reject", "Reject", new { id = Model.ID })
-    </p>
-}
 
+    <p>
+        @Html.ActionLink("Back to Pending List", "Manage")
+    </p>
+
+    if (Model.Status == SSIMS.Models.Status.Pending)
+    {
+        @*<p>
+            @Html.ActionLink("Approve", "Approve", new { id = Model.ID })
+        </p>
+
+        <p>
+            @Html.ActionLink("Reject", "Reject", new { id = Model.ID })
+        </p>*@
+
+        <form action="/requisition/approve">
+            <input type="text" name="comment" value=@Model.Comments />
+            <input type="hidden" name="id" value="@Model.ID" />
+            <button>Approve</button>
+        </form>
+
+        <form action="/requisition/reject">
+            <input type="text" name="comment" value=@Model.Comments />
+            <input type="hidden" name="id" value="@Model.ID" />
+            <button>Reject</button>
+        </form>
+
+
+    }
+}
 

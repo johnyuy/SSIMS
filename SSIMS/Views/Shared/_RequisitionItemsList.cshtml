@@ -6,6 +6,7 @@
 }
 
 
+<p style="margin:50px">    </p>
 @using (Html.BeginForm("SubmitRequisition", "Requisition"))
 {
     @Html.AntiForgeryToken()
@@ -19,16 +20,19 @@
         </tr>
         @foreach (RequisitionItemVM rivm in requisitionItems)
         {
-            if (rivm.Quantity != 0) { 
-            <tr>
-                <td>@rivm.SelectedCategory</td>
-                <td>@rivm.displayDescription</td>
-                <td>@rivm.UnitOfMeasure</td>
-                <td>@rivm.Quantity</td>
-            </tr>
+            if (rivm.Quantity != 0)
+            {
+                <tr>
+                    <td>@rivm.SelectedCategory</td>
+                    <td>@rivm.displayDescription</td>
+                    <td>@rivm.UnitOfMeasure</td>
+                    <td>@rivm.Quantity</td>
+                </tr>
             }
         }
     </table>
+    @*<p>Commments: @Html.TextBox("comments", (String)ViewBag.comments)</p>*@
+
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <input type="submit" value="Submit" class="btn btn-primary" />
+<p style="text-align:right"> <input type="submit" value="Submit" style="direction:rtl" class="btn btn-primary" /></p>
 } 

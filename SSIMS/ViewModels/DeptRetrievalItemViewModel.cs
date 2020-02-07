@@ -17,5 +17,9 @@ namespace SSIMS.ViewModels
             this.deptID = deptID;
             this.transactionItem = transactionItem;
         }
+
+        public DeptRetrievalItemViewModel()
+        {
+        }
     }
 }

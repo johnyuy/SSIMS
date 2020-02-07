@@ -309,6 +309,7 @@
     <Compile Include="Controllers\PurchaseItemsController.cs" />
     <Compile Include="Controllers\PurchaseOrdersController.cs" />
     <Compile Include="Controllers\RequisitionController.cs" />
+    <Compile Include="Controllers\RetrievalListsController.cs" />
     <Compile Include="Controllers\StaffsController.cs" />
     <Compile Include="Controllers\TestAPIController.cs" />
     <Compile Include="DAL\CollectionPointRepository.cs" />
@@ -373,6 +374,7 @@
     <Compile Include="Service\LoginService.cs" />
     <Compile Include="Service\NestedListValidationAttribute.cs" />
     <Compile Include="Service\NestedListValidationResult.cs" />
+    <Compile Include="Service\NotificationService.cs" />
     <Compile Include="Service\PurchaseOrderService.cs" />
     <Compile Include="Service\StaffService.cs" />
     <Compile Include="Service\DisbursementService.cs" />
@@ -382,6 +384,7 @@
     <Compile Include="ViewModels\DeliveryOrderVM.cs" />
     <Compile Include="ViewModels\DeptRetrievalItemViewModel.cs" />
     <Compile Include="ViewModels\InventoryItemDetailsVM.cs" />
+    <Compile Include="ViewModels\InventoryStockCardVM.cs" />
     <Compile Include="ViewModels\InventoryViewModel.cs" />
     <Compile Include="ViewModels\PurchaseItemVM.cs" />
     <Compile Include="ViewModels\PurchaseOrderVM.cs" />
@@ -389,10 +392,12 @@
     <Compile Include="ViewModels\RequisitionSummaryViewModel.cs" />
     <Compile Include="ViewModels\RetrievalListItemVM.cs" />
     <Compile Include="ViewModels\RetrievalListVM.cs" />
+    <Compile Include="ViewModels\RetrivalVM.cs" />
     <Compile Include="ViewModels\UserLogin.cs" />
     <Compile Include="ViewModels\RetrievalItemViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Client Scripts\gen_validatorv4.js" />
     <Content Include="Client Scripts\mvcfoolproof.unobtrusive.js" />
     <Content Include="Client Scripts\mvcfoolproof.unobtrusive.min.js" />
     <Content Include="Client Scripts\MvcFoolproofJQueryValidation.js" />
@@ -509,8 +514,6 @@
     <Content Include="Views\PurchaseOrders\Details.cshtml" />
     <Content Include="Views\PurchaseOrders\Edit.cshtml" />
     <Content Include="Views\PurchaseOrders\Index.cshtml" />
-    <Content Include="Views\Inventory\Create.cshtml" />
-    <Content Include="Views\Inventory\Delete.cshtml" />
     <Content Include="Views\Inventory\Details.cshtml" />
     <Content Include="Views\Inventory\Edit.cshtml" />
     <Content Include="Views\Inventory\Index.cshtml" />
@@ -530,7 +533,13 @@
     <Content Include="Views\Requisition\Create.cshtml" />
     <Content Include="Views\Requisition\Index.cshtml" />
     <Content Include="Views\Requisition\Details.cshtml" />
+    <Content Include="Views\RetrievalLists\Create.cshtml" />
+    <Content Include="Views\RetrievalLists\Delete.cshtml" />
+    <Content Include="Views\RetrievalLists\Details.cshtml" />
+    <Content Include="Views\RetrievalLists\Edit.cshtml" />
+    <Content Include="Views\RetrievalLists\Index.cshtml" />
     <Content Include="Views\Analytics\AnalyticsList2.cshtml" />
+    <Content Include="Views\Requisition\SendEmail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

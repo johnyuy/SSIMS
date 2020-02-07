@@ -4,19 +4,30 @@
 @*@model SSIMS.Models.Status*@
 @{
     ViewBag.Title = "ViewHistory";
+    ViewBag.Header = "Requisition Order History";
+    ViewBag.Section="Requisitions";
+
 }
 
-<h2>View Requisition Order History</h2>
-
+    <p style="margin:10px">    </p>
+@if (ViewBag.staffrole == "DeptHead") {
 <p>@Html.ActionLink("View Pending Requisition", "Manage")</p>
+}
 
-       <label> Sort by status: </label>
-        @Html.ActionLink("Approved", "ViewHistory", new { id=SSIMS.Models.Status.Approved})
-        @Html.ActionLink("Rejected", "ViewHistory", new { id = SSIMS.Models.Status.Rejected })
-        @Html.ActionLink("Completed", "ViewHistory", new { id = SSIMS.Models.Status.Completed })
+<p style="margin:20px">    </p>
+<table class="table table-striped">
+    <tr>
+        <th>Filter by status:</th>
+        <td>@Html.ActionLink("Approved", "ViewHistory", new { status = "Approved" })</td>
+        <td>@Html.ActionLink("Rejected", "ViewHistory", new { status = "Rejected" })</td>
+        <td>@Html.ActionLink("Completed", "ViewHistory", new { status = "Completed" })</td>
+        <td>@Html.ActionLink("See All", "ViewHistory", new { status = "All" })</td>
+    </tr>
+</table>
 
 
 
+<p style="margin:50px">    </p>
 <table class="table">
     <tr>
 
@@ -26,7 +37,8 @@
         </th>
 
         <th>
-            Created Date
+            
+            @Html.ActionLink("Created Date", "ViewHistory", new { sortOrder = ViewBag.CreDates })
             @*@Html.DisplayNameFor(model => model.CreatedDate)*@
         </th>
 
@@ -36,7 +48,8 @@
         </th>
 
         <th>
-            Response Date
+            
+            @Html.ActionLink("Response Date", "ViewHistory", new { sortOrder = ViewBag.ResDates })
             @*@Html.DisplayNameFor(model => model.ResponseDate)*@
         </th>
 
@@ -88,4 +101,4 @@
 <br />
 Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
-@Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+@Html.PagedListPager(Model, page => Url.Action("ViewHistory", new { page, sortOrder = ViewBag.CurrentSort,status = ViewBag.CurrentStatus }))

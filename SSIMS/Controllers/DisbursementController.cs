@@ -16,11 +16,12 @@ using SSIMS.Filters;
 
 namespace SSIMS.Controllers
 {
-    //[AuthenticationFilter]
-    //[AuthorizationFilter]
+    [AuthenticationFilter]
+    [AuthorizationFilter]
     public class DisbursementController : Controller
     {
         private DatabaseContext db = new DatabaseContext();
+        private UnitOfWork unitOfWork = new UnitOfWork();
         private DisbursementService ds = new DisbursementService();
 
         // GET: DisbursementLists
@@ -52,11 +53,28 @@ namespace SSIMS.Controllers
                 return HttpNotFound();
             }
 
-            return View(rivm.ToList());
+            return View(rivm);
         }
 
         [HttpPost]
-       // public ActionResult Confirm ()
+        [ValidateAntiForgeryToken]
+        public ActionResult Retrieval([Bind(Include = "rivmlist, ROList")] RetrivalVM model)
+        {
+            List<RequisitionOrder> ROList = model.ROList;
+            foreach(RequisitionOrder RO in ROList)
+            {
+                RequisitionOrder NewRO = unitOfWork.RequisitionOrderRepository.GetByID(RO.ID);
+                NewRO.Status = Models.Status.Completed;
+                unitOfWork.RequisitionOrderRepository.Update(NewRO);
+                unitOfWork.Save();
+            }
+            
+
+            List<RetrievalItemViewModel> rivmList = model.rivmlist;
+            ds.InsertRetrievalList(rivmList);
+
+            return RedirectToAction("Index");
+        }
 
 
         // GET: DisbursementLists/Details/5

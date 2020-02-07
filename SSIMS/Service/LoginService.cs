@@ -151,10 +151,43 @@ namespace SSIMS.Service
                 if (HttpContext.Current.Session["username"] == null)
                     return null;
                 string username = HttpContext.Current.Session["username"].ToString();
-                Staff staff = uow.StaffRepository.Get(filter: x => x.UserAccountID == username, includeProperties: "Department").First();
+                Staff staff = uow.StaffRepository.Get(filter: x => x.UserAccountID == username).FirstOrDefault();
 
                 return staff;
             }
         }
+
+        public static bool IsAuthorizedRoles(string authorizedRole)
+        {
+            string actualrole = HttpContext.Current.Session["role"].ToString();
+            if (actualrole.Equals(authorizedRole)
+                || actualrole.Equals("Admin")
+                || authorizedRole.Equals("All"))
+                return true;
+
+            return false;
+        }
+
+        public static bool IsAuthorizedRoles(string authorizedRole1, string authorizedRole2)
+        {
+            string actualrole = HttpContext.Current.Session["role"].ToString();
+            if (actualrole.Equals(authorizedRole1)
+                || actualrole.Equals(authorizedRole2)
+                || actualrole.Equals("Admin"))
+                return true;
+            return false;
+        }
+
+        public static bool IsAuthorizedRoles(string authorizedRole1, string authorizedRole2, string authorizedRole3)
+        {
+            string actualrole = HttpContext.Current.Session["role"].ToString();
+            if (actualrole.Equals(authorizedRole1)
+                || actualrole.Equals(authorizedRole2)
+                || actualrole.Equals(authorizedRole3)
+                || actualrole.Equals("Admin"))
+                return true;
+            return false;
+        }
+
     }
 }
