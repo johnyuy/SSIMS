@@ -223,6 +223,7 @@
     <Compile Include="Controllers\RequisitionController.cs" />
     <Compile Include="Controllers\RetrievalListsController.cs" />
     <Compile Include="Controllers\StaffsController.cs" />
+    <Compile Include="DAL\AdjustmentVoucherRepository.cs" />
     <Compile Include="DAL\CollectionPointRepository.cs" />
     <Compile Include="DAL\DeliveryOrderRepository.cs" />
     <Compile Include="DAL\DepartmentRepository.cs" />
@@ -290,6 +291,8 @@
     <Compile Include="Service\DisbursementService.cs" />
     <Compile Include="Service\RequisitionService.cs" />
     <Compile Include="Service\PurchaseService.cs" />
+    <Compile Include="ViewModels\AdjustmentItemVM.cs" />
+    <Compile Include="ViewModels\AdjustmentVoucherVM.cs" />
     <Compile Include="ViewModels\AnalyticsListViewModel.cs" />
     <Compile Include="ViewModels\DeliveryOrderVM.cs" />
     <Compile Include="ViewModels\DeptRetrievalItemViewModel.cs" />
@@ -449,6 +452,9 @@
     <Content Include="Views\RetrievalLists\Edit.cshtml" />
     <Content Include="Views\RetrievalLists\Index.cshtml" />
     <Content Include="Views\Analytics\AnalyticsList2.cshtml" />
+    <Content Include="Views\Inventory\AdjustmentVoucherNew.cshtml" />
+    <Content Include="Views\Inventory\AdjustmentList.cshtml" />
+    <Content Include="Views\Inventory\AdjustmentVoucher.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

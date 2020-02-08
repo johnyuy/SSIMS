@@ -22,7 +22,7 @@ namespace SSIMS.Controllers
     {
         private UnitOfWork uow = new UnitOfWork();
         private InventoryService InventoryService = new InventoryService();
-
+        private ILoginService loginService = new LoginService();
         public ActionResult Index(string searchString, string lowStock)
         {
             if (!LoginService.IsAuthorizedRoles("manager", "supervisor", "clerk"))
@@ -44,7 +44,7 @@ namespace SSIMS.Controllers
         {
             if (!LoginService.IsAuthorizedRoles("manager", "supervisor", "clerk"))
                 return RedirectToAction("Index", "Home");
-            if (id == null)
+            if (!id.HasValue)
                 return RedirectToAction("Index");
 
             InventoryItem inventoryItem = uow.InventoryItemRepository.Get(filter:x=>x.ID==id, includeProperties:"Item").First();
@@ -67,6 +67,125 @@ namespace SSIMS.Controllers
                 ViewBag.NextItemID = InventoryService.GetNextIndexFromSearchList(inventoryItem.ID, inventoryViewModel); ;
             }
             return View(inventoryItemDetailsVM);
+        }
+
+        public ActionResult Adjustment(int? id, string item = "", string command = "")
+        {
+            if (!LoginService.IsAuthorizedRoles("manager", "supervisor", "clerk"))
+                return RedirectToAction("Index", "Home");
+
+            if (command == "add" && item!="")
+            {
+                Debug.WriteLine("adding adjusted item to adjustment cart = " + item);
+                InventoryService.addItemToAdjustmentCart(new AdjustmentItemVM(item));
+                return RedirectToAction("Adjustment", new { command = "view" });
+
+
+            } else if (command == "view" && item == "")
+            {
+                Debug.WriteLine("viewing adjustment cart");
+                if (Session["AdjustmentCart"] == null)
+                {
+                    ViewBag.Empty = "true";
+                    return View("AdjustmentVoucherNew");
+                }
+                else
+                {
+                    ViewBag.ErrorMsg = TempData["ErrorMsg"];
+                    AdjustmentVoucherVM adjustmentCart = (AdjustmentVoucherVM)Session["AdjustmentCart"];
+                    return View("AdjustmentVoucherNew", adjustmentCart);
+                }
+            } else if (id.HasValue)
+            {
+                AdjustmentVoucherVM VM = InventoryService.GetAdjustmentVoucherVMSingle(id.Value);
+                if(VM!=null)
+                    return View("AdjustmentVoucher", VM);
+            }
+
+            //redirect to AV list
+            return View("AdjustmentList", InventoryService.GetAdjustmentVoucherVMList());
+        }
+
+
+        [HttpPost]
+        public ActionResult SaveAdjustments([Bind(Include = "AdjustmentID,ReportedByStaffName,ReportedByStaffID,Status,AdjustmentItems")]AdjustmentVoucherVM AdjustmentVM, string change)
+        {
+
+            Debug.WriteLine("Saving adjustments cart via ajax...");
+            Debug.WriteLine(Server.UrlDecode(change));
+            for (int i = 0; i < change.Split('&').Count(); i++)
+            {
+                string changestr = change.Split('&')[i];
+                if (i % 2 == 0)
+                {
+                    string qty = Server.UrlDecode(changestr.Split('=')[1]);
+                    if (int.TryParse(qty, out int output)){
+                        AdjustmentVM.AdjustmentItems[i / 2].QtyAdjusted = output;
+                        Debug.WriteLine(AdjustmentVM.AdjustmentItems[i / 2].QtyAdjusted);
+                    }
+                }
+                else
+                {
+                    string remarks = Server.UrlDecode(changestr.Split('=')[1]);
+                    AdjustmentVM.AdjustmentItems[i / 2].Remarks = remarks;
+                    Debug.WriteLine(AdjustmentVM.AdjustmentItems[i / 2].Remarks);
+                }
+                    
+            }
+            Session["AdjustmentCart"] = AdjustmentVM;
+            return Content("");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SubmitAdjustments()
+        {
+            if (!LoginService.IsAuthorizedRoles("manager", "supervisor", "clerk"))
+                return RedirectToAction("Index", "Home");
+
+            if (Session["AdjustmentCart"] == null)
+                return RedirectToAction("Adjustment", new { command = "view" });
+
+            if (InventoryService.VerifyAdjustmentCart())
+            {
+               if(InventoryService.ProcessStockAdjustmentEntry(loginService.StaffFromSession))
+                {
+                    Session["AdjustmentCart"]= null;
+                    return RedirectToAction("Adjustment");
+                }
+                TempData["ErrorMsg"] = "Error: An error occured during submission, please inform system admin";
+            } else
+            {
+                TempData["ErrorMsg"] = "Error: Please ensure that all quantities are not zero";
+                
+            }
+            return RedirectToAction("Adjustment", new { command = "view" });
+
+        }
+
+        public ActionResult RemoveAdjustment(int? index)
+        {
+            AdjustmentVoucherVM adjustmentCart = (AdjustmentVoucherVM)Session["AdjustmentCart"];
+            if(adjustmentCart != null && index.HasValue)
+            {
+                Debug.WriteLine("Removing item " + index.Value + "from adjustment cart");
+                adjustmentCart.AdjustmentItems.RemoveAt(index.Value);
+                if (adjustmentCart.AdjustmentItems.Count == 0)
+                    Session.Remove("AdjustmentCart");
+            }
+            return RedirectToAction("Adjustment", new { command = "view" });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ReplyAdjustment(int? id, bool response)
+        {
+            if (!LoginService.IsAuthorizedRoles("manager", "supervisor"))
+                return RedirectToAction("Index", "Home");
+
+            //update
+            InventoryService.UpdateAdjustmentVoucherStatus(id.Value, response, loginService.StaffFromSession);
+            return RedirectToAction("Adjustment", new { id = id.GetValueOrDefault()});
         }
 
 

@@ -24,7 +24,7 @@ namespace SSIMS.DAL
         private PurchaseItemRepository purchaseItemRepository;
         private DeliveryOrderRepository deliveryOrderRepository;
         private StockCardEntryRepository stockCardEntryRepository;
-
+        private AdjustmentVoucherRepository adjustmentVoucherRepository;
 
         public UnitOfWork()
         {
@@ -34,6 +34,18 @@ namespace SSIMS.DAL
         public UnitOfWork(DatabaseContext context)
         {
             this.context = context;
+        }
+
+        public AdjustmentVoucherRepository AdjustmentVoucherRepository
+        {
+            get
+            {
+                if(this.adjustmentVoucherRepository == null)
+                {
+                    this.adjustmentVoucherRepository = new AdjustmentVoucherRepository(context);
+                }
+                return adjustmentVoucherRepository;
+            }
         }
 
         public StockCardEntryRepository StockCardEntryRepository
