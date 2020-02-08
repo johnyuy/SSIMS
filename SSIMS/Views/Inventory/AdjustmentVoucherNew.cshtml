@@ -1,0 +1,175 @@
+﻿@model SSIMS.ViewModels.AdjustmentVoucherVM
+@using SSIMS.ViewModels
+@{
+    ViewBag.Header = "New Adjustments";
+    ViewBag.Section = "Inventory";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    bool empty = ViewBag.Empty == "true" ? true:false;
+}
+
+<style>
+    input[type=text] {
+        text-align: center;
+        width: 400px;
+    }
+
+    input[type=number] {
+        text-align: center;
+        width: 80px;
+    }
+
+    #table-top {
+        background-color: lightgoldenrodyellow;
+        height: 50px;
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    td {
+        padding: 15px 10px;
+    }
+
+    tr {
+        height: 40px;
+    }
+
+    table {
+        box-shadow: 2px 4px 8px 0px rgba(47,79,79,0.2);
+        margin: 10px 10px 10px 20px;
+        border-radius: 10px;
+    }
+    button{
+        width:150px;
+        height:40px;
+        margin: 0px 43%;
+        font-size: 15px;
+        font-weight:bold;
+        color:white;
+        background-color:#558686;
+    }
+    #table-container{
+        min-width:1000px;
+        max-width:1350px;
+        min-height:400px;
+    }
+    .text-danger{
+        margin: 20px auto 0px auto;
+        width:100%;
+        height:30px;
+        text-align:center;
+    }
+    .text-empty{
+        margin: 60px auto 10px auto;
+        width:100%;
+        text-align:center;
+        font-size:100px;
+        color:lightgray;
+    }
+    #back-link{
+        width:150px;
+        margin: 50px 48%;
+    }
+</style>
+<div id="table-container">
+    @if (!empty)
+    {
+        using (Html.BeginForm("SaveAdjustments", "Inventory", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <table>
+                <tr id="table-top">
+                    <td align="center" style="width: 120px">
+                        @Html.DisplayNameFor(Model => Model.AdjustmentItems[0].ItemID)
+                    </td>
+                    <td align="center" style="        width: 180px
+    ">
+                        @Html.DisplayNameFor(Model => Model.AdjustmentItems[0].Category)
+                    </td>
+                    <td align="center" style="width:450px">
+                        @Html.DisplayNameFor(Model => Model.AdjustmentItems[0].Description)
+                    </td>
+                    <td align="center" style="width:180px">
+                        @Html.DisplayNameFor(Model => Model.AdjustmentItems[0].UOM)
+                    </td>
+                    <td align="center" style="width:150px">
+                        @Html.DisplayNameFor(Model => Model.AdjustmentItems[0].QtyAdjusted)
+                    </td>
+                    <td align="center" style="width:300px">
+                        @Html.DisplayNameFor(Model => Model.AdjustmentItems[0].Remarks)
+                    </td>
+                    <td align="center" style="width:50px">
+                        
+                    </td>
+                </tr>
+                @for (int i = 0; i < Model.AdjustmentItems.Count; i++)
+                {
+                    <tr @if (i % 2 == 0) { @Html.Raw("style='background-color:#dbeeee'") }>
+                        <td align="center">
+                            @Html.DisplayFor(Model => Model.AdjustmentItems[i].ItemID)
+                            @Html.HiddenFor(Model => Model.AdjustmentItems[i].ItemID)
+                        </td>
+                        <td align="center">
+                            @Html.DisplayFor(Model => Model.AdjustmentItems[i].Category)
+                            @Html.HiddenFor(Model => Model.AdjustmentItems[i].Category)
+                        </td>
+                        <td align="center">
+                            @Html.DisplayFor(Model => Model.AdjustmentItems[i].Description)
+                            @Html.HiddenFor(Model => Model.AdjustmentItems[i].Description)
+                        </td>
+                        <td align="center">
+                            @Html.DisplayFor(Model => Model.AdjustmentItems[i].UOM)
+                            @Html.HiddenFor(Model => Model.AdjustmentItems[i].UOM)
+                        </td>
+                        <td align="center" onchange="save()">
+                            @Html.EditorFor(Model => Model.AdjustmentItems[i].QtyAdjusted)
+                        </td>
+                        <td align="center" onchange="save()">
+                            @Html.EditorFor(Model => Model.AdjustmentItems[i].Remarks)
+                        </td>
+                        <td align="center">
+                            @Html.ActionLink("x", "RemoveAdjustment", new { index= i })
+                        </td>
+                    </tr>
+                }
+            </table>
+        }
+
+        <p class="text-danger">@ViewBag.ErrorMsg</p>
+        using (Html.BeginForm("SubmitAdjustments", "Inventory", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <button type="submit" onclick="save()">Submit</button>
+        }
+    }
+    else
+    {
+        <p class="text-empty">Empty</p>
+        <div id="back-link"> @Html.ActionLink("Inventory", "index", "inventory")</div>
+    }
+
+
+
+</div>
+
+
+
+
+<script>
+    function save() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveAdjustments","Inventory")',
+            data: { AdjustmentVM: @Html.Raw(Json.Encode(Model)), change : $('.text-box.single-line').serialize()},
+            dataType: 'html',
+            success: function (data) {
+                console.log("cart saved");
+            }
+        })
+    }
+    function formsubmit() {
+        $('form').submit();
+    }
+
+
+</script>
+

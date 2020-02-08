@@ -10,24 +10,57 @@ using SSIMS.Database;
 using SSIMS.Models;
 using SSIMS.DAL;
 using PagedList;
+using SSIMS.Service;
+using SSIMS.ViewModels;
 
 namespace SSIMS.Controllers
 {
-    public class RetrievalListsController : Controller
+    public class RetrievalController : Controller
     {
         private DatabaseContext db = new DatabaseContext();
         private UnitOfWork uow = new UnitOfWork();
+        private DisbursementService ds = new DisbursementService();
 
         // GET: RetrievalLists
         public ActionResult Index(int? page, string status)
         {
-            var retrievalList = uow.RetrievalListRepository.Get(includeProperties: "CreatedByStaff, ItemTransactions, Department").ToList();
+            var retrievalList = uow.RetrievalListRepository.Get(includeProperties: "CreatedByStaff, ItemTransactions.Item, Department");
             int pageSize = 15;
             int pageNumber = (page ?? 1);
+
+            switch (status)
+            {
+                
+                case "InProgress":
+                    retrievalList = retrievalList.Where(x => x.Status == Models.Status.InProgress).ToList();
+                    break;
+                case "Completed":
+                    retrievalList = retrievalList.Where(x => x.Status == Models.Status.Completed).ToList();
+                    break;
+                case "All":
+                    retrievalList = retrievalList.ToList();
+                    break;
+                default:
+                    retrievalList = retrievalList.Where(x => x.Status == Models.Status.InProgress).ToList();
+                    break;
+            }
 
             return View(retrievalList.ToPagedList(pageNumber, pageSize));
         }
 
+        public ActionResult GenerateDisbursement()
+        {
+            List<Department> deptList = (List<Department>)uow.DepartmentRepository.Get();
+            List<DeptDisbursementViewModel> deptDVMList = new List<DeptDisbursementViewModel>();
+            foreach(Department dept in deptList)
+            {
+                DeptDisbursementViewModel deptDVM = ds.GenerateDeptDisbursementViewModel(dept.ID);
+                deptDVMList.Add(deptDVM);
+            }
+            
+            
+            return RedirectToAction("Disbursement", "Disbursement", deptDVMList);
+        }
 
         // GET: RetrievalLists/Details/5
         public ActionResult Details(int? id)
@@ -36,7 +69,7 @@ namespace SSIMS.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            RetrievalList retrievalList = db.RetrievalLists.Find(id);
+            var retrievalList = (RetrievalList)uow.RetrievalListRepository.Get(filter:x => x.ID == id, includeProperties: "CreatedByStaff, Department, ItemTransactions.Item").FirstOrDefault();
             if (retrievalList == null)
             {
                 return HttpNotFound();
