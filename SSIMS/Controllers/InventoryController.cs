@@ -115,7 +115,6 @@ namespace SSIMS.Controllers
         [HttpPost]
         public ActionResult SaveAdjustments([Bind(Include = "AdjustmentID,ReportedByStaffName,ReportedByStaffID,Status,AdjustmentItems")]AdjustmentVoucherVM AdjustmentVM, string change)
         {
-
             Debug.WriteLine("Saving adjustments cart via ajax...");
             Debug.WriteLine(Server.UrlDecode(change));
             for (int i = 0; i < change.Split('&').Count(); i++)
@@ -135,7 +134,6 @@ namespace SSIMS.Controllers
                     AdjustmentVM.AdjustmentItems[i / 2].Remarks = remarks;
                     Debug.WriteLine(AdjustmentVM.AdjustmentItems[i / 2].Remarks);
                 }
-                    
             }
             Session["AdjustmentCart"] = AdjustmentVM;
             return Content("");
@@ -162,7 +160,6 @@ namespace SSIMS.Controllers
             } else
             {
                 TempData["ErrorMsg"] = "Error: Please ensure that all quantities are not zero";
-                
             }
             return RedirectToAction("Adjustment", new { command = "view" });
 
@@ -193,6 +190,21 @@ namespace SSIMS.Controllers
             return RedirectToAction("Adjustment");
         }
 
+        public ActionResult InventoryStockCheck()
+        {
+            if (!LoginService.IsAuthorizedRoles("manager", "supervisor","clerk"))
+                return RedirectToAction("Index", "Home");
+
+            //session's adjustment cart must be empty first
+            if (Session["AdjustmentCart"] != null)
+            {
+                TempData["ErrorMsg"] = "Please submit or clear you new adjustments before starting inventory stock check!";
+                return RedirectToAction("Adjustment", new { command = "view" });
+            }
+
+            //contruct list of inventorycheckVM for view's model
+            return View(InventoryService.GenerateInventoryCheckList());
+        }
 
         protected override void Dispose(bool disposing)
         {

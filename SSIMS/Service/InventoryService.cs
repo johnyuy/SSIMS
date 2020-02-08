@@ -140,5 +140,20 @@ namespace SSIMS.Service
             uow.Save();
             Debug.WriteLine("Adjustment Voucher ID " + voucher.ID + " has been approved by " + responseStaff.Name);
         }
+
+        public List<InventoryCheckVM> GenerateInventoryCheckList()
+        {
+            UnitOfWork uow = new UnitOfWork();
+            List<InventoryItem> inventoryItems = uow.InventoryItemRepository.Get(includeProperties: "Item").ToList();
+            if(inventoryItems == null || inventoryItems.Count == 0)
+                return null;
+
+            List<InventoryCheckVM> VMList = new List<InventoryCheckVM>();
+            foreach(InventoryItem item in inventoryItems)
+            {
+                VMList.Add(new InventoryCheckVM(item));
+            }
+            return VMList;
+        }
     }
 }

@@ -188,6 +188,18 @@ namespace SSIMS.Service
                 return true;
             return false;
         }
+        //not in interface yet
+        public string UserDepartment
+        {
+            get
+            {
+                if (HttpContext.Current.Session["username"] == null)
+                    return null;
+                string username = HttpContext.Current.Session["username"].ToString();
+                Staff staff = uow.StaffRepository.Get(filter: x => x.UserAccountID == username, includeProperties:"Department").FirstOrDefault();
 
+                return staff.DepartmentID;
+            }
+        }
     }
 }

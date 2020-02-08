@@ -364,6 +364,7 @@
     <Compile Include="Models\UserAccount.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\AnalyticsService.cs" />
+    <Compile Include="Service\DepartmentService.cs" />
     <Compile Include="Service\DisbursementsService.cs" />
     <Compile Include="Service\InventoryService.cs" />
     <Compile Include="Service\IRequisitionService.cs" />
@@ -384,10 +385,12 @@
     <Compile Include="ViewModels\AnalyticsListViewModel.cs" />
     <Compile Include="ViewModels\DeliveryOrderVM.cs" />
     <Compile Include="ViewModels\DeptDisbursementViewModel.cs" />
+    <Compile Include="ViewModels\DeptHeadAuthVM.cs" />
     <Compile Include="ViewModels\DeptRetrievalItemViewModel.cs" />
     <Compile Include="ViewModels\DisbursementViewModel.cs" />
     <Compile Include="ViewModels\InventoryItemDetailsVM.cs" />
     <Compile Include="ViewModels\InventoryStockCardVM.cs" />
+    <Compile Include="ViewModels\InventoryCheckVM.cs" />
     <Compile Include="ViewModels\InventoryViewModel.cs" />
     <Compile Include="ViewModels\PurchaseItemVM.cs" />
     <Compile Include="ViewModels\PurchaseOrderVM.cs" />
@@ -398,6 +401,7 @@
     <Compile Include="ViewModels\RetrivalVM.cs" />
     <Compile Include="ViewModels\UserLogin.cs" />
     <Compile Include="ViewModels\RetrievalItemViewModel.cs" />
+    <Content Include="Views\Inventory\InventoryStockCheck.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Client Scripts\gen_validatorv4.js" />
@@ -501,10 +505,7 @@
     <Content Include="Views\Disbursement\Retrieval.cshtml" />
     <Content Include="Views\Disbursements\Index.cshtml" />
     <Content Include="Views\Disbursements\Retrieval.cshtml" />
-    <Content Include="Views\Departments\Create.cshtml" />
-    <Content Include="Views\Departments\Delete.cshtml" />
     <Content Include="Views\Departments\Details.cshtml" />
-    <Content Include="Views\Departments\Edit.cshtml" />
     <Content Include="Views\Departments\Index.cshtml" />
     <Content Include="Views\Departments\DelegateAuthority.cshtml" />
     <Content Include="Views\PurchaseItems\Create.cshtml" />

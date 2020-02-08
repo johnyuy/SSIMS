@@ -11,6 +11,8 @@ using SSIMS.DAL;
 using SSIMS.Models;
 using System.Diagnostics;
 using SSIMS.Filters;
+using SSIMS.Service;
+using SSIMS.ViewModels;
 
 
 namespace SSIMS.Controllers
@@ -21,6 +23,9 @@ namespace SSIMS.Controllers
     {
         
         UnitOfWork unitOfWork = new UnitOfWork();
+        ILoginService loginService = new LoginService();
+        DepartmentService departmentService = new DepartmentService();
+        IStaffService staffService = new StaffService();
         // GET: Departments
         public ActionResult Index()
         {
@@ -209,11 +214,35 @@ namespace SSIMS.Controllers
             return View(department);
         }
 
+
+        //Go to view for dep head only to select staff for delegation
         public ActionResult DelegateAuthority()
         {
-            return View();
+            string dept = loginService.StaffFromSession.DepartmentID;
+            //show history and form together
+            //get a list of auths (history)
+            List<DeptHeadAuthVM> vmlist = departmentService.GetDeptHeadAuthorizationVMs(dept);
+            if(vmlist == null)
+            {
+                Debug.WriteLine("EMPTY AUTHLIST!!");
+            }
+            //get a list of staff (new delegation)
+            List<Staff> stafflist = staffService.GetStaffByDeptID(dept);
+            ViewBag.StaffList = stafflist;
+            DeptHeadAuthorization auth = new DeptHeadAuthorization();
+            //get current active delegation (if exists)
+            if(departmentService.IsActiveAuthExist(dept, out auth))
+            {
+                ViewBag.CurrentDelegation = new DeptHeadAuthVM(auth);
+            } else
+            {
+                ViewBag.CurrentDelegation = null;
+            }
+            return View(vmlist);
         }
 
+
+        //behind the scene to process the submission
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult DelegateAuthority([Bind(Include = "ID,StartDate,EndDate,DepartmentID")] DeptHeadAuthorization deptHeadAuthorization)
@@ -221,16 +250,14 @@ namespace SSIMS.Controllers
             if (ModelState.IsValid)
             {
                 unitOfWork.DeptHeadAuthorizationRepository.Insert(deptHeadAuthorization);
-                unitOfWork.DeptHeadAuthorizationRepository.Update(deptHeadAuthorization);
-                return RedirectToAction("DelegatedAuthority");
+                unitOfWork.Save();
+                return RedirectToAction("DelegateAuthority");
             }
-            return View(deptHeadAuthorization);
+            return RedirectToAction("Details", new { id = loginService.StaffFromSession.DepartmentID});
         }
 
-        public ActionResult DelegatedAuthority()
-        {
-            return View(unitOfWork.DeptHeadAuthorizationRepository.Get());
-        }
+
+        //End Delegation
     }
 }
 

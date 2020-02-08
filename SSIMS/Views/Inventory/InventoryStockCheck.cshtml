@@ -1,0 +1,138 @@
+﻿@model List<SSIMS.ViewModels.InventoryCheckVM>
+@{
+    ViewBag.Header = "Inventory Stock Check";
+    ViewBag.Section = "Inventory";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    tr, th, input{
+        font-size:15px;
+        text-align:center;
+    }
+    tr{
+        height:100px;
+        border-bottom: solid white 1px;
+        transition-duration: 0.5s;
+    }
+    th, td{
+        padding:0px 20px;
+        
+    }
+    #top-row {
+        background: linear-gradient(to right, rgba(146, 167, 154, 0.20) 0%, rgba(115, 147, 147, 0.31) 100%);
+        border-bottom: double white 3px;
+    }
+    #form-container{
+        box-shadow: 2px 4px 8px 0px rgba(47,79,79,0.2);
+        width:auto;
+    }
+    input{
+        width:80px;
+        text-indent:12px;
+    }
+    input.checkbox{
+        transform:scale(1.5);
+    }
+
+</style>
+<div id="form-container">
+
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <table>
+            <tr id="top-row">
+                <th>
+                    @Html.DisplayNameFor(Model => Model[0].ItemCode)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(Model => Model[0].Category)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(Model => Model[0].Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(Model => Model[0].UOM)
+                </th>
+                <th>
+                    
+                </th>
+                <th>
+                    @Html.DisplayNameFor(Model => Model[0].Qty)
+                </th>
+                <th>
+                    Checked
+                </th>
+            </tr>
+            @for (int i = 0; i < Model.Count(); i++)
+            {
+                <tr @Html.Raw("id='row-" + i + "'")>
+                    <td>
+                        @Html.DisplayFor(Model => Model[i].ItemCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(Model => Model[i].Category)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(Model => Model[i].Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(Model => Model[i].UOM)
+                    </td>
+                    <td>
+                        <img @Html.Raw("id='img-" + i + "'") src=@Url.Content(Model[i].ImageURL) style="width:100px"/>
+                    </td>
+                    <td>
+                        @Html.EditorFor(Model => Model[i].Qty)
+                        @Html.HiddenFor(Model => Model[i].Qty)
+                    </td>
+                    <td onchange="check(@i)">
+                        @Html.CheckBox("checkbox", false, new { @id = "checkbox" + i.ToString(), @class="checkbox" })
+                    </td>
+                </tr>
+            }
+        </table>
+        <div>
+            <button>Submit</button>
+        </div>
+    }
+</div>
+
+<span style="color:#d8e0e0"></span>
+
+<script>
+    function check(i) {
+        var box = "checkbox" + i;
+        var element = document.getElementById(box);
+        var inputbox = document.getElementsByName("[" + i + "].Qty")[0];
+        var rowi = "row-" + i;
+        var row = document.getElementById(rowi);
+        var imgi = "img-" + i;
+        var img = document.getElementById(imgi);
+
+        if (element.checked == true) {
+            inputbox.setAttribute('readonly', true);
+            row.style.background ="linear-gradient(to right, rgba(146, 167, 154, 0.20) 0%, rgba(115, 147, 147, 0.31) 100%";
+            row.style.color = "grey";
+            row.style.fontSize = "12px";
+            row.style.height = "20px";
+            inputbox.style.backgroundColor = "#d8e0e0";
+            inputbox.style.border = "none";
+            img.style.display = "none";
+        } else {
+            inputbox.removeAttribute('readonly');
+            row.style.background = "";
+            row.style.backgroundColor = "white";
+            row.style.color = "";
+            row.style.fontSize = "";
+            row.style.height = "";
+            inputbox.style.backgroundColor = "white";
+            inputbox.style.border = "";
+            img.style.display = "";
+        }
+
+        
+        
+    }
+</script>
