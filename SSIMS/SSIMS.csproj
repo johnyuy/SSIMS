@@ -540,6 +540,7 @@
     <Content Include="Views\RetrievalLists\Index.cshtml" />
     <Content Include="Views\Analytics\AnalyticsList2.cshtml" />
     <Content Include="Views\Requisition\SendEmail.cshtml" />
+    <Content Include="Views\Departments\DelegatedAuthority.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -19,7 +19,7 @@ namespace SSIMS.Controllers
     [AuthorizationFilter]
     public class DepartmentsController : Controller
     {
-
+        
         UnitOfWork unitOfWork = new UnitOfWork();
         // GET: Departments
         public ActionResult Index()
@@ -209,25 +209,27 @@ namespace SSIMS.Controllers
             return View(department);
         }
 
-        public ActionResult DelegateAuthority(string id)
+        public ActionResult DelegateAuthority()
         {
-            if (String.IsNullOrEmpty(id))
-                return RedirectToAction("Index");
-
-            Department department = unitOfWork.DepartmentRepository.Get(filter: x => x.ID == id, includeProperties: "DeptHeadAuthorization").First();
-            Staff selected = department.DeptHead;
-            ViewBag.StaffList = unitOfWork.StaffRepository.Get(filter: x => x.Department.DeptName == department.DeptName);
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            if (department == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.Department = department;
-            Session["CurrentDepartmentID"] = department.ID;
             return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DelegateAuthority([Bind(Include = "ID,StartDate,EndDate,DepartmentID")] DeptHeadAuthorization deptHeadAuthorization)
+        {
+            if (ModelState.IsValid)
+            {
+                unitOfWork.DeptHeadAuthorizationRepository.Insert(deptHeadAuthorization);
+                unitOfWork.DeptHeadAuthorizationRepository.Update(deptHeadAuthorization);
+                return RedirectToAction("DelegatedAuthority");
+            }
+            return View(deptHeadAuthorization);
+        }
+
+        public ActionResult DelegatedAuthority()
+        {
+            return View(unitOfWork.DeptHeadAuthorizationRepository.Get());
         }
     }
 }

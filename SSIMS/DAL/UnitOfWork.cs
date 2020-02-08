@@ -24,6 +24,7 @@ namespace SSIMS.DAL
         private PurchaseItemRepository purchaseItemRepository;
         private DeliveryOrderRepository deliveryOrderRepository;
         private StockCardEntryRepository stockCardEntryRepository;
+        private DeptHeadAuthorizationRepository deptHeadAuthorizationRepository;
 
 
         public UnitOfWork()
@@ -34,6 +35,17 @@ namespace SSIMS.DAL
         public UnitOfWork(DatabaseContext context)
         {
             this.context = context;
+        }
+        public DeptHeadAuthorizationRepository DeptHeadAuthorizationRepository
+        {
+            get
+            {
+                if(this.deptHeadAuthorizationRepository == null)
+                {
+                    this.deptHeadAuthorizationRepository = new DeptHeadAuthorizationRepository(context);
+                }
+                return deptHeadAuthorizationRepository;
+            }
         }
 
         public StockCardEntryRepository StockCardEntryRepository

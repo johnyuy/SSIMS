@@ -1,0 +1,46 @@
+﻿@model IEnumerable<SSIMS.Models.DeptHeadAuthorization>
+
+@{
+    ViewBag.Title = "Delegated Authority";
+}
+
+<h2>Delegated Authority</h2>
+
+<p>
+    @Html.ActionLink("Delegate Authority", "DelegateAuthority")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Staff)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StartDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EndDate)
+        </th>
+
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Staff)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.StartDate)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.EndDate)
+    </td>
+
+    <td> |
+        @Html.ActionLink("Cancel Authority", "Delete", new { id = item.ID })
+
+    </td>
+</tr>
+}
+
+</table>
