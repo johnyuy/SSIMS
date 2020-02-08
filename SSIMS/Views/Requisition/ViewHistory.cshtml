@@ -4,16 +4,19 @@
 @*@model SSIMS.Models.Status*@
 @{
     ViewBag.Title = "ViewHistory";
+    ViewBag.Header = "Requisition Order History";
+    ViewBag.Section="Requisitions";
+
 }
 
-<h2>View Requisition Order History</h2>
 
 <p>@Html.ActionLink("View Pending Requisition", "Manage")</p>
 
-       <label> Sort by status: </label>
-        @Html.ActionLink("Approved", "ViewHistory", new { id=SSIMS.Models.Status.Approved})
-        @Html.ActionLink("Rejected", "ViewHistory", new { id = SSIMS.Models.Status.Rejected })
-        @Html.ActionLink("Completed", "ViewHistory", new { id = SSIMS.Models.Status.Completed })
+<label> Filter by status: </label>
+@Html.ActionLink("Approved", "ViewHistory", new { status = "Approved" })
+@Html.ActionLink("Rejected", "ViewHistory", new { status = "Rejected" })
+@Html.ActionLink("Completed", "ViewHistory", new { status = "Completed" })
+@Html.ActionLink("See All", "ViewHistory", new { status = "All" })
 
 
 
@@ -26,7 +29,8 @@
         </th>
 
         <th>
-            Created Date
+            
+            @Html.ActionLink("Created Date", "ViewHistory", new { sortOrder = ViewBag.CreDates })
             @*@Html.DisplayNameFor(model => model.CreatedDate)*@
         </th>
 
@@ -36,7 +40,8 @@
         </th>
 
         <th>
-            Response Date
+            
+            @Html.ActionLink("Response Date", "ViewHistory", new { sortOrder = ViewBag.ResDates })
             @*@Html.DisplayNameFor(model => model.ResponseDate)*@
         </th>
 

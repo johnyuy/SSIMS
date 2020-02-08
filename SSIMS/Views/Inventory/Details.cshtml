@@ -1,12 +1,12 @@
 ﻿@model SSIMS.ViewModels.InventoryItemDetailsVM
-
+@using SSIMS.ViewModels;
 @{
     ViewBag.Section = "Inventory";
     ViewBag.Header = "Item Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
     bool isLow = Model.InStoreQty <= Model.ReorderLvl ? true : false;
     string cI = "", mI = "", Index = "";
-    bool hasPrev = false, hasNext = false;
+    bool hasPrev = false, hasNext = false, viewStock = ViewBag.StockCard == "true" ? true : false;
     if (ViewBag.CurrentItemIndex != null)
     {
         cI = ViewBag.CurrentItemIndex.ToString();
@@ -19,30 +19,19 @@
     string lowStock = Session["InventoryLowStockMode"]==null? "":Session["InventoryLowStockMode"].ToString();
 }
 <script>
-    function goPrev() {
-        post('/inventory/details', { 'id': ViewBag.PrevItemID});
-    }
-
-    function goNext() {
-        post('/inventory/details', { 'id': ViewBag.NextItemID});
-    }
-
-    function post(path, params, method='post') {
-      const form = document.createElement('form');
-      form.method = method;
-      form.action = path;
-
-      for (const key in params) {
-        if (params.hasOwnProperty(key)) {
-          const hiddenField = document.createElement('input');
-          hiddenField.type = 'hidden';
-          hiddenField.name = key;
-          hiddenField.value = params[key];
-          form.appendChild(hiddenField);
+    function stockcard() {
+        var stockc = document.getElementById("stock-card");
+        var supplier = document.getElementById("supplier-information");
+        var stocki = document.getElementById("stock-information");
+        if (stockc.hidden == true) {
+            stockc.hidden = false;
+            stocki.hidden = true;
+            supplier.hidden = true;
+        } else {
+            stockc.hidden = true;
+            stocki.hidden = false;
+            supplier.hidden = false;
         }
-      }
-      document.body.appendChild(form);
-      form.submit();
     }
 </script>
 
@@ -87,12 +76,7 @@
            <tr><td height="15px"></td><td></td></tr>
        </table>
    </div>
-    <div style="        width: 450px;
-        margin-left: 10px;
-        height: 350px;
-        float: left;
-        background-color: #efefef;
-        padding-bottom: 40px">
+    <div id="stock-information" style="width: 450px; margin-left: 10px; height: 350px; float: left; background-color: #efefef; padding-bottom: 40px">
         <table style="font-size:17px;width:100%;" >
             <tr align="center">
                 <td colspan="2" height="70px" style="font-size: 22px ">Stock Information</td>
@@ -120,8 +104,8 @@
 
             </tr>
             <tr>
-                <td align="center" style="height: 50px"><button style="width:180px">Adjust</button></td>
-                <td align="center" style="height:50px"><button style="width:180px"> Stock Card</button></td>
+                <td align="center" style="height: 50px"><div style="width:180px;" class="btn-success">Adjust</div></td>
+                <td align="center" style="height:50px"><div style="width:180px;" class="btn-primary" onclick="stockcard()">Stock Card</div></td>
             </tr>
             <tr align="center">
                 <td height="30px">@Html.DisplayNameFor(model => model.ReorderLvl)</td>
@@ -144,6 +128,26 @@
             <tr align="center" style="font-size:11px"><td height="20px" valign="bottom">@Html.DisplayFor(model => model.LastOrderLine1)</td></tr>
             <tr align="center" style="font-size:11px"><td height="15px">@Html.DisplayFor(model => model.LastOrderLine2)</td></tr>
         </table>
+    </div>
+    <div id="stock-card" style="height:350px;width:900px;" hidden>
+        <table border="1">
+            <tr style="font-weight:bold;background-color:#efefef">
+                <td align="center" width="150px">Date</td>
+                <td align="center" width="450px">Movement Details</td>
+                <td align="center" width="150px">Qty Change</td>
+                <td align="center" width="150px">In Store Balance</td>
+            </tr>
+            @foreach (InventoryStockCardVM card in Model.StockCard)
+            {
+                <tr>
+                    <td align="center">@card.Date</td>
+                    <td align="center">@card.Movement</td>
+                    <td align="center">@card.QtyChange</td>
+                    <td align="center">@card.InStoreBalance</td>
+                </tr>
+            }
+        </table>
+        <div style="width:180px;" class="btn-primary" onclick="stockcard()">Item Info</div>
     </div>
 </div>
 
