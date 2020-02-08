@@ -67,9 +67,12 @@
     }
     #back-link{
         width:150px;
-        margin: 50px 48%;
+        margin: 50px 45%;
     }
 </style>
+<div style="width: 1000px; height: 40px; margin:10px 0px">
+    <div style="height:40px;float:left"><button style="width:180px;margin:0px 20px" onclick="window.location.href = '/inventory/adjustment';">Back to Adjustments</button></div>
+</div>
 <div id="table-container">
     @if (!empty)
     {
@@ -144,7 +147,7 @@
     else
     {
         <p class="text-empty">Empty</p>
-        <div id="back-link"> @Html.ActionLink("Inventory", "index", "inventory")</div>
+        <div id="back-link"> @Html.ActionLink("Add from Inventory", "index", "inventory")</div>
     }
 
 

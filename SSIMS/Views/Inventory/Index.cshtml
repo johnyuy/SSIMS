@@ -67,6 +67,14 @@
         .slider.round:before {
             border-radius: 50%;
         }
+
+    button{
+        height:40px;
+        font-size: 15px;
+        font-weight:bold;
+        color:white;
+        background-color:#558686;
+    }
 </style>
 <script>
 
@@ -106,86 +114,102 @@
         form.submit();
     }
 </script>
-<form>
-    <div>
-        <div style="float:left">
-            @if (lowStockMode == "true")
-            {
-                <label class="switch">
-                    <input id="lowstocktoggle" type="checkbox" checked>
-                    <span class="slider round" onclick="lowstockfilter()"></span>
-                </label>
-            }
-            else
-            {
-                <label class="switch">
-                    <input id="lowstocktoggle" type="checkbox" unchecked>
-                    <span class="slider round" onclick="lowstockfilter()"></span>
-                </label>
-            }
-            <span style="margin-left:10px">Low Stock Only</span>
+<div style="position:page; min-height:800px;min-width:900px">
+    <div style="width:100%; height: 0px; margin:0px">
+        <div style="height:50px;margin:0px 0px 0px 0px;position:relative;left:200px;top:10px">
+            <button style="width:250px" onclick="window.location.href = '/inventory/';">
+                Stock Inventory Check
+            </button>
         </div>
-        <div style="float:right">
-            @Html.TextBox("searchString")
-            <input type="submit" value="search" onclick="search()" />
+        <div style="height:50px;margin:0px 0px 0px 0px;position:relative;left:460px;top:-40px">
+            <button style="width:250px" onclick="window.location.href = '/inventory/adjustment';">
+                Adjustment Vouchers
+            </button>
         </div>
     </div>
-</form>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Item.ID)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Item.Category)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Item.Description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Item.UnitOfMeasure)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.InStoreQty)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.InTransitQty)
-        </th>
 
-    </tr>
-
-    @foreach (var item in Model)
-    {
-        <tr @if (item.InStoreQty < item.ReorderLvl) { @Html.Raw("style='background-color:rgba(255, 165, 215, 0.2)'") ;}>
-            <td>
-                @Html.DisplayFor(modelItem => item.Item.ID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Item.Category)
-            </td>
-            <td>
-                @Html.ActionLink((string)item.Item.Description, "Details", new { id = item.ID })
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Item.UnitOfMeasure)
-            </td>
-
-            <td>
-                @if (item.InStoreQty < item.ReorderLvl)
+    <form>
+        <div style="width: 100%; height: 60px; margin:3px 0px">
+            <div style="float:left;margin-top: 15px">
+                @if (lowStockMode == "true")
                 {
-                    <span style="color:maroon"><b>@item.InStoreQty</b></span>
+                    <label class="switch">
+                        <input id="lowstocktoggle" type="checkbox" checked>
+                        <span class="slider round" onclick="lowstockfilter()"></span>
+                    </label>
                 }
                 else
                 {
-                    @item.InStoreQty;
+                    <label class="switch">
+                        <input id="lowstocktoggle" type="checkbox" unchecked>
+                        <span class="slider round" onclick="lowstockfilter()"></span>
+                    </label>
                 }
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.InTransitQty)
-            </td>
+                <span style="margin-left:10px">Low Stock Only</span>
+            </div>
+
+            <div style="float:right;margin-top:15px" >
+                @Html.TextBox("searchString")
+                <input type="submit" value="search" onclick="search()" />
+            </div>
+        </div>
+    </form>
+    <table class="table" style="min-height:700px">
+        <tr style="background:linear-gradient(to right, rgba(146, 167, 154, 0.20) 0%, rgba(115, 147, 147, 0.31) 100%);">
+            <th>
+                @Html.DisplayNameFor(model => model.Item.ID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Item.Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Item.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Item.UnitOfMeasure)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InStoreQty)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InTransitQty)
+            </th>
 
         </tr>
-    }
 
-</table>
+        @foreach (var item in Model)
+        {
+            <tr @if (item.InStoreQty < item.ReorderLvl) { @Html.Raw("style='background-color:rgba(255, 165, 215, 0.2)'") ; }>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Item.ID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Item.Category)
+                </td>
+                <td>
+                    @Html.ActionLink((string)item.Item.Description, "Details", new { id = item.ID })
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Item.UnitOfMeasure)
+                </td>
 
+                <td>
+                    @if (item.InStoreQty < item.ReorderLvl)
+                    {
+                        <span style="color:maroon"><b>@item.InStoreQty</b></span>
+                    }
+                    else
+                    {
+                        @item.InStoreQty;
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.InTransitQty)
+                </td>
+
+            </tr>
+        }
+
+    </table>
+
+</div>
