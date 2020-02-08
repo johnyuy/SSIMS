@@ -2,7 +2,7 @@
 @using PagedList.Mvc;
 @{
         ViewBag.Title = "Retrieval";
-        ViewBag.Header = "Retrieval History";
+        ViewBag.Header = "Retrieval List";
         ViewBag.Section = "Disbursements";
         Layout = "~/Views/Shared/_Layout.cshtml";
         
@@ -11,45 +11,45 @@
 <h2>Index</h2>
 <div class="table-responsive">
     <label>See by Status:</label>
-    @Html.ActionLink("InProgess", "Index", new { status = "InProgress" })
-    @Html.ActionLink("Completed", "Index", new { status = "Completed" })
+    @Html.ActionLink("InProgess", "Index", new { status = "InProgress" }) |
+    @Html.ActionLink("Completed", "Index", new { status = "Completed" }) |
     @Html.ActionLink("See All", "Index", new { status = "All" })
 
-    <table class="table">
+<table class="table">
+    <tr>
+        <th>Retrieval ID</th>
+        <th>Created Date</th>
+        <th>Department</th>
+        <th>Status</th>
+        <th>Created By</th>
+        <th>View Details</th>
+    </tr>
+
+    @foreach (var rl in Model)
+    {
         <tr>
-            <th>Retrieval ID</th>
-            <th>Created Date</th>
-            <th>Department</th>
-            <th>Status</th>
-            <th>Created By</th>
-            <th>View Details</th>
+            <td>
+                @Html.DisplayFor(modelItem => rl.ID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => rl.CreatedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => rl.Department.ID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => rl.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => rl.CreatedByStaff.Name)
+            </td>
+            <td>
+                @Html.ActionLink("Details", "Details", new { id = rl.ID })
+            </td>
         </tr>
-
-        @foreach (var rl in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => rl.ID)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => rl.CreatedDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => rl.Department.ID)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => rl.Status)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => rl.CreatedByStaff.Name)
-                </td>
-                <td>
-                    @Html.ActionLink("Details", "Details", new { id = rl.ID })
-                </td>
-            </tr>
-        }
-
-    </table>
+    }
+    <tr><td align="right" colspan="6"><button type="button">@Html.ActionLink("Generate Disbursement", "GenerateDisbursement")</button></td></tr>
+</table>
     </div>
     <br />
 <table class="table">

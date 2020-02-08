@@ -40,6 +40,12 @@ namespace SSIMS.Controllers
             return View(disbursementLists.ToList());
         }
 
+        public ActionResult Disbursement([Bind(Include = "deptDVM")] DisbursementViewModel model)
+        {
+
+            return View();
+        }
+
         //GET: RetrievalLists
         public ActionResult Retrieval()
         {

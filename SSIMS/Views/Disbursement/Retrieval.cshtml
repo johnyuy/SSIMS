@@ -57,7 +57,7 @@
                     List<string> indexx = new List<string>();
                     <tr>
                         <td rowspan=@rowNo>
-                            <span onclick=hide("@indexx")>+</span> 
+                            <span onclick=hide("@index")>+</span> 
                             @Html.DisplayFor(model => model.rivmlist[i].item.Description)
                             @Html.HiddenFor(model => model.rivmlist[i].item.ID,  new { htmlAttributes = new { @class = "form-control" }, })
                         </td>
