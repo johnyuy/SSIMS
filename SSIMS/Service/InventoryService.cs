@@ -111,8 +111,10 @@ namespace SSIMS.Service
             {
                 VMList.Add(new AdjustmentVoucherVM(adjustmentVoucher));
             }
+            VMList.Sort((x, y) => x.Status.CompareTo(y.Status));
             //show only the latest 100 results
-            List<AdjustmentVoucherVM> last100 = Enumerable.Reverse(VMList).Take(100).Reverse().ToList();
+            List<AdjustmentVoucherVM> last100 = Enumerable.Reverse(VMList).Take(100).ToList();
+
             return last100;
         }
 
