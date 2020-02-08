@@ -6,47 +6,45 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<style>
-table{
-    border: solid black 1px;
-}
-tr{
-    height: 30px;
-}
-</style>
 
-<table>
-
-    <tr>
+<table class="table" style="width:1000px;">
+    <tr style="font-weight:bold;background-color:#4c7d7d;color:white">
         <td align="center">
-            @Html.DisplayNameFor(Model=> Model[0].AdjustmentID)
+            @Html.DisplayNameFor(Model => Model[0].AdjustmentID)
         </td>
         <td align="center">
-            @Html.DisplayNameFor(Model=> Model[0].ReportedByStaffName)
+            @Html.DisplayNameFor(Model => Model[0].ReportedByStaffName)
         </td>
         <td align="center">
-            @Html.DisplayNameFor(Model=> Model[0].Status)
+            @Html.DisplayNameFor(Model => Model[0].DateCreated)
+        </td>
+        <td align="center">
+            @Html.DisplayNameFor(Model => Model[0].Status)
         </td>
         <td align="center">
             Action
         </td>
     </tr>
-    @for(int i = 0; i<Model.Count(); i++)
+    @for (int i = 0; i < Model.Count(); i++)
     {
-    <tr>
-        <td align="center">
-            @Html.DisplayFor(Model => Model[i].AdjustmentID)
-        </td>
-        <td align="center">
-            @Html.DisplayFor(Model => Model[i].ReportedByStaffName)
-        </td>
-        <td align="center">
-            @Html.DisplayFor(Model => Model[i].Status)
-        </td>
-        <td>
-            @Html.ActionLink("View","Adjustment", new { id = Model[i].AdjustmentID})
-        </td>
-    </tr>
+<tr @if (Model[i].Status == "Pending") { @Html.Raw("style='background-color:rgba(252, 182, 122, 0.30)'") ; }>
+    <td align="center">
+        @Html.DisplayFor(Model => Model[i].AdjustmentID)
+    </td>
+    <td align="center">
+        @Html.DisplayFor(Model => Model[i].ReportedByStaffName)
+    </td>
+    <td align="center">
+        @Html.DisplayFor(Model => Model[0].DateCreated)
+    </td>
+    <td align="center">
+        @Html.DisplayFor(Model => Model[i].Status)
+    </td>
+    <td align="center">
+        @Html.ActionLink("View", "Adjustment", new { id = Model[i].AdjustmentID })
+    </td>
+</tr>
     }
 
 </table>
+<span style="color:rgba(252, 182, 122, 0.30)"></span>

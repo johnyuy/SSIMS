@@ -98,8 +98,13 @@ namespace SSIMS.Controllers
             } else if (id.HasValue)
             {
                 AdjustmentVoucherVM VM = InventoryService.GetAdjustmentVoucherVMSingle(id.Value);
-                if(VM!=null)
+                if (VM != null)
+                {
+                    if (LoginService.IsAuthorizedRoles("manager", "supervisor"))
+                        ViewBag.IsSuper = true;
                     return View("AdjustmentVoucher", VM);
+                }
+                    
             }
 
             //redirect to AV list
@@ -185,7 +190,7 @@ namespace SSIMS.Controllers
 
             //update
             InventoryService.UpdateAdjustmentVoucherStatus(id.Value, response, loginService.StaffFromSession);
-            return RedirectToAction("Adjustment", new { id = id.GetValueOrDefault()});
+            return RedirectToAction("Adjustment");
         }
 
 

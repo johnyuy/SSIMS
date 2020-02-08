@@ -4,6 +4,7 @@
     ViewBag.Header = "Adjustment Voucher";
     ViewBag.Section = "Inventory";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    bool isSuper = ViewBag.IsSuper??false;
 }
 
 <style>
@@ -49,46 +50,54 @@
         font-size: 50px;
         color: #205050;
     }
+    button{
+        width:150px;
+        height:40px;
+        font-size: 15px;
+        font-weight:bold;
+        color:white;
+        background-color:#558686;
+    }
 </style>
 
 
 <div id="table-container">
     <div id="info-table-container">
-    <p id="voucher-title">@Html.DisplayFor(Model => Model.AdjustmentID)</p>
-    <table id="info-table">
-        <tr style="height:20px;">
-            <td align="right">
-                @Html.DisplayNameFor(Model => Model.AdjustmentID) :
-            </td>
-            <td align="center" style="width:200px;">
-                @Html.DisplayFor(Model => Model.AdjustmentID)
-            </td>
-        </tr>
-        <tr style="height:20px;">
-            <td align="right">
-                @Html.DisplayNameFor(Model => Model.ReportedByStaffName) :
-            </td>
-            <td align="center">
-                @Html.DisplayFor(Model => Model.ReportedByStaffName)
-            </td>
-        </tr>
-        <tr style="height:20px;">
-            <td align="right">
-                @Html.DisplayNameFor(Model => Model.DateCreated) :
-            </td>
-            <td align="center">
-                @Html.DisplayFor(Model => Model.DateCreated)
-            </td>
-        </tr>
-        <tr style="height:20px;">
-            <td align="right">
-                @Html.DisplayNameFor(Model => Model.Status) :
-            </td>
-            <td align="center">
-                @Html.DisplayFor(Model => Model.Status)
-            </td>
-        </tr>
-    </table>
+        <p id="voucher-title">@Html.DisplayFor(Model => Model.AdjustmentID)</p>
+        <table id="info-table">
+            <tr style="height:20px;">
+                <td align="right">
+                    @Html.DisplayNameFor(Model => Model.AdjustmentID) :
+                </td>
+                <td align="center" style="width:200px;">
+                    @Html.DisplayFor(Model => Model.AdjustmentID)
+                </td>
+            </tr>
+            <tr style="height:20px;">
+                <td align="right">
+                    @Html.DisplayNameFor(Model => Model.ReportedByStaffName) :
+                </td>
+                <td align="center">
+                    @Html.DisplayFor(Model => Model.ReportedByStaffName)
+                </td>
+            </tr>
+            <tr style="height:20px;">
+                <td align="right">
+                    @Html.DisplayNameFor(Model => Model.DateCreated) :
+                </td>
+                <td align="center">
+                    @Html.DisplayFor(Model => Model.DateCreated)
+                </td>
+            </tr>
+            <tr style="height:20px;">
+                <td align="right">
+                    @Html.DisplayNameFor(Model => Model.Status) :
+                </td>
+                <td align="center">
+                    @Html.DisplayFor(Model => Model.Status)
+                </td>
+            </tr>
+        </table>
     </div>
     <table id="table-main">
         <tr id="table-top">
@@ -135,4 +144,22 @@
             </tr>
         }
     </table>
+    @if (isSuper && Model.Status=="Pending")
+    {
+        <div id="approve-container" style="height:50px;width:100%">
+            @using (Html.BeginForm("ReplyAdjustment", "Inventory", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken();
+                <div style="width:150px;margin:auto">
+                    <button type="submit" name="response" value="true">Approve</button>
+                </div>
+                <input hidden name="id" value=@Model.AdjustmentID>
+            }
+        </div>
+    }
+    else
+    {
+        <div style="height:50px;width:100%"></div>
+    }
+
 </div>
