@@ -1,23 +1,12 @@
 ﻿@model SSIMS.Models.RequisitionOrder
 @{
     ViewBag.Title = "Cancel";
+    ViewBag.Header = "Requisition Order Details";
+    ViewBag.Section="Requisitions";
 }
 
-<h2>Cancel Details</h2>
-
-    <div class="form-group">
-        @Html.LabelFor(x => x.CreatedDate, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-5">
-            @Html.DisplayFor(x => x.CreatedDate)
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(x => x.Status, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-5">
-            @Html.DisplayFor(x => x.Status)
-        </div>
-    </div>
+    <p> <label>Created Date: </label> @Html.DisplayFor(x => x.CreatedDate) </p>
+    <p> <label>Status </label>  @Html.DisplayFor(x => x.Status) </p>
 
 
     <table class="table">

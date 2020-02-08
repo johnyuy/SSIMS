@@ -6,7 +6,8 @@ using System.Linq;
 using SSIMS.DAL;
 using System.Web;
 using Foolproof;
-
+using SSIMS.ViewModels;
+using System.ComponentModel;
 
 namespace SSIMS.Models
 {
@@ -15,17 +16,20 @@ namespace SSIMS.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public Guid ID { get; set; }
-
+        [DisplayName("Handover Qty")]
         public int HandOverQty { get; set; }
 
         //[LessThanOrEqualTo("HandOverQty")]
+        [DisplayName("Takeover Qty")]
         public int TakeOverQty { get; set; }
 
         public string Reason { get; set; }
 
-        public Item Item { get; set; }
+        public virtual Item Item { get; set; }
 
         public virtual Document Document { get; set; }
+
+        UnitOfWork uow = new UnitOfWork();
 
         public TransactionItem()
         {
@@ -56,5 +60,21 @@ namespace SSIMS.Models
             Reason = reason;
         }
 
+        public TransactionItem(DeptRetrievalItemViewModel drvm, UnitOfWork uow)
+        {
+            
+            string itemID = drvm.transactionItem.Item.ID;
+            Item = uow.ItemRepository.GetByID(itemID);
+            HandOverQty = drvm.transactionItem.HandOverQty;
+            TakeOverQty = drvm.transactionItem.TakeOverQty;
+            Reason = drvm.transactionItem.Reason;
+
+
+        }
+
+        public TransactionItem(string itemID, UnitOfWork uow)
+        {
+            Item = uow.ItemRepository.GetByID(itemID);
+        }
     }
 }

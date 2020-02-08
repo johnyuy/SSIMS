@@ -1,0 +1,89 @@
+﻿@model SSIMS.Models.RetrievalList
+
+@{
+        ViewBag.Title = "Retrieval";
+        ViewBag.Header = "Retrieval History";
+        ViewBag.Section = "Disbursements";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<h2>Retrieval List Details</h2>
+
+<div>
+    
+    <hr />
+    <dl class="dl-horizontal">
+
+        <dt>
+            Retrieval List ID
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ID)
+        </dd>
+
+        <dt>
+            Department ID
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Department.ID)
+        </dd>
+
+        <dt>
+            Retrieved by
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedByStaff.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ResponseDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ResponseDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+
+    </dl>
+<table class="table">
+    <tr>
+        <th>Item Description</th>
+        <th>Unit</th>
+        <th>Qty Requested</th>
+        <th>Qty Issued</th>
+        <th>Reason</th>
+    </tr>
+    @foreach (var transItem in Model.ItemTransactions)
+    {
+    <tr>
+        <td>@Html.DisplayFor(model => transItem.Item.Description)</td>
+        <td>@Html.DisplayFor(model => transItem.Item.UnitOfMeasure)</td>
+        <td>@Html.DisplayFor(model => transItem.HandOverQty)</td>
+        <td>@Html.DisplayFor(model => transItem.TakeOverQty)</td>
+        <td>@Html.DisplayFor(model => transItem.Reason)</td>
+    </tr>
+    }
+</table>
+    </div>
+<p>
+    @Html.ActionLink("Back to List", "Index")
+</p>

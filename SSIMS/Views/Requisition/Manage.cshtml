@@ -3,13 +3,17 @@
 @using PagedList.Mvc;
 @{
     ViewBag.Title = "Manage";
+    ViewBag.Header = "Manage";
+    ViewBag.Section="Requisitions";
 }
 
-<h2>Deal Requisition Order</h2>
+    <p style="margin:10px">    </p>
 
 <p>
     @Html.ActionLink("See Requisition History List", "ViewHistory")
 </p>
+
+<p style="margin:50px">    </p>
 
 <table class="table">
     <tr>
@@ -34,15 +38,15 @@
             @*@Html.DisplayNameFor(model => model.Status)*@
         </th>
 
-        @*<th>
-                @Html.DisplayNameFor(model => model.ResponseDate)
-            </th>*@
-
         <th>
             Details
         </th>
 
-        <th></th>
+        <th>
+            Manage
+        </th>
+
+        
     </tr>
 
     @foreach (var ro in Model)
@@ -63,14 +67,15 @@
             <td>
                 @Html.DisplayFor(modelItem => ro.Status)
             </td>
-            @*<td>
-                    @Html.DisplayFor(modelItem => ro.ResponseDate)
-                </td>*@
 
             <td>
 
                 @Html.ActionLink("Details", "Details", new { id = ro.ID })
 
+            </td>
+            <td>
+                @Html.ActionLink("Approve", "Approvequick", new { id = ro.ID }) ||
+                @Html.ActionLink("Reject", "Rejectquick", new { id = ro.ID })
             </td>
         </tr>
     }
@@ -83,4 +88,4 @@
 <br />
 Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
-@Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+@Html.PagedListPager(Model, page => Url.Action("Manage", new { page }))
