@@ -20,6 +20,23 @@ namespace SSIMS.DAL
             this.dbSet = context.Set<TEntity>();
         }
 
+        public bool Any(Expression<Func<TEntity, bool>> filter = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            string includeProperties = "")
+        {
+
+            bool result = false;
+            IQueryable<TEntity> query = dbSet;
+
+            if (filter != null)
+            {
+                result = query.Any(filter);
+            }
+
+            return result;
+
+        }
+
         public virtual IEnumerable<TEntity> Get(
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
@@ -77,6 +94,7 @@ namespace SSIMS.DAL
             }
             dbSet.Remove(entityToDelete);
         }
+
 
         public virtual void Update(TEntity entityToUpdate)
         {

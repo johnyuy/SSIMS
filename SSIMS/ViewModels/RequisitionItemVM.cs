@@ -42,10 +42,7 @@ namespace SSIMS.ViewModels
         [Display(Name = "Requisition ID")]
         public string displayDescription { get; set; }
 
-        [Display(Name ="Comments")]
-        public string Comments { get; set; }
-
-       
+ 
 
         [Required]
         [Display(Name = "Category")]

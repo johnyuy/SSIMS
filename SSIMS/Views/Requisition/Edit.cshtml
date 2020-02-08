@@ -1,29 +1,26 @@
 ﻿@model SSIMS.ViewModels.RequisitionItemVM
 @using SSIMS.ViewModels;
 
-@*@{
-    List<RequisitionItemVM> requisitionItems = ViewBag.RequisitionItems;
-
-}*@
-
 
 @{
     ViewBag.Title = "Edit";
+    ViewBag.Header = "Edit Requisition Order";
+    ViewBag.Section="Requisitions";
 }
 
-<h2>Edit</h2>
+
 
 @using (Html.BeginForm("Save", "Requisition", new { id = Model.ROID }))
 {
     @Html.AntiForgeryToken()
     <table>
         <tr>
-            <td> </td>
-            <td>Category</td>
-            <td>Description</td>
-            <td>Unit of Measure</td>
-            <td>Quantity</td>
-            @*<td>Reomove</td>*@
+           
+            <th>Category</th>
+            <th>Description</th>
+            <th>Unit of Measure</th>
+            <th>Quantity</th>
+           
         </tr>
 
         @for (var i = 0; i < Model.DocumentItems.Count; i++)
@@ -53,90 +50,33 @@
                     @Html.EditorFor(m => Model.DocumentItems[i].Qty, new { htmlAttributes = new { @type = "number", @min = "1", @max = "100" } })
 
                 </td>
-                @*<td>
-
-                        <input type="submit" value="Remove" class="btn btn-primary" />
-                    </td>*@
-                }
+               
             </tr>
 
         }
 
 
     </table>
-    <input type="submit" value="Save" class="btn btn-primary" />
+   <p style="text-align:right"> <input type="submit" value="Save" class="btn btn-primary" /></p>
 }
 
 
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
 
+    th, td {
+        text-align: left;
+        padding: 8px;
+    }
 
-@*@using (Html.BeginForm())
-    {
-        @Html.AntiForgeryToken()
+    tr:nth-child(even) {
+        background-color: #f2f2f2
+    }
 
-        @Html.HiddenFor(x => x.ROID)
-
-        <div class="form-group">
-            @Html.LabelFor(x => x.SelectedCategory, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-5">
-                @Html.DropDownListFor(x => Model.SelectedCategory, new SelectList(Model.Categories, "Value", "Text"), htmlAttributes: new { @class = "form-control", @id = "Category" })
-                @Html.ValidationMessageFor(x => x.SelectedCategory, "", new { @class = "text-danger" })
-            </div>
-        </div>*@
-
-@*<div class="form-group">
-            @Html.LabelFor(x => x.SelectedDescription, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-5">
-                @Html.DropDownListFor(x => Model.SelectedDescription, new SelectList(Model.Descriptions, "Value", "Text"), htmlAttributes: new { @class = "form-control", @id = "Description" })
-                @Html.ValidationMessageFor(x => x.SelectedDescription, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(x => x.Quantity, htmlAttributes: new { @class = "control-label col-md-2" })
-            @Html.TextBoxFor(model => model.Quantity, new { type = "number", min = "0", max = "100" })
-            @Html.ValidationMessageFor(x => x.Quantity, "", new { @class = "text-danger" })
-        </div>
-
-
-
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </div>
-
-    }*@
-
-
-
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-    <script type="text/javascript">
-            $('#Category').change(function () {
-                var selectedCategory = $("#Category").val();
-                var descriptionSelect = $('#Description');
-                descriptionSelect.empty();
-                if ( selectedCategory != null &&  selectedCategory != '') {
-                    $.getJSON('@Url.Action("GetDescription")', { category:  selectedCategory }, function (descriptions) {
-                        if (descriptions != null && !jQuery.isEmptyObject(descriptions))
-                        {
-                            descriptionSelect.append($('<option/>', {
-                                value: null,
-                                text: ""
-                            }));
-                            $.each(descriptions, function (index, description) {
-                                descriptionSelect.append($('<option/>', {
-                                    value: description.Value,
-                                    text: description.Text
-                                }));
-                            });
-                        };
-                    });
-                }
-            });
-    </script>
-}
-
+    th {
+        color: black;
+    }
+</style>

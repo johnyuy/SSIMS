@@ -2,6 +2,8 @@
 
 @{
     ViewBag.Title = "Details";
+    ViewBag.Header = "Requisition Order Details";
+    ViewBag.Section="Requisitions";
 }
 <script>
     function post(path, params, method = 'post') {
@@ -34,29 +36,31 @@
 </script>
 
 
-<table>
+<table  class="table table-bordered" >
     <tr>
-        <td>
-            @Html.LabelFor(x => x.ID, htmlAttributes: new { @class = "control-label col-md-2" })
-        </td>
+        <th>
+            Requisition ID
+            @*@Html.LabelFor(x => x.ID, htmlAttributes: new { @class = "control-label col-md-2" })*@
+        </th>
         <td>
             @Html.DisplayFor(x => x.ID)
         </td>
     </tr>
 
     <tr>
-        <td>
-            @Html.LabelFor(x => Model.CreatedByStaff.Department, htmlAttributes: new { @class = "control-label col-md-2" })
-        </td>
+        <th>
+            Department
+            @*@Html.LabelFor(x => Model.CreatedByStaff.Department, htmlAttributes: new { @class = "control-label col-md-2" })*@
+        </th>
         <td>
             @Html.DisplayFor(x => Model.CreatedByStaff.DepartmentID)
         </td>
     </tr>
 
     <tr>
-        <td>
-            @Html.LabelFor(x => x.CreatedByStaff.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-        </td>
+        <th>Staff Name
+            @*@Html.LabelFor(x => x.CreatedByStaff.Name, htmlAttributes: new { @class = "control-label col-md-2" })*@
+        </th>
         <td>
             @Html.DisplayFor(x => x.CreatedByStaff.Name)
 
@@ -64,17 +68,17 @@
     </tr>
 
     <tr>
-        <td>
-            @Html.LabelFor(x => x.CreatedDate, htmlAttributes: new { @class = "control-label col-md-2" })
-        </td>
+        <th>Created Date
+            @*@Html.LabelFor(x => x.CreatedDate, htmlAttributes: new { @class = "control-label col-md-2" })*@
+        </th>
         <td>
             @Html.DisplayFor(x => x.CreatedDate)
         </td>
     </tr>
     <tr>
-        <td>
-            @Html.LabelFor(x => x.Status, htmlAttributes: new { @class = "control-label col-md-2" })
-        </td>
+        <th>Status
+            @*@Html.LabelFor(x => x.Status, htmlAttributes: new { @class = "control-label col-md-2" })*@
+        </th>
         <td>
             @Html.DisplayFor(x => x.Status)
         </td>
