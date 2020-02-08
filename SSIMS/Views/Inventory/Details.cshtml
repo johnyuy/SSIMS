@@ -33,6 +33,26 @@
             supplier.hidden = false;
         }
     }
+    function adjust(i) {
+        post('/inventory/adjust', { 'add': "true", 'item': @Model.ItemCode });
+    }
+    function post(path, params, method = 'post') {
+        const form = document.createElement('form');
+        form.method = method;
+        form.action = path;
+
+        for (const key in params) {
+            if (params.hasOwnProperty(key)) {
+                const hiddenField = document.createElement('input');
+                hiddenField.type = 'hidden';
+                hiddenField.name = key;
+                hiddenField.value = params[key];
+                form.appendChild(hiddenField);
+            }
+        }
+        document.body.appendChild(form);
+        form.submit();
+    }
 </script>
 
 <div style="margin-left:15px;margin-top:10px;position:relative;top:10px">
@@ -104,7 +124,7 @@
 
             </tr>
             <tr>
-                <td align="center" style="height: 50px"><div style="width:180px;" class="btn-success">Adjust</div></td>
+                <td align="center" style="height: 50px"><div style="width:180px;" class="btn-success">@Html.ActionLink("Adjust", "Adjustment", new { command = "add", item = Model.ItemCode }, new {@style="text-decoration:none;font-color:white;" })</div></td>
                 <td align="center" style="height:50px"><div style="width:180px;" class="btn-primary" onclick="stockcard()">Stock Card</div></td>
             </tr>
             <tr align="center">

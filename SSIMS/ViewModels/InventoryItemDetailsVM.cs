@@ -129,7 +129,7 @@ namespace SSIMS.ViewModels
                     ID = entries[i].AdjustmentVoucher.ID.ToString($"AD{0:1000000}");
                     date = (DateTime) entries[i].AdjustmentVoucher.CreatedDate;
                     dateString = date.ToString("dd/MM/yyyy");
-                    movement = "Adjustment " + ID + ", " + entries[i].AdjustmentVoucher.Comments;
+                    movement = "Adjustment " + ID;
                 }
                 else if (entries[i].DeliveryOrder != null)
                 {
@@ -155,7 +155,7 @@ namespace SSIMS.ViewModels
 
             foreach(InventoryStockCardVM card in StockCard)
             {
-                Debug.WriteLine(card.ToString());
+                //Debug.WriteLine(card.ToString());
             }
 
             if (StockCard.Count > 50)

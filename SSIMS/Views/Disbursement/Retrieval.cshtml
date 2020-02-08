@@ -37,12 +37,17 @@
         <form>
             <table class="table" id="one" style="border-bottom: 1px solid; border-bottom-color: lightslategrey">
                 <tr>
-                    <th>Item  @Html.HiddenFor(model => model.ROList)</th>
+                    <th>Item</th>
                     <th>Dept</th>
                     <th>HandOver Qty</th>
                     <th>TakeOver Qty</th>
                     <th>Reason</th>
                 </tr>
+                @for(int i = 0; i < Model.ROList.Count; i++)
+                {
+                    @Html.HiddenFor(model => model.ROList[i].ID, new { htmlAttributes = new { @class = "form-control" }, })
+                }
+
                 @for (int i = 0; i < Model.rivmlist.Count; i++)
                 //@for (int i = 0; i < vm.Count; i++)
                 {
@@ -52,8 +57,9 @@
                     List<string> indexx = new List<string>();
                     <tr>
                         <td rowspan=@rowNo>
-                            <span onclick=hide("@indexx")>+</span> @Html.DisplayFor(model => model.rivmlist[i].item.Description)
-                            @Html.HiddenFor(model => model.rivmlist[i].item.Description)
+                            <span onclick=hide("@index")>+</span> 
+                            @Html.DisplayFor(model => model.rivmlist[i].item.Description)
+                            @Html.HiddenFor(model => model.rivmlist[i].item.ID,  new { htmlAttributes = new { @class = "form-control" }, })
                         </td>
                     </tr>
                     for (int j = 0; j < Model.rivmlist[i].deptRetrievalItems.Count; j++)
@@ -64,9 +70,12 @@
                         <tr id="@newindex">
                             <td>
                                 @Html.DisplayFor(model => model.rivmlist[i].deptRetrievalItems[j].deptID)
-                                @Html.HiddenFor(model => model.rivmlist[i].deptRetrievalItems[j].deptID)
+                                @Html.HiddenFor(model => model.rivmlist[i].deptRetrievalItems[j].deptID, new { htmlAttributes = new { @class = "form-control" }, })
+                                @Html.HiddenFor(model => model.rivmlist[i].deptRetrievalItems[j].transactionItem.Item.ID, new { htmlAttributes = new { @class = "form-control" }, })
                             </td>
-                            <td>@Html.DisplayFor(model => model.rivmlist[i].deptRetrievalItems[j].transactionItem.HandOverQty)</td>
+                            <td>@Html.DisplayFor(model => model.rivmlist[i].deptRetrievalItems[j].transactionItem.HandOverQty)
+                                @Html.HiddenFor(model => model.rivmlist[i].deptRetrievalItems[j].transactionItem.HandOverQty, new { htmlAttributes = new { @class = "form-control" }, })
+                            </td>
                             <td>@Html.EditorFor(model => model.rivmlist[i].deptRetrievalItems[j].transactionItem.TakeOverQty, new { htmlAttributes = new { @class = "form-control" , max=@Model.rivmlist[i].deptRetrievalItems[j].transactionItem.HandOverQty}, })
                             @*<input type="number" name="drivmTOQ" max=@Model.ToList()[i].deptRetrievalItems[j].transactionItem.HandOverQty style="border:1px solid; border-color:lightgray; border-radius:5px; width: 60px; text-align:center" value=@Model.ToList()[i].deptRetrievalItems[j].transactionItem.TakeOverQty />*@</td>
                             <td>@Html.EditorFor(model => model.rivmlist[i].deptRetrievalItems[j].transactionItem.Reason, new { htmlAttributes = new { @class = "form-control" }, })
