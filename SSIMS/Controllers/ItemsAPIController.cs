@@ -19,14 +19,14 @@ namespace SSIMS.Controllers
     {
         UnitOfWork unitOfWork = new UnitOfWork();
 
-        //POST: api/ItemsAPI
+        //GET: api/ItemsAPI
         [HttpGet]
-        public string Get()
+        public List<Item> Get()
         {
 
             List<Item> items = unitOfWork.ItemRepository.Get().ToList();
 
-            return JsonConvert.SerializeObject(items);
+            return items;
         }
 
 

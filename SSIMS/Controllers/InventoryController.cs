@@ -28,7 +28,6 @@ namespace SSIMS.Controllers
             if (!LoginService.IsAuthorizedRoles("manager", "supervisor", "clerk"))
                 return RedirectToAction("Index", "Home");
 
-
             Debug.WriteLine("searchString = " + searchString + "\tlowStock = " + lowStock);
             bool low = lowStock == "true" ? true : false;
             InventoryViewModel inventoryViewModel =  new InventoryViewModel(searchString, low);
