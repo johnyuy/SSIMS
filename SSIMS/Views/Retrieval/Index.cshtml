@@ -1,15 +1,19 @@
 ﻿@model PagedList.IPagedList<SSIMS.Models.RetrievalList>
 @using PagedList.Mvc;
 @{
-    ViewBag.Title = "Index";
+        ViewBag.Title = "Retrieval";
+        ViewBag.Header = "Retrieval List";
+        ViewBag.Section = "Disbursements";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+        
 }
 
 <h2>Index</h2>
-
-<label>See by Status:</label>
-@Html.ActionLink("InProgess", "Index", new { status = "InProgress" })
-@Html.ActionLink("Completed", "Index", new { status = "Completed" })
-@Html.ActionLink("See All", "Index", new { status = "All"})
+<div class="table-responsive">
+    <label>See by Status:</label>
+    @Html.ActionLink("InProgess", "Index", new { status = "InProgress" }) |
+    @Html.ActionLink("Completed", "Index", new { status = "Completed" }) |
+    @Html.ActionLink("See All", "Index", new { status = "All" })
 
 <table class="table">
     <tr>
@@ -44,10 +48,15 @@
             </td>
         </tr>
     }
-
+    <tr><td align="right" colspan="6"><button type="button">@Html.ActionLink("Generate Disbursement", "GenerateDisbursement")</button></td></tr>
 </table>
-
-<br />
-Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
-@Html.PagedListPager(Model, page => Url.Action("NextPage", new { page}))
-
+    </div>
+    <br />
+<table class="table">
+    <tr>
+        <td align="center">Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount</td>
+    </tr>
+    <tr>
+        <td align="center">@Html.PagedListPager(Model, page => Url.Action("NextPage", new { page }))</td>
+    </tr>
+</table>

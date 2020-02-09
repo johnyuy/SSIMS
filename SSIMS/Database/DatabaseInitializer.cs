@@ -5,6 +5,7 @@ using System.Data.Entity;
 using SSIMS.Models;
 using Microsoft.EntityFrameworkCore;
 using SSIMS.DAL;
+using SSIMS.Service;
 
 namespace SSIMS.Database
 {
@@ -46,13 +47,10 @@ namespace SSIMS.Database
             InitPurchaseItems(context);
             InitPurchaseOrders(context);
             //InitDeptHeadAuthorizations(context);
-
-
             InitDeliveryOrders(context);
-
-            //other initializations copy:    static void Init (DatabaseContext context)
             context.SaveChanges();
             base.Seed(context);
+            Finishing();
             Debug.WriteLine("SEEDING COMPLETED!");
         }
 
@@ -874,7 +872,7 @@ namespace SSIMS.Database
             reqform3.Status = (Status)1;
             context.RequisitionOrders.Add(reqform3);
 
-            Staff staff4 = StaffRepository.GetByID(10024); //COMM dept
+            Staff staff4 = StaffRepository.GetByID(10023); //COMM dept
             RequisitionOrder reqform4 = new RequisitionOrder(staff4);
             reqform4.RepliedByStaff = StaffRepository.GetByID(10020);
             List<DocumentItem> documentItems4 = new List<DocumentItem>
@@ -901,7 +899,7 @@ namespace SSIMS.Database
             reqform5.Status = (Status)1;
             context.RequisitionOrders.Add(reqform5);
 
-
+            //Completed Retrieval Lists
             Staff clerk1 = StaffRepository.GetByID(10003);
 
             RetrievalList retrievalList = new RetrievalList(staff1, DepartmentRepository.GetByID("ARTS"));
@@ -915,6 +913,46 @@ namespace SSIMS.Database
             retrievalList.Completed(clerk1);
             context.RetrievalLists.Add(retrievalList);
 
+            //InProgress Retrieval Lists
+            RetrievalList retrievalList2 = new RetrievalList(staff3, DepartmentRepository.GetByID("ENGL"));
+            List<TransactionItem> transactionItems2 = new List<TransactionItem>
+            {
+                new TransactionItem(5,4,"Retrieval",ItemRepository.GetByID("C003")),
+                new TransactionItem(10,10,"Retrieval",ItemRepository.GetByID("E031")),
+                new TransactionItem(7,7,"Retrieval",ItemRepository.GetByID("F032")),
+            };
+
+            retrievalList2.ItemTransactions = transactionItems2;
+            retrievalList2.InProgress(clerk1);
+            context.RetrievalLists.Add(retrievalList2);
+
+            RetrievalList retrievalList3 = new RetrievalList(staff4, DepartmentRepository.GetByID("COMM"));
+            List<TransactionItem> transactionItems3 = new List<TransactionItem>
+            {
+                new TransactionItem(5,5,"Retrieval",ItemRepository.GetByID("C001")),
+                new TransactionItem(10,10,"Retrieval",ItemRepository.GetByID("E032")),
+                new TransactionItem(5,5,"Retrieval",ItemRepository.GetByID("P039")),
+            };
+
+            retrievalList3.ItemTransactions = transactionItems3;
+            retrievalList3.InProgress(clerk1);
+            context.RetrievalLists.Add(retrievalList3);
+
+
+            RetrievalList retrievalList4 = new RetrievalList(staff5, DepartmentRepository.GetByID("COMM"));
+            List<TransactionItem> transactionItems4 = new List<TransactionItem>
+            {
+                new TransactionItem(5,5,"Retrieval",ItemRepository.GetByID("T001")),
+                new TransactionItem(10,10,"Retrieval",ItemRepository.GetByID("P032")),
+                new TransactionItem(5,5,"Retrieval",ItemRepository.GetByID("S011")),
+            };
+
+            retrievalList4.ItemTransactions = transactionItems4;
+            retrievalList4.InProgress(clerk1);
+            context.RetrievalLists.Add(retrievalList4);
+
+
+
             DisbursementList disbursementList = new DisbursementList(staff1, DepartmentRepository.GetByID("ARTS"));
             disbursementList.RepliedByStaff = StaffRepository.GetByID(10014);
             List<TransactionItem> disbursedItems = new List<TransactionItem>
@@ -925,6 +963,9 @@ namespace SSIMS.Database
             };
             disbursementList.ItemTransactions = disbursedItems;
             context.DisbursementLists.Add(disbursementList);
+
+
+            
             context.SaveChanges();
 
             
@@ -1132,6 +1173,15 @@ namespace SSIMS.Database
             context.SaveChanges();
         }
 
-
+        static void Finishing()
+        {
+            InventoryService inventoryService = new InventoryService();
+            UnitOfWork uow = new UnitOfWork();
+            IEnumerable<Item> items = uow.ItemRepository.Get();
+            foreach(Item item in items)
+            {
+                inventoryService.UpdateInStoreQty(item.ID);
+            }
+        }
     }
 }
