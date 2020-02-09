@@ -5,6 +5,8 @@
     ViewBag.Header = "Delegate Authority";
     ViewBag.Section = "Delegate";
     List<Staff> stafflist = ViewBag.StaffList ?? null;
+    List<Staff> staffwoheadlist = ViewBag.StaffWOHeadList ?? null;
+    List<Staff> staffonlylist = ViewBag.StaffOnlyList ?? null;
     DeptHeadAuthVM currentDelegation = ViewBag.CurrentDelegation ?? null;
     bool isCurrent = currentDelegation == null ? false : true;
     string error = ViewBag.DelegateError ?? "";
@@ -25,10 +27,10 @@
                     <td>
                         <select name="StaffName">
                             <option selected value="">select</option>
-                            @for (int i = 0; i < stafflist.Count(); i++)
+                            @for (int i = 0; i < staffwoheadlist.Count(); i++)
                             {
-                                string name = Server.UrlEncode(stafflist[i].Name);
-                                <option value=@name>@stafflist[i].Name</option>
+                                string name = Server.UrlEncode(staffwoheadlist[i].Name);
+                                <option value=@name>@staffwoheadlist[i].Name</option>
                             }
                         </select>
                     </td>
