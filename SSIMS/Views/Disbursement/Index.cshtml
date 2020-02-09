@@ -1,63 +1,66 @@
-﻿@model IEnumerable<SSIMS.Models.DisbursementList>
+﻿@model PagedList.IPagedList<SSIMS.Models.DisbursementList>
+@using PagedList.Mvc;
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Disbursement";
+    ViewBag.Header = "Disbursement History";
+    ViewBag.Section = "Disbursements";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
 }
 
-<h2>Index</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+<hr />
+
+<div class="table-responsive">
+    <h4>Disbursement History</h4>
+    <label>See by Status:</label>
+    @Html.ActionLink("Pending", "Index", new { status = "Pending" }) |
+    @Html.ActionLink("Completed", "Index", new { status = "Completed" }) |
+    @Html.ActionLink("See All", "Index", new { status = "All" })
+
+    <table class="table">
+        <tr>
+            <th>Disbursement ID</th>
+            <th>Created Date</th>
+            <th>Department</th>
+            <th>Status</th>
+            <th>Created By</th>
+            <th>View Details</th>
+        </tr>
+
+        @foreach (var dl in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => dl.ID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => dl.CreatedDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => dl.Department.ID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => dl.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => dl.CreatedByStaff.Name)
+                </td>
+                <td>
+                    @Html.ActionLink("Details", "Details", new { id = dl.ID })
+                </td>
+            </tr>
+        }
+        
+    </table>
+</div>
+<br />
 <table class="table">
     <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.CreatedByStaff.UserAccountID)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.RepliedByStaff.UserAccountID)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Comments)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CreatedDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ResponseDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Status)
-        </th>
-        <th></th>
+        <td align="center">Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount</td>
     </tr>
-
-@foreach (var item in Model) {
     <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreatedByStaff.UserAccountID)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.RepliedByStaff.UserAccountID)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Comments)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreatedDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ResponseDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Status)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
-        </td>
+        <td align="center">@Html.PagedListPager(Model, page => Url.Action("NextPage", new { page }))</td>
     </tr>
-}
-
 </table>

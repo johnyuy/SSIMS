@@ -543,6 +543,7 @@
     <Content Include="Views\Analytics\AnalyticsList2.cshtml" />
     <Content Include="Views\Requisition\SendEmail.cshtml" />
     <Content Include="Views\Disbursement\Disbursement.cshtml" />
+    <Content Include="Views\Disbursement\CurrentDisbursements.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

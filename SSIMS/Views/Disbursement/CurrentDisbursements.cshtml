@@ -1,0 +1,141 @@
+﻿@model List<SSIMS.Models.DisbursementList>
+
+@{
+    ViewBag.Title = "Disbursement";
+    ViewBag.Header = "Disbursement";
+    ViewBag.Section = "Disbursements";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<script>
+    function update() {
+        var cp = document.getElementById("collectionpoint").value;
+        
+        post("/disbursement/GetDisbursementListForCollectionPoint", { "id": cp });
+    }
+
+</script>
+
+<div class="table-responsive">
+
+    <hr />
+
+    <h4>Disbursement List by Department</h4>
+    <table class="table">
+        <tr>
+            <th>Dept Code</th>
+            <th>Department Name</th>
+            <th>Disbursement ID</th>
+            <th>Collection Location</th>
+            <th></th>
+        </tr>
+        @foreach (var dl in Model)
+        {
+            <tr>
+                <td>@dl.Department.ID</td>
+                <td>@dl.Department.DeptName</td>
+                <td>@dl.ID</td>
+                <td>@dl.Department.CollectionPoint.Location</td>
+                <td>@Html.ActionLink("View", "Disbursement", new { id = dl.ID })</td>
+            </tr>
+        }
+
+    </table>
+
+    <p>
+        @Html.ActionLink("View History", "Index")
+    </p>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*@using (Html.BeginForm())
+{
+    @foreach (var dvm in Model)
+    {
+        foreach
+        <div class="form-group">
+            @Html.LabelFor(model => dvm.collectionPoints.ID, "CollectionPointID", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("CollectionPointID", dvm.collectionPoints.ToList(), htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CollectionPoint.ID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        }
+    }
+
+    <table class="table">
+        @foreach (var dvm in Model)
+        {
+            for (int i = 0; i < dvm.deptDVM.Count; i++)
+            {
+
+            }
+
+
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => dl.)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RepliedByStaff.UserAccountID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Comments)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CreatedDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ResponseDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreatedByStaff.UserAccountID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RepliedByStaff.UserAccountID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Comments)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreatedDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ResponseDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+                    </td>
+                </tr>
+            }
+        }
+    </table>*@

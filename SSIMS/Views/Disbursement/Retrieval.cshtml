@@ -76,7 +76,7 @@
                             <td>@Html.DisplayFor(model => model.rivmlist[i].deptRetrievalItems[j].transactionItem.HandOverQty)
                                 @Html.HiddenFor(model => model.rivmlist[i].deptRetrievalItems[j].transactionItem.HandOverQty, new { htmlAttributes = new { @class = "form-control" }, })
                             </td>
-                            <td>@Html.EditorFor(model => model.rivmlist[i].deptRetrievalItems[j].transactionItem.TakeOverQty, new { htmlAttributes = new { @class = "form-control" , max=@Model.rivmlist[i].deptRetrievalItems[j].transactionItem.HandOverQty}, })
+                            <td>@Html.EditorFor(model => model.rivmlist[i].deptRetrievalItems[j].transactionItem.TakeOverQty, new { htmlAttributes = new { @class = "form-control" , max=@Model.rivmlist[i].deptRetrievalItems[j].transactionItem.HandOverQty}, min=0 })
                             @*<input type="number" name="drivmTOQ" max=@Model.ToList()[i].deptRetrievalItems[j].transactionItem.HandOverQty style="border:1px solid; border-color:lightgray; border-radius:5px; width: 60px; text-align:center" value=@Model.ToList()[i].deptRetrievalItems[j].transactionItem.TakeOverQty />*@</td>
                             <td>@Html.EditorFor(model => model.rivmlist[i].deptRetrievalItems[j].transactionItem.Reason, new { htmlAttributes = new { @class = "form-control" }, })
                             @*<input type="text" name="drivmReason" style="border:1px solid; border-color:lightgray; border-radius: 5px; width: 380px" maxlength="300" value=@Model.ToList()[i].deptRetrievalItems[j].transactionItem.Reason />*@</td>

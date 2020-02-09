@@ -1,7 +1,6 @@
-﻿@model List<SSIMS.ViewModels.DeptDisbursementViewModel>
+﻿@model SSIMS.Models.DisbursementList
 
-@using PagedList.Mvc;
-@using SSIMS.ViewModels;
+@using SSIMS.Models;
 @{
     ViewBag.Title = "Disbursement";
     ViewBag.Header = "Disbursement";
@@ -10,68 +9,68 @@
 
 }
 
-<script>
-
-    function hide(index) {
-        console.log(index);
-        var element = document.getElementById(i);
-        var isHidden = element.hidden;
-        if (isHidden) {
-            element.hidden = false;
-
-        } else {
-            element.hidden = true;
-        }
-    }
-</script>
-<div class="table-responsive">
-
-    <table class="table">
-        <tr>
-            <th>Department</th>
-            <th>Status</th>
-            <th>View Details</th>
-        </tr>
-
-        @foreach (var deptdvm in Model)
-        {
-            for (int i = 0; i < Model.Count; i++)
-            {
-                string index = "item" + (i + 1).ToString();
-
-                <tr>
-                    <td>
-                        <span onclick=hide("@index")>+</span>
-                        @Html.DisplayNameFor(model => model[i].deptID)
-                        @Html.HiddenFor(model => model[i].deptID, new { htmlAttributes = new { @class = "form-control" }, })
-                    </td>
-                    <td>
-                        @Html.DisplayNameFor(model => model[i].status)
-                        @Html.HiddenFor(model => model[i].status, new { htmlAttributes = new { @class = "form-control" }, })
-                    </td>
-                </tr>
-                <tr id="@index">
-                    <td>
-                        <table class="table">
-                            <tr>
-                                <th>Description</th>
-                                <th>Handover Qty</th>
-                                <th>Takeover Qty</th>
-                            </tr>
-                            @for (int j = 0; j < deptdvm.transItemLists.Count; j++)
-                            {
-                                <tr>
-                                    <td>@Html.DisplayFor(model => model[i].transItemLists[j].Item.Description)</td>
-                                    <td>@Html.DisplayFor(model => model[i].transItemLists[j].HandOverQty)</td>
-                                    <td>@Html.DisplayFor(model => model[i].transItemLists[j].TakeOverQty)</td>
-                                </tr>
-                            }
-                        </table>
-                    </td>
-                </tr>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="table-responsive">
+        <table class="table">
+            <tr style="border:hidden">
+                <td colspan="4">
+                    <strong>Disbursement ID:</strong> @Model.ID
+                    @Html.HiddenFor(model => model.ID, new { htmlAttributes = new { @class = "form-control" }, })
+                </td>
+                <td colspan="3" align="right"><strong>Date of Collection:</strong> @Model.Department.CollectionPoint.Time.Date</td>
+            </tr>
+            <tr style="border:hidden">
+                <td colspan="4"><strong>Request Dept:</strong> @Model.Department.DeptName</td>
+                <td colspan="3" align="right"><strong>Location:</strong> @Model.Department.CollectionPoint.Location</td>
+            </tr>
+            <tr style="border-top:hidden">
+                <td colspan="7" align="right"> <button type="button" id="print">Print</button></td>
+            </tr>
+            <tr>
+                <th>No.</th>
+                <th>Item Code</th>
+                <th>Item Description</th>
+                <th>Unit of Measure</th>
+                <th>Handover Qty</th>
+                <th>Collected</th>
+                <th>Remarks</th>
+                <th>Checked</th>
+            </tr>
+            @{
+                int count = 0;
 
             }
-        }
-        <tr><td><button type="button"><a href="~/Disbursement/Generate"> Generate Disbursement</a></button></td></tr>
-    </table>
-</div>
+            @for (int i = 0; i < Model.ItemTransactions.Count; i++)
+            {
+                count = i + 1;
+                string cb = "cb" + i;
+                <tr>
+                    <td>
+                        @count
+                        @Html.HiddenFor(model => model.ItemTransactions.ToList()[i].ID, new { htmlAttributes = new { @class = "form-control" }, })
+                    </td>
+                    <td>@Html.DisplayFor(model => model.ItemTransactions.ToList()[i].Item.ID)</td>
+                    <td>@Html.DisplayFor(model => model.ItemTransactions.ToList()[i].Item.Description)</td>
+                    <td>@Html.DisplayFor(model => model.ItemTransactions.ToList()[i].Item.UnitOfMeasure)</td>
+                    <td>@Html.DisplayFor(model => model.ItemTransactions.ToList()[i].HandOverQty)</td>
+                    <td>@Html.EditorFor(model => model.ItemTransactions.ToList()[i].TakeOverQty, new { htmlAttributes = new { @class = "form-control", max = Model.ItemTransactions.ToList()[i].HandOverQty, min = 0 } })</td>
+
+                    <td>@Html.EditorFor(model => model.ItemTransactions.ToList()[i].Reason, new { htmlAttributes = new { @class = "form-control" }, })</td>
+                    <td>@Html.CheckBox("checkbox", false, new { @id = cb })</td>
+                </tr>
+            }
+            <tr style="border-bottom:hidden">
+                <td colspan="7"></td>
+            </tr>
+            <tr style="border-bottom:hidden"> 
+                <td colspan="6">Verification Code:</td>
+                <td>@Html.TextBox("verify", new { htmlAttributes = new { @class = "form-control" }, })</td>
+            <tr>
+                <td colspan="7" align="right"><button type="submit">Complete</button></td>
+            </tr>
+        </table>
+
+    </div>
+}

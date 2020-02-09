@@ -13,6 +13,7 @@ using SSIMS.Service;
 using SSIMS.DAL;
 using SSIMS.ViewModels;
 using SSIMS.Filters;
+using PagedList;
 
 namespace SSIMS.Controllers
 {
@@ -25,43 +26,98 @@ namespace SSIMS.Controllers
         private DisbursementService ds = new DisbursementService();
         private readonly ILoginService loginService = new LoginService();
         // GET: DisbursementLists
-        public ActionResult Index()
+        public ActionResult Index(int? page, string status)
         {
-            var disbursementLists = db.DisbursementLists.Include(d => d.CreatedByStaff).Include(d => d.RepliedByStaff);
-
-            //my code for testing
+            var disbursementList = unitOfWork.DisbursementListRepository.Get(includeProperties: "CreatedByStaff, ItemTransactions.Item, Department");
             
-            if (disbursementLists == null)
+            int pageSize = 15;
+            int pageNumber = (page ?? 1);
+
+            switch (status)
+            {
+
+                case "Pending":
+                    disbursementList = disbursementList.Where(x => x.Status == Models.Status.Pending).ToList();
+                    break;
+                case "Completed":
+                    disbursementList = disbursementList.Where(x => x.Status == Models.Status.Completed).ToList();
+                    break;
+                case "All":
+                    disbursementList = disbursementList.ToList();
+                    break;
+                default:
+                    disbursementList = disbursementList.ToList();
+                    break;
+            }
+
+            if (disbursementList == null)
             {
                 return HttpNotFound();
             }
 
+            return View(disbursementList.ToPagedList(pageNumber, pageSize));
+
+        }
+
+        
+        public ActionResult Disbursement(int? id)
+        {
+            DisbursementList DL = unitOfWork.DisbursementListRepository.Get(filter: x => x.ID == id, includeProperties: "CreatedByStaff, ItemTransactions.Item, Department.CollectionPoint").FirstOrDefault();
+
+            if (DL == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            return View(DL);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Disbursement([Bind(Include = "Department, ItemTransactions")] DisbursementList model)
+        {
+            DisbursementList DL = unitOfWork.DisbursementListRepository.Get(filter: x => x.ID == model.ID, includeProperties: "CreatedByStaff, ItemTransactions.Item, Department.CollectionPoint").FirstOrDefault();
+            
+            for(int i = 0; i<DL.ItemTransactions.Count; i++)
+            {
+                for(int j = 0; j<model.ItemTransactions.Count; j++)
+                {
+                    if(DL.ItemTransactions.ToList()[i].Item.ID == model.ItemTransactions.ToList()[j].Item.ID)
+                    {
+                        DL.ItemTransactions.ToList()[i].TakeOverQty = model.ItemTransactions.ToList()[j].TakeOverQty;
+                        
+                    }
+                }
+            }
+            DL.Completed(DL.Department.DeptRep);
+            unitOfWork.DisbursementListRepository.Update(DL);
+            unitOfWork.Save();
+            
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult CurrentDisbursements()
+        {
+            var disbursementLists = unitOfWork.DisbursementListRepository.Get(filter: x => x.Status == Models.Status.Pending, includeProperties: "CreatedByStaff, ItemTransactions.Item, Department.CollectionPoint");
 
             return View(disbursementLists.ToList());
         }
 
-        public ActionResult Disbursement([Bind(Include = "deptDVM")] DisbursementViewModel model)
-        {
-
-            return View();
-        }
+        //public ActionResult Disbursement([Bind(Include = "deptDVM")] DisbursementViewModel model)
+        //{
+        //    List<RetrievalList> retrievalLists = (List<RetrievalList>)unitOfWork.RetrievalListRepository.Get(filter: x => x.Status == Models.Status.InProgress, includeProperties: "Department");
+        //    var deptList = retrievalLists.Select(x => x.Department.ID).Distinct();
+        //    //List<Department> deptList = (List<Department>)uow.DepartmentRepository.Get();
+        //    List<DeptDisbursementViewModel> deptDVMList = new List<DeptDisbursementViewModel>();
+        //    foreach (string dept in deptList)
+        //    {
+        //        DeptDisbursementViewModel deptDVM = ds.GenerateDeptDisbursementViewModel(dept);
+        //        deptDVMList.Add(deptDVM);
+        //    }
+        //    return View(deptDVMList);
+        //}
 
         //GET: RetrievalLists
-        public ActionResult Retrieval()
-        {
-
-            List<TransactionItem> combinedRL = ds.ViewCombinedRetrievalList();
-            var rivm = ds.ViewRetrievalItemViewModel(combinedRL);
-            var retrievalLists = db.RetrievalLists.Include(d => d.CreatedByStaff).Include(d => d.Status);
-
-            if(retrievalLists == null)
-            {
-                return HttpNotFound();
-            }
-
-            return View(rivm);
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Retrieval([Bind(Include = "ROList, rivmlist")] RetrivalVM model)
@@ -94,7 +150,8 @@ namespace SSIMS.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            DisbursementList disbursementList = db.DisbursementLists.Find(id);
+
+            DisbursementList disbursementList = unitOfWork.DisbursementListRepository.Get(filter: x => x.ID == id, includeProperties: "CreatedByStaff, ItemTransactions.Item, Department").FirstOrDefault();
             if (disbursementList == null)
             {
                 return HttpNotFound();

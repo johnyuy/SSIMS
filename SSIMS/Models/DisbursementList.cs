@@ -17,6 +17,13 @@ namespace SSIMS.Models
         }
 
         public DisbursementList() : base() { }
+
+        public DisbursementList(ICollection<TransactionItem> itemTransactions, Department department)
+        {
+            ItemTransactions = itemTransactions;
+            Department = department;
+        }
+
         public Boolean UpdateInventoryItem()
         {
             Console.WriteLine("UpdateInventoryItem()");

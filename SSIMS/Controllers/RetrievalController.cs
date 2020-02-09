@@ -12,9 +12,12 @@ using SSIMS.DAL;
 using PagedList;
 using SSIMS.Service;
 using SSIMS.ViewModels;
+using SSIMS.Filters;
 
 namespace SSIMS.Controllers
 {
+    [AuthenticationFilter]
+    [AuthorizationFilter]
     public class RetrievalController : Controller
     {
         private DatabaseContext db = new DatabaseContext();
@@ -50,16 +53,19 @@ namespace SSIMS.Controllers
 
         public ActionResult GenerateDisbursement()
         {
-            List<Department> deptList = (List<Department>)uow.DepartmentRepository.Get();
-            List<DeptDisbursementViewModel> deptDVMList = new List<DeptDisbursementViewModel>();
-            foreach(Department dept in deptList)
+            List<RetrievalList> retrievalLists = (List<RetrievalList>)uow.RetrievalListRepository.Get(filter: x => x.Status == Models.Status.InProgress, includeProperties: "Department");
+            var deptList = retrievalLists.Select(x => x.Department.ID).Distinct();
+            //List<Department> deptList = (List<Department>)uow.DepartmentRepository.Get();
+            //List<DeptDisbursementViewModel> deptDVMList = new List<DeptDisbursementViewModel>();
+            foreach (string dept in deptList)
             {
-                DeptDisbursementViewModel deptDVM = ds.GenerateDeptDisbursementViewModel(dept.ID);
-                deptDVMList.Add(deptDVM);
+                //for each retrievallists create adn save disbursement list
+                //change retrieval list status to complete
+                ds.InsertDisbursementList(dept);
             }
-            
-            
-            return RedirectToAction("Disbursement", "Disbursement", deptDVMList);
+
+
+            return RedirectToAction("CurrentDisbursements", "Disbursement");
         }
 
         // GET: RetrievalLists/Details/5
