@@ -135,7 +135,7 @@ namespace SSIMS.Controllers
 
 
         // GET: Requisition
-        public ActionResult Index(Staff staff, int? page)
+        public ActionResult Index(Staff staff, int? page, string sortOrder)
         {
             if (LoginService.IsAuthorizedRoles("head"))
                 return RedirectToAction("Manage", "Requisition");
@@ -143,6 +143,10 @@ namespace SSIMS.Controllers
                 return RedirectToAction("ViewHistory", "Requisition");
 
             staff = loginService.StaffFromSession;
+
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.CreDates = String.IsNullOrEmpty(sortOrder) ? "cre_date" : "";
+            ViewBag.ResDates = String.IsNullOrEmpty(sortOrder) ? "res_date" : "";
 
             Debug.WriteLine(staff.Name + staff.ID);
             Debug.WriteLine(Session["role"]);
@@ -154,7 +158,17 @@ namespace SSIMS.Controllers
 
             var reqList = unitofwork.RequisitionOrderRepository.Get(filter: x => x.CreatedByStaffID == staff.ID).ToList();
 
-            Debug.WriteLine(reqList.Count);
+            switch (sortOrder)
+            {
+                case "cre_date":
+                    reqList = (List<RequisitionOrder>)reqList.OrderByDescending(i => i.CreatedDate).ToList();
+                    break;
+                case "res_date":
+                    reqList = (List<RequisitionOrder>)reqList.OrderByDescending(i => i.ResponseDate).ToList();
+                    break;
+            }
+
+                    Debug.WriteLine(reqList.Count);
 
             int pageSize = 10;
             int pageNumber = (page ?? 1);
@@ -313,9 +327,6 @@ namespace SSIMS.Controllers
             return View(vm);
         }
         
-       
-
-
        
         // POST: Requisition/Create
         [HttpPost]
