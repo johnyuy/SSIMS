@@ -305,6 +305,7 @@
     <Compile Include="Controllers\ItemsController.cs" />
     <Compile Include="Controllers\LoginApiController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\PurchaseItemsController.cs" />
     <Compile Include="Controllers\PurchaseOrdersController.cs" />
     <Compile Include="Controllers\RequisitionController.cs" />
@@ -546,6 +547,8 @@
     <Content Include="Views\Inventory\AdjustmentVoucherNew.cshtml" />
     <Content Include="Views\Inventory\AdjustmentList.cshtml" />
     <Content Include="Views\Inventory\AdjustmentVoucher.cshtml" />
+    <Content Include="Views\Requisition\SendEmail.cshtml" />
+    <Content Include="Views\Notification\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
