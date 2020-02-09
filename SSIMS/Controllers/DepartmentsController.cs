@@ -218,26 +218,25 @@ namespace SSIMS.Controllers
         //Go to view for dep head only to select staff for delegation
         public ActionResult DelegateAuthority()
         {
+            UnitOfWork uow = new UnitOfWork();
             string dept = loginService.StaffFromSession.DepartmentID;
             //show history and form together
             //get a list of auths (history)
-            List<DeptHeadAuthVM> vmlist = departmentService.GetDeptHeadAuthorizationVMs(dept);
+            List<DeptHeadAuthVM> vmlist = departmentService.GetDeptHeadAuthorizationVMs(dept, uow);
             if(vmlist == null)
             {
                 Debug.WriteLine("EMPTY AUTHLIST!!");
             }
+
             //get a list of staff (new delegation)
             List<Staff> stafflist = staffService.GetStaffByDeptID(dept);
             ViewBag.StaffList = stafflist;
-            DeptHeadAuthorization auth = new DeptHeadAuthorization();
+
             //get current active delegation (if exists)
-            if(departmentService.IsActiveAuthExist(dept, out auth))
-            {
-                ViewBag.CurrentDelegation = new DeptHeadAuthVM(auth);
-            } else
-            {
-                ViewBag.CurrentDelegation = null;
-            }
+            ViewBag.CurrentDelegation = departmentService.IsActiveAuthExist(dept, out DeptHeadAuthorization auth, uow) ? (new DeptHeadAuthVM(auth)) : null;
+
+            ViewBag.DelegateError = TempData["delegateError"];
+           
             return View(vmlist);
         }
 
@@ -245,19 +244,35 @@ namespace SSIMS.Controllers
         //behind the scene to process the submission
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DelegateAuthority([Bind(Include = "ID,StartDate,EndDate,DepartmentID")] DeptHeadAuthorization deptHeadAuthorization)
+        public ActionResult DelegateAuthority(string StaffName, string StartDate, string EndDate)
         {
+            UnitOfWork uow = new UnitOfWork();
+            string deptID = loginService.StaffFromSession.DepartmentID;
             if (ModelState.IsValid)
             {
-                unitOfWork.DeptHeadAuthorizationRepository.Insert(deptHeadAuthorization);
-                unitOfWork.Save();
+                Debug.WriteLine(Server.UrlDecode(StaffName) + " " + StartDate + " " + EndDate);
+                string name = Server.UrlDecode(StaffName);
+                if(!departmentService.SubmitNewAuth(name, StartDate, EndDate, deptID))
+                    TempData["delegateError"] = "Please try again";
                 return RedirectToAction("DelegateAuthority");
             }
-            return RedirectToAction("Details", new { id = loginService.StaffFromSession.DepartmentID});
+            return RedirectToAction("Details", new { id = deptID});
         }
 
 
+
+
         //End Delegation
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CancelAuthorization()
+        {
+            string deptID = loginService.StaffFromSession.DepartmentID;
+            if (departmentService.CancelAuth(deptID))
+                Debug.WriteLine("Auth for" + deptID + "canceled");
+
+            return RedirectToAction("DelegateAuthority");
+        }
+
     }
 }
-

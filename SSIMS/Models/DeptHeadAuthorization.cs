@@ -39,5 +39,13 @@ namespace SSIMS.Models
             Staff = uow.StaffRepository.Get(filter: x => x.Name == vm.StaffName).FirstOrDefault();
 
         }
+
+        public DeptHeadAuthorization(string StaffName, string startDate, string endDate, string deptID, UnitOfWork uow)
+        {
+            Staff = uow.StaffRepository.Get(filter: x => x.Name == StaffName).FirstOrDefault();
+            StartDate = DateTime.Parse(startDate);
+            EndDate = DateTime.Parse(endDate);
+            DepartmentID = deptID;
+        }
     }
 }
