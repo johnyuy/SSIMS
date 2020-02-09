@@ -98,52 +98,12 @@ namespace SSIMS.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult CurrentDisbursements()
+        public ActionResult Current()
         {
             var disbursementLists = unitOfWork.DisbursementListRepository.Get(filter: x => x.Status == Models.Status.Pending, includeProperties: "CreatedByStaff, ItemTransactions.Item, Department.CollectionPoint");
 
-            return View(disbursementLists.ToList());
+            return View("CurrentDisbursements",disbursementLists.ToList());
         }
-
-        //public ActionResult Disbursement([Bind(Include = "deptDVM")] DisbursementViewModel model)
-        //{
-        //    List<RetrievalList> retrievalLists = (List<RetrievalList>)unitOfWork.RetrievalListRepository.Get(filter: x => x.Status == Models.Status.InProgress, includeProperties: "Department");
-        //    var deptList = retrievalLists.Select(x => x.Department.ID).Distinct();
-        //    //List<Department> deptList = (List<Department>)uow.DepartmentRepository.Get();
-        //    List<DeptDisbursementViewModel> deptDVMList = new List<DeptDisbursementViewModel>();
-        //    foreach (string dept in deptList)
-        //    {
-        //        DeptDisbursementViewModel deptDVM = ds.GenerateDeptDisbursementViewModel(dept);
-        //        deptDVMList.Add(deptDVM);
-        //    }
-        //    return View(deptDVMList);
-        //}
-
-        //GET: RetrievalLists
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Retrieval([Bind(Include = "ROList, rivmlist")] RetrivalVM model)
-        {
-            
-            //model.ROList[i].ID;
-            //rivmlist.deptRetrievalItems.transactionItem.Item,
-            //model.rivmlist[1].deptRetrievalItems[i].transactionItem.Item
-            List<RequisitionOrder> ROList = model.ROList;
-            foreach(RequisitionOrder RO in ROList)
-            {
-                RequisitionOrder NewRO = unitOfWork.RequisitionOrderRepository.GetByID(RO.ID);
-                NewRO.Completed(loginService.StaffFromSession);
-                unitOfWork.RequisitionOrderRepository.Update(NewRO);
-                unitOfWork.Save();
-            }
-            
-
-            List<RetrievalItemViewModel> rivmList = model.rivmlist;
-            ds.InsertRetrievalList(rivmList);
-
-            return RedirectToAction("Index");
-        }
-
 
         // GET: DisbursementLists/Details/5
         public ActionResult Details(int? id)
@@ -167,86 +127,6 @@ namespace SSIMS.Controllers
             ViewBag.CreatedByStaffID = new SelectList(db.Staffs, "ID", "UserAccountID");
             ViewBag.RepliedByStaffID = new SelectList(db.Staffs, "ID", "UserAccountID");
             return View();
-        }
-
-        // POST: DisbursementLists/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,CreatedByStaffID,RepliedByStaffID,Comments,CreatedDate,ResponseDate,Status")] DisbursementList disbursementList)
-        {
-            if (ModelState.IsValid)
-            {
-                db.DisbursementLists.Add(disbursementList);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            ViewBag.CreatedByStaffID = new SelectList(db.Staffs, "ID", "UserAccountID", disbursementList.CreatedByStaffID);
-            ViewBag.RepliedByStaffID = new SelectList(db.Staffs, "ID", "UserAccountID", disbursementList.RepliedByStaffID);
-            return View(disbursementList);
-        }
-
-        // GET: DisbursementLists/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            DisbursementList disbursementList = db.DisbursementLists.Find(id);
-            if (disbursementList == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.CreatedByStaffID = new SelectList(db.Staffs, "ID", "UserAccountID", disbursementList.CreatedByStaffID);
-            ViewBag.RepliedByStaffID = new SelectList(db.Staffs, "ID", "UserAccountID", disbursementList.RepliedByStaffID);
-            return View(disbursementList);
-        }
-
-        // POST: DisbursementLists/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,CreatedByStaffID,RepliedByStaffID,Comments,CreatedDate,ResponseDate,Status")] DisbursementList disbursementList)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(disbursementList).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            ViewBag.CreatedByStaffID = new SelectList(db.Staffs, "ID", "UserAccountID", disbursementList.CreatedByStaffID);
-            ViewBag.RepliedByStaffID = new SelectList(db.Staffs, "ID", "UserAccountID", disbursementList.RepliedByStaffID);
-            return View(disbursementList);
-        }
-
-        // GET: DisbursementLists/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            DisbursementList disbursementList = db.DisbursementLists.Find(id);
-            if (disbursementList == null)
-            {
-                return HttpNotFound();
-            }
-            return View(disbursementList);
-        }
-
-        // POST: DisbursementLists/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            DisbursementList disbursementList = db.DisbursementLists.Find(id);
-            db.DisbursementLists.Remove(disbursementList);
-            db.SaveChanges();
-            return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)

@@ -132,9 +132,9 @@
                 {<a href="~/requisition/index"> Requisitions</a>}
 
                 if (ViewBag.Section == "Disbursements")
-                {<a class="active" href="~/disbursements/index">Disbursements</a>}
+                {<a class="active" href="~/disbursement/index">Disbursements</a>}
                 else
-                {<a href="~/disbursements/index"> Disbursements</a>}
+                {<a href="~/disbursement/index"> Disbursements</a>}
 
                 if (ViewBag.Section == "Items")
                 {<a class="active" href="~/items/index">Items</a>}
@@ -195,6 +195,11 @@
                 {<a class="active" href="~/requisition/index"><i class=""></i> Requisitions</a>}
                 else
                 {<a href="~/requisition/index"><i class=""></i> Requisitions</a>}
+
+                if (ViewBag.Section == "Disbursements")
+                {<a class="active" href="~/disbursement/index">Disbursements</a>}
+                else
+                {<a href="~/disbursement/index"> Disbursements</a>}
 
                 if (ViewBag.Section == "Departments")
                 {<a class="active" href="~/departments/index"><i class="fa fa-fw fa-user"></i> Departments</a>}

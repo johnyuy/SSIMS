@@ -148,7 +148,7 @@ namespace SSIMS.Service
 
 
         //generate the combined retrieval list by item, adding in the DRIVM List here.
-        public RetrivalVM ViewRetrievalItemViewModel(List<TransactionItem> combinedRetrievalList)
+        public RetrievalVM ViewRetrievalItemViewModel(List<TransactionItem> combinedRetrievalList)
         {
             List<RetrievalItemViewModel> combinedRIVMList = new List<RetrievalItemViewModel>();
             List<RetrievalItemViewModel> rivmList = GenerateRetrievalItemViewModelWithoutDRIVMList(combinedRetrievalList);
@@ -178,7 +178,7 @@ namespace SSIMS.Service
             List<RequisitionOrder> requisitionOrderList = (List<RequisitionOrder>)unitOfWork.RequisitionOrderRepository.Get(filter: x => x.Status == Models.Status.Approved);
 
             Debug.WriteLine("Number of Approved ROs: " + requisitionOrderList.Count);
-            RetrivalVM retrivalVM = new RetrivalVM();
+            RetrievalVM retrivalVM = new RetrievalVM();
             retrivalVM.ROList = requisitionOrderList;
             retrivalVM.rivmlist = rivmList;
             return retrivalVM;

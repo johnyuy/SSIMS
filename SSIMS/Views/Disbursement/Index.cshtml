@@ -2,22 +2,45 @@
 @using PagedList.Mvc;
 
 @{
-    ViewBag.Title = "Disbursement";
-    ViewBag.Header = "Disbursement History";
+    ViewBag.Header = "Disbursements";
     ViewBag.Section = "Disbursements";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
 }
+<style>
+    th, td{
+        text-align:center;
+    }
+    #top-bar{
+        width:100%;
+        height:50px;
+        margin: 5px 0px;
+    }
+        #top-bar button {
+            float: left;
+            margin-right: 50px;
+            width: 200px;
+            height: 40px;
+            font-size: 15px;
+            font-weight: bold;
+            color: white;
+            background-color: #437373;
+        }
+</style>
 
-
-<hr />
-
+<div id="top-bar">
+    <div>
+        <button onclick="window.location.href = '/Retrieval/Index';">Go to Retrievals</button>
+    </div>
+    <div>
+        <button onclick="window.location.href = '/Disbursement/Current';">Current Disbursements</button>
+    </div>
+</div>
 <div class="table-responsive">
-    <h4>Disbursement History</h4>
-    <label>See by Status:</label>
-    @Html.ActionLink("Pending", "Index", new { status = "Pending" }) |
-    @Html.ActionLink("Completed", "Index", new { status = "Completed" }) |
-    @Html.ActionLink("See All", "Index", new { status = "All" })
+    <label> &nbsp;View by Status: &nbsp;</label>
+    &nbsp; @Html.ActionLink("Pending", "Index", new { status = "Pending" }) &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+    @Html.ActionLink("Completed", "Index", new { status = "Completed" }) &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+    @Html.ActionLink("View All", "Index", new { status = "All" })
 
     <table class="table">
         <tr>
@@ -31,9 +54,10 @@
 
         @foreach (var dl in Model)
         {
+            string fullid = dl.ID.ToString($"DL{0:1000000}");
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => dl.ID)
+                    @fullid
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => dl.CreatedDate)
@@ -52,7 +76,7 @@
                 </td>
             </tr>
         }
-        
+
     </table>
 </div>
 <br />

@@ -2,75 +2,198 @@
 
 @using SSIMS.Models;
 @{
-    ViewBag.Title = "Disbursement";
     ViewBag.Header = "Disbursement";
     ViewBag.Section = "Disbursements";
     Layout = "~/Views/Shared/_Layout.cshtml";
-
+    string fullid = Model.ID.ToString($"DL{0:100000}");
+    string collectionTime = Model.Department.CollectionPoint.Time.ToString("hh:mm tt");
+    int size = Model.ItemTransactions.Count() * 2;
+    int sizeok = Model.ItemTransactions.Count();
 }
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-    <div class="table-responsive">
-        <table class="table">
-            <tr style="border:hidden">
-                <td colspan="4">
-                    <strong>Disbursement ID:</strong> @Model.ID
-                    @Html.HiddenFor(model => model.ID, new { htmlAttributes = new { @class = "form-control" }, })
-                </td>
-                <td colspan="3" align="right"><strong>Date of Collection:</strong> @Model.Department.CollectionPoint.Time.Date</td>
-            </tr>
-            <tr style="border:hidden">
-                <td colspan="4"><strong>Request Dept:</strong> @Model.Department.DeptName</td>
-                <td colspan="3" align="right"><strong>Location:</strong> @Model.Department.CollectionPoint.Location</td>
-            </tr>
-            <tr style="border-top:hidden">
-                <td colspan="7" align="right"> <button type="button" id="print">Print</button></td>
-            </tr>
-            <tr>
-                <th>No.</th>
-                <th>Item Code</th>
-                <th>Item Description</th>
-                <th>Unit of Measure</th>
-                <th>Handover Qty</th>
-                <th>Collected</th>
-                <th>Remarks</th>
-                <th>Checked</th>
-            </tr>
-            @{
-                int count = 0;
+<style>
+    th, td {
+        text-align: center;
+    }
 
-            }
-            @for (int i = 0; i < Model.ItemTransactions.Count; i++)
-            {
-                count = i + 1;
-                string cb = "cb" + i;
-                <tr>
-                    <td>
-                        @count
-                        @Html.HiddenFor(model => model.ItemTransactions.ToList()[i].ID, new { htmlAttributes = new { @class = "form-control" }, })
-                    </td>
-                    <td>@Html.DisplayFor(model => model.ItemTransactions.ToList()[i].Item.ID)</td>
-                    <td>@Html.DisplayFor(model => model.ItemTransactions.ToList()[i].Item.Description)</td>
-                    <td>@Html.DisplayFor(model => model.ItemTransactions.ToList()[i].Item.UnitOfMeasure)</td>
-                    <td>@Html.DisplayFor(model => model.ItemTransactions.ToList()[i].HandOverQty)</td>
-                    <td>@Html.EditorFor(model => model.ItemTransactions.ToList()[i].TakeOverQty, new { htmlAttributes = new { @class = "form-control", max = Model.ItemTransactions.ToList()[i].HandOverQty, min = 0 } })</td>
+    #top-bar, #bottom-bar {
+        width: 100%;
+        height: 50px;
+        margin: 5px 0px;
+    }
 
-                    <td>@Html.EditorFor(model => model.ItemTransactions.ToList()[i].Reason, new { htmlAttributes = new { @class = "form-control" }, })</td>
-                    <td>@Html.CheckBox("checkbox", false, new { @id = cb })</td>
-                </tr>
-            }
-            <tr style="border-bottom:hidden">
-                <td colspan="7"></td>
-            </tr>
-            <tr style="border-bottom:hidden"> 
-                <td colspan="6">Verification Code:</td>
-                <td>@Html.TextBox("verify", new { htmlAttributes = new { @class = "form-control" }, })</td>
-            <tr>
-                <td colspan="7" align="right"><button type="submit">Complete</button></td>
-            </tr>
-        </table>
+        #top-bar button {
+            float: left;
+            margin-right: 50px;
+            width: 200px;
+            height: 40px;
+            font-size: 15px;
+            font-weight: bold;
+            color: white;
+            background-color: #437373;
+        }
 
+    #info-table-container {
+        width: 100%;
+        height: 150px;
+    }
+
+    #list-title {
+        float: left;
+        margin: 20px 10px 0px 30px;
+        font-size: 50px;
+        color: #205050;
+    }
+
+    #info-table {
+        width: 40%;
+        box-shadow: none;
+        float: right;
+        margin: 30px 30px 0px 50px;
+        font-weight: bold;
+    }
+    #table-bottom{
+        float:right;
+    }
+    #form-container{
+        box-shadow: 2px 4px 8px 0px rgba(47,79,79,0.2);
+        padding:20px;
+        background:linear-gradient(to right, rgba(146, 167, 154, 0.20) 0%, rgba(115, 147, 147, 0.31) 100%);
+    }
+</style>
+
+
+
+
+<div id="top-bar">
+    <div>
+        <button onclick="window.location.href = '/Disbursement/Current';">Back</button>
     </div>
-}
+    <div style="float:right">
+        <button type="button" id="print" style="margin-right:0px">Print</button>
+    </div>
+</div>
+<div id="form-container">
+        <div id="info-table-container">
+            <p id="list-title">@fullid</p>
+            <table id="info-table">
+                <tr>
+                    <td style="text-align: right">
+                        Department :
+                    </td>
+                    <td>
+                        @Model.Department.DeptName
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align:right">
+                        Collection Point :
+                    </td>
+                    <td style="width: 250px">
+                        @Model.Department.CollectionPoint.Location
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align:right">
+                        Collection Time :
+                    </td>
+                    <td>
+                        @collectionTime
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="table-responsive">
+                <table class="table">
+                    <tr>
+                        <th>No.</th>
+                        <th>Item Code</th>
+                        <th>Item Description</th>
+                        <th>Unit of Measure</th>
+                        <th>Handover Qty</th>
+                        <th>Collected</th>
+                        <th>Remarks</th>
+                        <th>Checked</th>
+                    </tr>
+                    @{
+                        int count = 0;
+                    }
+                    @for (int i = 0; i < Model.ItemTransactions.Count; i++)
+                    {
+                        count = i + 1;
+                        string cb = "cb" + i;
+                        <tr>
+                            <td>
+                                @count
+                                @Html.HiddenFor(model => model.ItemTransactions.ToList()[i].ID, new { htmlAttributes = new { @class = "form-control" }, })
+                            </td>
+                            <td>@Html.DisplayFor(model => model.ItemTransactions.ToList()[i].Item.ID)</td>
+                            <td>@Html.DisplayFor(model => model.ItemTransactions.ToList()[i].Item.Description)</td>
+                            <td>@Html.DisplayFor(model => model.ItemTransactions.ToList()[i].Item.UnitOfMeasure)</td>
+                            <td>@Html.DisplayFor(model => model.ItemTransactions.ToList()[i].HandOverQty)</td>
+                            <td>@Html.EditorFor(model => model.ItemTransactions.ToList()[i].TakeOverQty, new { htmlAttributes = new { @class = "form-control", max = Model.ItemTransactions.ToList()[i].HandOverQty, min = 0 } })</td>
+
+                            <td>@Html.EditorFor(model => model.ItemTransactions.ToList()[i].Reason, new { htmlAttributes = new { @class = "form-control" }, })</td>
+                            <td onchange="oncheck()">@Html.CheckBox("checkbox", false, new { @id = cb })</td>
+                        </tr>
+                    }
+
+                </table>
+
+                <div id="bottom-bar">
+                    <table id="table-bottom">
+                        <tr style="height:50px">
+                            <td>
+                                Verification Code: &nbsp;
+                            </td>
+                            <td>
+                                <input style="width:100px" name="otp" value="" type="text" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td><button id="submit-button" disabled style="width:100px; color:lightgrey" type="submit">Complete</button></td>
+                        </tr>
+                    </table>
+                </div>
+
+
+                <p hidden>@Html.HiddenFor(model => model.ID, new { htmlAttributes = new { @class = "form-control" }, })</p>
+            </div>
+
+                        }
+</div>
+
+
+<script>
+    function oncheck() {
+        var boxes = document.getElementsByName("checkbox");
+        var count = 0
+        for (i = 0; i < @size; i++) {
+            if (boxes[i].checked) {
+                count++;
+            }
+        }
+        if (count == @sizeok) {
+            activate();
+        } else {
+            deactivate();
+        }
+    }
+
+    function activate() {
+        var button = document.getElementById("submit-button");
+        button.style.color = "";
+        button.removeAttribute("disabled");
+    }
+
+    function deactivate() {
+        var button = document.getElementById("submit-button");
+        button.style.color = "lightgrey";
+        button.setAttribute("disabled", true);
+    }
+</script>
