@@ -206,6 +206,37 @@ namespace SSIMS.Controllers
             return View(InventoryService.GenerateInventoryCheckList());
         }
 
+
+        [HttpPost]
+        public ActionResult UpdateStockCheck(string itemcode, string qtyChanged, string remarks)
+        {
+            string itemCode = itemcode.Trim();
+            string qtyx = qtyChanged.Trim();
+            string re = remarks.Trim();
+
+            Debug.WriteLine("Updating stock check: " + itemcode.Trim() + " " + qtyChanged.Trim() + " " + remarks.Trim());
+            
+            //LOGIC : IF QTY is the same as the one in the inventory, we do not save it
+            // Else we store the discrepancy in the Session object "Adjustment Cart" as a
+            // AdjustmentItemVm (DONE)
+            if(int.TryParse(qtyx, out int x)) //check for if qtyChanged is a integer first
+            {
+                if (x != 0)
+                {
+                    Debug.WriteLine("\tCreating a adjustment");
+                    AdjustmentItemVM adjustment = new AdjustmentItemVM(itemCode, x, re);
+                    if (adjustment != null)
+                        InventoryService.addItemToAdjustmentCart(adjustment);
+                }
+                else
+                {
+                    Debug.WriteLine("No changed qty detected");
+                }
+            }
+            //no need to return anything since we are just receiving information
+            return Content("");
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

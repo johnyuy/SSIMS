@@ -20,6 +20,9 @@ namespace SSIMS.ViewModels
         public int Qty { get; set; }
         
         public string ImageURL { get; set; }
+        [Display(Name = "Reason")]
+        [MaxLength(30)]
+        public string Remarks { get; set; }
 
         public InventoryCheckVM() {}
         //construct using inventory item
@@ -31,6 +34,7 @@ namespace SSIMS.ViewModels
             UOM = item.Item.UnitOfMeasure;
             Qty = item.InStoreQty;
             ImageURL = item.Item.ImageURL;
+            Remarks = "";
         }
 
     }

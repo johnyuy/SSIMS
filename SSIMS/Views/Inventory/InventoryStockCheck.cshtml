@@ -6,13 +6,12 @@
 }
 <style>
     tr, th, input{
-        font-size:15px;
+        font-size:13px;
         text-align:center;
     }
     tr{
         height:100px;
-        border-bottom: solid white 1px;
-        transition-duration: 0.5s;
+        border: solid lightgrey 1px;
     }
     th, td{
         padding:0px 20px;
@@ -20,10 +19,9 @@
     }
     #top-row {
         background: linear-gradient(to right, rgba(146, 167, 154, 0.20) 0%, rgba(115, 147, 147, 0.31) 100%);
-        border-bottom: double white 3px;
+        border-bottom: solid lightgrey 3px;
     }
     #form-container{
-        box-shadow: 2px 4px 8px 0px rgba(47,79,79,0.2);
         width:auto;
     }
     input{
@@ -33,76 +31,97 @@
     input.checkbox{
         transform:scale(1.5);
     }
-
+    input.textbox{
+        border:lightgrey solid 0.5px;
+        width:200px;
+        text-align:left;
+    }
+    tr{
+        transition-duration: 0.5s;
+    }
+    table{
+        box-shadow: 2px 4px 8px 0px rgba(47,79,79,0.2);
+    }
 </style>
 <div id="form-container">
 
 
-    @using (Html.BeginForm())
-    {
-        @Html.AntiForgeryToken()
+
         <table>
             <tr id="top-row">
-                <th>
+                <th width="50px">
                     @Html.DisplayNameFor(Model => Model[0].ItemCode)
                 </th>
                 <th>
                     @Html.DisplayNameFor(Model => Model[0].Category)
                 </th>
-                <th>
+                <th width="200px">
                     @Html.DisplayNameFor(Model => Model[0].Description)
                 </th>
-                <th>
+                <th width="50px">
                     @Html.DisplayNameFor(Model => Model[0].UOM)
                 </th>
-                <th>
-                    
+                <th width="100px">
+
                 </th>
-                <th>
+
+                <th width="50px">
                     @Html.DisplayNameFor(Model => Model[0].Qty)
                 </th>
-                <th>
+
+                <th width="200px">
+                    Remarks
+                </th>
+
+                <th width="50px">
                     Checked
                 </th>
             </tr>
-            @for (int i = 0; i < Model.Count(); i++)
+            @for (int i = 0 ; i < Model.Count(); i++)
             {
-                <tr @Html.Raw("id='row-" + i + "'")>
-                    <td>
-                        @Html.DisplayFor(Model => Model[i].ItemCode)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(Model => Model[i].Category)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(Model => Model[i].Description)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(Model => Model[i].UOM)
-                    </td>
-                    <td>
-                        <img @Html.Raw("id='img-" + i + "'") src=@Url.Content(Model[i].ImageURL) style="width:100px"/>
-                    </td>
-                    <td>
-                        @Html.EditorFor(Model => Model[i].Qty)
-                        @Html.HiddenFor(Model => Model[i].Qty)
-                    </td>
-                    <td onchange="check(@i)">
-                        @Html.CheckBox("checkbox", false, new { @id = "checkbox" + i.ToString(), @class="checkbox" })
-                    </td>
-                </tr>
+                 
+                int bal = Model[i].Qty;
+                
+        <tr @Html.Raw("id='row-" + i + "'")>
+            <td @Html.Raw("id='item-" + i + "'")>
+                @Html.DisplayFor(Model => Model[i].ItemCode)
+            </td>
+            <td>
+                @Html.DisplayFor(Model => Model[i].Category)
+            </td>
+            <td>
+                @Html.DisplayFor(Model => Model[i].Description)
+            </td>
+            <td>
+                @Html.DisplayFor(Model => Model[i].UOM)
+            </td>
+            <td>
+                <img @Html.Raw("id='img-" + i + "'") src=@Url.Content(Model[i].ImageURL) style="width:100px" />
+            </td>
+
+            <td onchange="toggleremarks(@i, @bal)">
+                @Html.EditorFor(Model => Model[i].Qty)
+            </td>
+
+            <td>
+                @Html.TextBox("textbox", Model[i].Remarks, new { @id = "textbox" + i.ToString(), @class = "textbox" })
+            </td>
+            <td onchange="check(@i, @bal)">
+                @Html.CheckBox("checkbox", false, new { @id = "checkbox" + i.ToString(), @class = "checkbox" })
+            </td>
+        </tr>
             }
         </table>
         <div>
             <button>Submit</button>
         </div>
-    }
+    
 </div>
 
-<span style="color:#d8e0e0"></span>
+<span style="color: #d8e0e0 "></span>
 
 <script>
-    function check(i) {
+    function check(i,balance) {
         var box = "checkbox" + i;
         var element = document.getElementById(box);
         var inputbox = document.getElementsByName("[" + i + "].Qty")[0];
@@ -110,6 +129,8 @@
         var row = document.getElementById(rowi);
         var imgi = "img-" + i;
         var img = document.getElementById(imgi);
+        var textbox = document.getElementById("textbox" + i);
+
 
         if (element.checked == true) {
             inputbox.setAttribute('readonly', true);
@@ -120,19 +141,62 @@
             inputbox.style.backgroundColor = "#d8e0e0";
             inputbox.style.border = "none";
             img.style.display = "none";
+            textbox.style.backgroundColor = "#d8e0e0";
+            textbox.style.border = "none";
         } else {
             inputbox.removeAttribute('readonly');
             row.style.background = "";
             row.style.backgroundColor = "white";
             row.style.color = "";
-            row.style.fontSize = "";
-            row.style.height = "";
+            row.style.fontSize = "13px";
+            row.style.height = "100px";
             inputbox.style.backgroundColor = "white";
             inputbox.style.border = "";
-            img.style.display = "";
-        }
+            if (textbox.value == "") {
+                textbox.style.backgroundColor = "white";
+                textbox.style.border = "lightgrey solid 0.5px"
+            } else {
+                textbox.style.backgroundColor = "wheat";
+                textbox.style.border = "grey solid 1px"
+            }
+            setTimeout(function () {
+                $(img).display = "block";
+                $(img).fadeIn(300);
+            }, 500);
 
-        
-        
+        }
+        //alert(x);
+        //call AJAX to submit the item code, qty, remarks to controller action method
+        //x, itemcode and the remarks => save()
+        var x = inputbox.value - balance;
+        var xstr = x.toString();
+        var Itemcode = document.getElementById("item-" + i).innerHTML;
+        var Remarks = textbox.value;
+        save(xstr, Itemcode, Remarks);
+    }
+
+    function toggleremarks(i, balance) {
+        var textbox = document.getElementById("textbox" + i);
+        var inputbox = document.getElementsByName("[" + i + "].Qty")[0];
+        if (inputbox.value != balance) {
+            textbox.style.backgroundColor = "wheat";
+            textbox.style.border = "grey solid 1px";
+        } else {
+            textbox.style.backgroundColor = "white";
+            textbox.style.border = "lightgrey solid 0.5px";
+        }
+    }
+
+
+    function save(xstr, code, re) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("UpdateStockCheck","Inventory")',
+            data: { itemcode: code, qtyChanged: xstr, remarks: re},
+            dataType: 'html',
+            success: function (data) {
+                console.log("check updated");
+            }
+        })
     }
 </script>
