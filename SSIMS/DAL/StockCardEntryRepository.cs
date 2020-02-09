@@ -97,7 +97,7 @@ namespace SSIMS.DAL
             List<StockCardEntry> transactions = new List<StockCardEntry>();
             foreach (DocumentItem item in items)
             {
-                if (item.Item == null || item.Qty < 1)
+                if (item.Item == null || item.Qty == 0)
                 {
                     isTransactionOk = false;
                     break;

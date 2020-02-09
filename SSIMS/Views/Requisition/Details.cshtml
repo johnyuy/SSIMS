@@ -171,19 +171,21 @@ else
         <p>
             @Html.ActionLink("Reject", "Reject", new { id = Model.ID })
         </p>*@
+        <p style="text-align:left">
+            <form action="/requisition/approve">
+                <input type="text" name="comment" value=@Model.Comments />
+                <input type="hidden" name="id" value="@Model.ID" />
+                <button>Approve</button>
+            </form>
+        </p>
 
-        <form action="/requisition/approve">
-            <input type="text" name="comment" value=@Model.Comments />
-            <input type="hidden" name="id" value="@Model.ID" />
-            <button>Approve</button>
-        </form>
-
-        <form action="/requisition/reject">
-            <input type="text" name="comment" value=@Model.Comments />
-            <input type="hidden" name="id" value="@Model.ID" />
-            <button>Reject</button>
-        </form>
-
+        <p style="text-align:right">
+            <form action="/requisition/reject">
+                <input type="text" name="comment" value=@Model.Comments />
+                <input type="hidden" name="id" value="@Model.ID" />
+                <button>Reject</button>
+            </form>
+        </p>
 
     }
 }

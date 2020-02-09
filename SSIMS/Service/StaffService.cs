@@ -30,5 +30,14 @@ namespace SSIMS.Service
             }
             return null;
         }
+
+        public List<Staff> GetStaffByDeptID(string deptID)
+        {
+            IEnumerable<Staff> stafflist = unitOfWork.StaffRepository.Get(filter: x => x.DepartmentID == deptID, includeProperties: "Department");
+            if (stafflist == null)
+                return null;
+
+            return stafflist.ToList();
+        }
     }
 }

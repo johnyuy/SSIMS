@@ -14,9 +14,7 @@ namespace SSIMS.Models
         public string ID { get; set; }
         [Display(Name = "Department Name")]
         public string DeptName { get; set; }
-
         public Staff DeptRep { get; set; }
-
         public Staff DeptHead { get; set; }
         public string PhoneNumber { get; set; }
         public string FaxNumber { get; set; }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -9,6 +10,7 @@ namespace SSIMS.ViewModels
     {
         public string Date { get; set; }
         public string Movement { get; set; }
+        [DisplayFormat(DataFormatString = "{0:+#;-#;0}", ApplyFormatInEditMode = false)]
         public int QtyChange { get; set; }
         public int InStoreBalance { get; set; }
         public InventoryStockCardVM(string date, string movement, int qtyChange, int inStoreBalance)
@@ -22,5 +24,6 @@ namespace SSIMS.ViewModels
         {
             return Date + " | " + Movement + " | " + QtyChange + " | " + InStoreBalance;
         }
+        public InventoryStockCardVM() { }
     }
 }

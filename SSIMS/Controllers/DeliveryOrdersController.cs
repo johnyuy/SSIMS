@@ -204,18 +204,30 @@ namespace SSIMS.Controllers
                     uow.PurchaseOrderRepository.Update(PO);
                     uow.Save();
                 }
+
                 Staff currentUser = loginService.StaffFromSession;
 
                 //Create DeliveryOrder
+
                 DeliveryOrder deliveryOrder = new DeliveryOrder(currentUser, PO.Supplier, PO);
                 deliveryOrder.DocumentItems = deliveredItems;
-                uow.DeliveryOrderRepository.Insert(deliveryOrder);
-                uow.Save();
+                bool result = uow.StockCardEntryRepository.ProcessDeliveryOrderAcceptance(deliveryOrder);
 
+                if (result){
+                    uow.DeliveryOrderRepository.Insert(deliveryOrder);
+                    uow.Save();
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.CreatedByStaffID = new SelectList(db.Staffs, "ID", "UserAccountID", deliveryOrderVM.CreatedByStaffID);
+                    ViewBag.RepliedByStaffID = new SelectList(db.Staffs, "ID", "UserAccountID", deliveryOrderVM.RepliedByStaffID);
+                    return View(deliveryOrderVM);
+                }
             }
             ViewBag.CreatedByStaffID = new SelectList(db.Staffs, "ID", "UserAccountID", deliveryOrderVM.CreatedByStaffID);
             ViewBag.RepliedByStaffID = new SelectList(db.Staffs, "ID", "UserAccountID", deliveryOrderVM.RepliedByStaffID);
-            return RedirectToAction("Index");
+            return View(deliveryOrderVM);
         }
 
         // GET: DeliveryOrders/Delete/5

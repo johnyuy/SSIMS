@@ -1,70 +1,152 @@
-﻿@using SSIMS.Models
-
+﻿@model List<SSIMS.ViewModels.DeptHeadAuthVM>
+@using SSIMS.Models;
+@using SSIMS.ViewModels;
 @{
     ViewBag.Header = "Delegate Authority";
-    Department department = ViewBag.Department;
-    string selected = ViewBag.SelectedAuth;
-    List<Staff> options = ViewBag.StaffList;
+    ViewBag.Section = "Delegate";
+    List<Staff> stafflist = ViewBag.StaffList ?? null;
+    List<Staff> staffwoheadlist = ViewBag.StaffWOHeadList ?? null;
+    List<Staff> staffonlylist = ViewBag.StaffOnlyList ?? null;
+    DeptHeadAuthVM currentDelegation = ViewBag.CurrentDelegation ?? null;
+    bool isCurrent = currentDelegation == null ? false : true;
+    string error = ViewBag.DelegateError ?? "";
 }
 
+@if (!isCurrent)
+{
+    using (Html.BeginForm(FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
 
-<h2>@department.DeptName  Authority Delegation</h2>
+        <div>
+            <table>
+                <tr>
+                    <th>
+                        Staff
+                    </th>
+                    <td>
+                        <select name="StaffName">
+                            <option selected value="">select</option>
+                            @for (int i = 0; i < staffwoheadlist.Count(); i++)
+                            {
+                                string name = Server.UrlEncode(staffwoheadlist[i].Name);
+                                <option value=@name>@staffwoheadlist[i].Name</option>
+                            }
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Start Date
+                    </th>
+                    <td>
+                        <input name="StartDate" type="date" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        End Date
+                    </th>
+                    <td>
+                        <input name="EndDate" type="date" />
+                    </td>
+                </tr>
+            </table>
 
-<script>
-    function update() {
-        var auth = document.getElementById("authorized").value;
-        alert("Authority Delgation Updated!");
-        post("/departments/updateauthority", { "id": auth });
+            <div>
+                <div>
+                    <p class="text-danger">@error</p>
+                </div>
+                <div>
+                    <input type="submit" value="Delegate" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+
     }
-
-    function post(path, params, method='post') {
-      const form = document.createElement('form');
-      form.method = method;
-      form.action = path;
-
-      for (const key in params) {
-        if (params.hasOwnProperty(key)) {
-          const hiddenField = document.createElement('input');
-          hiddenField.type = 'hidden';
-          hiddenField.name = key;
-          hiddenField.value = params[key];
-          form.appendChild(hiddenField);
-        }
-      }
-      document.body.appendChild(form);
-      form.submit();
-    }
-</script>
-
-<div>
-
+    
+}
+else
+{
     <table>
         <tr>
-            <th>Currently Authorized: </th>
-            <td></td>
-        </tr>
-
-        <tr>
-            <th>Authorize: </th>
+            <th>
+                Current Authorized Head
+            </th>
             <td>
-
+                @currentDelegation.StaffName
+            </td>
+            <td rowspan="3">
+                @using (Html.BeginForm("CancelAuthorization", "Departments", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                <div>
+                    <input type="submit" value="Cancel" class="btn btn-default" />
+                </div>
+                }
             </td>
         </tr>
-
         <tr>
-            <th>From: </th>
+            <th>
+                Start Date
+            </th>
             <td>
-
+                @currentDelegation.StartDate
             </td>
         </tr>
-
         <tr>
-            <th>Till: </th>
+            <th>
+                End Date
+            </th>
             <td>
-
+                @currentDelegation.EndDate
             </td>
         </tr>
     </table>
+}
+
+
+@if (Model.Count == 0 || Model == null)
+{
+    <p style="font-size:50px">NO AUTH IN RECORD</p>
+}
+else
+{
+    <p>AUTH HISTORY IS HERE</p>
+    <table>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(Model => Model[0].StaffName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(Model => Model[0].StartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(Model => Model[0].EndDate)
+            </th>
+        </tr>
+        @for(int i = 0; i< Model.Count(); i++)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(Model => Model[i].StaffName)
+            </td>
+            <td>
+                @Html.DisplayFor(Model => Model[i].StartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(Model => Model[i].EndDate)
+            </td>
+        </tr>
+        }
+    </table>
+}
+
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
 </div>
 
-
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
