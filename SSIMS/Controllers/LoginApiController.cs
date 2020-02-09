@@ -22,15 +22,28 @@ namespace SSIMS.Controllers
 
         //POST: api/LoginApi
         [HttpPost]
-        public string Authenticate([FromBody] UserLogin userLogin)
+        public UserAccount Authenticate([FromBody] UserLogin userLogin)
 
         {
             if (LoginService.VerifyPasswordApi(userLogin.Username, userLogin.Password))
             {
-                return JsonConvert.SerializeObject("Login Successful");
+                UserAccount account = uow.UserAccountRepository.GetByID(userLogin.Username);
+                account.Password = "";
+                return account;
             }
 
-            return JsonConvert.SerializeObject("Login Failed");
+            return null;
+        }
+
+        [HttpGet]
+        public Staff GetStaff([FromBody] string username)
+        {
+            if (username != "" )
+            {
+                Staff staff = uow.StaffRepository.Get(filter: x=> x.UserAccountID == username).FirstOrDefault();
+                return staff;
+            }
+            return null;
         }
 
 
