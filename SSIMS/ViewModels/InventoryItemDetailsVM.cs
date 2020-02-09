@@ -134,7 +134,7 @@ namespace SSIMS.ViewModels
                 else if (entries[i].DeliveryOrder != null)
                 {
                     ID = entries[i].DeliveryOrder.ID.ToString($"DO{0:1000000}");
-                    date = (DateTime)entries[i].DeliveryOrder.ResponseDate;
+                    date = (DateTime)entries[i].DeliveryOrder.CreatedDate;
                     dateString = date.ToString("dd/MM/yyyy");
                     movement = "Delivery " + ID + " from " + entries[i].DeliveryOrder.Supplier.ID;
                 }
@@ -162,6 +162,8 @@ namespace SSIMS.ViewModels
             {
                 StockCard.RemoveRange(0, StockCard.Count - 50);
             }
+            //arrange by date first
+            StockCard.Reverse();
 
         }
     }
