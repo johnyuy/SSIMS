@@ -1,38 +1,116 @@
 ﻿@model SSIMS.Models.DisbursementList
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Header = "Disbursement Details";
+    ViewBag.Section = "Disbursements";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
 }
 
-<h2>Details</h2>
 
 <div>
-    <h4>DisbursementList</h4>
+
     <hr />
     <dl class="dl-horizontal">
+
         <dt>
-            @Html.DisplayNameFor(model => model.CreatedByStaff.UserAccountID)
+            Disbursement ID
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.CreatedByStaff.UserAccountID)
+            @Html.DisplayFor(model => model.ID)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.RepliedByStaff.UserAccountID)
+            Request Department
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.RepliedByStaff.UserAccountID)
+            @Html.DisplayFor(model => model.Department.ID)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Comments)
+            Delivered by
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Comments)
+            @Html.DisplayFor(model => model.CreatedByStaff.Name)
         </dd>
+    </dl>
+    <div class="table-responsive">
+        <table class="table">
+            <tr style="border-top:hidden; border-left:hidden; border-right:hidden">
+                <td colspan="5" align="right"><button type="button">Print</button></td>
+            </tr>
+            <tr>
+                <th>No.</th>
+                <th>Item Code</th>
+                <th>Item Description</th>
+                <th>Request Qty</th>
+                <th>Collected Qty</th>
+            </tr>
+            @{
+                int count = 0;
+            }
+            @foreach (var transItem in Model.ItemTransactions)
+            {
+                count++;
+                <tr>
+                    <td>@count</td>
+                    <td>@Html.DisplayFor(model => transItem.Item.ID)</td>
+                    <td>@Html.DisplayFor(model => transItem.Item.Description)</td>
+                    <td>@Html.DisplayFor(model => transItem.HandOverQty)</td>
+                    <td>@Html.DisplayFor(model => transItem.TakeOverQty)</td>
+                </tr>
+            }
+            @*<tr>
+                <td colspan="5" style="border-bottom:hidden"></td>
+            </tr>
+            <tr style="border-bottom:hidden">
+                <td>Status:</td>
+                <td>@Html.DisplayFor(model => model.Status)</td>
+            </tr>
+            <tr style="border-bottom:hidden">
+                <td>Signed by:</td>
+                <td>@Html.DisplayFor(model => model.RepliedByStaff.Name)</td>
+            </tr>
+            <tr>
+                <td>Date: </td>
+                <td>@Html.DisplayFor(model => model.ResponseDate)</td>
+            </tr>*@
+
+        </table>
+        <br />
+        <dl class="dl-horizontal">
+
+            <dt>
+                Status
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Status)
+            </dd>
+
+            <dt>
+                Signed By
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.RepliedByStaff.Name)
+            </dd>
+
+            <dt>
+                Date
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.ResponseDate)
+            </dd>
+        </dl>
+    </div>
+
+
+@*
 
         <dt>
             @Html.DisplayNameFor(model => model.CreatedDate)
@@ -59,8 +137,27 @@
         </dd>
 
     </dl>
+    <table class="table">
+        <tr>
+            <th>Item Description</th>
+            <th>Unit</th>
+            <th>Qty Requested</th>
+            <th>Qty Issued</th>
+            <th>Reason</th>
+        </tr>
+        @foreach (var transItem in Model.ItemTransactions)
+        {
+            <tr>
+                <td>@Html.DisplayFor(model => transItem.Item.Description)</td>
+                <td>@Html.DisplayFor(model => transItem.Item.UnitOfMeasure)</td>
+                <td>@Html.DisplayFor(model => transItem.HandOverQty)</td>
+                <td>@Html.DisplayFor(model => transItem.TakeOverQty)</td>
+                <td>@Html.DisplayFor(model => transItem.Reason)</td>
+            </tr>
+        }
+    </table>*@
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
+

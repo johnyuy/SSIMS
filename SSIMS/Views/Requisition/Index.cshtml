@@ -38,7 +38,8 @@
         </th>
 
         <th>
-            Create Date
+            @*Create Date*@
+            @Html.ActionLink("Created Date", "Index", new { sortOrder = ViewBag.CreDates })
         </th>
 
         <th>
@@ -46,7 +47,8 @@
         </th>
 
         <th>
-            Response Date
+            @*Response Date*@
+            @Html.ActionLink("Response Date", "Index", new { sortOrder = ViewBag.ResDates })
         </th>
 
         <th>
@@ -87,4 +89,4 @@
 <br />
 Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
-@Html.PagedListPager(Model, page => Url.Action("Index",new { page }))
+@Html.PagedListPager(Model, page => Url.Action("Index",new { page,sortOrder = ViewBag.CurrentSort }))

@@ -150,24 +150,24 @@
         </table>
     </div>
     <div id="stock-card" style="height:350px;width:900px;" hidden>
-        <table border="1">
-            <tr style="font-weight:bold;background-color:#efefef">
+        <div style="width:150px;height:30px;text-align:center;padding:5px;position:relative;left:750px;margin-bottom:5px" class="btn-primary" onclick="stockcard()">Back</div>
+        <table style="font-size:12px">
+            <tr style="font-weight:bold;background: linear-gradient(to right, rgba(146, 167, 154, 0.20) 0%, rgba(115, 147, 147, 0.31) 100%);border-bottom: solid lightgrey 3px;height:20px">
                 <td align="center" width="150px">Date</td>
                 <td align="center" width="450px">Movement Details</td>
                 <td align="center" width="150px">Qty Change</td>
                 <td align="center" width="150px">In Store Balance</td>
             </tr>
-            @foreach (InventoryStockCardVM card in Model.StockCard)
+            @for (int i = 0; i < Model.StockCard.Count(); i++)
             {
-                <tr>
-                    <td align="center">@card.Date</td>
-                    <td align="center">@card.Movement</td>
-                    <td align="center">@card.QtyChange</td>
-                    <td align="center">@card.InStoreBalance</td>
+                <tr style="height:18px;border-bottom: solid lightgrey 1px;background: linear-gradient(to right, rgba(146, 167, 154, 0.20) 0%, rgba(115, 147, 147, 0.31) 100%)">
+                    <td align="center">@Html.DisplayFor(Model => Model.StockCard[i].Date)</td>
+                    <td align="center">@Html.DisplayFor(Model => Model.StockCard[i].Movement)</td>
+                    <td align="center">@Html.DisplayFor(Model => Model.StockCard[i].QtyChange)</td>
+                    <td align="center">@Html.DisplayFor(Model => Model.StockCard[i].InStoreBalance)</td>
                 </tr>
             }
         </table>
-        <div style="width:180px;" class="btn-primary" onclick="stockcard()">Item Info</div>
     </div>
 </div>
 

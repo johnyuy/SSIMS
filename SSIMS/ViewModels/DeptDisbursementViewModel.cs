@@ -10,8 +10,11 @@ namespace SSIMS.ViewModels
 {
     public class DeptDisbursementViewModel
     {
+
         [DisplayName("Dept ID")]
         public string deptID { get; set; }
+        [DisplayName("Collection Point")]
+        public int CollectionPointID { get; set; }
         public List<TransactionItem> transItemLists { get; set; }
         [DisplayName("Status")]
         public Status status { get; set; }

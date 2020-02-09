@@ -94,13 +94,19 @@ namespace SSIMS.Service
                 uow.AdjustmentVoucherRepository.Insert(adjustmentVoucher);
                 uow.Save();
                 Debug.WriteLine("Adjustment Voucher inserted successfully into DB");
+                //Update the respective inventory item
+                foreach(AdjustmentItemVM adjustment in Voucher.AdjustmentItems)
+                {
+                    if (!UpdateInStoreQty(adjustment.ItemID))
+                        Debug.WriteLine("Update In Store Qty failed for" + adjustment.ItemID);
+                }
+
                 return true;
             }
 
             return false;
         }
 
-       
         public List<AdjustmentVoucherVM> GetAdjustmentVoucherVMList()
         {
             List<AdjustmentVoucher> adjustmentVouchers = uow.AdjustmentVoucherRepository.Get(includeProperties: "CreatedByStaff,DocumentItems.Item").ToList();
@@ -129,6 +135,8 @@ namespace SSIMS.Service
 
         public void UpdateAdjustmentVoucherStatus(int id, bool isApproved, Staff responseStaff)
         {
+            UnitOfWork uow = new UnitOfWork();
+
             //For adjustment voucher, can only be approved
             AdjustmentVoucher voucher = uow.AdjustmentVoucherRepository.GetByID(id);
             if (voucher == null)
@@ -154,6 +162,27 @@ namespace SSIMS.Service
                 VMList.Add(new InventoryCheckVM(item));
             }
             return VMList;
+        }
+
+        public bool UpdateInStoreQty(string ItemID)
+        {
+            UnitOfWork uow = new UnitOfWork();
+            IEnumerable<StockCardEntry> entries= uow.StockCardEntryRepository.Get(filter: x => x.Item.ID == ItemID, includeProperties: "Item");
+
+            if (entries == null || entries.Count() == 0)
+                return false;
+
+            int balance = entries.Sum(x => x.QtyChanged);
+
+            InventoryItem item = uow.InventoryItemRepository.Get(x => x.ItemID == ItemID).FirstOrDefault();
+            if (item == null)
+                return false;
+            item.InStoreQty = balance;
+
+            uow.InventoryItemRepository.Update(item);
+            uow.Save();
+            Debug.WriteLine("InStore Qty for " + ItemID + "updated to" + balance);
+            return true;
         }
     }
 }

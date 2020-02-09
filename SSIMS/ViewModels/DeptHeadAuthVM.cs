@@ -26,5 +26,7 @@ namespace SSIMS.ViewModels
             DeptID = auth.DepartmentID;
             StaffName = auth.Staff.Name;
         }
+
+        public DeptHeadAuthVM() { }
     }
 }

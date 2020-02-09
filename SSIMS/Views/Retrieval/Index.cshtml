@@ -1,57 +1,106 @@
 ﻿@model PagedList.IPagedList<SSIMS.Models.RetrievalList>
 @using PagedList.Mvc;
 @{
-        ViewBag.Title = "Retrieval";
-        ViewBag.Header = "Retrieval List";
-        ViewBag.Section = "Disbursements";
-        Layout = "~/Views/Shared/_Layout.cshtml";
-        
+    ViewBag.Header = "Retrievals";
+    ViewBag.Section = "Disbursements";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string status = ViewBag.RetrievalStatus ?? "";
 }
-
-<h2>Index</h2>
-<div class="table-responsive">
-    <label>See by Status:</label>
-    @Html.ActionLink("InProgess", "Index", new { status = "InProgress" }) |
-    @Html.ActionLink("Completed", "Index", new { status = "Completed" }) |
-    @Html.ActionLink("See All", "Index", new { status = "All" })
-
-<table class="table">
-    <tr>
-        <th>Retrieval ID</th>
-        <th>Created Date</th>
-        <th>Department</th>
-        <th>Status</th>
-        <th>Created By</th>
-        <th>View Details</th>
-    </tr>
-
-    @foreach (var rl in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => rl.ID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => rl.CreatedDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => rl.Department.ID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => rl.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => rl.CreatedByStaff.Name)
-            </td>
-            <td>
-                @Html.ActionLink("Details", "Details", new { id = rl.ID })
-            </td>
-        </tr>
+<style>
+    .text-empty {
+        margin: 60px auto 10px auto;
+        width: 100%;
+        text-align: center;
+        font-size: 100px;
+        color: lightgray;
     }
-    <tr><td align="right" colspan="6"><button type="button">@Html.ActionLink("Generate Disbursement", "GenerateDisbursement")</button></td></tr>
-</table>
+    th, td{
+        text-align:center;
+    }
+    .table-responsive{
+        min-height:700px;
+    }
+    #top-bar{
+        width:100%;
+        height:50px;
+        margin: 5px 0px;
+    }
+    #top-bar button{
+        float:left;
+        margin-right:50px;
+        width:200px;
+        height:40px;
+        font-size: 15px;
+        font-weight:bold;
+        color:white;
+        background-color:#437373;
+    }
+</style>
+
+<div id="top-bar">
+    <div>
+        <button onclick="window.location.href = '/Disbursement/Index';">Go to Disbursements</button>
     </div>
-    <br />
+    <div>
+        <button onclick="window.location.href = '/Retrieval/Current';">New Retrieval</button>
+    </div>
+    @if(Model.Count > 0 && status == "InProgress")
+    {
+<div>
+    <button style="float:right;background-color:#ca5100" onclick="window.location.href = '/Retrieval/GenerateDisbursement';">Disburse Now</button>
+</div>
+    }
+</div>
+
+<div class="table-responsive">
+    <label> &nbsp;View by Status: &nbsp;</label>
+    &nbsp; @Html.ActionLink("In Progress", "Index", new { status = "InProgress" }) &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+    @Html.ActionLink("Completed", "Index", new { status = "Completed" }) &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+    @Html.ActionLink("View All", "Index", new { status = "All" })
+
+    <table class="table">
+        <tr>
+            <th>Retrieval ID</th>
+            <th>Created Date</th>
+            <th>Department</th>
+            <th>Status</th>
+            <th>Created By</th>
+            <th>View Details</th>
+        </tr>
+
+        @foreach (var rl in Model)
+        {
+
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => rl.ID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => rl.CreatedDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => rl.Department.ID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => rl.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => rl.CreatedByStaff.Name)
+                </td>
+                <td>
+                    @Html.ActionLink("Details", "Details", new { id = rl.ID })
+                </td>
+            </tr>
+        }
+    </table>
+    @if (Model.Count() == 0)
+    {
+        <div style="width:100%;height:50px">
+            <p class="text-empty">Empty</p>
+        </div>
+    }
+</div>
+<br />
 <table class="table">
     <tr>
         <td align="center">Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount</td>

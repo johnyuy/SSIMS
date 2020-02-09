@@ -162,6 +162,8 @@ namespace SSIMS.ViewModels
             {
                 StockCard.RemoveRange(0, StockCard.Count - 50);
             }
+            //arrange by date first
+            StockCard.Reverse();
 
         }
     }

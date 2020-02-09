@@ -6,17 +6,17 @@ using SSIMS.Models;
 
 namespace SSIMS.ViewModels
 {
-    public class RetrivalVM
+    public class RetrievalVM
     {
         public List<RetrievalItemViewModel> rivmlist { get; set; }
         public List<RequisitionOrder> ROList { get; set; }
 
-        public RetrivalVM()
+        public RetrievalVM()
         {
             rivmlist = new List<RetrievalItemViewModel>();
         }
 
-        public RetrivalVM(List<RetrievalItemViewModel> rivmlist, List<RequisitionOrder> rOList)
+        public RetrievalVM(List<RetrievalItemViewModel> rivmlist, List<RequisitionOrder> rOList)
         {
             this.rivmlist = rivmlist;
             ROList = rOList;

@@ -1,0 +1,64 @@
+﻿@model List<SSIMS.Models.DisbursementList>
+
+@{
+    ViewBag.Header = "Current Disbursements";
+    ViewBag.Section = "Disbursements";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<style>
+    th, td{
+        text-align:center;
+    }
+    #top-bar{
+        width:100%;
+        height:50px;
+        margin: 5px 0px;
+    }
+        #top-bar button {
+            float: left;
+            margin-right: 50px;
+            width: 200px;
+            height: 40px;
+            font-size: 15px;
+            font-weight: bold;
+            color: white;
+            background-color: #437373;
+        }
+</style>
+<script>
+    function update() {
+        var cp = document.getElementById("collectionpoint").value;
+        
+        post("/disbursement/GetDisbursementListForCollectionPoint", { "id": cp });
+    }
+</script>
+<div id="top-bar">
+    <div>
+        <button onclick="window.location.href = '/Disbursement/Index';">Back</button>
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table">
+        <tr>
+            <th>Dept Code</th>
+            <th>Department Name</th>
+            <th>Disbursement ID</th>
+            <th>Collection Location</th>
+            <th></th>
+        </tr>
+        @foreach (var dl in Model)
+        {
+            <tr>
+                <td>@dl.Department.ID</td>
+                <td>@dl.Department.DeptName</td>
+                <td>@dl.ID</td>
+                <td>@dl.Department.CollectionPoint.Location</td>
+                <td>@Html.ActionLink("View", "Disbursement", new { id = dl.ID })</td>
+            </tr>
+        }
+
+    </table>
+
+</div>

@@ -5,6 +5,7 @@ using System.Data.Entity;
 using SSIMS.Models;
 using Microsoft.EntityFrameworkCore;
 using SSIMS.DAL;
+using SSIMS.Service;
 
 namespace SSIMS.Database
 {
@@ -46,13 +47,10 @@ namespace SSIMS.Database
             InitPurchaseItems(context);
             InitPurchaseOrders(context);
             //InitDeptHeadAuthorizations(context);
-
-
             InitDeliveryOrders(context);
-
-            //other initializations copy:    static void Init (DatabaseContext context)
             context.SaveChanges();
             base.Seed(context);
+            Finishing();
             Debug.WriteLine("SEEDING COMPLETED!");
         }
 
@@ -1197,6 +1195,15 @@ namespace SSIMS.Database
             context.SaveChanges();
         }
 
-
+        static void Finishing()
+        {
+            InventoryService inventoryService = new InventoryService();
+            UnitOfWork uow = new UnitOfWork();
+            IEnumerable<Item> items = uow.ItemRepository.Get();
+            foreach(Item item in items)
+            {
+                inventoryService.UpdateInStoreQty(item.ID);
+            }
+        }
     }
 }

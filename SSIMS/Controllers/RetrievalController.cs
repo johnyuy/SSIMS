@@ -12,17 +12,20 @@ using SSIMS.DAL;
 using PagedList;
 using SSIMS.Service;
 using SSIMS.ViewModels;
+using SSIMS.Filters;
 
 namespace SSIMS.Controllers
 {
+    [AuthenticationFilter]
+    [AuthorizationFilter]
     public class RetrievalController : Controller
     {
         private DatabaseContext db = new DatabaseContext();
         private UnitOfWork uow = new UnitOfWork();
         private DisbursementService ds = new DisbursementService();
-
+        private readonly ILoginService loginService = new LoginService();
         // GET: RetrievalLists
-        public ActionResult Index(int? page, string status)
+        public ActionResult Index(int? page, string status="InProgress")
         {
             var retrievalList = uow.RetrievalListRepository.Get(includeProperties: "CreatedByStaff, ItemTransactions.Item, Department");
             int pageSize = 15;
@@ -44,27 +47,70 @@ namespace SSIMS.Controllers
                     retrievalList = retrievalList.Where(x => x.Status == Models.Status.InProgress).ToList();
                     break;
             }
-
+            ViewBag.RetrievalStatus = status;
             return View(retrievalList.ToPagedList(pageNumber, pageSize));
         }
 
-        public ActionResult GenerateDisbursement()
+        public ActionResult Current()
         {
-            List<Department> deptList = (List<Department>)uow.DepartmentRepository.Get();
-            List<DeptDisbursementViewModel> deptDVMList = new List<DeptDisbursementViewModel>();
-            foreach(Department dept in deptList)
+
+            List<TransactionItem> combinedRL = ds.ViewCombinedRetrievalList();
+            var rivm = ds.ViewRetrievalItemViewModel(combinedRL);
+            var retrievalLists = db.RetrievalLists.Include(d => d.CreatedByStaff).Include(d => d.Status);
+
+            if (retrievalLists == null)
             {
-                DeptDisbursementViewModel deptDVM = ds.GenerateDeptDisbursementViewModel(dept.ID);
-                deptDVMList.Add(deptDVM);
+                return HttpNotFound();
             }
-            
-            
-            return RedirectToAction("Disbursement", "Disbursement", deptDVMList);
+
+            return View("CurrentRetrieval",rivm);
         }
 
-        // GET: RetrievalLists/Details/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Current([Bind(Include = "ROList, rivmlist")] RetrievalVM model)
+        {
+            UnitOfWork uow = new UnitOfWork();
+
+            List<RequisitionOrder> ROList = model.ROList;
+            foreach (RequisitionOrder RO in ROList)
+            {
+                RequisitionOrder NewRO = uow.RequisitionOrderRepository.GetByID(RO.ID);
+                NewRO.Completed(loginService.StaffFromSession);
+                uow.RequisitionOrderRepository.Update(NewRO);
+                uow.Save();
+            }
+
+            List<RetrievalItemViewModel> rivmList = model.rivmlist;
+            ds.InsertRetrievalList(rivmList);
+
+            return RedirectToAction("Index");
+        }
+
+
+        public ActionResult GenerateDisbursement()
+        {
+            //authorize user
+
+            List<RetrievalList> retrievalLists = (List<RetrievalList>)uow.RetrievalListRepository.Get(filter: x => x.Status == Models.Status.InProgress, includeProperties: "Department");
+            var deptList = retrievalLists.Select(x => x.Department.ID).Distinct();
+            //List<Department> deptList = (List<Department>)uow.DepartmentRepository.Get();
+            //List<DeptDisbursementViewModel> deptDVMList = new List<DeptDisbursementViewModel>();
+            foreach (string dept in deptList)
+            {
+                //for each retrievallists create adn save disbursement list
+                //change retrieval list status to complete
+                ds.InsertDisbursementList(dept);
+            }
+
+
+            return RedirectToAction("CurrentDisbursements", "Disbursement");
+        }
+
+        // Show in progress & completed retrieval
         public ActionResult Details(int? id)
         {
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -77,93 +123,7 @@ namespace SSIMS.Controllers
             return View(retrievalList);
         }
 
-        // GET: RetrievalLists/Create
-        public ActionResult Create()
-        {
-            ViewBag.CreatedByStaffID = new SelectList(db.Staffs, "ID", "UserAccountID");
-            ViewBag.RepliedByStaffID = new SelectList(db.Staffs, "ID", "UserAccountID");
-            return View();
-        }
 
-        // POST: RetrievalLists/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,CreatedByStaffID,RepliedByStaffID,Comments,CreatedDate,ResponseDate,Status")] RetrievalList retrievalList)
-        {
-            if (ModelState.IsValid)
-            {
-                db.RetrievalLists.Add(retrievalList);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            ViewBag.CreatedByStaffID = new SelectList(db.Staffs, "ID", "UserAccountID", retrievalList.CreatedByStaffID);
-            ViewBag.RepliedByStaffID = new SelectList(db.Staffs, "ID", "UserAccountID", retrievalList.RepliedByStaffID);
-            return View(retrievalList);
-        }
-
-        // GET: RetrievalLists/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            RetrievalList retrievalList = db.RetrievalLists.Find(id);
-            if (retrievalList == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.CreatedByStaffID = new SelectList(db.Staffs, "ID", "UserAccountID", retrievalList.CreatedByStaffID);
-            ViewBag.RepliedByStaffID = new SelectList(db.Staffs, "ID", "UserAccountID", retrievalList.RepliedByStaffID);
-            return View(retrievalList);
-        }
-
-        // POST: RetrievalLists/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,CreatedByStaffID,RepliedByStaffID,Comments,CreatedDate,ResponseDate,Status")] RetrievalList retrievalList)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(retrievalList).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            ViewBag.CreatedByStaffID = new SelectList(db.Staffs, "ID", "UserAccountID", retrievalList.CreatedByStaffID);
-            ViewBag.RepliedByStaffID = new SelectList(db.Staffs, "ID", "UserAccountID", retrievalList.RepliedByStaffID);
-            return View(retrievalList);
-        }
-
-        // GET: RetrievalLists/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            RetrievalList retrievalList = db.RetrievalLists.Find(id);
-            if (retrievalList == null)
-            {
-                return HttpNotFound();
-            }
-            return View(retrievalList);
-        }
-
-        // POST: RetrievalLists/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            RetrievalList retrievalList = db.RetrievalLists.Find(id);
-            db.RetrievalLists.Remove(retrievalList);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
 
         protected override void Dispose(bool disposing)
         {

@@ -1,63 +1,90 @@
-﻿@model IEnumerable<SSIMS.Models.DisbursementList>
+﻿@model PagedList.IPagedList<SSIMS.Models.DisbursementList>
+@using PagedList.Mvc;
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Header = "Disbursements";
+    ViewBag.Section = "Disbursements";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
 }
+<style>
+    th, td{
+        text-align:center;
+    }
+    #top-bar{
+        width:100%;
+        height:50px;
+        margin: 5px 0px;
+    }
+        #top-bar button {
+            float: left;
+            margin-right: 50px;
+            width: 200px;
+            height: 40px;
+            font-size: 15px;
+            font-weight: bold;
+            color: white;
+            background-color: #437373;
+        }
+</style>
 
-<h2>Index</h2>
+<div id="top-bar">
+    <div>
+        <button onclick="window.location.href = '/Retrieval/Index';">Go to Retrievals</button>
+    </div>
+    <div>
+        <button onclick="window.location.href = '/Disbursement/Current';">Current Disbursements</button>
+    </div>
+</div>
+<div class="table-responsive">
+    <label> &nbsp;View by Status: &nbsp;</label>
+    &nbsp; @Html.ActionLink("Pending", "Index", new { status = "Pending" }) &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+    @Html.ActionLink("Completed", "Index", new { status = "Completed" }) &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+    @Html.ActionLink("View All", "Index", new { status = "All" })
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+    <table class="table">
+        <tr>
+            <th>Disbursement ID</th>
+            <th>Created Date</th>
+            <th>Department</th>
+            <th>Status</th>
+            <th>Created By</th>
+            <th>View Details</th>
+        </tr>
+
+        @foreach (var dl in Model)
+        {
+            string fullid = dl.ID.ToString($"DL{0:1000000}");
+            <tr>
+                <td>
+                    @fullid
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => dl.CreatedDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => dl.Department.ID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => dl.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => dl.CreatedByStaff.Name)
+                </td>
+                <td>
+                    @Html.ActionLink("Details", "Details", new { id = dl.ID })
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+<br />
 <table class="table">
     <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.CreatedByStaff.UserAccountID)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.RepliedByStaff.UserAccountID)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Comments)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CreatedDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ResponseDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Status)
-        </th>
-        <th></th>
+        <td align="center">Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount</td>
     </tr>
-
-@foreach (var item in Model) {
     <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreatedByStaff.UserAccountID)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.RepliedByStaff.UserAccountID)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Comments)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreatedDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ResponseDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Status)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
-        </td>
+        <td align="center">@Html.PagedListPager(Model, page => Url.Action("NextPage", new { page }))</td>
     </tr>
-}
-
 </table>
