@@ -20,8 +20,10 @@
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
     <IISExpressSSLPort>44386</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
+    <IISExpressAnonymousAuthentication>
+    </IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>
+    </IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
@@ -292,11 +294,12 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <None Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AnalyticsController.cs" />
     <Compile Include="Controllers\DeliveryOrdersAPIController.cs" />
     <Compile Include="Controllers\DeliveryOrdersController.cs" />
     <Compile Include="Controllers\DepartmentsController.cs" />
+    <Compile Include="Controllers\DisburesmentsAPIController.cs" />
     <Compile Include="Controllers\DisbursementController.cs" />
     <Compile Include="Controllers\DisbursementsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -383,6 +386,9 @@
     <Compile Include="ViewModels\AdjustmentItemVM.cs" />
     <Compile Include="ViewModels\AdjustmentVoucherVM.cs" />
     <Compile Include="ViewModels\AnalyticsListViewModel.cs" />
+    <Compile Include="ViewModels\ApiDisbursementListListView.cs" />
+    <Compile Include="ViewModels\ApiDisbursementListView.cs" />
+    <Compile Include="ViewModels\ApiTransactionItemView.cs" />
     <Compile Include="ViewModels\DeliveryOrderVM.cs" />
     <Compile Include="ViewModels\DeptDisbursementViewModel.cs" />
     <Compile Include="ViewModels\DeptHeadAuthVM.cs" />
