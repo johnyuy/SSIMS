@@ -111,8 +111,10 @@ namespace SSIMS.Service
             {
                 VMList.Add(new AdjustmentVoucherVM(adjustmentVoucher));
             }
+            VMList.Sort((x, y) => x.Status.CompareTo(y.Status));
             //show only the latest 100 results
-            List<AdjustmentVoucherVM> last100 = Enumerable.Reverse(VMList).Take(100).Reverse().ToList();
+            List<AdjustmentVoucherVM> last100 = Enumerable.Reverse(VMList).Take(100).ToList();
+
             return last100;
         }
 
@@ -137,6 +139,21 @@ namespace SSIMS.Service
             uow.AdjustmentVoucherRepository.Update(voucher);
             uow.Save();
             Debug.WriteLine("Adjustment Voucher ID " + voucher.ID + " has been approved by " + responseStaff.Name);
+        }
+
+        public List<InventoryCheckVM> GenerateInventoryCheckList()
+        {
+            UnitOfWork uow = new UnitOfWork();
+            List<InventoryItem> inventoryItems = uow.InventoryItemRepository.Get(includeProperties: "Item").ToList();
+            if(inventoryItems == null || inventoryItems.Count == 0)
+                return null;
+
+            List<InventoryCheckVM> VMList = new List<InventoryCheckVM>();
+            foreach(InventoryItem item in inventoryItems)
+            {
+                VMList.Add(new InventoryCheckVM(item));
+            }
+            return VMList;
         }
     }
 }

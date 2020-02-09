@@ -97,8 +97,13 @@ namespace SSIMS.Controllers
             } else if (id.HasValue)
             {
                 AdjustmentVoucherVM VM = InventoryService.GetAdjustmentVoucherVMSingle(id.Value);
-                if(VM!=null)
+                if (VM != null)
+                {
+                    if (LoginService.IsAuthorizedRoles("manager", "supervisor"))
+                        ViewBag.IsSuper = true;
                     return View("AdjustmentVoucher", VM);
+                }
+                    
             }
 
             //redirect to AV list
@@ -109,7 +114,6 @@ namespace SSIMS.Controllers
         [HttpPost]
         public ActionResult SaveAdjustments([Bind(Include = "AdjustmentID,ReportedByStaffName,ReportedByStaffID,Status,AdjustmentItems")]AdjustmentVoucherVM AdjustmentVM, string change)
         {
-
             Debug.WriteLine("Saving adjustments cart via ajax...");
             Debug.WriteLine(Server.UrlDecode(change));
             for (int i = 0; i < change.Split('&').Count(); i++)
@@ -129,7 +133,6 @@ namespace SSIMS.Controllers
                     AdjustmentVM.AdjustmentItems[i / 2].Remarks = remarks;
                     Debug.WriteLine(AdjustmentVM.AdjustmentItems[i / 2].Remarks);
                 }
-                    
             }
             Session["AdjustmentCart"] = AdjustmentVM;
             return Content("");
@@ -156,7 +159,6 @@ namespace SSIMS.Controllers
             } else
             {
                 TempData["ErrorMsg"] = "Error: Please ensure that all quantities are not zero";
-                
             }
             return RedirectToAction("Adjustment", new { command = "view" });
 
@@ -184,9 +186,55 @@ namespace SSIMS.Controllers
 
             //update
             InventoryService.UpdateAdjustmentVoucherStatus(id.Value, response, loginService.StaffFromSession);
-            return RedirectToAction("Adjustment", new { id = id.GetValueOrDefault()});
+            return RedirectToAction("Adjustment");
         }
 
+        public ActionResult InventoryStockCheck()
+        {
+            if (!LoginService.IsAuthorizedRoles("manager", "supervisor","clerk"))
+                return RedirectToAction("Index", "Home");
+
+            //session's adjustment cart must be empty first
+            if (Session["AdjustmentCart"] != null)
+            {
+                TempData["ErrorMsg"] = "Please submit or clear you new adjustments before starting inventory stock check!";
+                return RedirectToAction("Adjustment", new { command = "view" });
+            }
+
+            //contruct list of inventorycheckVM for view's model
+            return View(InventoryService.GenerateInventoryCheckList());
+        }
+
+
+        [HttpPost]
+        public ActionResult UpdateStockCheck(string itemcode, string qtyChanged, string remarks)
+        {
+            string itemCode = itemcode.Trim();
+            string qtyx = qtyChanged.Trim();
+            string re = remarks.Trim();
+
+            Debug.WriteLine("Updating stock check: " + itemcode.Trim() + " " + qtyChanged.Trim() + " " + remarks.Trim());
+            
+            //LOGIC : IF QTY is the same as the one in the inventory, we do not save it
+            // Else we store the discrepancy in the Session object "Adjustment Cart" as a
+            // AdjustmentItemVm (DONE)
+            if(int.TryParse(qtyx, out int x)) //check for if qtyChanged is a integer first
+            {
+                if (x != 0)
+                {
+                    Debug.WriteLine("\tCreating a adjustment");
+                    AdjustmentItemVM adjustment = new AdjustmentItemVM(itemCode, x, re);
+                    if (adjustment != null)
+                        InventoryService.addItemToAdjustmentCart(adjustment);
+                }
+                else
+                {
+                    Debug.WriteLine("No changed qty detected");
+                }
+            }
+            //no need to return anything since we are just receiving information
+            return Content("");
+        }
 
         protected override void Dispose(bool disposing)
         {

@@ -11,5 +11,6 @@ namespace SSIMS.Service
     {
         ICollection<Staff> GetStaff();
         Staff GetStaffByUsername(string username);
+        List<Staff> GetStaffByDeptID(string deptID);
     }
 }

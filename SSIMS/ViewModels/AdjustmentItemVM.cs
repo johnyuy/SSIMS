@@ -49,6 +49,22 @@ namespace SSIMS.ViewModels
             }
         }
 
+        //for stock check 
+        public AdjustmentItemVM(string ItemCode, int QtyChanged, string remarks)
+        {
+            UnitOfWork uow = new UnitOfWork();
+            Item item = uow.ItemRepository.GetByID(ItemCode);
+            if (item != null)
+            {
+                ItemID = item.ID;
+                Category = item.Category;
+                Description = item.Description;
+                UOM = item.UnitOfMeasure;
+                QtyAdjusted = QtyChanged;
+                Remarks = remarks;
+            }
+        }
+
         public AdjustmentItemVM() { }
     }
 }
