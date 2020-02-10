@@ -6,63 +6,103 @@ using System.Web;
 using SSIMS.ViewModels;
 using SSIMS.Models;
 using SSIMS.DAL;
+using System.Web.Mvc;
 
 namespace SSIMS.Service
 {
     public class AnalyticsService
     {
         UnitOfWork uow = new UnitOfWork();
-        public static ArrayList QtyCategoryChart1X(List<AnalyticsDetailsVM> SummaryList)
-        {
+        
 
-            ArrayList output = new ArrayList();
-            foreach (AnalyticsDetailsVM rvsm in SummaryList)
-            {
-                output.Add(rvsm.Category);
-            }
-            if (output.Count > 0)
-                return output;
-            
-            return null;
-        }
-        public static ArrayList QtyCategoryChart1Y(List<AnalyticsDetailsVM> SummaryList)
+        //For numerical fields like qty, count or cost
+        public static ArrayList YAxis(List<AnalyticsDetailsVM> list, string field)
         {
             ArrayList output = new ArrayList();
-            foreach (AnalyticsDetailsVM rvsm in SummaryList)
-            {
-                output.Add(rvsm.Qty);
-            }
-            if (output.Count > 0)
-                return output;
-
-            return null;
+            foreach(AnalyticsDetailsVM item in list)
+                output.Add(item.GetType().GetProperty(field).GetValue(item, null));
+            return output.Count > 0 ? output : null;
         }
-        public static ArrayList QtyCategoryChart2X(List<AnalyticsDetailsVM> SummaryList)
+
+        public static ArrayList YAxisCost(List<AnalyticsDetailsVM> list)
         {
             ArrayList output = new ArrayList();
-            foreach (AnalyticsDetailsVM rvsm in SummaryList)
-            {
-                output.Add(rvsm.Department);
-            }
-            if (output.Count > 0)
-                return output;
-
-            return null;
+            foreach (AnalyticsDetailsVM item in list)
+                output.Add(item.Cost);
+            return output.Count > 0 ? output : null;
         }
 
-        public static ArrayList QtyCategoryChart2Y(List<AnalyticsDetailsVM> SummaryList)
+        public static ArrayList YAxisQty(List<AnalyticsDetailsVM> list)
         {
             ArrayList output = new ArrayList();
-            foreach (AnalyticsDetailsVM rvsm in SummaryList)
-            {
-                output.Add(rvsm.Count);
-            }
-            if (output.Count > 0)
-                return output;
-
-            return null;
+            foreach (AnalyticsDetailsVM item in list)
+                output.Add(item.Qty);
+            return output.Count > 0 ? output : null;
         }
 
+        public static ArrayList YAxisCount(List<AnalyticsDetailsVM> list)
+        {
+            ArrayList output = new ArrayList();
+            foreach (AnalyticsDetailsVM item in list)
+                output.Add(item.Count);
+            return output.Count > 0 ? output : null;
+        }
+
+        //FILTER Methods used first before GROUP Methods
+
+        public static List<AnalyticsDetailsVM> FilterByDepartment(List<AnalyticsDetailsVM> list, string deptID)
+        {
+            if (list == null || list.Count == 0)
+                return null;
+
+            List<AnalyticsDetailsVM> result = list.Where(x => x.Department == deptID).ToList();
+            return result ?? null;
+        }
+
+        public static List<AnalyticsDetailsVM> FilterByCategory(List<AnalyticsDetailsVM> list, string category)
+        {
+            if (list == null || list.Count == 0)
+                return null;
+
+            List<AnalyticsDetailsVM> result = list.Where(x => x.Category == category).ToList();
+            return result ?? null;
+        }
+
+        public static List<AnalyticsDetailsVM> FilterByMonth(List<AnalyticsDetailsVM> list, int month)
+        {
+            if (list == null || list.Count == 0)
+                return null;
+
+            List<AnalyticsDetailsVM> result = list.Where(x => x.Month == month).ToList();
+            return result ?? null;
+        }
+
+        public static List<AnalyticsDetailsVM> FilterByYear(List<AnalyticsDetailsVM> list, int year)
+        {
+            if (list == null || list.Count == 0)
+                return null;
+
+            List<AnalyticsDetailsVM> result = list.Where(x => x.Year == year).ToList();
+            return result ?? null;
+        }
+
+        public static List<AnalyticsDetailsVM> FilterByItem(List<AnalyticsDetailsVM> list, string itemcode)
+        {
+            if (list == null || list.Count == 0)
+                return null;
+
+            List<AnalyticsDetailsVM> result = list.Where(x => x.ItemCode == itemcode).ToList();
+            return result ?? null;
+        }
+
+        public static List<AnalyticsDetailsVM> FilterByOrderStaff(List<AnalyticsDetailsVM> list, string orderstaff)
+        {
+            if (list == null || list.Count == 0)
+                return null;
+
+            List<AnalyticsDetailsVM> result = list.Where(x => x.OrderStaff == orderstaff).ToList();
+            return result ?? null;
+        }
 
         //GROUP Methods are Aggregate Functions
         public static List<AnalyticsDetailsVM> GroupByCategory(List<AnalyticsDetailsVM> list)
@@ -166,58 +206,140 @@ namespace SSIMS.Service
 
             return result;
         }
-        public static List<AnalyticsDetailsVM> FilterByDepartment(List<AnalyticsDetailsVM> list, string deptID)
-        {
-            if (list == null || list.Count == 0)
-                return null;
 
-            List<AnalyticsDetailsVM> result = list.Where(x => x.Department == deptID).ToList();
-            return result ?? null;
+        public static IEnumerable<SelectListItem> GetFilter2List(string filter1){
+            List<SelectListItem> output = new List<SelectListItem>();
+            
+            output.Add(new SelectListItem { Value = "Category", Text = "Category" }); //1
+            output.Add(new SelectListItem { Value = "Department", Text = "Department" }); //2
+            output.Add(new SelectListItem { Value = "Year", Text = "Year" }); //3
+            output.Add(new SelectListItem { Value = "Month", Text = "Month" }); //4
+            output.Add(new SelectListItem { Value = "Item", Text = "Item" }); //5
+            output.Add(new SelectListItem { Value = "Staff", Text = "Staff" }); //6
+            if (filter1 == "Category" || filter1 == "Item") { output.RemoveAt(0); output.RemoveAt(3); }
+            else if (filter1 == "Department" || filter1 == "Staff") { output.RemoveAt(1); output.RemoveAt(4); }
+            else if (filter1 == "Year") { output.RemoveAt(2); }
+            else if (filter1 == "Month") { output.RemoveAt(3); }
+            return new SelectList(output, "Value", "Text");
         }
 
-        public static List<AnalyticsDetailsVM> FilterByCategory(List<AnalyticsDetailsVM> list, string category)
+        public static IEnumerable<SelectListItem> GetFilterValues(string filter1)
         {
-            if (list == null || list.Count == 0)
-                return null;
+            UnitOfWork uow = new UnitOfWork();
+            List<SelectListItem> output = new List<SelectListItem>();
+            if (filter1 == "Category") { output = uow.ItemRepository.GetCategories().ToList(); }
+            else if (filter1 == "Item") { output = uow.ItemRepository.GetAllDescriptions().ToList(); }
+            else if (filter1 == "Year") { output = GetYearValues().ToList(); }
+            else if (filter1 == "Month") { output = GetMonthValues().ToList(); }
+            else if (filter1 == "Department") { output = uow.DepartmentRepository.GetAllDepartmentIDs().ToList(); }
+            else if (filter1 == "Staff") { output = uow.StaffRepository.GetAllStaffNames().ToList(); }
 
-            List<AnalyticsDetailsVM> result = list.Where(x => x.Category == category).ToList();
-            return result ?? null;
+            return output;
         }
 
-        public static List<AnalyticsDetailsVM> FilterByMonth(List<AnalyticsDetailsVM> list, int month)
+        public static IEnumerable<SelectListItem> GetYearValues()
         {
-            if (list == null || list.Count == 0)
-                return null;
+            List<SelectListItem> output = new List<SelectListItem>();
+            int startyear = 2018;
+            int years = DateTime.Now.Year - startyear;
+            for(int i = 0; i <= years; i++)
+            {
+                output.Add(new SelectListItem
+                {
+                    Value = (DateTime.Now.Year - i).ToString(),
+                    Text = (DateTime.Now.Year - i).ToString()
+                });
+            }
+            var categorytip = new SelectListItem()
+            {
+                Value = null,
+                Text = "- select year -"
+            };
+            output.Insert(0, categorytip);
+            return new SelectList(output, "Value", "Text");
+        }
+        public static IEnumerable<SelectListItem> GetMonthValues()
+        {
+            List<SelectListItem> output = new List<SelectListItem>();
 
-            List<AnalyticsDetailsVM> result = list.Where(x => x.Month == month).ToList();
-            return result ?? null;
+            for (int i = 1; i <= 12; i++)
+            {
+                string month ="";
+                if(i == 1) { month = "January"; }
+                if(i == 2) { month = "February"; }
+                if(i == 3) { month = "March"; }
+                if(i == 4) { month = "April"; }
+                if(i == 5) { month = "May"; }
+                if(i == 6) { month = "June"; }
+                if(i == 7) { month = "July"; }
+                if(i == 8) { month = "August"; }
+                if(i == 9) { month = "September"; }
+                if(i == 10) { month = "October"; }
+                if(i == 11) { month = "November"; }
+                if(i == 12) { month = "December"; }
+                output.Add(new SelectListItem
+                {
+                    Value = i.ToString(),
+                    Text =  month
+                });
+            }
+            var categorytip = new SelectListItem()
+            {
+                Value = null,
+                Text = "- select month -"
+            };
+            output.Insert(0, categorytip);
+            return new SelectList(output, "Value", "Text");
         }
 
-        public static List<AnalyticsDetailsVM> FilterByYear(List<AnalyticsDetailsVM> list, int year)
+        public static ArrayList QtyCategoryChart1X(List<AnalyticsDetailsVM> SummaryList)
         {
-            if (list == null || list.Count == 0)
-                return null;
 
-            List<AnalyticsDetailsVM> result = list.Where(x => x.Year == year).ToList();
-            return result ?? null;
+            ArrayList output = new ArrayList();
+            foreach (AnalyticsDetailsVM rvsm in SummaryList)
+            {
+                output.Add(rvsm.Category);
+            }
+            if (output.Count > 0)
+                return output;
+
+            return null;
         }
-
-        public static List<AnalyticsDetailsVM> FilterByItem(List<AnalyticsDetailsVM> list, string itemcode)
+        public static ArrayList QtyCategoryChart1Y(List<AnalyticsDetailsVM> SummaryList)
         {
-            if (list == null || list.Count == 0)
-                return null;
+            ArrayList output = new ArrayList();
+            foreach (AnalyticsDetailsVM rvsm in SummaryList)
+            {
+                output.Add(rvsm.Qty);
+            }
+            if (output.Count > 0)
+                return output;
 
-            List<AnalyticsDetailsVM> result = list.Where(x => x.ItemCode == itemcode).ToList();
-            return result ?? null;
+            return null;
         }
-
-        public static List<AnalyticsDetailsVM> FilterByOrderStaff(List<AnalyticsDetailsVM> list, string orderstaff)
+        public static ArrayList QtyCategoryChart2X(List<AnalyticsDetailsVM> SummaryList)
         {
-            if (list == null || list.Count == 0)
-                return null;
+            ArrayList output = new ArrayList();
+            foreach (AnalyticsDetailsVM rvsm in SummaryList)
+            {
+                output.Add(rvsm.Department);
+            }
+            if (output.Count > 0)
+                return output;
 
-            List<AnalyticsDetailsVM> result = list.Where(x => x.OrderStaff == orderstaff).ToList();
-            return result ?? null;
+            return null;
+        }
+        public static ArrayList QtyCategoryChart2Y(List<AnalyticsDetailsVM> SummaryList)
+        {
+            ArrayList output = new ArrayList();
+            foreach (AnalyticsDetailsVM rvsm in SummaryList)
+            {
+                output.Add(rvsm.Count);
+            }
+            if (output.Count > 0)
+                return output;
+
+            return null;
         }
     }
 }

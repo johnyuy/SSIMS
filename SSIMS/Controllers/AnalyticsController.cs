@@ -28,38 +28,47 @@ namespace SSIMS.Controllers
             if (Session["Analytics"] == null)
             {
                 UnitOfWork uow = new UnitOfWork();
-                List<RequisitionOrder> requisitionOrderList = (List<RequisitionOrder>)uow.RequisitionOrderRepository.Get(includeProperties: "CreatedByStaff.Department,DocumentItems.Item");
                 analytics = new AnalyticsListVM(uow);
                 Session["Analytics"] = analytics;
             } else
             {
                 analytics = (AnalyticsListVM)Session["Analytics"];
             }
-            
-             
-            
-            // get all requisition order
-
-            
-
-            
-            List<AnalyticsDetailsVM> categorylist = AnalyticsService.GroupByCategory(analytics.SummaryList);
-            List<AnalyticsDetailsVM> categorylist2 = AnalyticsService.GroupByDepartment(analytics.SummaryList);
 
 
-            foreach (AnalyticsDetailsVM detail in AnalyticsService.FilterByDepartment(analytics.SummaryList, "ARCH")) ;
-                //Debug.WriteLine(detail.ToString());
+            //generate lists for dropdown
 
 
-            foreach (AnalyticsDetailsVM detail in AnalyticsService.GroupByDepartment(analytics.SummaryList))
-                Debug.WriteLine(detail.ToString());
 
 
+            //List<AnalyticsDetailsVM> categorylist = AnalyticsService.GroupByCategory(analytics.SummaryList);
             // Analytics TABLE = new Analytics(categorylist, categorylist2);
-            ViewBag.Summarylist= categorylist;
-            
-            return View("AnalyticsList", categorylist);
+            //ViewBag.Summarylist= categorylist;
+            //return View("AnalyticsList", categorylist);
+            return View();
         }
+
+        public ActionResult Chart(string groupby, string groupval, string filter1="", string value1="", string filter2="", string value2="")
+        {
+            AnalyticsListVM analytics;
+
+            if (Session["Analytics"] == null)
+            {
+                UnitOfWork uow = new UnitOfWork();
+                analytics = new AnalyticsListVM(uow);
+                Session["Analytics"] = analytics;
+            }
+            else
+            {
+                analytics = (AnalyticsListVM)Session["Analytics"];
+            }
+
+
+
+
+            return null;
+        }
+
 
         public ActionResult Index2()
         {
@@ -98,7 +107,7 @@ namespace SSIMS.Controllers
                 .AddSeries("Default", chartType: "Column", xValue: xValue, yValues: yValue)
                 .Write("bmp");
             return null;
-
+           
         }
         public ActionResult Chart2()
         {
@@ -116,7 +125,36 @@ namespace SSIMS.Controllers
 
         }
 
+        [HttpGet]
+        public JsonResult GetFilter2(string filter1)
+        {
+            IEnumerable<SelectListItem> filter2List = new List<SelectListItem>() ;
 
+            if (!String.IsNullOrWhiteSpace(filter1))
+            {
+
+                filter2List = AnalyticsService.GetFilter2List(filter1);
+
+            }
+
+            return Json(filter2List, JsonRequestBehavior.AllowGet);
+        }
+
+
+        [HttpGet]
+        public JsonResult GetFilterValues(string filter)
+        {
+            IEnumerable<SelectListItem> valueslist = new List<SelectListItem>();
+
+            if (!String.IsNullOrWhiteSpace(filter))
+            {
+
+                valueslist = AnalyticsService.GetFilterValues(filter);
+
+            }
+
+            return Json(valueslist, JsonRequestBehavior.AllowGet);
+        }
     }
     
 }

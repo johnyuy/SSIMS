@@ -5,6 +5,7 @@ using System.Web;
 using SSIMS.Models;
 using SSIMS.Database;
 using System.Diagnostics;
+using System.Web.Mvc;
 
 namespace SSIMS.DAL
 {
@@ -96,5 +97,29 @@ namespace SSIMS.DAL
             return (Staff)staff;
         }
 
+
+        //get all distinct descriptions
+        public IEnumerable<SelectListItem> GetAllStaffNames()
+        {
+            using (var context = new DatabaseContext())
+            {
+                List<SelectListItem> output = context.Staffs.AsNoTracking()
+                    .Where(n => n.DepartmentID != "STOR" && n.Name != "System Admin")
+                    .OrderBy(n => n.Name)
+                        .Select(n =>
+                        new SelectListItem
+                        {
+                            Value = n.Name,
+                            Text = n.Name
+                        }).Distinct().ToList();
+                var categorytip = new SelectListItem()
+                {
+                    Value = null,
+                    Text = "-------- select staff --------"
+                };
+                output.Insert(0, categorytip);
+                return new SelectList(output, "Value", "Text");
+            }
+        }
     }
 }

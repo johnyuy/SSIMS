@@ -1,0 +1,159 @@
+﻿
+@{
+    ViewBag.Header = "Trend Analysis";
+    ViewBag.Section = "Analytics";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    tr{
+        height:50px;
+    }
+    td{
+        width: 250px;
+        
+    }
+    select {
+        width: 200px;
+        padding-right:20px;
+    }
+    th{
+        text-align:right;
+        width:200px;
+    }
+    button{
+        width:150px;
+    }
+</style>
+
+<table>
+    <tr>
+        <th>View Statistics By: </th>
+        <td align="center">
+            <select name="">
+                <option selected value="Category">Category</option>
+                <option value="Department">Department</option>
+                <option value="Item">Item</option>
+                <option value="Staff">Staff</option>
+                <option value="Month">Month</option>
+                <option value="Year">Year</option>
+            </select>
+        </td>
+        <td align="center">
+            <button>View</button>
+        </td>
+    </tr>
+    <tr>
+        <th>Filter 1 : </th>
+        <td align="center">
+            <select id="filter1">
+                <option>None</option>
+                <option value="Category">Category</option>
+                <option value="Department">Department</option>
+                <option value="Item">Item</option>
+                <option value="Staff">Staff</option>
+                <option value="Month">Month</option>
+                <option value="Year">Year</option>
+            </select>
+        </td>
+        <td align="center">
+            <select id="value1" hidden>
+            </select>
+        </td>
+    </tr>
+    <tr id="row2" hidden>
+        <th>Filter 2 : </th>
+        <td align="center">
+            <select id="filter2">
+            </select>
+        </td>
+        <td align="center">
+            <select id="value2" hidden>
+            </select>
+        </td>
+    </tr>
+
+</table>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+
+    $('#filter1').change(function () {
+        var filter1select = $("#filter1").val();
+        var filter2 = $('#filter2');
+        var values1 = $('#value1');
+        var values2 = $('#value2');
+            
+        filter2.empty();
+
+        if ( filter1select != null &&  filter1select != '') {
+            $.getJSON('@Url.Action("GetFilter2")', { filter1:  filter1select }, function (descriptions) {
+                if (descriptions != null && !jQuery.isEmptyObject(descriptions))
+                {
+                    filter2.append($('<option/>', {
+                        value: null,
+                        text: "None"
+                    }));
+                    $.each(descriptions, function (index, description) {
+                        filter2.append($('<option/>', {
+                            value: description.Value,
+                            text: description.Text
+                        }));
+                    });
+                };
+            });
+            values1.empty();
+            values2.empty();
+            $.getJSON('@Url.Action("GetFilterValues")', { filter:  filter1select }, function (descriptions) {
+                if (descriptions != null && !jQuery.isEmptyObject(descriptions))
+                {
+
+                    $.each(descriptions, function (index, description) {
+                        values1.append($('<option/>', {
+                            value: description.Value,
+                            text: description.Text
+                        }));
+                    });
+                };
+            });
+        }
+
+        var f1 = document.getElementById("filter1");
+        var r2 = document.getElementById("row2");
+        if (f1.value == "None") {
+            document.getElementById("value1").hidden = true;
+            r2.hidden = true;
+        } else {
+            document.getElementById("value1").hidden = false;
+            r2.hidden = false;
+        }
+        document.getElementById("value2").hidden = true;
+    });
+
+    $('#filter2').change(function () {
+        var filter2select = $("#filter2").val();
+        var values2 = $('#value2');
+        values2.empty();
+        if (filter2select != null && filter2select != '') {
+            $.getJSON('@Url.Action("GetFilterValues")', { filter: filter2select }, function (descriptions) {
+                if (descriptions != null && !jQuery.isEmptyObject(descriptions)) {
+
+                    $.each(descriptions, function (index, description) {
+                        values2.append($('<option/>', {
+                            value: description.Value,
+                            text: description.Text
+                        }));
+                    });
+                };
+            });
+        }
+        var f2 = document.getElementById("filter2");
+        if (f2.value == "None") {
+            document.getElementById("value2").hidden = true;
+        } else {
+            document.getElementById("value2").hidden = false;
+        }
+    });
+</script>
+}
