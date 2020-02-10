@@ -13,11 +13,12 @@ using PagedList;
 using SSIMS.Service;
 using SSIMS.ViewModels;
 using SSIMS.Filters;
+using Rotativa;
 
 namespace SSIMS.Controllers
 {
-    [AuthenticationFilter]
-    [AuthorizationFilter]
+    //[AuthenticationFilter]
+    //[AuthorizationFilter]
     public class RetrievalController : Controller
     {
         private DatabaseContext db = new DatabaseContext();
@@ -87,6 +88,16 @@ namespace SSIMS.Controllers
             return RedirectToAction("Index");
         }
 
+        public ActionResult Print(int? id)
+        {
+            UnitOfWork uow = new UnitOfWork();
+
+            RetrievalList retrievalList = uow.RetrievalListRepository.Get(filter: x => x.ID == id, includeProperties: "CreatedByStaff, ItemTransactions.Item").FirstOrDefault();
+            //DisbursementList disbursementList = unitOfWork.DisbursementListRepository.GetByID(id);
+            var pdfResult = new ActionAsPdf("Details", new { id = id });
+
+            return pdfResult;
+        }
 
         public ActionResult GenerateDisbursement()
         {
@@ -104,7 +115,7 @@ namespace SSIMS.Controllers
             }
 
 
-            return RedirectToAction("CurrentDisbursements", "Disbursement");
+            return RedirectToAction("Current", "Disbursement");
         }
 
         // Show in progress & completed retrieval

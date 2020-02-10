@@ -14,11 +14,12 @@ using SSIMS.DAL;
 using SSIMS.ViewModels;
 using SSIMS.Filters;
 using PagedList;
+using Rotativa;
 
 namespace SSIMS.Controllers
 {
-    [AuthenticationFilter]
-    [AuthorizationFilter]
+    //[AuthenticationFilter]
+   //[AuthorizationFilter]
     public class DisbursementController : Controller
     {
         
@@ -61,7 +62,18 @@ namespace SSIMS.Controllers
 
         }
 
-        
+        public ActionResult Print(int? id)
+        {
+            UnitOfWork uow = new UnitOfWork();
+            
+            DisbursementList disbursementList = uow.DisbursementListRepository.Get(filter: x => x.ID == id, includeProperties: "CreatedByStaff, ItemTransactions.Item, Department.CollectionPoint").FirstOrDefault();
+            //DisbursementList disbursementList = unitOfWork.DisbursementListRepository.GetByID(id);
+            var pdfResult = new ActionAsPdf("Details", new { id = id });
+       
+           return pdfResult; 
+        }
+
+        [HttpGet]
         public ActionResult Disbursement(int? id)
         {
             DisbursementList DL = unitOfWork.DisbursementListRepository.Get(filter: x => x.ID == id, includeProperties: "CreatedByStaff, ItemTransactions.Item, Department.CollectionPoint").FirstOrDefault();
@@ -78,9 +90,15 @@ namespace SSIMS.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Disbursement([Bind(Include = "Department, ItemTransactions")] DisbursementList model)
         {
+            //UnitOfWork uow = new UnitOfWork();
             DisbursementList DL = unitOfWork.DisbursementListRepository.Get(filter: x => x.ID == model.ID, includeProperties: "CreatedByStaff, ItemTransactions.Item, Department.CollectionPoint").FirstOrDefault();
             
-            for(int i = 0; i<DL.ItemTransactions.Count; i++)
+            if (DL == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            for (int i = 0; i<DL.ItemTransactions.Count; i++)
             {
                 for(int j = 0; j<model.ItemTransactions.Count; j++)
                 {

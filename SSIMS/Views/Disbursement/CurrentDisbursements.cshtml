@@ -50,10 +50,11 @@
         </tr>
         @foreach (var dl in Model)
         {
+            string fullid = dl.ID.ToString($"DL{0:1000000}");
             <tr>
                 <td>@dl.Department.ID</td>
                 <td>@dl.Department.DeptName</td>
-                <td>@dl.ID</td>
+                <td>@fullid </td>
                 <td>@dl.Department.CollectionPoint.Location</td>
                 <td>@Html.ActionLink("View", "Disbursement", new { id = dl.ID })</td>
             </tr>
