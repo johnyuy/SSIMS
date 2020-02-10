@@ -9,8 +9,8 @@ using SSIMS.Service;
 
 namespace SSIMS.Database
 {
-    //public class DatabaseInitializer<T> : DropCreateDatabaseAlways<DatabaseContext>
-    public class DatabaseInitializer<T> : CreateDatabaseIfNotExists<DatabaseContext>
+    public class DatabaseInitializer<T> : DropCreateDatabaseAlways<DatabaseContext>
+    //public class DatabaseInitializer<T> : CreateDatabaseIfNotExists<DatabaseContext>
 
     {
         static StaffRepository StaffRepository;
@@ -75,18 +75,19 @@ namespace SSIMS.Database
         static void InitDepartments(DatabaseContext context)
         {
             Debug.WriteLine("\tInitializing Departments");
+            //need a way to update the departments with the heads and reps
             List<Department> departments = new List<Department>
             {
-                new Department("ARCH", "Architecture","68901257","68921001", CollectionPointRepository.GetByID(1),null,StaffRepository.GetByID(10006),StaffRepository.GetByID(10007)),
-                new Department("ARTS", "Arts","68901226", "68921011", CollectionPointRepository.GetByID(1),null,StaffRepository.GetByID(10013),StaffRepository.GetByID(10014)),
-                new Department("COMM", "Commerce","68741284","68921256", CollectionPointRepository.GetByID(2),null,StaffRepository.GetByID(10020),StaffRepository.GetByID(10021)),
-                new Department("CPSC", "Computer Science","68901235","68921457", CollectionPointRepository.GetByID(2),null,StaffRepository.GetByID(10027),StaffRepository.GetByID(10028)),
-                new Department("ENGG", "Engineering","68901776","68922395", CollectionPointRepository.GetByID(3),null,StaffRepository.GetByID(10034),StaffRepository.GetByID(10035)),
-                new Department("ENGL", "English","68742234","68921456", CollectionPointRepository.GetByID(3),null,StaffRepository.GetByID(10041),StaffRepository.GetByID(10042)),
-                new Department("MEDI", "Medicine","67848808","68928106", CollectionPointRepository.GetByID(4),null,StaffRepository.GetByID(10048),StaffRepository.GetByID(10049)),
-                new Department("REGR", "Registrar","68901266","68921465", CollectionPointRepository.GetByID(4),null,StaffRepository.GetByID(10055),StaffRepository.GetByID(10056)),
-                new Department("SCIE", "Science","68907191","68921992", CollectionPointRepository.GetByID(5),null,StaffRepository.GetByID(10062),StaffRepository.GetByID(10063)),
-                new Department("ZOOL", "Zoology","68901266","68921465", CollectionPointRepository.GetByID(5),null,StaffRepository.GetByID(10069),StaffRepository.GetByID(10070)),
+                new Department("ARCH", "Architecture","68901257","68921001", CollectionPointRepository.GetByID(1),null,null,null),
+                new Department("ARTS", "Arts","68901226", "68921011", CollectionPointRepository.GetByID(1),null,null,null),
+                new Department("COMM", "Commerce","68741284","68921256", CollectionPointRepository.GetByID(2),null,null,null),
+                new Department("CPSC", "Computer Science","68901235","68921457", CollectionPointRepository.GetByID(2),null,null,null),
+                new Department("ENGG", "Engineering","68901776","68922395", CollectionPointRepository.GetByID(3),null,null,null),
+                new Department("ENGL", "English","68742234","68921456", CollectionPointRepository.GetByID(3),null,null,null),
+                new Department("MEDI", "Medicine","67848808","68928106", CollectionPointRepository.GetByID(4),null,null,null),
+                new Department("REGR", "Registrar","68901266","68921465", CollectionPointRepository.GetByID(4),null,null,null),
+                new Department("SCIE", "Science","68907191","68921992", CollectionPointRepository.GetByID(5),null,null,null),
+                new Department("ZOOL", "Zoology","68901266","68921465", CollectionPointRepository.GetByID(5),null,null,null),
                 new Department("STOR", "Store","","",null,null,null,null)
             };
             foreach (Department dept in departments)
