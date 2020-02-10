@@ -13,10 +13,12 @@ using SSIMS.DAL;
 using System.Diagnostics;
 using SSIMS.Service;
 using PagedList;
-
+using SSIMS.Filters;
 
 namespace SSIMS.Controllers
 {
+    [AuthenticationFilter]
+    [AuthorizationFilter]
     public class DeliveryOrdersController : Controller
     {
         private DatabaseContext db = new DatabaseContext();
