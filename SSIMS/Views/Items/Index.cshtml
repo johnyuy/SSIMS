@@ -37,6 +37,8 @@
                 Unit Of Measure
             </th>
             <th></th>
+            <th></th>
+            <th></th>
         </tr>
 
         @foreach (var item in Model)
@@ -53,13 +55,15 @@
                 </td>
                 <td>
 
-                    @Html.ActionLink("Details", "Details", new { id = item.ID }) ||
-
+                    @Html.ActionLink("Details", "Details", new { id = item.ID }) 
+                </td>
+                <td>
                     @if (ViewBag.staffrole == "Clerk")
                     {
                         @Html.ActionLink("Edit", "Edit", new { id = item.ID })  
                     }
-                    ||
+                </td>
+                <td>
                     @if (ViewBag.staffrole == "Clerk")
                     {
                         @Html.ActionLink("Delete", "Delete", new { id = item.ID })

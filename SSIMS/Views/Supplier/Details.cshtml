@@ -1,0 +1,70 @@
+﻿@model SSIMS.Models.Supplier
+
+@{
+    ViewBag.Title = "Details";
+    ViewBag.Header = "Supplier Details";
+    ViewBag.Section = "Supplier";
+}
+
+<div>
+<h4>Supplier</h4>
+<hr />
+<dl class="dl-horizontal">
+    <dt>
+        @Html.DisplayNameFor(model => model.SupplierName)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.SupplierName)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.Address)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Address)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.PhoneNumber)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.PhoneNumber)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.FaxNumber)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.FaxNumber)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.GstReg)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.GstReg)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.ContactName)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.ContactName)
+    </dd>
+</dl>
+</div>
+<p>
+    @if (ViewBag.staffrole == "Supervisor" || ViewBag.staffrole == "Manager")
+    {
+        @Html.ActionLink("Edit", "Edit", new { id = Model.ID })
+    }
+</p>
+<p>
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -26,6 +26,7 @@ namespace SSIMS.DAL
         private StockCardEntryRepository stockCardEntryRepository;
         private AdjustmentVoucherRepository adjustmentVoucherRepository;
         private DeptHeadAuthorizationRepository deptHeadAuthorizationRepository;
+     
 
         public UnitOfWork()
         {
