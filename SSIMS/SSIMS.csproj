@@ -381,7 +381,7 @@
     <Compile Include="Service\PurchaseService.cs" />
     <Compile Include="ViewModels\AdjustmentItemVM.cs" />
     <Compile Include="ViewModels\AdjustmentVoucherVM.cs" />
-    <Compile Include="ViewModels\AnalyticsListViewModel.cs" />
+    <Compile Include="ViewModels\AnalyticsListVM.cs" />
     <Compile Include="ViewModels\DeliveryOrderVM.cs" />
     <Compile Include="ViewModels\DeptDisbursementViewModel.cs" />
     <Compile Include="ViewModels\DeptHeadAuthVM.cs" />
@@ -394,7 +394,7 @@
     <Compile Include="ViewModels\PurchaseItemVM.cs" />
     <Compile Include="ViewModels\PurchaseOrderVM.cs" />
     <Compile Include="ViewModels\RequisitionItemVM.cs" />
-    <Compile Include="ViewModels\RequisitionSummaryViewModel.cs" />
+    <Compile Include="ViewModels\AnalyticsDetailsVM.cs" />
     <Compile Include="ViewModels\RetrievalVM.cs" />
     <Compile Include="ViewModels\UserLogin.cs" />
     <Compile Include="ViewModels\RetrievalItemViewModel.cs" />

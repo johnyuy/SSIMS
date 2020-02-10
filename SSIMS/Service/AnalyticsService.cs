@@ -12,11 +12,11 @@ namespace SSIMS.Service
     public class AnalyticsService
     {
         UnitOfWork uow = new UnitOfWork();
-        public static ArrayList GetQtyCategoryChart1X(List<RequisitionSummaryViewModel> SummaryList)
+        public static ArrayList GetQtyCategoryChart1X(List<AnalyticsDetailsVM> SummaryList)
         {
 
             ArrayList output = new ArrayList();
-            foreach (RequisitionSummaryViewModel rvsm in SummaryList)
+            foreach (AnalyticsDetailsVM rvsm in SummaryList)
             {
                 output.Add(rvsm.Category);
             }
@@ -25,10 +25,10 @@ namespace SSIMS.Service
             
             return null;
         }
-        public static ArrayList GetQtyCategoryChart1Y(List<RequisitionSummaryViewModel> SummaryList)
+        public static ArrayList GetQtyCategoryChart1Y(List<AnalyticsDetailsVM> SummaryList)
         {
             ArrayList output = new ArrayList();
-            foreach (RequisitionSummaryViewModel rvsm in SummaryList)
+            foreach (AnalyticsDetailsVM rvsm in SummaryList)
             {
                 output.Add(rvsm.Qty);
             }
@@ -37,10 +37,10 @@ namespace SSIMS.Service
 
             return null;
         }
-        public static ArrayList GetQtyCategoryChart2X(List<RequisitionSummaryViewModel> SummaryList)
+        public static ArrayList GetQtyCategoryChart2X(List<AnalyticsDetailsVM> SummaryList)
         {
             ArrayList output = new ArrayList();
-            foreach (RequisitionSummaryViewModel rvsm in SummaryList)
+            foreach (AnalyticsDetailsVM rvsm in SummaryList)
             {
                 output.Add(rvsm.Department);
             }
@@ -50,12 +50,12 @@ namespace SSIMS.Service
             return null;
         }
 
-        public static ArrayList GetQtyCategoryChart2Y(List<RequisitionSummaryViewModel> SummaryList)
+        public static ArrayList GetQtyCategoryChart2Y(List<AnalyticsDetailsVM> SummaryList)
         {
             ArrayList output = new ArrayList();
-            foreach (RequisitionSummaryViewModel rvsm in SummaryList)
+            foreach (AnalyticsDetailsVM rvsm in SummaryList)
             {
-                output.Add(rvsm.count);
+                output.Add(rvsm.Count);
             }
             if (output.Count > 0)
                 return output;
@@ -63,13 +63,13 @@ namespace SSIMS.Service
             return null;
         }
 
-        public static List<RequisitionSummaryViewModel> GroupSummaryListByCategory(List<RequisitionSummaryViewModel> SummaryList)
+        public static List<AnalyticsDetailsVM> GroupSummaryListByCategory(List<AnalyticsDetailsVM> SummaryList)
         {
             if(SummaryList!=null && SummaryList.Count > 0)
             {
-                List<RequisitionSummaryViewModel> result = SummaryList
+                List<AnalyticsDetailsVM> result = SummaryList
                     .GroupBy(l => l.Category)
-                    .Select(cl => new RequisitionSummaryViewModel
+                    .Select(cl => new AnalyticsDetailsVM
                     {
                         Category = cl.Key,
                         Qty = cl.Sum(c => c.Qty),
@@ -83,18 +83,18 @@ namespace SSIMS.Service
             return null;
         }
 
-        public static List<RequisitionSummaryViewModel> GroupSummaryListByDepartment(List<RequisitionSummaryViewModel> SummaryList)
+        public static List<AnalyticsDetailsVM> GroupSummaryListByDepartment(List<AnalyticsDetailsVM> SummaryList)
         {
             if (SummaryList != null && SummaryList.Count > 0)
             {
-                List<RequisitionSummaryViewModel> result = SummaryList
+                List<AnalyticsDetailsVM> result = SummaryList
                     .GroupBy(l => l.Department)
-                    .Select(cl => new RequisitionSummaryViewModel
+                    .Select(cl => new AnalyticsDetailsVM
                     {   Qty=0,
                         Category = "",
                         Department = cl.Key,
                         Month = 0,
-                        count = cl.Count()
+                        Count = cl.Count()
                     }).ToList();
 
                 return result;

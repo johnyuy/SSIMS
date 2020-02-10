@@ -13,13 +13,13 @@ using SSIMS.Service;
 
 namespace SSIMS.ViewModels
 {
-    public class AnalyticsListViewModel
+    public class AnalyticsListVM
     {
         public List<RequisitionOrder> ROList;
-        public List<RequisitionSummaryViewModel> SummaryList;
-        public AnalyticsListViewModel()
+        public List<AnalyticsDetailsVM> SummaryList;
+        public AnalyticsListVM()
         {
-            List<RequisitionSummaryViewModel> summaryList = new List<RequisitionSummaryViewModel>();
+            List<AnalyticsDetailsVM> summaryList = new List<AnalyticsDetailsVM>();
             UnitOfWork unitOfWork = new UnitOfWork();
             Debug.WriteLine(DateTime.Now.Year.ToString());
 
@@ -27,12 +27,12 @@ namespace SSIMS.ViewModels
                 .Get(includeProperties: "CreatedByStaff.Department, DocumentItems.Item");
             ROList = items.ToList();
 
-            Debug.WriteLine("Number of items = " + ROList.Count());
+            //Debug.WriteLine("Number of items = " + ROList.Count());
             foreach (RequisitionOrder ro in ROList)
             {
                 foreach (DocumentItem di in ro.DocumentItems)
                 {
-                    RequisitionSummaryViewModel rvsm = new RequisitionSummaryViewModel(di.Qty, di.Item.Category, ro.CreatedDate, ro.CreatedByStaff.Department.ID);
+                    AnalyticsDetailsVM rvsm = new AnalyticsDetailsVM(di.Qty, di.Item.Category, ro.CreatedDate, ro.CreatedByStaff.Department.ID, di.Item.Description, ro.CreatedByStaff.Name);
                     
                     summaryList.Add(rvsm);
                     

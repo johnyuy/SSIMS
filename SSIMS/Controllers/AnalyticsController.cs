@@ -22,7 +22,7 @@ namespace SSIMS.Controllers
         public ActionResult Index()
         {
             DatabaseContext context = new DatabaseContext();
-            AnalyticsListViewModel analyticsListViewModel = new AnalyticsListViewModel();
+            AnalyticsListVM analyticsListViewModel = new AnalyticsListVM();
             RequisitionOrderRepository = new RequisitionOrderRepository(context);
             // get all requisition order
             List<RequisitionOrder> requisitionOrderList = (List<RequisitionOrder>)RequisitionOrderRepository.Get(includeProperties:"CreatedByStaff.Department,DocumentItems.Item");
@@ -38,8 +38,8 @@ namespace SSIMS.Controllers
                  }
              }*/
             
-            List<RequisitionSummaryViewModel> categorylist = AnalyticsService.GroupSummaryListByCategory(analyticsListViewModel.SummaryList);
-            List<RequisitionSummaryViewModel> categorylist2 = AnalyticsService.GroupSummaryListByDepartment(analyticsListViewModel.SummaryList);
+            List<AnalyticsDetailsVM> categorylist = AnalyticsService.GroupSummaryListByCategory(analyticsListViewModel.SummaryList);
+            List<AnalyticsDetailsVM> categorylist2 = AnalyticsService.GroupSummaryListByDepartment(analyticsListViewModel.SummaryList);
             // Debug.WriteLine("hello :" + categorylist.First().CreatedDate.ToString("yyyy"));
            // Analytics TABLE = new Analytics(categorylist, categorylist2);
             ViewBag.Summarylist= categorylist;
@@ -50,19 +50,19 @@ namespace SSIMS.Controllers
         public ActionResult Index2()
         {
             DatabaseContext context = new DatabaseContext();
-            AnalyticsListViewModel analyticsListViewModel = new AnalyticsListViewModel();
+            AnalyticsListVM analyticsListViewModel = new AnalyticsListVM();
             RequisitionOrderRepository = new RequisitionOrderRepository(context);
             // get all requisition order
             List<RequisitionOrder> requisitionOrderList = (List<RequisitionOrder>)RequisitionOrderRepository.Get(includeProperties: "CreatedByStaff.Department,DocumentItems.Item");
-            List<RequisitionSummaryViewModel> categorylist2 = AnalyticsService.GroupSummaryListByDepartment(analyticsListViewModel.SummaryList);
+            List<AnalyticsDetailsVM> categorylist2 = AnalyticsService.GroupSummaryListByDepartment(analyticsListViewModel.SummaryList);
             // Debug.WriteLine("hello :" + categorylist.First().CreatedDate.ToString("yyyy"));
             ViewBag.Summarylist1 = categorylist2;
 
             return View("AnalyticsList2", categorylist2);
         }
         public ActionResult Chart1()
-        {  AnalyticsListViewModel analyticsListViewModel = new AnalyticsListViewModel();
-            List<RequisitionSummaryViewModel> categorylist = AnalyticsService.GroupSummaryListByCategory(analyticsListViewModel.SummaryList);
+        {  AnalyticsListVM analyticsListViewModel = new AnalyticsListVM();
+            List<AnalyticsDetailsVM> categorylist = AnalyticsService.GroupSummaryListByCategory(analyticsListViewModel.SummaryList);
              
           // RequisitionSummaryViewModel clipCategory = AnalyticsService.GroupByCategory("Clip", summaryList);
 
@@ -78,8 +78,8 @@ namespace SSIMS.Controllers
         }
         public ActionResult Chart2()
         {
-            AnalyticsListViewModel analyticsListViewModel = new AnalyticsListViewModel();
-            List<RequisitionSummaryViewModel> categorylist = AnalyticsService.GroupSummaryListByDepartment(analyticsListViewModel.SummaryList);
+            AnalyticsListVM analyticsListViewModel = new AnalyticsListVM();
+            List<AnalyticsDetailsVM> categorylist = AnalyticsService.GroupSummaryListByDepartment(analyticsListViewModel.SummaryList);
 
             ArrayList xValue = AnalyticsService.GetQtyCategoryChart2X(categorylist);
             ArrayList yValue = AnalyticsService.GetQtyCategoryChart2Y(categorylist);
