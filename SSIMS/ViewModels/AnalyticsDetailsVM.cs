@@ -23,9 +23,9 @@ namespace SSIMS.ViewModels
         [DisplayName("Count")]
         public int Count { get; set; }
         [DisplayName("Item")]                                       //ADDABLE
-        public string ItemCode { get; set; } //GROUP
+        public string Item { get; set; } //GROUP
         [DisplayName("Staff")]  
-        public string OrderStaff { get; set; } //GROUP
+        public string Staff { get; set; } //GROUP
         [DisplayName("Cost")]
         public double Cost { get; set; }                            //ADDABLE
 
@@ -44,14 +44,14 @@ namespace SSIMS.ViewModels
             Month = createdDate.Month;
             Year = createdDate.Year;
             Count = 1;
-            ItemCode = itemdesc;
-            OrderStaff = staffname;
+            Item = itemdesc;
+            Staff = staffname;
             Cost = cost;
         }
 
         public override string ToString()
         {
-            return Qty + "/" + Category + "/" + Department + "/m" + Month + "/y" + Year + "/" + Count + "/" + ItemCode + "/" + OrderStaff + "/" + Cost.ToString($"${0:00}");
+            return Qty + "/" + Category + "/" + Department + "/m" + Month + "/y" + Year + "/" + Count + "/" + Item + "/" + Staff + "/" + Cost.ToString($"${0:00}");
         }
     }
 }
