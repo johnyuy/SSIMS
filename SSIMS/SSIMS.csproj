@@ -311,6 +311,7 @@
     <Compile Include="Controllers\RequisitionController.cs" />
     <Compile Include="Controllers\RetrievalController.cs" />
     <Compile Include="Controllers\StaffsController.cs" />
+    <Compile Include="Controllers\SupplierController.cs" />
     <Compile Include="DAL\AdjustmentVoucherRepository.cs" />
     <Compile Include="DAL\CollectionPointRepository.cs" />
     <Compile Include="DAL\DeliveryOrderRepository.cs" />
@@ -544,6 +545,11 @@
     <Content Include="Views\Disbursement\Disbursement.cshtml" />
     <Content Include="Views\Disbursement\CurrentDisbursements.cshtml" />
     <Content Include="Views\Retrieval\CurrentRetrieval.cshtml" />
+    <Content Include="Views\Supplier\Index.cshtml" />
+    <Content Include="Views\Supplier\Create.cshtml" />
+    <Content Include="Views\Supplier\Edit.cshtml" />
+    <Content Include="Views\Supplier\Delete.cshtml" />
+    <Content Include="Views\Supplier\Details.cshtml" />
     <Content Include="Views\Analytics\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
