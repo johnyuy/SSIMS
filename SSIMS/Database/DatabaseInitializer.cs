@@ -9,8 +9,8 @@ using SSIMS.Service;
 
 namespace SSIMS.Database
 {
-    public class DatabaseInitializer<T> : DropCreateDatabaseAlways<DatabaseContext>
-    //public class DatabaseInitializer<T> : CreateDatabaseIfNotExists<DatabaseContext>
+    //public class DatabaseInitializer<T> : DropCreateDatabaseAlways<DatabaseContext>
+    public class DatabaseInitializer<T> : CreateDatabaseIfNotExists<DatabaseContext>
 
     {
         static StaffRepository StaffRepository;
