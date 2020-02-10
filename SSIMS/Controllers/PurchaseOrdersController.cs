@@ -12,14 +12,17 @@ using SSIMS.Service;
 using SSIMS.DAL;
 using SSIMS.ViewModels;
 using PagedList;
-
+using SSIMS.Filters;
 
 namespace SSIMS.Controllers
 {
+    [AuthenticationFilter]
+    [AuthorizationFilter]
     public class PurchaseOrdersController : Controller
     {
         private DatabaseContext db = new DatabaseContext();
         private UnitOfWork uow = new UnitOfWork();
+        readonly ILoginService loginService = new LoginService();
 
         // GET: PurchaseOrders
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
@@ -86,8 +89,11 @@ namespace SSIMS.Controllers
             }
             PurchaseOrder purchaseOrder = uow.PurchaseOrderRepository.Get(filter: x => x.ID == id, includeProperties: "Supplier, CreatedByStaff, RepliedByStaff, PurchaseItems.Tender.Item ").FirstOrDefault();
 
-            // to change later 
-            purchaseOrder.Approve(uow.StaffRepository.GetByID(10002));
+            Staff staff = loginService.StaffFromSession;
+            //ViewBag.staffrole = staff.StaffRole;
+
+            // to change later // changed already
+            purchaseOrder.Approve(staff);
             uow.PurchaseOrderRepository.Update(purchaseOrder);
             uow.Save();
             Debug.WriteLine("Purchase Order Approved");
@@ -107,8 +113,11 @@ namespace SSIMS.Controllers
             }
             PurchaseOrder purchaseOrder = uow.PurchaseOrderRepository.Get(filter: x => x.ID == id, includeProperties: "Supplier, CreatedByStaff, RepliedByStaff, PurchaseItems.Tender.Item ").FirstOrDefault();
 
-            // to change later 
-            purchaseOrder.Rejected(uow.StaffRepository.GetByID(10002));
+            Staff staff = loginService.StaffFromSession;
+            //ViewBag.staffrole = staff.StaffRole;
+
+            // to change later //changed already
+            purchaseOrder.Rejected(staff);
             uow.PurchaseOrderRepository.Update(purchaseOrder);
             uow.Save();
             Debug.WriteLine("Purchase Order Rejected");
@@ -175,6 +184,10 @@ namespace SSIMS.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
+            Staff staff = loginService.StaffFromSession;
+            ViewBag.staffrole = staff.StaffRole;
+
             PurchaseOrder purchaseOrder = uow.PurchaseOrderRepository.Get(filter: x => x.ID == id, includeProperties: "Supplier, CreatedByStaff, RepliedByStaff, PurchaseItems.Tender.Item ").FirstOrDefault();
             PurchaseOrderVM vm = new PurchaseOrderVM(purchaseOrder);
 

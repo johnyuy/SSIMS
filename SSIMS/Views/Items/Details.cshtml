@@ -2,9 +2,11 @@
 
 @{
     ViewBag.Title = "Details";
+    ViewBag.Header = "Item Details";
+    ViewBag.Section="Items";
 }
 
-<h2>Details</h2>
+@*<h2>Details</h2>*@
 
 <div>
     <h4>Item</h4>
@@ -37,6 +39,11 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
-    @Html.ActionLink("Back to List", "Index")
+    @if (ViewBag.staffrole == "Clerk")
+    {
+        @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) 
+    }
+</p>
+<p>
+@Html.ActionLink("Back to List", "Index")
 </p>

@@ -10,16 +10,24 @@ using SSIMS.Database;
 using SSIMS.Models;
 using SSIMS.DAL;
 using PagedList;
+using SSIMS.Filters;
+using SSIMS.Service;
 
 namespace SSIMS.Controllers
 {
+    [AuthenticationFilter]
+    [AuthorizationFilter]
     public class ItemsController : Controller
-    {   
+    {
+        readonly ILoginService loginService = new LoginService();
         private UnitOfWork unitOfWork = new UnitOfWork();
 
         // GET: Items
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
+            Staff staff = loginService.StaffFromSession;
+            ViewBag.staffrole = staff.StaffRole;
+
             //ViewBag.ItemDescriptionSortParm = String.IsNullOrEmpty(sortOrder) ? "Item_desc" : "";
             ViewBag.ItemDescriptionSortParm = String.IsNullOrEmpty(sortOrder) ? "Item_desc" : "";
             ViewBag.CategorySortParm = sortOrder == "Category" ? "Category_desc" : "Category";
