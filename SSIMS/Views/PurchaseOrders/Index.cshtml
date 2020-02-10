@@ -5,9 +5,11 @@
 
 @{
     ViewBag.Title = "Purchase Orders";
+    ViewBag.Header = "Purchase Orders";
+    ViewBag.Section="PurchaseOrders";
 }
 
-<h2>Purchase Orders</h2>
+@*<h2>Purchase Orders</h2>*@
 
 @using (Html.BeginForm("Index", "PurchaseOrders", FormMethod.Get))
 {

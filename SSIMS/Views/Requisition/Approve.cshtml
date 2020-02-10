@@ -3,21 +3,23 @@
 @{
     ViewBag.Title = "Approve";
     ViewBag.Header = "Requisition Order Details";
-    ViewBag.Section="Requisitions";
+    ViewBag.Section = "Requisitions";
 }
 
- 
+
 
 <table class="table table-bordered">
     <tr>
-        <th>Requisition ID
+        <th>
+            Requisition ID
             @*@Html.LabelFor(x => x.ID, htmlAttributes: new { @class = "control-label col-md-2" })*@
         </th>
         <td>
             @Html.DisplayFor(x => x.ID)
         </td>
-    
-        <th>Department
+
+        <th>
+            Department
             @*@Html.LabelFor(x => x.CreatedByStaff.Department, htmlAttributes: new { @class = "control-label col-md-2" })*@
         </th>
         <td>
@@ -26,15 +28,17 @@
     </tr>
 
     <tr>
-        <th>Created Date
+        <th>
+            Created Date
             @*@Html.LabelFor(x => x.CreatedDate, htmlAttributes: new { @class = "control-label col-md-2" })*@
         </th>
         <td class="noBorder">
             @Html.DisplayFor(x => x.CreatedDate)
 
         </td>
-    
-        <th>Status
+
+        <th>
+            Status
             @*@Html.LabelFor(x => x.Status, htmlAttributes: new { @class = "control-label col-md-2" })*@
 
         </th>
@@ -44,15 +48,17 @@
     </tr>
 
     <tr>
-        <th>Staff ID
+        <th>
+            Staff ID
             @*@Html.LabelFor(x => x.CreatedByStaffID, htmlAttributes: new { @class = "control-label col-md-2" })*@
         </th>
         <td>
             @Html.DisplayFor(x => x.CreatedByStaff.ID)
 
         </td>
-  
-        <th>Staff Name
+
+        <th>
+            Staff Name
             @*@Html.LabelFor(x => x.CreatedByStaff, htmlAttributes: new { @class = "control-label col-md-2" })*@
 
         </th>
@@ -62,15 +68,17 @@
         </td>
     </tr>
     <tr>
-        <th>Replied By Staff
+        <th>
+            Replied By Staff
             @*@Html.LabelFor(x => x.RepliedByStaff, htmlAttributes: new { @class = "control-label col-md-2" })*@
         </th>
         <td>
             @Html.DisplayFor(x => x.RepliedByStaff.Name)
 
         </td>
-   
-        <th>Response Date
+
+        <th>
+            Response Date
             @*@Html.LabelFor(x => x.ResponseDate, htmlAttributes: new { @class = "control-label col-md-2" })*@
         </th>
         <td>
@@ -79,7 +87,8 @@
     </tr>
 
     <tr>
-        <th>Comments
+        <th>
+            Comments
             @*@Html.LabelFor(x => x.Comments, htmlAttributes: new { @class = "control-label col-md-2" })*@
         </th>
         <td colspan="3">
@@ -94,61 +103,62 @@
 
 
 
-        <table class="table">
-            <tr>
-                <th>
-                    Item ID
-                </th>
+<table class="table">
+    <tr>
+        <th>
+            Item ID
+        </th>
 
-                <th>
-                    Category
-                </th>
+        <th>
+            Category
+        </th>
 
-                <th>
-                    Description
-                </th>
+        <th>
+            Description
+        </th>
 
 
-                <th>
-                    Unit of Measure
-                </th>
+        <th>
+            Unit of Measure
+        </th>
 
-                <th>
-                    Qty
-                </th>
+        <th>
+            Qty
+        </th>
 
-            </tr>
+    </tr>
 
-            @foreach (var ro in Model.DocumentItems)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => ro.Item.ID)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => ro.Item.Category)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => ro.Item.Description)
-                    </td>
+    @foreach (var ro in Model.DocumentItems)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => ro.Item.ID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => ro.Item.Category)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => ro.Item.Description)
+            </td>
 
-                    <td>
-                        @Html.DisplayFor(modelItem => ro.Item.UnitOfMeasure)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => ro.Qty)
-                    </td>
+            <td>
+                @Html.DisplayFor(modelItem => ro.Item.UnitOfMeasure)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => ro.Qty)
+            </td>
 
-                </tr>
-            }
+        </tr>
+    }
 
-        </table>
-
-        <p>
-            @Html.ActionLink("Back to Pending List", "Manage")
-        </p>
-
-        <p>
-            @Html.ActionLink("Back to Requisition History List", "ViewHistory")
-        </p>
+</table>
+@if (ViewBag.staffrole == "DeptHead")
+{
+    <p>
+        @Html.ActionLink("Back to Pending List", "Manage")
+    </p>
+}
+    <p>
+        @Html.ActionLink("Back to Requisition History List", "ViewHistory")
+    </p>
 

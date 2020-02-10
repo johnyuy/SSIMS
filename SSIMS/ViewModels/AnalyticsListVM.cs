@@ -17,8 +17,9 @@ namespace SSIMS.ViewModels
     {
         public List<RequisitionOrder> ROList;
         public List<AnalyticsDetailsVM> SummaryList;
-        public AnalyticsListVM()
+        public AnalyticsListVM(UnitOfWork uow)
         {
+
             List<AnalyticsDetailsVM> summaryList = new List<AnalyticsDetailsVM>();
             UnitOfWork unitOfWork = new UnitOfWork();
             Debug.WriteLine(DateTime.Now.Year.ToString());
@@ -32,7 +33,7 @@ namespace SSIMS.ViewModels
             {
                 foreach (DocumentItem di in ro.DocumentItems)
                 {
-                    AnalyticsDetailsVM rvsm = new AnalyticsDetailsVM(di.Qty, di.Item.Category, ro.CreatedDate, ro.CreatedByStaff.Department.ID, di.Item.Description, ro.CreatedByStaff.Name);
+                    AnalyticsDetailsVM rvsm = new AnalyticsDetailsVM(di.Qty, di.Item.Category, ro.CreatedDate, ro.CreatedByStaff.Department.ID, di.Item.Description, ro.CreatedByStaff.Name, uow.TenderRepository.GetItemPriceDefaultSupplier(di.Item.ID));
                     
                     summaryList.Add(rvsm);
                     

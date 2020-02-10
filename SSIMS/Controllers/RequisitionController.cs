@@ -600,6 +600,8 @@ namespace SSIMS.Controllers
             {
                 return HttpNotFound();
             }
+            Staff staff= loginService.StaffFromSession;
+            ViewBag.staffrole = staff.StaffRole;
             requisitionOrder.Approve(loginService.StaffFromSession);
             requisitionOrder.Comments = comment;
             unitofwork.RequisitionOrderRepository.Update(requisitionOrder);
@@ -624,6 +626,8 @@ namespace SSIMS.Controllers
             {
                 return HttpNotFound();
             }
+            Staff staff = loginService.StaffFromSession;
+            ViewBag.staffrole = staff.StaffRole;
             requisitionOrder.Rejected(loginService.StaffFromSession);
             requisitionOrder.Comments = comment;
             unitofwork.RequisitionOrderRepository.Update(requisitionOrder);

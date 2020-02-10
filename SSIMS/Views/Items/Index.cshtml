@@ -4,60 +4,76 @@
 
 @{
     ViewBag.Title = "Items";
+    ViewBag.Header = "Item List";
+    ViewBag.Section = "Items";
 }
 
-<h2>Items</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-
-@using (Html.BeginForm("Index", "Items", FormMethod.Get))
+@if (ViewBag.staffrole == "Clerk")
 {
     <p>
-        Find by name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
-        <input type="submit" value="Search" />
+        @Html.ActionLink("Create New", "Create")
     </p>
 }
-<table class="table">
-    <tr>
-        <th>
-            @*Html.DisplayNameFor(model => model.Category)*@
-            @Html.ActionLink("Category", "Index", new { sortOrder = ViewBag.CategorySortParm })
-        </th>
-        <th>
-            @*@Html.DisplayNameFor(model => model.Description)*@
-            @Html.ActionLink("Discription", "Index", new { sortOrder = ViewBag.ItemDescriptionSortParm })
-        </th>
-        <th>
-            @*@Html.DisplayNameFor(model => model.UnitOfMeasure)*@
-            Unit Of Measure
-        </th>
-        <th></th>
-    </tr>
 
-    @foreach (var item in Model)
+    @using (Html.BeginForm("Index", "Items", FormMethod.Get))
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UnitOfMeasure)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
-                @Html.ActionLink("Details", "Details", new { id = item.ID }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
-            </td>
-        </tr>
+        <p>
+            Find by name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+            <input type="submit" value="Search" />
+        </p>
     }
+    <table class="table">
+        <tr>
+            <th>
+                @*Html.DisplayNameFor(model => model.Category)*@
+                @Html.ActionLink("Category", "Index", new { sortOrder = ViewBag.CategorySortParm })
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.Description)*@
+                @Html.ActionLink("Discription", "Index", new { sortOrder = ViewBag.ItemDescriptionSortParm })
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.UnitOfMeasure)*@
+                Unit Of Measure
+            </th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
 
-</table>
-<br/>
-Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UnitOfMeasure)
+                </td>
+                <td>
 
-@Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+                    @Html.ActionLink("Details", "Details", new { id = item.ID }) 
+                </td>
+                <td>
+                    @if (ViewBag.staffrole == "Clerk")
+                    {
+                        @Html.ActionLink("Edit", "Edit", new { id = item.ID })  
+                    }
+                </td>
+                <td>
+                    @if (ViewBag.staffrole == "Clerk")
+                    {
+                        @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+                    }
+                </td>
+            </tr>
+        }
+
+    </table>
+    <br />
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

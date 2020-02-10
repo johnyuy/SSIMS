@@ -11,9 +11,21 @@ namespace SSIMS.DAL
     public class TenderRepository : GenericRepository<Tender>
     {
 
-        public TenderRepository(DatabaseContext context)
-    : base(context)
+        public TenderRepository(DatabaseContext context) : base(context)
         {
         }
+
+        public double GetItemPriceDefaultSupplier(string itemCode)
+        {
+            IEnumerable<Tender> tenders = Get(filter: x => x.Item.ID == itemCode, includeProperties: "Item");
+
+            if(tenders==null || tenders.Count() == 0)
+                return 0;
+
+            Tender tender = tenders.OrderByDescending(x => x.Price).LastOrDefault();
+
+            return tender.Price;
+        }
+
     }
 }

@@ -185,11 +185,13 @@
 
 </table>
 
-<p>
-    @Html.ActionLink("Back to Pending List", "Manage")
-</p>
-
-<p>
-    @Html.ActionLink("Back to Requisition History List", "ViewHistory")
-</p>
+@if (ViewBag.staffrole == "DeptHead")
+{
+    <p>
+        @Html.ActionLink("Back to Pending List", "Manage")
+    </p>
+}
+    <p>
+        @Html.ActionLink("Back to Requisition History List", "ViewHistory")
+    </p>
 
