@@ -39,13 +39,12 @@
 </style>
 
 
-    @using (Html.BeginForm(FormMethod.Post))
-    {
+
         <table>
             <tr>
                 <th>View Statistics By: </th>
                 <td align="center">
-                    <select name="group">
+                    <select name="group" id="group">
                         <option value="Category">Category</option>
                         <option value="Department">Department</option>
                         <option value="Item">Item</option>
@@ -55,7 +54,7 @@
                     </select>
                 </td>
                 <td align="center">
-                    <button type="submit">View</button>
+                    <button onclick="refresh()">View</button>
                 </td>
             </tr>
             <tr>
@@ -89,13 +88,13 @@
             </tr>
 
         </table>
-    }
+    
 
 
     <div id="chart-container">
-        <img src=" @Url.Action("GenerateChartQty")" alt="Chart"  class="chart"/>
-        <img src=" @Url.Action("GenerateChartCost")" alt="Chart"  class="chart"/>
-        <img src=" @Url.Action("GenerateChartCount")" alt="Chart"  class="chart"/>
+        <img id="chart1" src=" @Url.Action("GenerateChartQty")" alt="Chart"  class="chart"/>
+        <img id="chart2" src=" @Url.Action("GenerateChartCost")" alt="Chart"  class="chart"/>
+        <img id="chart3" src=" @Url.Action("GenerateChartCount")" alt="Chart"  class="chart"/>
         
 
     </div>
@@ -181,5 +180,36 @@
             document.getElementById("value2").hidden = false;
         }
     });
+    </script>
+
+
+    <script>
+        function refresh() {
+
+            var group = $("#group").val();
+            var filter1 = $("#filter1").val();
+            var filter2 = $("#filter2").val();
+            var value1 = $("#value1").val();
+            var value2 = $("#value2").val();
+
+            $.ajax({
+                url: " @Url.Action("Index","Analytics")",
+                type: "POST",
+                data: { group: group, filter1: filter1, filter2: filter2, value1: value1, value2: value2},
+                datatype :"html",
+                cache: false,
+                success: function () {
+                    //alert("success");
+                }
+
+            });
+
+            $("#chart1").attr("src", "@Url.Action("GenerateChartQty")?" + new Date().getTime());
+            $("#chart2").attr("src", "@Url.Action("GenerateChartCost")?" + new Date().getTime());
+            $("#chart3").attr("src", "@Url.Action("GenerateChartCount")?" + new Date().getTime());
+        }
+
+        
+
     </script>
 }

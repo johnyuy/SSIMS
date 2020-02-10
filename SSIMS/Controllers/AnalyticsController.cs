@@ -50,12 +50,14 @@ namespace SSIMS.Controllers
             Session["AValue1"] = value1;
             Session["AValue2"] = value2;
 
-            return RedirectToAction("Index");
+            return null;
+            //return RedirectToAction("Index");
         }
 
         //RIGHT NOW EACH CHART ONLY HAS REQUISITION/CAN HAVE A SERIES FOR ACTUAL DISBURSED
-        public ActionResult GenerateChartQty()
+        public ActionResult GenerateChartQty(string t)
         {
+            Debug.WriteLine("Called");
             string group = Session["AGroup"] == null ? "Category" : Session["AGroup"].ToString();
             string filter1 = Session["AFilter1"] == null ? "" : Session["AFilter1"].ToString();
             string filter2 = Session["AFilter2"] == null ? "" : Session["AFilter2"].ToString();
@@ -92,7 +94,7 @@ namespace SSIMS.Controllers
             return null;
         }
 
-        public ActionResult GenerateChartCost()
+        public ActionResult GenerateChartCost(string t)
         {
             string group = Session["AGroup"] == null ? "Category" : Session["AGroup"].ToString();
             string filter1 = Session["AFilter1"] == null ? "" : Session["AFilter1"].ToString();
@@ -131,7 +133,7 @@ namespace SSIMS.Controllers
             return null;
         }
 
-        public ActionResult GenerateChartCount()
+        public ActionResult GenerateChartCount(string t)
         {
             string group = Session["AGroup"] == null ? "Category" : Session["AGroup"].ToString();
             string filter1 = Session["AFilter1"] == null ? "" : Session["AFilter1"].ToString();
