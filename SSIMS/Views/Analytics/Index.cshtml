@@ -6,74 +6,100 @@
 }
 
 <style>
-    tr{
-        height:50px;
+    tr {
+        height: 50px;
     }
-    td{
+
+    td {
         width: 250px;
-        
     }
+
     select {
         width: 200px;
-        padding-right:20px;
+        padding-right: 20px;
     }
-    th{
-        text-align:right;
-        width:200px;
+
+    th {
+        text-align: right;
+        width: 200px;
     }
-    button{
-        width:150px;
+
+    button {
+        width: 150px;
+    }
+    #chart-container{
+        width:100%;
+        height:500px;
+        background: linear-gradient(to right, rgba(146, 167, 154, 0.20) 0%, rgba(115, 147, 147, 0.31) 100%);
+    }
+    .chart{
+        width:100%;
+        margin: 10px auto;
     }
 </style>
 
-<table>
-    <tr>
-        <th>View Statistics By: </th>
-        <td align="center">
-            <select name="">
-                <option selected value="Category">Category</option>
-                <option value="Department">Department</option>
-                <option value="Item">Item</option>
-                <option value="Staff">Staff</option>
-                <option value="Month">Month</option>
-                <option value="Year">Year</option>
-            </select>
-        </td>
-        <td align="center">
-            <button>View</button>
-        </td>
-    </tr>
-    <tr>
-        <th>Filter 1 : </th>
-        <td align="center">
-            <select id="filter1">
-                <option>None</option>
-                <option value="Category">Category</option>
-                <option value="Department">Department</option>
-                <option value="Item">Item</option>
-                <option value="Staff">Staff</option>
-                <option value="Month">Month</option>
-                <option value="Year">Year</option>
-            </select>
-        </td>
-        <td align="center">
-            <select id="value1" hidden>
-            </select>
-        </td>
-    </tr>
-    <tr id="row2" hidden>
-        <th>Filter 2 : </th>
-        <td align="center">
-            <select id="filter2">
-            </select>
-        </td>
-        <td align="center">
-            <select id="value2" hidden>
-            </select>
-        </td>
-    </tr>
 
-</table>
+    @using (Html.BeginForm(FormMethod.Post))
+    {
+        <table>
+            <tr>
+                <th>View Statistics By: </th>
+                <td align="center">
+                    <select name="group">
+                        <option value="Category">Category</option>
+                        <option value="Department">Department</option>
+                        <option value="Item">Item</option>
+                        <option value="Staff">Staff</option>
+                        <option value="Month">Month</option>
+                        <option value="Year">Year</option>
+                    </select>
+                </td>
+                <td align="center">
+                    <button type="submit">View</button>
+                </td>
+            </tr>
+            <tr>
+                <th>Filter 1 : </th>
+                <td align="center">
+                    <select id="filter1" name="filter1">
+                        <option>None</option>
+                        <option value="Category">Category</option>
+                        <option value="Department">Department</option>
+                        <option value="Item">Item</option>
+                        <option value="Staff">Staff</option>
+                        <option value="Month">Month</option>
+                        <option value="Year">Year</option>
+                    </select>
+                </td>
+                <td align="center">
+                    <select id="value1" name="value1" hidden>
+                    </select>
+                </td>
+            </tr>
+            <tr id="row2" hidden>
+                <th>Filter 2 : </th>
+                <td align="center">
+                    <select id="filter2" name="filter2">
+                    </select>
+                </td>
+                <td align="center">
+                    <select id="value2" name="value2" hidden>
+                    </select>
+                </td>
+            </tr>
+
+        </table>
+    }
+
+
+    <div id="chart-container">
+        <img src=" @Url.Action("GenerateChartQty")" alt="Chart"  class="chart"/>
+        <img src=" @Url.Action("GenerateChartCost")" alt="Chart"  class="chart"/>
+        <img src=" @Url.Action("GenerateChartCount")" alt="Chart"  class="chart"/>
+        
+
+    </div>
+
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
@@ -84,7 +110,7 @@
         var filter2 = $('#filter2');
         var values1 = $('#value1');
         var values2 = $('#value2');
-            
+
         filter2.empty();
 
         if ( filter1select != null &&  filter1select != '') {
@@ -155,5 +181,5 @@
             document.getElementById("value2").hidden = false;
         }
     });
-</script>
+    </script>
 }

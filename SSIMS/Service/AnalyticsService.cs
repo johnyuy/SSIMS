@@ -14,36 +14,97 @@ namespace SSIMS.Service
     {
         UnitOfWork uow = new UnitOfWork();
         
-
-        //For numerical fields like qty, count or cost
-        public static ArrayList YAxis(List<AnalyticsDetailsVM> list, string field)
+        public static void GetAnalyticsData(string group, string filter1, string filter2, string value1, string value2)
         {
+            List<AnalyticsDetailsVM> data;
+
+            if (HttpContext.Current.Session["AData"] == null)
+            {
+                AnalyticsListVM analytics = (AnalyticsListVM)HttpContext.Current.Session["Analytics"];
+                data = analytics.SummaryList;
+                data = ApplyFilter(data, filter1, value1);
+                data = ApplyFilter(data, filter2, value2);
+                data = ApplyGroup(data, group);
+                HttpContext.Current.Session["AData"] = data;
+            }
+        }
+
+
+
+        public static List<AnalyticsDetailsVM> ApplyFilter(List<AnalyticsDetailsVM> data, string filter, string value)
+        {
+            if (data == null || data.Count == 0) return null;
+            if (filter == "" || value == "") return data;
+
+            List<AnalyticsDetailsVM> output = null;
+            if (filter == "Department") { output = FilterByDepartment(data, value); }
+            else if (filter == "Category") { output = FilterByCategory(data, value); }
+            else if (filter == "Item") { output = FilterByItem(data, value); }
+            else if (filter == "Staff") { output = FilterByStaff(data, value); }
+            else if (filter == "Month") {
+                if (int.TryParse(value, out int month))
+                    output = FilterByMonth(data, month);
+                else
+                    return null;
+            }
+            else if (filter == "Year")
+            {
+                if (int.TryParse(value, out int year))
+                    output = FilterByYear(data, year);
+                else
+                    return null;
+            }
+
+            return output ?? null;
+        }
+        public static List<AnalyticsDetailsVM> ApplyGroup(List<AnalyticsDetailsVM> data, string group)
+        {
+            if (data == null || data.Count == 0) return null;
+            if (group == "") return data;
+            List<AnalyticsDetailsVM> output = null;
+            if(group == "Department") { output = GroupByDepartment(data); }
+            else if(group == "Category") { output = GroupByCategory(data); }
+            else if(group == "Item") { output = GroupByItem(data); }
+            else if(group == "Staff") { output = GroupByStaff(data); }
+            else if(group == "Month") { output = GroupByMonth(data); }
+            else if(group == "Year") { output = GroupByYear(data); }
+
+
+            return output ?? null; ;
+        }
+        //For numerical fields like qty, count or cost
+        public static ArrayList XAxis(List<AnalyticsDetailsVM> data, string group)
+        {
+            if (data == null || data.Count() == 0 || group=="") return null;
             ArrayList output = new ArrayList();
-            foreach(AnalyticsDetailsVM item in list)
-                output.Add(item.GetType().GetProperty(field).GetValue(item, null));
+            foreach(AnalyticsDetailsVM item in data)
+                output.Add(item.GetType().GetProperty(group).GetValue(item, null));
             return output.Count > 0 ? output : null;
         }
 
-        public static ArrayList YAxisCost(List<AnalyticsDetailsVM> list)
+        public static ArrayList YAxisCost(List<AnalyticsDetailsVM> data)
         {
+            if (data == null || data.Count() == 0) return null;
             ArrayList output = new ArrayList();
-            foreach (AnalyticsDetailsVM item in list)
+            foreach (AnalyticsDetailsVM item in data)
                 output.Add(item.Cost);
             return output.Count > 0 ? output : null;
         }
 
-        public static ArrayList YAxisQty(List<AnalyticsDetailsVM> list)
+        public static ArrayList YAxisQty(List<AnalyticsDetailsVM> data)
         {
+            if (data == null || data.Count() == 0) return null;
             ArrayList output = new ArrayList();
-            foreach (AnalyticsDetailsVM item in list)
+            foreach (AnalyticsDetailsVM item in data)
                 output.Add(item.Qty);
             return output.Count > 0 ? output : null;
         }
 
-        public static ArrayList YAxisCount(List<AnalyticsDetailsVM> list)
+        public static ArrayList YAxisCount(List<AnalyticsDetailsVM> data)
         {
+            if (data == null || data.Count() == 0) return null;
             ArrayList output = new ArrayList();
-            foreach (AnalyticsDetailsVM item in list)
+            foreach (AnalyticsDetailsVM item in data)
                 output.Add(item.Count);
             return output.Count > 0 ? output : null;
         }
@@ -91,16 +152,16 @@ namespace SSIMS.Service
             if (list == null || list.Count == 0)
                 return null;
 
-            List<AnalyticsDetailsVM> result = list.Where(x => x.ItemCode == itemcode).ToList();
+            List<AnalyticsDetailsVM> result = list.Where(x => x.Item == itemcode).ToList();
             return result ?? null;
         }
 
-        public static List<AnalyticsDetailsVM> FilterByOrderStaff(List<AnalyticsDetailsVM> list, string orderstaff)
+        public static List<AnalyticsDetailsVM> FilterByStaff(List<AnalyticsDetailsVM> list, string orderstaff)
         {
             if (list == null || list.Count == 0)
                 return null;
 
-            List<AnalyticsDetailsVM> result = list.Where(x => x.OrderStaff == orderstaff).ToList();
+            List<AnalyticsDetailsVM> result = list.Where(x => x.Staff == orderstaff).ToList();
             return result ?? null;
         }
 
@@ -173,15 +234,15 @@ namespace SSIMS.Service
             return result;
         }
 
-        public static List<AnalyticsDetailsVM> GroupByItemCode(List<AnalyticsDetailsVM> list)
+        public static List<AnalyticsDetailsVM> GroupByItem(List<AnalyticsDetailsVM> list)
         {
             if (list == null || list.Count == 0)
                 return null;
             List<AnalyticsDetailsVM> result = list
-                .GroupBy(l => l.ItemCode)
+                .GroupBy(l => l.Item)
                 .Select(cl => new AnalyticsDetailsVM
                 {
-                    ItemCode = cl.Key,
+                    Item = cl.Key,
                     Qty = cl.Sum(c => c.Qty),       //total qty of per itemcode
                     Count = cl.Sum(c => c.Count),   //Number of item requests made per itemcode
                     Cost = cl.Sum(c => c.Cost)      //Total default tender chargeback per item
@@ -190,15 +251,15 @@ namespace SSIMS.Service
             return result;
         }
 
-        public static List<AnalyticsDetailsVM> GroupByOrderStaff(List<AnalyticsDetailsVM> list)
+        public static List<AnalyticsDetailsVM> GroupByStaff(List<AnalyticsDetailsVM> list)
         {
             if (list == null || list.Count == 0)
                 return null;
             List<AnalyticsDetailsVM> result = list
-                .GroupBy(l => l.OrderStaff)
+                .GroupBy(l => l.Staff)
                 .Select(cl => new AnalyticsDetailsVM
                 {
-                    OrderStaff = cl.Key,
+                    Staff = cl.Key,
                     Qty = cl.Sum(c => c.Qty),       //total qty of items ordered per staff
                     Count = cl.Sum(c => c.Count),   //Number of item requests made per staff
                     Cost = cl.Sum(c => c.Cost)      //Total default tender chargeback per staff
@@ -222,7 +283,6 @@ namespace SSIMS.Service
             else if (filter1 == "Month") { output.RemoveAt(3); }
             return new SelectList(output, "Value", "Text");
         }
-
         public static IEnumerable<SelectListItem> GetFilterValues(string filter1)
         {
             UnitOfWork uow = new UnitOfWork();
@@ -236,7 +296,6 @@ namespace SSIMS.Service
 
             return output;
         }
-
         public static IEnumerable<SelectListItem> GetYearValues()
         {
             List<SelectListItem> output = new List<SelectListItem>();
