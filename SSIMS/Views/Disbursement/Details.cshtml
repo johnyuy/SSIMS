@@ -7,6 +7,34 @@
 
 }
 
+<style>
+    #top-bar button {
+        float: left;
+        margin-right: 50px;
+        width: 200px;
+        height: 40px;
+        font-size: 15px;
+        font-weight: bold;
+        color: white;
+        background-color: #437373;
+    }
+    #top-bar{
+        width:100%;
+        height:50px;
+        margin: 5px 0px;
+    }
+</style>
+
+<div id="top-bar">
+    <div>
+        <button onclick="window.location.href = '/Retrieval/Index';">Back</button>
+    </div>
+    <div style="float:right">
+        @Html.ActionLink("Print", "Print", new { id = Model.ID })
+        <button type="button" id=@Model.ID style="margin-right:0px">Print</button>
+    </div>
+</div>
+
 
 <div>
 
@@ -39,9 +67,7 @@
     </dl>
     <div class="table-responsive">
         <table class="table">
-            <tr style="border-top:hidden; border-left:hidden; border-right:hidden">
-                <td colspan="5" align="right"><button type="button">Print</button>@Html.ActionLink("Print", "Print", new { id = Model.ID })</td>
-            </tr>
+
             <tr>
                 <th>No.</th>
                 <th>Item Code</th>
@@ -63,21 +89,6 @@
                     <td>@Html.DisplayFor(model => transItem.TakeOverQty)</td>
                 </tr>
             }
-            @*<tr>
-                <td colspan="5" style="border-bottom:hidden"></td>
-            </tr>
-            <tr style="border-bottom:hidden">
-                <td>Status:</td>
-                <td>@Html.DisplayFor(model => model.Status)</td>
-            </tr>
-            <tr style="border-bottom:hidden">
-                <td>Signed by:</td>
-                <td>@Html.DisplayFor(model => model.RepliedByStaff.Name)</td>
-            </tr>
-            <tr>
-                <td>Date: </td>
-                <td>@Html.DisplayFor(model => model.ResponseDate)</td>
-            </tr>*@
 
         </table>
         <br />
@@ -110,54 +121,5 @@
     </div>
 
 
-@*
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CreatedDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CreatedDate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ResponseDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ResponseDate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-
-    </dl>
-    <table class="table">
-        <tr>
-            <th>Item Description</th>
-            <th>Unit</th>
-            <th>Qty Requested</th>
-            <th>Qty Issued</th>
-            <th>Reason</th>
-        </tr>
-        @foreach (var transItem in Model.ItemTransactions)
-        {
-            <tr>
-                <td>@Html.DisplayFor(model => transItem.Item.Description)</td>
-                <td>@Html.DisplayFor(model => transItem.Item.UnitOfMeasure)</td>
-                <td>@Html.DisplayFor(model => transItem.HandOverQty)</td>
-                <td>@Html.DisplayFor(model => transItem.TakeOverQty)</td>
-                <td>@Html.DisplayFor(model => transItem.Reason)</td>
-            </tr>
-        }
-    </table>*@
 </div>
-<p>
-    @Html.ActionLink("Back to List", "Index")
-</p>
 

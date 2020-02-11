@@ -29,7 +29,7 @@ namespace SSIMS.Controllers
         private DisbursementService ds = new DisbursementService();
         private readonly ILoginService loginService = new LoginService();
         // GET: DisbursementLists
-        public ActionResult Index(int? page, string status)
+        public ActionResult Index(int? page, string status = "Pending")
         {
             var disbursementList = unitOfWork.DisbursementListRepository.Get(includeProperties: "CreatedByStaff, ItemTransactions.Item, Department");
             
@@ -49,10 +49,10 @@ namespace SSIMS.Controllers
                     disbursementList = disbursementList.ToList();
                     break;
                 default:
-                    disbursementList = disbursementList.ToList();
+                    disbursementList = disbursementList.Where(x => x.Status == Models.Status.Pending).ToList();
                     break;
             }
-
+            ViewBag.DisbursementStatus = status;
             if (disbursementList == null)
             {
                 return HttpNotFound();
@@ -60,6 +60,11 @@ namespace SSIMS.Controllers
 
             return View(disbursementList.ToPagedList(pageNumber, pageSize));
 
+        }
+
+        public ActionResult Return(int? id)
+        {
+            return RedirectToAction("Index");
         }
 
         public ActionResult Print(int? id)
