@@ -29,8 +29,9 @@ namespace SSIMS.Controllers
         // GET: Departments
         public ActionResult Index()
         {
-            Debug.WriteLine("Hey drake , user type = " + Session["usertype"]);
-            Debug.WriteLine("Hey drake , user group = " + Session["usergroup"]);
+            if (!LoginService.IsAuthorizedRoles(""))
+                return RedirectToAction("Index", "Home");
+
             var departments = unitOfWork.DepartmentRepository.Get(includeProperties: "CollectionPoint");
             ViewBag.RepList = unitOfWork.StaffRepository.GetDeptRepList();
             var Deps = unitOfWork.DepartmentRepository.Get(filter: x => x.ID != "STOR", includeProperties: "DeptHeadAuthorization.Staff");
@@ -53,6 +54,7 @@ namespace SSIMS.Controllers
         // GET: Departments/Details/5
         public ActionResult Details(string id)
         {
+            if (!LoginService.IsAuthorizedRoles("head", "rep")) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             Debug.WriteLine("welcome to department details, routevalue id = " + id);
             if (String.IsNullOrEmpty(id))
                 return RedirectToAction("Index");
@@ -78,6 +80,7 @@ namespace SSIMS.Controllers
         [HttpPost]
         public ActionResult UpdateCollectionPoint(string id)
         {
+            if (!LoginService.IsAuthorizedRoles("head","rep")) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             string deptId = Session["CurrentDepartmentID"].ToString();
             Department department = unitOfWork.DepartmentRepository.GetByID(deptId);
             CollectionPoint collectionPoint = unitOfWork.CollectionPointRepository.GetByID(int.Parse(id));
@@ -103,7 +106,7 @@ namespace SSIMS.Controllers
 
         public ActionResult SelectCollectionPoint (string id)
         {
-            
+            if (!LoginService.IsAuthorizedRoles("head", "rep")) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);

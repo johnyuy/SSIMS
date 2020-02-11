@@ -161,8 +161,8 @@ namespace SSIMS.Service
         {
             string actualrole = HttpContext.Current.Session["role"].ToString();
             if (actualrole.Equals(authorizedRole)
-                || actualrole.Equals("Admin")
-                || authorizedRole.Equals("All"))
+                || actualrole.Equals("admin")
+                || authorizedRole.Equals("all"))
                 return true;
 
             return false;
@@ -173,7 +173,7 @@ namespace SSIMS.Service
             string actualrole = HttpContext.Current.Session["role"].ToString();
             if (actualrole.Equals(authorizedRole1)
                 || actualrole.Equals(authorizedRole2)
-                || actualrole.Equals("Admin"))
+                || actualrole.Equals("admin"))
                 return true;
             return false;
         }
@@ -184,7 +184,7 @@ namespace SSIMS.Service
             if (actualrole.Equals(authorizedRole1)
                 || actualrole.Equals(authorizedRole2)
                 || actualrole.Equals(authorizedRole3)
-                || actualrole.Equals("Admin"))
+                || actualrole.Equals("admin"))
                 return true;
             return false;
         }
