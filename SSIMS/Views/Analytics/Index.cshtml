@@ -22,80 +22,88 @@
     th {
         text-align: right;
         width: 200px;
+        font-weight:bold;
+        color:white;
     }
 
     button {
         width: 150px;
     }
-    #chart-container{
-        width:100%;
-        height:500px;
-        background: linear-gradient(to right, rgba(146, 167, 154, 0.20) 0%, rgba(115, 147, 147, 0.31) 100%);
+    #chart-container {
+        width: 100%;
+        height:1000px;
     }
     .chart{
         width:100%;
         margin: 10px auto;
     }
+    table{
+        margin:20px;
+    }
+    #table-container{
+        width:100%;
+        height:auto;
+        background:linear-gradient(to right, rgba(41, 89, 89, 0.85) 20%, rgba(1, 16, 16, 0.0) 80%);
+    }
 </style>
 
 
-    @using (Html.BeginForm(FormMethod.Post))
-    {
-        <table>
-            <tr>
-                <th>View Statistics By: </th>
-                <td align="center">
-                    <select name="group">
-                        <option value="Category">Category</option>
-                        <option value="Department">Department</option>
-                        <option value="Item">Item</option>
-                        <option value="Staff">Staff</option>
-                        <option value="Month">Month</option>
-                        <option value="Year">Year</option>
-                    </select>
-                </td>
-                <td align="center">
-                    <button type="submit">View</button>
-                </td>
-            </tr>
-            <tr>
-                <th>Filter 1 : </th>
-                <td align="center">
-                    <select id="filter1" name="filter1">
-                        <option>None</option>
-                        <option value="Category">Category</option>
-                        <option value="Department">Department</option>
-                        <option value="Item">Item</option>
-                        <option value="Staff">Staff</option>
-                        <option value="Month">Month</option>
-                        <option value="Year">Year</option>
-                    </select>
-                </td>
-                <td align="center">
-                    <select id="value1" name="value1" hidden>
-                    </select>
-                </td>
-            </tr>
-            <tr id="row2" hidden>
-                <th>Filter 2 : </th>
-                <td align="center">
-                    <select id="filter2" name="filter2">
-                    </select>
-                </td>
-                <td align="center">
-                    <select id="value2" name="value2" hidden>
-                    </select>
-                </td>
-            </tr>
+<div id="table-container">
+    <table>
+        <tr>
+            <th style="width:200px;">View Statistics By </th>
+            <td align="center" style="width:300px;">
+                <select name="group" id="group">
+                    <option value="Category">Category</option>
+                    <option value="Department">Department</option>
+                    <option value="Item">Item</option>
+                    <option value="Staff">Staff</option>
+                    <option value="Month">Month</option>
+                    <option value="Year">Year</option>
+                </select>
+            </td>
+            <td style="width:300px;">
+                <button onclick="refresh()">View</button>
+            </td>
+        </tr>
+        <tr>
+            <th>Filter 1  </th>
+            <td align="center">
+                <select id="filter1" name="filter1">
+                    <option>None</option>
+                    <option value="Category">Category</option>
+                    <option value="Department">Department</option>
+                    <option value="Item">Item</option>
+                    <option value="Staff">Staff</option>
+                    <option value="Month">Month</option>
+                    <option value="Year">Year</option>
+                </select>
+            </td>
+            <td>
+                <select id="value1" name="value1" hidden>
+                </select>
+            </td>
+        </tr>
+        <tr id="row2" hidden>
+            <th id="label2">Filter 2  </th>
+            <td align="center">
+                <select id="filter2" name="filter2">
+                </select>
+            </td>
+            <td>
+                <select id="value2" name="value2" hidden>
+                </select>
+            </td>
+        </tr>
 
-        </table>
-    }
+    </table>
+</div> 
 
 
     <div id="chart-container">
-        <img src=" @Url.Action("GenerateChartQty")" alt="Chart"  class="chart"/>
-        <img src=" @Url.Action("GenerateChartCost")" alt="Chart"  class="chart"/>
-        <img src=" @Url.Action("GenerateChartCount")" alt="Chart"  class="chart"/>
+        <img id="chart1" src=" @Url.Action("GenerateChartQty")" alt="Chart"  class="chart"/>
+        <img id="chart2" src=" @Url.Action("GenerateChartCost")" alt="Chart"  class="chart"/>
+        <img id="chart3" src=" @Url.Action("GenerateChartCount")" alt="Chart"  class="chart"/>
         
 
     </div>
@@ -106,6 +114,32 @@
     <script type="text/javascript">
 
     $('#filter1').change(function () {
+
+        var f1 = document.getElementById("filter1");
+        var r2 = document.getElementById("row2");
+        $("#value2").fadeOut(50);
+        if (f1.value == "None") {
+             $("#row2").delay(500).hide(100);
+             $("#filter2").fadeOut(100);
+             //$("#label2").fadeOut(100);
+            $("#value1").fadeOut(100);
+           
+
+        } else {
+            $("#filter2").fadeOut(50);
+            //$("#label2").fadeOut(50);
+            $("#value1").fadeOut(50);
+
+            $("#row2").show(1000).fadeIn(1000);
+            
+            $("#filter2").delay(800).fadeIn(300);
+            //$("#label2").delay(800).fadeIn(300);
+            $("#value1").delay(100).fadeIn(300);
+            
+        }
+        
+
+
         var filter1select = $("#filter1").val();
         var filter2 = $('#filter2');
         var values1 = $('#value1');
@@ -145,19 +179,18 @@
             });
         }
 
-        var f1 = document.getElementById("filter1");
-        var r2 = document.getElementById("row2");
-        if (f1.value == "None") {
-            document.getElementById("value1").hidden = true;
-            r2.hidden = true;
-        } else {
-            document.getElementById("value1").hidden = false;
-            r2.hidden = false;
-        }
-        document.getElementById("value2").hidden = true;
+        
     });
 
     $('#filter2').change(function () {
+        var f2 = document.getElementById("filter2");
+        if (f2.value == "None") {
+            $("#value2").fadeOut(200);
+        } else {
+            $("#value2").fadeOut(200);
+            $("#value2").fadeIn(300);
+        }
+
         var filter2select = $("#filter2").val();
         var values2 = $('#value2');
         values2.empty();
@@ -174,12 +207,48 @@
                 };
             });
         }
-        var f2 = document.getElementById("filter2");
-        if (f2.value == "None") {
-            document.getElementById("value2").hidden = true;
-        } else {
-            document.getElementById("value2").hidden = false;
-        }
+        
     });
+    </script>
+
+
+    <script>
+        function refresh() {
+            $("#chart1").fadeOut(200);
+            $("#chart2").fadeOut(200);
+            $("#chart3").fadeOut(200);
+
+
+            var group = $("#group").val();
+            var filter1 = $("#filter1").val();
+            var filter2 = $("#filter2").val();
+            var value1 = $("#value1").val();
+            var value2 = $("#value2").val();
+
+            $.ajax({
+                url: " @Url.Action("Index","Analytics")",
+                type: "POST",
+                data: { group: group, filter1: filter1, filter2: filter2, value1: value1, value2: value2},
+                datatype :"html",
+                cache: false,
+                success: function () {
+                    //alert("success");
+                }
+
+            });
+
+
+            $("#chart1").attr("src", "@Url.Action("GenerateChartQty")?" + new Date().getTime());
+            $("#chart2").attr("src", "@Url.Action("GenerateChartCost")?" + new Date().getTime());
+            $("#chart3").attr("src", "@Url.Action("GenerateChartCount")?" + new Date().getTime());
+
+            $("#chart1").delay(1500).fadeIn();
+            $("#chart2").delay(1500).fadeIn();
+            $("#chart3").delay(1500).fadeIn();
+
+        }
+
+        
+
     </script>
 }
