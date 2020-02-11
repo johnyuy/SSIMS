@@ -5,17 +5,29 @@
     ViewBag.Header = "Disbursements";
     ViewBag.Section = "Disbursements";
     Layout = "~/Views/Shared/_Layout.cshtml";
-
+    string status = ViewBag.DisbursementStatus ?? "";
 }
 <style>
-    th, td{
-        text-align:center;
+    th, td {
+        text-align: center;
     }
-    #top-bar{
-        width:100%;
-        height:50px;
+    .text-empty {
+        margin: 60px auto 10px auto;
+        width: 100%;
+        text-align: center;
+        font-size: 100px;
+        color: lightgray;
+    }
+    .table-responsive{
+        min-height:700px;
+    }
+
+    #top-bar {
+        width: 100%;
+        height: 50px;
         margin: 5px 0px;
     }
+
         #top-bar button {
             float: left;
             margin-right: 50px;
@@ -40,6 +52,7 @@
     <label> &nbsp;View by Status: &nbsp;</label>
     &nbsp; @Html.ActionLink("Pending", "Index", new { status = "Pending" }) &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
     @Html.ActionLink("Completed", "Index", new { status = "Completed" }) &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+    @Html.ActionLink("Rejected", "Index", new { status = "Rejected" }) &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
     @Html.ActionLink("View All", "Index", new { status = "All" })
 
     <table class="table">
@@ -50,6 +63,12 @@
             <th>Status</th>
             <th>Created By</th>
             <th>View Details</th>
+            @if (Model.Count > 0 && status == "Pending")
+            {
+                <th>
+                    Return
+                </th>
+            }
         </tr>
 
         @foreach (var dl in Model)
@@ -74,17 +93,30 @@
                 <td>
                     @Html.ActionLink("Details", "Details", new { id = dl.ID })
                 </td>
+                @if (Model.Count > 0 && status == "Pending")
+                {
+                    <td>
+                        @Html.ActionLink("Return to Store", "Return", new { id = dl.ID, })
+                    </td>
+                }
+
             </tr>
         }
-
     </table>
+    @if (Model.Count() == 0)
+    {
+    <div style="width:100%;height:50px">
+        <p class="text-empty">Empty</p>
+    </div>
+    }
 </div>
-<br />
-<table class="table">
-    <tr>
-        <td align="center">Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount</td>
-    </tr>
-    <tr>
-        <td align="center">@Html.PagedListPager(Model, page => Url.Action("NextPage", new { page }))</td>
-    </tr>
-</table>
+
+    <br />
+    <table class="table">
+        <tr>
+            <td align="center">Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount</td>
+        </tr>
+        <tr>
+            <td align="center">@Html.PagedListPager(Model, page => Url.Action("NextPage", new { page }))</td>
+        </tr>
+    </table>

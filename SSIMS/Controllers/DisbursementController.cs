@@ -14,6 +14,8 @@ using SSIMS.DAL;
 using SSIMS.ViewModels;
 using SSIMS.Filters;
 using PagedList;
+using Rotativa;
+using System.Diagnostics;
 
 namespace SSIMS.Controllers
 {
@@ -21,17 +23,17 @@ namespace SSIMS.Controllers
     [AuthorizationFilter]
     public class DisbursementController : Controller
     {
-        
+
 
         private DatabaseContext db = new DatabaseContext();
         private UnitOfWork unitOfWork = new UnitOfWork();
         private DisbursementService ds = new DisbursementService();
         private readonly ILoginService loginService = new LoginService();
         // GET: DisbursementLists
-        public ActionResult Index(int? page, string status)
+        public ActionResult Index(int? page, string status="Pending")
         {
             var disbursementList = unitOfWork.DisbursementListRepository.Get(includeProperties: "CreatedByStaff, ItemTransactions.Item, Department");
-            
+
             int pageSize = 15;
             int pageNumber = (page ?? 1);
 
@@ -44,10 +46,11 @@ namespace SSIMS.Controllers
                 case "Completed":
                     disbursementList = disbursementList.Where(x => x.Status == Models.Status.Completed).ToList();
                     break;
-                case "All":
-                    disbursementList = disbursementList.ToList();
+                case "Rejected":
+                    disbursementList = disbursementList.Where(x => x.Status == Models.Status.Rejected).ToList();
                     break;
-                default:
+
+                case "All":
                     disbursementList = disbursementList.ToList();
                     break;
             }
@@ -56,12 +59,31 @@ namespace SSIMS.Controllers
             {
                 return HttpNotFound();
             }
-
+            ViewBag.DisbursementStatus = status;
             return View(disbursementList.ToPagedList(pageNumber, pageSize));
 
         }
 
-        
+        //[AllowAnonymous]
+        public ActionResult Print(int? id)
+        {
+            UnitOfWork uow = new UnitOfWork();
+
+            DisbursementList disbursementList = uow.DisbursementListRepository.Get(filter: x => x.ID == id.Value, includeProperties: "CreatedByStaff, ItemTransactions.Item, Department.CollectionPoint").FirstOrDefault();
+
+
+            var fff = new PartialViewAsPdf
+            {
+                ViewName = "Details",
+                Model = disbursementList
+            };
+
+            return fff;
+        }
+
+
+
+        [HttpGet]
         public ActionResult Disbursement(int? id)
         {
             DisbursementList DL = unitOfWork.DisbursementListRepository.Get(filter: x => x.ID == id, includeProperties: "CreatedByStaff, ItemTransactions.Item, Department.CollectionPoint").FirstOrDefault();
@@ -74,29 +96,57 @@ namespace SSIMS.Controllers
             return View(DL);
         }
 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Disbursement([Bind(Include = "Department, ItemTransactions")] DisbursementList model)
+        public ActionResult CompleteDisbursement(string id="", string reply = "")
         {
-            DisbursementList DL = unitOfWork.DisbursementListRepository.Get(filter: x => x.ID == model.ID, includeProperties: "CreatedByStaff, ItemTransactions.Item, Department.CollectionPoint").FirstOrDefault();
-            
-            for(int i = 0; i<DL.ItemTransactions.Count; i++)
+            if(!int.TryParse(id, out int Id))
+                return RedirectToAction("Disbursement", new { id });
+            UnitOfWork uow = new UnitOfWork();
+            DisbursementList DL = uow.DisbursementListRepository.Get(filter: x => x.ID == Id, includeProperties: "CreatedByStaff, ItemTransactions.Item, Department.CollectionPoint").FirstOrDefault();
+            Debug.WriteLine(reply);
+            List<int> takeover = new List<int>();
+            List<string> reason = new List<string>();
+
+            string[] sets = reply.Split('&');
+
+            for(int i = 0; i < sets.Length; i++)
             {
-                for(int j = 0; j<model.ItemTransactions.Count; j++)
+                string value = sets[i].Split('=')[1];
+                if (i % 2 == 0)
                 {
-                    if(DL.ItemTransactions.ToList()[i].Item.ID == model.ItemTransactions.ToList()[j].Item.ID)
-                    {
-                        DL.ItemTransactions.ToList()[i].TakeOverQty = model.ItemTransactions.ToList()[j].TakeOverQty;
-                        
-                    }
+
+                    takeover.Add(int.Parse(value));
+                    Debug.WriteLine(int.Parse(value));
                 }
+                else
+                {
+                    reason.Add(value);
+                    Debug.WriteLine(value);
+                }
+
             }
-            DL.Completed(DL.Department.DeptRep);
-            unitOfWork.DisbursementListRepository.Update(DL);
-            unitOfWork.Save();
+
+            //update takeover qty
+            for (int i = 0; i < DL.ItemTransactions.Count; i++)
+            {
+                DL.ItemTransactions.ToList()[i].TakeOverQty = takeover[i];
+                DL.ItemTransactions.ToList()[i].Reason = reason[i];
+            }
+
+            //update
+            Staff depRep = uow.StaffRepository.Get(filter: x=>x.Department.ID == DL.Department.ID && x.StaffRole == "DeptRep").FirstOrDefault();
+            DL.Completed(depRep);
             
-            return RedirectToAction("Index");
+            uow.DisbursementListRepository.Update(DL);
+            uow.Save();
+
+
+            return RedirectToAction("Current");
         }
+
+
 
         public ActionResult Current()
         {
@@ -129,6 +179,43 @@ namespace SSIMS.Controllers
             return View();
         }
 
+
+        [HttpGet]
+        public JsonResult Verify(string p="", string d="")
+        {
+            string s = "false";
+            UnitOfWork uow = new UnitOfWork();
+            Debug.WriteLine("Received : " + p + ", checking with DL" + d );
+            int.TryParse(d, out int i);
+
+            if (ds.VerifyOTP(i, p, uow))
+                s = "true";
+
+            return Json(s, JsonRequestBehavior.AllowGet);
+        }
+
+
+        public ActionResult Return(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            UnitOfWork uow = new UnitOfWork();
+            DisbursementList disbursementList = uow.DisbursementListRepository.Get(filter: x => x.ID == id, includeProperties: "CreatedByStaff, ItemTransactions.Item, Department").FirstOrDefault();
+            if (disbursementList == null)
+            {
+                return HttpNotFound();
+            }
+            InventoryService inventoryService = new InventoryService();
+            Staff clerk = loginService.StaffFromSession;
+            inventoryService.ProcessRejectedDisbursement(clerk, disbursementList.ID);
+            disbursementList.Rejected(clerk);
+            uow.DisbursementListRepository.Update(disbursementList);
+            uow.Save();
+            return RedirectToAction("Index");
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -137,6 +224,7 @@ namespace SSIMS.Controllers
             }
             base.Dispose(disposing);
         }
+
 
        
     }

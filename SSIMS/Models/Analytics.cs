@@ -10,9 +10,9 @@ namespace SSIMS.Models
     {
 
        // public IEnumerable<RequisitionSummaryViewModel> categorylist { get;  set; }
-        public IEnumerable<RequisitionSummaryViewModel> categorylist { get; set; }
-        public IEnumerable<RequisitionSummaryViewModel> categorylist2 { get;  set; }
-        public Analytics(List<RequisitionSummaryViewModel> categorylist, List<RequisitionSummaryViewModel> categorylist2)
+        public IEnumerable<AnalyticsDetailsVM> categorylist { get; set; }
+        public IEnumerable<AnalyticsDetailsVM> categorylist2 { get;  set; }
+        public Analytics(List<AnalyticsDetailsVM> categorylist, List<AnalyticsDetailsVM> categorylist2)
         {
            
             this.categorylist = categorylist.ToList();

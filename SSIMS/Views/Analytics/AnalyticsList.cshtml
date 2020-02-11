@@ -1,26 +1,15 @@
-﻿@model IEnumerable<SSIMS.ViewModels.RequisitionSummaryViewModel>
+﻿@model IEnumerable<SSIMS.ViewModels.AnalyticsDetailsVM>
 @using SSIMS.ViewModels
 @{
 
-    ViewBag.Title = "AnalyticsList";
+    ViewBag.Header = "Analytics";
+    ViewBag.Section = "Analytics";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    //DatabaseContext db = new DatabaseContext();
-    //var selectQueryString = "select DocumentItems.Qty,Items.Category,RequisitionOrders.CreatedDate,Staffs.Department_ID ,MONTH(RequisitionOrders.CreatedDate) AS MONTHfrom Staffs, RequisitionOrders, DocumentItems, Items where Items.ID=DocumentItems.Item_ID and Staffs.ID=RequisitionOrders.CreatedByStaffID";
-    /*  var myChart = new Chart(width: 600, height: 400)
-          .AddTitle("Chart1")
-          .AddSeries(chartType:"column",xValue:SummaryList.CreatedDate, xField: "CreatDate",
-  yValues: SummaryList.Qty, yFields: "Qty")
-  .Write();
-  */
-    List<RequisitionSummaryViewModel> summarylist = ViewBag.SummaryList;
+
+    List<AnalyticsDetailsVM> summarylist = ViewBag.SummaryList;
 
 }
-<!DOCTYPE html>
-<h2>AnalyticsList</h2>
 
-<html>
-<head>
-    <title>ORDER</title>
     <style>
         table, th, td {
             border: solid 1px #bbbbbb;
@@ -28,8 +17,6 @@
             padding: 2px;
         }
     </style>
-</head>
-<body>
     <h3> Category and Quantity</h3>
     <table>
         <thead>
@@ -55,7 +42,7 @@
                 {
                     <th>MONTH</th>
                 }
-                @if (summarylist[0].count != 0)
+                @if (summarylist[0].Count != 0)
                 {
                     <th>COUNT</th>
                 }
@@ -88,9 +75,9 @@
                     {
                         <td>@Html.DisplayFor(modelItem => item.Month)</td>
                     }
-                    @if (summarylist[0].count != 0)
+                    @if (summarylist[0].Count != 0)
                     {
-                        <td>@Html.DisplayFor(modelItem => item.count)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Count)</td>
                     }
 
                 </tr>
@@ -107,5 +94,3 @@
     </div>
    
     @Html.ActionLink("Go to check Department and Orders ", "index2")
-</body>
-</html>

@@ -2,9 +2,11 @@
 
 @{
     ViewBag.Title = "Details";
+    ViewBag.Header = "Purchase Order Details";
+    ViewBag.Section="Purchases";
 }
 
-<h2>Details</h2>
+@*<h2>Details</h2>*@
 
 <div>
     <h4>PurchaseOrder</h4>
@@ -176,7 +178,10 @@
             <td>
                 @if (Html.ValueFor(model => model.Status).ToString() == "Pending")
                 {
+                    if (ViewBag.staffrole == "Supervisor"||ViewBag.staffrole == "Manager")
+                    {
                     @Html.ActionLink("Reject", "Reject", new { id = Model.ID })
+                    }
                 }
             </td>
             <td></td>
@@ -200,13 +205,21 @@
             <td>
                 @if (Html.ValueFor(model => model.Status).ToString() == "Pending")
                 {
+                    if (ViewBag.staffrole == "Supervisor" || ViewBag.staffrole == "Manager")
+                    {
                     @Html.ActionLink("Approve", "Approve", new { id = Model.ID })
+                    }
                 }
             </td>
         </tr>
     </table>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
-    @Html.ActionLink("Back to List", "Index")
+    @if (Html.ValueFor(model => model.Status).ToString() == "Pending")
+    {
+        @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) 
+     }
+    </p>
+<p>
+        @Html.ActionLink("Back to List", "Index")
 </p>

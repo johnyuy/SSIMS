@@ -114,6 +114,30 @@ namespace SSIMS.DAL
 
         }
 
+        //get all distinct descriptions
+        public IEnumerable<SelectListItem> GetAllDescriptions()
+        {
+            using (var context = new DatabaseContext())
+            {
+                List<SelectListItem> output = context.Items.AsNoTracking()
+                    .OrderBy(n => n.Description)
+                        .Select(n =>
+                        new SelectListItem
+                        {
+                            Value = n.Description,
+                            Text = n.Description
+                        }).Distinct().ToList();
+                var categorytip = new SelectListItem()
+                {
+                    Value = null,
+                    Text = "---------- select item ----------"
+                };
+                output.Insert(0, categorytip);
+                return new SelectList(output, "Value", "Text");
+            }
+        }
+
+
         //get item object by its description
         public Item GetItembyDescrption(string itemID)
         {

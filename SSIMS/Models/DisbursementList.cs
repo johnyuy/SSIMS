@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using SSIMS.Service;
 
 namespace SSIMS.Models
 {
@@ -10,10 +11,13 @@ namespace SSIMS.Models
         public virtual ICollection<TransactionItem> ItemTransactions { get; set; }
 
         public Department Department { get; set; }
+        public int OTP { get; set; }
+
 
         public DisbursementList(Staff creator, Department department) : base(creator)
         {
             Department = department;
+            OTP = DisbursementService.GenerateOTP();
         }
 
         public DisbursementList() : base() { }
@@ -22,6 +26,8 @@ namespace SSIMS.Models
         {
             ItemTransactions = itemTransactions;
             Department = department;
+
+            OTP = DisbursementService.GenerateOTP();
         }
 
         public Boolean UpdateInventoryItem()

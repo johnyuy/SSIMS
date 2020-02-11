@@ -9,6 +9,7 @@
     string collectionTime = Model.Department.CollectionPoint.Time.ToString("hh:mm tt");
     int size = Model.ItemTransactions.Count() * 2;
     int sizeok = Model.ItemTransactions.Count();
+    int otp = Model.OTP;
 }
 
 <style>
@@ -52,13 +53,15 @@
         margin: 30px 30px 0px 50px;
         font-weight: bold;
     }
-    #table-bottom{
-        float:right;
+
+    #table-bottom {
+        float: right;
     }
-    #form-container{
+
+    #form-container {
         box-shadow: 2px 4px 8px 0px rgba(47,79,79,0.2);
-        padding:20px;
-        background:linear-gradient(to right, rgba(146, 167, 154, 0.20) 0%, rgba(115, 147, 147, 0.31) 100%);
+        padding: 20px;
+        background: linear-gradient(to right, rgba(146, 167, 154, 0.20) 0%, rgba(115, 147, 147, 0.31) 100%);
     }
 </style>
 
@@ -70,103 +73,130 @@
         <button onclick="window.location.href = '/Disbursement/Current';">Back</button>
     </div>
     <div style="float:right">
-        <button type="button" id="print" style="margin-right:0px">Print</button>
+        @Html.ActionLink("Print", "Print", new { id = Model.ID })
+        <button type="button" id=@Model.ID style="margin-right:0px" onclick="window.location.href = '/Disbursement/Print';">Print</button>
     </div>
 </div>
 <div id="form-container">
-        <div id="info-table-container">
-            <p id="list-title">@fullid</p>
-            <table id="info-table">
+    <div id="info-table-container">
+        <p id="list-title">@fullid</p>
+        <table id="info-table">
+            <tr>
+                <td style="text-align: right">
+                    Department :
+                </td>
+                <td>
+                    @Model.Department.DeptName
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:right">
+                    Collection Point :
+                </td>
+                <td style="width: 250px">
+                    @Model.Department.CollectionPoint.Location
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:right">
+                    Collection Time :
+                </td>
+                <td>
+                    @collectionTime
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    @using (Html.BeginForm("Disbursement", "Disbursement", FormMethod.Post, new { @id = "dform" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="table-responsive">
+            <table class="table">
                 <tr>
-                    <td style="text-align: right">
-                        Department :
-                    </td>
-                    <td>
-                        @Model.Department.DeptName
-                    </td>
+                    <th>No.</th>
+                    <th>Item Code</th>
+                    <th>Item Description</th>
+                    <th>Unit of Measure</th>
+                    <th>Handover Qty</th>
+                    <th>Collected</th>
+                    <th>Remarks</th>
+                    <th>Checked</th>
                 </tr>
-                <tr>
-                    <td style="text-align:right">
-                        Collection Point :
-                    </td>
-                    <td style="width: 250px">
-                        @Model.Department.CollectionPoint.Location
-                    </td>
-                </tr>
-                <tr>
-                    <td style="text-align:right">
-                        Collection Time :
-                    </td>
-                    <td>
-                        @collectionTime
-                    </td>
-                </tr>
+                @{
+                    int count = 0;
+                }
+                @for (int i = 0; i < Model.ItemTransactions.Count; i++)
+                {
+                    count = i + 1;
+                    string cb = "cb" + i;
+                    <tr>
+                        <td>
+                            @count
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(model => model.ItemTransactions.ToList()[i].Item.ID)
+                            @Html.HiddenFor(model => model.ItemTransactions.ToList()[i].Item.ID, new { htmlAttributes = new { @class = "form-control" }, })
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(model => model.ItemTransactions.ToList()[i].Item.Description)
+                            @Html.HiddenFor(model => model.ItemTransactions.ToList()[i].Item.Description, new { htmlAttributes = new { @class = "form-control" }, })
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(model => model.ItemTransactions.ToList()[i].Item.UnitOfMeasure)
+                            @Html.HiddenFor(model => model.ItemTransactions.ToList()[i].Item.UnitOfMeasure, new { htmlAttributes = new { @class = "form-control" }, })
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(model => model.ItemTransactions.ToList()[i].HandOverQty)
+                            @Html.HiddenFor(model => model.ItemTransactions.ToList()[i].HandOverQty, new { htmlAttributes = new { @class = "form-control" }, })
+                        </td>
+
+                        <td>
+                            @Html.EditorFor(model => model.ItemTransactions.ToList()[i].TakeOverQty, new { htmlAttributes = new { @class = "form-control", max = Model.ItemTransactions.ToList()[i].HandOverQty, min = 0 } })
+                        </td>
+
+                        <td>
+                            @Html.EditorFor(model => model.ItemTransactions.ToList()[i].Reason, new { htmlAttributes = new { @class = "form-control" }, })
+                        </td>
+                        <td onchange="oncheck()">@Html.CheckBox("checkbox", false, new { @id = cb })</td>
+                    </tr>
+                }
             </table>
+
+            @Html.HiddenFor(model => model.ID, new { htmlAttributes = new { @class = "form-control" }, })
         </div>
 
-        @using (Html.BeginForm())
-        {
-            @Html.AntiForgeryToken()
-            <div class="table-responsive">
-                <table class="table">
-                    <tr>
-                        <th>No.</th>
-                        <th>Item Code</th>
-                        <th>Item Description</th>
-                        <th>Unit of Measure</th>
-                        <th>Handover Qty</th>
-                        <th>Collected</th>
-                        <th>Remarks</th>
-                        <th>Checked</th>
-                    </tr>
-                    @{
-                        int count = 0;
-                    }
-                    @for (int i = 0; i < Model.ItemTransactions.Count; i++)
-                    {
-                        count = i + 1;
-                        string cb = "cb" + i;
-                        <tr>
-                            <td>
-                                @count
-                                @Html.HiddenFor(model => model.ItemTransactions.ToList()[i].ID, new { htmlAttributes = new { @class = "form-control" }, })
-                            </td>
-                            <td>@Html.DisplayFor(model => model.ItemTransactions.ToList()[i].Item.ID)</td>
-                            <td>@Html.DisplayFor(model => model.ItemTransactions.ToList()[i].Item.Description)</td>
-                            <td>@Html.DisplayFor(model => model.ItemTransactions.ToList()[i].Item.UnitOfMeasure)</td>
-                            <td>@Html.DisplayFor(model => model.ItemTransactions.ToList()[i].HandOverQty)</td>
-                            <td>@Html.EditorFor(model => model.ItemTransactions.ToList()[i].TakeOverQty, new { htmlAttributes = new { @class = "form-control", max = Model.ItemTransactions.ToList()[i].HandOverQty, min = 0 } })</td>
-
-                            <td>@Html.EditorFor(model => model.ItemTransactions.ToList()[i].Reason, new { htmlAttributes = new { @class = "form-control" }, })</td>
-                            <td onchange="oncheck()">@Html.CheckBox("checkbox", false, new { @id = cb })</td>
-                        </tr>
-                    }
-
-                </table>
-
-                <div id="bottom-bar">
-                    <table id="table-bottom">
-                        <tr style="height:50px">
-                            <td>
-                                Verification Code: &nbsp;
-                            </td>
-                            <td>
-                                <input style="width:100px" name="otp" value="" type="text" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td><button id="submit-button" disabled style="width:100px; color:lightgrey" type="submit">Complete</button></td>
-                        </tr>
-                    </table>
-                </div>
-
-
-                <p hidden>@Html.HiddenFor(model => model.ID, new { htmlAttributes = new { @class = "form-control" }, })</p>
-            </div>
-
-                        }
+    }
+    <div id="bottom-bar">
+        <table id="table-bottom">
+            <tr style="height:50px">
+                <td>
+                    Verification Code: &nbsp;
+                </td>
+                <td>
+                    <input style="width:100px" id="otpEntered" value="" type="text" required />
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><button id="submit-button" disabled style="width:100px; color:lightgrey" type="submit" onclick="verify()">Complete</button></td>
+            </tr>
+        </table>
+    </div>
 </div>
+
+@using (Html.BeginForm("CompleteDisbursement", "Disbursement", FormMethod.Post,new { @id = "complete" }))
+{
+    @Html.AntiForgeryToken()
+    <input id="reply" name="reply" type="hidden" value="" />
+    <input name="id" type="hidden" value="@Model.ID" />
+}
+
+
 
 
 <script>
@@ -196,4 +226,32 @@
         button.style.color = "lightgrey";
         button.setAttribute("disabled", true);
     }
+
+    function verify() {
+        var otp = $("#otpEntered").val().toString();
+        var id = @Model.ID;
+
+        $.getJSON('@Url.Action("Verify")', { p : otp, d: id  }, function (response) {
+                if (response != null && !jQuery.isEmptyObject(response))
+                {
+                    if (response == "false") {
+                        alert("Invalid OTP! Please try again.");
+                    }
+                    else {
+                        buildReply();
+                        $("#complete").submit();
+                    }
+                };
+        }
+        );
+
+        function buildReply() {
+            var s = $('.text-box.single-line').serialize();
+            $("#reply").val(decodeURI(s));
+        }
+
+    }
+
+
+
 </script>

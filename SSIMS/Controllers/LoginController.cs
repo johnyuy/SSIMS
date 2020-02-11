@@ -48,8 +48,13 @@ namespace SSIMS.Controllers
                 Logger(userLogin.Username, true);
                 return RedirectToAction("Index", "Home");
             }
+            else
+            {
+                ViewBag.ErrorMsg = "Incorrect username or password";
+                return RedirectToAction("Authentication", userLogin);
+            }
                 
-            return RedirectToAction("Authentication", userLogin);
+           
         }
 
         private void updateAuthCookie(string username, string sessionid)

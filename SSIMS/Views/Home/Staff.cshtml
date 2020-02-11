@@ -1,0 +1,67 @@
+﻿@model IEnumerable<SSIMS.Models.RequisitionOrder>
+@{
+    ViewBag.Title = "Staff";
+    ViewBag.Header = "Staff Dashboard";
+    ViewBag.Section = "Dashboard";
+
+}
+
+<h2>My Current Requests</h2>
+@if (Model.Count() == 0)
+{
+    <p>No Request</p>
+}
+else
+{
+<table>
+    <tr>
+        <th>Requests ID</th>
+        <th>Date Submitted</th>
+        <th>Status Update</th>
+        <th>Status</th>
+
+    </tr>
+    @foreach (var ro in Model)
+    {
+
+        <tr>
+            <td>@Html.DisplayFor(model => ro.ID)</td>
+            <td>@Html.DisplayFor(model => ro.CreatedDate)</td>
+            <td>@Html.DisplayFor(model => ro.ResponseDate)</td>
+            <td>@Html.DisplayFor(model => ro.Status)</td>
+
+        </tr>
+    }
+</table>}
+<div>
+    <button onclick="window.location.href = '/Requisition/Create';">
+        New Request
+    </button>
+</div>
+
+<style>
+    div button {
+        float: right;
+        margin-left: -50%;
+        margin-top: 2em;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        text-align: left;
+        padding: 8px;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2
+    }
+
+    th {
+        color: black;
+    }
+
+</style>

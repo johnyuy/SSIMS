@@ -4,44 +4,83 @@
     ViewBag.Header = "Disbursement Details";
     ViewBag.Section = "Disbursements";
     Layout = "~/Views/Shared/_Layout.cshtml";
-
+    string fullid = Model.ID.ToString($"DL{0:100000}");
 }
+<style>
+    th, td {
+        text-align: center;
+    }
+    #info-table-container {
+        width: 100%;
+        height: 150px;
+    }
+    #list-title {
+        float: left;
+        margin: 20px 10px 0px 30px;
+        font-size: 50px;
+        color: #205050;
+    }
+
+    #info-table {
+        box-shadow: none;
+        float: left;
+        margin: 20px;
+        font-weight: bold;
+    }
+    #bottom-table{
+        float: left;
+        margin: 20px;
+        font-weight: bold;
+    }
+    button{
+        background:none;
+        border:lightgrey 1px solid;
+        color:grey;
+        margin:20px;
+    }
+    #full-container {
+        padding: 20px;
+        background: linear-gradient(to right, rgba(146, 167, 154, 0.20) 0%, rgba(115, 147, 147, 0.31) 100%);
+    }
+</style>
+<Button style="float:right" onclick="toPrint()"><i></i>Print</Button>
+<div id="full-container">
+
+    <div id="info-table-container">
+        <table id="info-table">
+            <tr>
+                <td style="text-align: left; width:150px">
+                    Disbursement ID:
+                </td>
+                <td style="text-align: left">
+                    &nbsp;&nbsp; @fullid
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left">
+                    Request Department :
+                </td>
+                <td style="text-align: left">
+                    &nbsp;&nbsp; @Model.Department.DeptName
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left">
+                    Delivered By :
+                </td>
+                <td style="width: 500px; text-align:left">
+                    &nbsp;&nbsp; @Html.DisplayFor(model => model.CreatedByStaff.Name)
+                </td>
+            </tr>
+        </table>
+
+    </div>
+    
 
 
-<div>
 
-    <hr />
-    <dl class="dl-horizontal">
-
-        <dt>
-            Disbursement ID
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ID)
-        </dd>
-
-        <dt>
-            Request Department
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Department.ID)
-        </dd>
-
-        <dt>
-            Delivered by
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CreatedByStaff.Name)
-        </dd>
-    </dl>
     <div class="table-responsive">
         <table class="table">
-            <tr style="border-top:hidden; border-left:hidden; border-right:hidden">
-                <td colspan="5" align="right"><button type="button">Print</button></td>
-            </tr>
             <tr>
                 <th>No.</th>
                 <th>Item Code</th>
@@ -63,101 +102,51 @@
                     <td>@Html.DisplayFor(model => transItem.TakeOverQty)</td>
                 </tr>
             }
-            @*<tr>
-                <td colspan="5" style="border-bottom:hidden"></td>
-            </tr>
-            <tr style="border-bottom:hidden">
-                <td>Status:</td>
-                <td>@Html.DisplayFor(model => model.Status)</td>
-            </tr>
-            <tr style="border-bottom:hidden">
-                <td>Signed by:</td>
-                <td>@Html.DisplayFor(model => model.RepliedByStaff.Name)</td>
-            </tr>
-            <tr>
-                <td>Date: </td>
-                <td>@Html.DisplayFor(model => model.ResponseDate)</td>
-            </tr>*@
 
         </table>
         <br />
-        <dl class="dl-horizontal">
+        <table id="bottom-table">
+            <tr>
+                <td style="text-align: left; width:100px">
+                    Status : 
+                </td>
+                <td style="text-align: left">
+                    &nbsp;&nbsp; @Html.DisplayFor(model => model.Status)
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left">
+                    Signed By : 
+                </td>
+                <td style="text-align: left">
+                    &nbsp;&nbsp; @Html.DisplayFor(model => model.RepliedByStaff.Name)
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left">
+                    Date : 
+                </td>
+                <td style="text-align: left">
+                    &nbsp;&nbsp; @Html.DisplayFor(model => model.ResponseDate)
+                </td>
+            </tr>
+        </table>
 
-            <dt>
-                Status
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Status)
-            </dd>
-
-            <dt>
-                Signed By
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.RepliedByStaff.Name)
-            </dd>
-
-            <dt>
-                Date
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.ResponseDate)
-            </dd>
-        </dl>
+          
     </div>
 
 
-@*
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CreatedDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CreatedDate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ResponseDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ResponseDate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-
-    </dl>
-    <table class="table">
-        <tr>
-            <th>Item Description</th>
-            <th>Unit</th>
-            <th>Qty Requested</th>
-            <th>Qty Issued</th>
-            <th>Reason</th>
-        </tr>
-        @foreach (var transItem in Model.ItemTransactions)
-        {
-            <tr>
-                <td>@Html.DisplayFor(model => transItem.Item.Description)</td>
-                <td>@Html.DisplayFor(model => transItem.Item.UnitOfMeasure)</td>
-                <td>@Html.DisplayFor(model => transItem.HandOverQty)</td>
-                <td>@Html.DisplayFor(model => transItem.TakeOverQty)</td>
-                <td>@Html.DisplayFor(model => transItem.Reason)</td>
-            </tr>
-        }
-    </table>*@
 </div>
+<br/>
 <p>
     @Html.ActionLink("Back to List", "Index")
 </p>
 
+
+<script>
+
+    function toPrint() {
+        window.open('/Disbursement/Print?id=@Model.ID'); 
+    }
+
+</script>

@@ -1,0 +1,59 @@
+﻿@model SSIMS.Models.Department
+@{
+    ViewBag.Title = "DepRep";
+    ViewBag.Header = "Dept Rep Dashboard";
+    ViewBag.Section = "Dashboard";
+
+}
+<h2>Your Department Upcoming Collection</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            Collection Point:
+        </th>
+        <td> @Html.DisplayFor(x => x.CollectionPoint.Location)</td>
+        <td rowspan="2">
+            @if (Model.CollectionPoint.ID == 1)
+            {
+                <img src=@Url.Content("~/Resources/Maps/SelectedStore.png") id="collectionmap" width=450 height=300 />
+            }
+            @if (Model.CollectionPoint.ID == 2)
+            {
+                <img src=@Url.Content("~/Resources/Maps/SelectedMgmt.png") id="collectionmap" width=450 height=300 />
+            }
+            @if (Model.CollectionPoint.ID == 3)
+            {
+                <img src=@Url.Content("~/Resources/Maps/SelectedMedi.png") id="collectionmap" width=450 height=300 />
+            }
+            @if (Model.CollectionPoint.ID == 4)
+            {
+                <img src=@Url.Content("~/Resources/Maps/SelectedENGG.png") id="collectionmap" width=450 height=300 />
+            }
+            @if (Model.CollectionPoint.ID == 5)
+            {
+                <img src=@Url.Content("~/Resources/Maps/SelectedScience.png") id="collectionmap" width=450 height=300 />
+            }
+            @if (Model.CollectionPoint.ID == 6)
+            {
+                <img src=@Url.Content("~/Resources/Maps/SelectedHosp.png") id="collectionmap" width=450 height=300 />
+            }
+        </td>
+    </tr>
+    <tr>
+        <th>
+            Collection Date:
+        </th>
+        <td> @Html.DisplayFor(x => x.CollectionPoint.Time)</td>
+    </tr>
+</table>
+
+<div>
+    <button onclick="window.location.href = '/Requisition/Index';">
+        View My Requests
+    </button>
+</div>
+
+
+
+
