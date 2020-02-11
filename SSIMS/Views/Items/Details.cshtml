@@ -36,6 +36,14 @@
             @Html.DisplayFor(model => model.UnitOfMeasure)
         </dd>
 
+        @*<dt>
+            @Html.DisplayNameFor(model => model.ImageURL)
+        </dt>*@
+
+        <dd>
+            <img src=@Url.Content(Model.ImageURL) style="width:280px;" />
+        </dd>
+
     </dl>
 </div>
 <p>

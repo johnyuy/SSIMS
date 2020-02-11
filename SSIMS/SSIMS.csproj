@@ -20,8 +20,10 @@
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
     <IISExpressSSLPort>44386</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
+    <IISExpressAnonymousAuthentication>
+    </IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>
+    </IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
@@ -297,6 +299,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AnalyticsController.cs" />
+    <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\DeliveryOrdersAPIController.cs" />
     <Compile Include="Controllers\DeliveryOrdersController.cs" />
     <Compile Include="Controllers\DepartmentsController.cs" />
@@ -559,6 +562,9 @@
     <Content Include="Views\Supplier\Delete.cshtml" />
     <Content Include="Views\Supplier\Details.cshtml" />
     <Content Include="Views\Analytics\Index.cshtml" />
+    <Content Include="Views\Dashboard\Staff.cshtml" />
+    <Content Include="Views\Dashboard\DepHead.cshtml" />
+    <Content Include="Views\Dashboard\DepRep.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
