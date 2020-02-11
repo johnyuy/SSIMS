@@ -107,6 +107,34 @@ namespace SSIMS.Service
             return false;
         }
 
+
+        public bool ProcessRejectedDisbursement(Staff staff, int DisbursementID)
+        {
+            UnitOfWork uow = new UnitOfWork();
+
+            DisbursementList dl = uow.DisbursementListRepository.Get(filter: x => x.ID == DisbursementID, includeProperties: "ItemTransactions.Item").FirstOrDefault();
+
+            if (dl == null) return false;
+            
+            AdjustmentVoucher adjustmentVoucher = new AdjustmentVoucher(dl, uow, staff);
+            if (adjustmentVoucher == null) return false;
+
+            if (uow.StockCardEntryRepository.ProcessAdjustmentVoucher(adjustmentVoucher))
+            {
+                uow.AdjustmentVoucherRepository.Insert(adjustmentVoucher);
+                uow.Save();
+                Debug.WriteLine("Adjustment Voucher inserted successfully into DB for rejected DL");
+                //Update the respective inventory item
+                foreach (DocumentItem di in adjustmentVoucher.DocumentItems)
+                {
+                    if (!UpdateInStoreQty(di.Item.ID))
+                        Debug.WriteLine("Update In Store Qty failed for" + di.Item.ID);
+                }
+                return true;
+            }
+            return false;
+        }
+
         public List<AdjustmentVoucherVM> GetAdjustmentVoucherVMList()
         {
             List<AdjustmentVoucher> adjustmentVouchers = uow.AdjustmentVoucherRepository.Get(includeProperties: "CreatedByStaff,DocumentItems.Item").ToList();
