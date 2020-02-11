@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "Details";
     ViewBag.Header = "Item Details";
-    ViewBag.Section="Items";
+     ViewBag.Section = "Catalogue";
 }
 
 @*<h2>Details</h2>*@
@@ -34,6 +34,14 @@
 
         <dd>
             @Html.DisplayFor(model => model.UnitOfMeasure)
+        </dd>
+
+        @*<dt>
+            @Html.DisplayNameFor(model => model.ImageURL)
+        </dt>*@
+
+        <dd>
+            <img src=@Url.Content(Model.ImageURL) style="width:280px;" />
         </dd>
 
     </dl>
