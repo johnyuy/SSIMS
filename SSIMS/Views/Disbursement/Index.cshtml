@@ -5,17 +5,19 @@
     ViewBag.Header = "Disbursements";
     ViewBag.Section = "Disbursements";
     Layout = "~/Views/Shared/_Layout.cshtml";
-
+    string status = ViewBag.DisbursementStatus ?? "";
 }
 <style>
-    th, td{
-        text-align:center;
+    th, td {
+        text-align: center;
     }
-    #top-bar{
-        width:100%;
-        height:50px;
+
+    #top-bar {
+        width: 100%;
+        height: 50px;
         margin: 5px 0px;
     }
+
         #top-bar button {
             float: left;
             margin-right: 50px;
@@ -74,17 +76,29 @@
                 <td>
                     @Html.ActionLink("Details", "Details", new { id = dl.ID })
                 </td>
-            </tr>
-        }
+                @if (Model.Count > 0 && status == "InProgress")
+                {
+                    <td>
+                        @Html.ActionLink("Return to Store", "Return", new { id = dl.ID, })
+                    </td>
+                }
 
+
+                }
+
+
+                }
+            </tr>
+
+        </table>
+    </div>
+
+    <br />
+    <table class="table">
+        <tr>
+            <td align="center">Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount</td>
+        </tr>
+        <tr>
+            <td align="center">@Html.PagedListPager(Model, page => Url.Action("NextPage", new { page }))</td>
+        </tr>
     </table>
-</div>
-<br />
-<table class="table">
-    <tr>
-        <td align="center">Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount</td>
-    </tr>
-    <tr>
-        <td align="center">@Html.PagedListPager(Model, page => Url.Action("NextPage", new { page }))</td>
-    </tr>
-</table>
