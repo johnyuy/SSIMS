@@ -100,7 +100,7 @@
     <div id="topnav" class="navbar navbar-inverse navbar-fixed-top">
         <img src=@Url.Content("~/Resources/LogicUIcon.png") id="logicuicon" />
         <div id="header"><h1>@ViewBag.Header</h1></div>
-        <div id="username"><b>@user.ToUpper()</b>&nbsp;&nbsp;&nbsp;@Html.ActionLink("Logout","Logout","Login",new { username = user },null)</div>
+        <div id="username"><b>@user.ToUpper()</b>&nbsp;&nbsp;&nbsp;@Html.ActionLink("Logout", "Logout", "Login", new { username = user }, null)</div>
     </div>
     <div class="sidebar">
         @{
@@ -150,9 +150,9 @@
             if (usergroup == "dept")
             {
                 if (ViewBag.Section == "Dashboard")
-                {<a class="active" href="~/dashboard/index"><i class=""></i> Dashboard</a>}
+                {<a class="active" href="~/Home/index"><i class=""></i> Dashboard</a>}
                 else
-                {<a href="~/dashboard/index"><i class=""></i> Dashboard</a>}
+                {<a href="~/Home/index"><i class=""></i> Dashboard</a>}
 
                 if (ViewBag.Section == "Catalogue")
                 {<a class="active" href="~/items/index"><i class=""></i> Catalogue</a>}
@@ -182,9 +182,9 @@
             else if (usergroup == "store")
             {
                 if (ViewBag.Section == "Dashboard")
-                {<a class="active" href="~/dashboard/index"><i class=""></i> Dashboard</a>}
+                {<a class="active" href="~/Home/index"><i class=""></i> Dashboard</a>}
                 else
-                {<a href="~/dashboard/index"><i class=""></i> Dashboard</a>}
+                {<a href="~/Home/index"><i class=""></i> Dashboard</a>}
 
                 if (ViewBag.Section == "Inventory")
                 {<a class="active" href="~/inventory/index"><i class=""></i> Inventory</a>}
@@ -227,6 +227,7 @@
     </div>
 
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </body>
