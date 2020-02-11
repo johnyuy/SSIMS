@@ -9,8 +9,8 @@ using SSIMS.Service;
 
 namespace SSIMS.Database
 {
-    //public class DatabaseInitializer<T> : DropCreateDatabaseAlways<DatabaseContext>
-    public class DatabaseInitializer<T> : CreateDatabaseIfNotExists<DatabaseContext>
+    public class DatabaseInitializer<T> : DropCreateDatabaseAlways<DatabaseContext>
+    //public class DatabaseInitializer<T> : CreateDatabaseIfNotExists<DatabaseContext>
 
     {
         static StaffRepository StaffRepository;
@@ -75,6 +75,7 @@ namespace SSIMS.Database
         static void InitDepartments(DatabaseContext context)
         {
             Debug.WriteLine("\tInitializing Departments");
+            //need a way to update the departments with the heads and reps
             List<Department> departments = new List<Department>
             {
                 new Department("ARCH", "Architecture","68901257","68921001", CollectionPointRepository.GetByID(1),null,null,null),
