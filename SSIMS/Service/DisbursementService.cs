@@ -15,6 +15,14 @@ namespace SSIMS.Service
     {
         static UnitOfWork unitOfWork = new UnitOfWork();
         ILoginService loginService = new LoginService();
+        static Random rnd = new Random();
+        NotificationService ns = new NotificationService();
+
+        public int GenerateOTP()
+        {
+            int otp = rnd.Next(1000, 9999);
+            return otp;
+        }
 
         //returns a list of TransactionIems from approved Request Orders of a given dept
         public List<TransactionItem> GenerateDeptRetrievalList(string deptID, bool toSave)
@@ -104,7 +112,6 @@ namespace SSIMS.Service
 
             return transItemList;
         }
-
 
 
         //generate the retrieval list item for the model view
@@ -258,9 +265,11 @@ namespace SSIMS.Service
 
         //Condensing all the retrieval lists from that dept that are InProgress (i.e. not disbursed yet) into a combined retrieval list with unique items
         //Changing the status of the retrieval list to Completed. 
-        public void InsertDisbursementList(string deptID)
+        public bool InsertDisbursementList(string deptID)
         {
-            var completedRetrievals = unitOfWork.RetrievalListRepository.Get(filter: x => x.Status == Models.Status.InProgress && x.Department.ID == deptID, includeProperties: "ItemTransactions.Item, Department").ToList();
+            UnitOfWork uow = new UnitOfWork();
+            bool isSuccessful = true;
+            var completedRetrievals = uow.RetrievalListRepository.Get(filter: x => x.Status == Models.Status.InProgress && x.Department.ID == deptID, includeProperties: "ItemTransactions.Item, Department").ToList();
 
             List<TransactionItem> combinedTransItemList = new List<TransactionItem>();
             //List<TransactionItem> tempTransItems = new List<TransactionItem>();
@@ -280,7 +289,7 @@ namespace SSIMS.Service
             List<TransactionItem> uniqueTransItemList = new List<TransactionItem>();
             foreach (string itemID in tempTransItems)
             {
-                TransactionItem i = new TransactionItem(itemID, unitOfWork);
+                TransactionItem i = new TransactionItem(itemID, uow);
                 uniqueTransItemList.Add(i);
             }
 
@@ -297,61 +306,55 @@ namespace SSIMS.Service
                 }
             }
 
-            Department dept = unitOfWork.DepartmentRepository.GetByID(deptID);
-            DisbursementList deptDL = new DisbursementList(uniqueTransItemList, dept);
-            Staff clerk = loginService.StaffFromSession;
-            deptDL.CreatedByStaff = clerk;
-            unitOfWork.DisbursementListRepository.Insert(deptDL);
-            unitOfWork.Save();
+            if(uniqueTransItemList == null || uniqueTransItemList.Count == 0)
+            {
+                return isSuccessful = false;
+            }
+            else
+            {
+                Department dept = uow.DepartmentRepository.GetByID(deptID);
+                DisbursementList deptDL = new DisbursementList(uniqueTransItemList, dept);
+                Staff clerk = loginService.StaffFromSession;
+                deptDL.CreatedByStaff = clerk;
+                uow.DisbursementListRepository.Insert(deptDL);
+                uow.Save();
+                bool isSent = sendOTPNotification(deptDL, uow);
+
+            }
+            return isSuccessful;
+
         } 
-            //foreach (RetrievalList rl in completedRetrievals)
-            //{
-            //    List<TransactionItem> transItemList = (List<TransactionItem>)rl.ItemTransactions;
-            //    if (combinedRetrievalList.Count == 0 && transItemList.Count > 0)
-            //    {
-            //        foreach (TransactionItem item in transItemList)
-            //        {
-            //            tempTransItems.Add(item);
-            //            Debug.WriteLine("HELLO!!! GenerateCombinedDeptRetrievalList temptransItems contains: " + tempTransItems.Count);
-            //        }
-            //    }
 
-            //    foreach (TransactionItem transItem in transItemList)
-            //    {
-            //        bool isExist = false;
-            //        TransactionItem temp;
-            //        int index = 0;
-            //        for (int i = 0; i < combinedRetrievalList.Count; i++)
-            //        {
-            //            temp = combinedRetrievalList[i];
-            //            if (temp.Item.ID.Equals(transItem.Item.ID))
-            //            {
-            //                isExist = true;
-            //                index = i;
-            //                break;
-            //            }
+        public bool sendOTPNotification(DisbursementList disbursementList, UnitOfWork uow)
+        {
+            bool isSent = true;
+            Staff deptRep = uow.StaffRepository.Get(filter: x => x.DepartmentID == disbursementList.Department.ID && x.StaffRole == "DeptRep", includeProperties:"Department.CollectionPoint").FirstOrDefault();
+            if(deptRep == null)
+            {
+                return isSent = false;
+            }
 
-            //        }
-            //        if (isExist)
-            //        {
-            //            combinedRetrievalList[index].HandOverQty += transItem.HandOverQty;
-            //            combinedRetrievalList[index].TakeOverQty += transItem.TakeOverQty;
-            //        }
-            //        else
-            //        {
-            //            combinedRetrievalList.Add(transItem);
-            //        }
-            //    }
-            //    //UpdateRetrievalListStatus(rl, 4); //Update status to completed
-            //}
-            //foreach (TransactionItem item in combinedRetrievalList)
-            //{
-            //    Debug.WriteLine("HELLO AGAIN! Combined Dept Retrieval List contains: " + item.Item.Description + " " + item.HandOverQty);
-            //}
-            //RetrievalList combinedDeptRetrievalList = new RetrievalList(combinedRetrievalList, unitOfWork.DepartmentRepository.GetByID(deptID));
-            //Debug.WriteLine("Combined Dept Retrieval List successfully created!!");
-            //return combinedDeptRetrievalList;
-        
+            string collectionTime = deptRep.Department.CollectionPoint.Time.ToString("hh:mm tt");
+            string RepEmail = "nataliehsm@gmail.com";
+            string subject = "Verification Code";
+            string msg = "Stationary Disbursement " + disbursementList.ID.ToString($"DL{ 0:1000000}") + " for " + disbursementList.Department.DeptName + " Department is ready for collection." +
+                "\nCollection Point: " + deptRep.Department.CollectionPoint.Location +
+                "\nTime: " + collectionTime +
+                "\nPlease provide OTP: " + disbursementList.OTP + " to our clerk during collection. \nThis is a System Generated Message, do not reply.";
+
+            ns.SendEmail(RepEmail, subject, msg);
+            return isSent; 
+        }
+
+        public bool VerifyOTP (string otp, string otpEntered)
+        {
+            bool isVerified = false;
+            if (otp.Equals(otpEntered))
+            {
+                isVerified = true;
+            }
+            return isVerified;
+        }
 
         public void InsertRetrievalList(List<RetrievalItemViewModel> rivmList)
         {

@@ -24,21 +24,35 @@
     }
 </script>
 <style>
-    #top-bar{
-        width:100%;
-        height:50px;
+    #top-bar {
+        width: 100%;
+        height: 50px;
         margin: 5px 0px;
     }
-    #top-bar button{
-        float:left;
-        margin-right:50px;
-        width:200px;
-        height:40px;
-        font-size: 15px;
-        font-weight:bold;
-        color:white;
-        background-color:#437373;
+
+   #top-bar button {
+       float: left;
+       margin-right: 50px;
+       width: 200px;
+       height: 40px;
+       font-size: 15px;
+       font-weight: bold;
+       color: white;
+       background-color: #437373;
+   }
+
+    .text-empty {
+        margin: 60px auto 10px auto;
+        width: 100%;
+        text-align: center;
+        font-size: 100px;
+        color: lightgray;
     }
+
+    .table-responsive{
+        min-height:700px;
+    }
+
 </style>
 <div id="top-bar">
     <div>
@@ -49,55 +63,55 @@
 {
     @Html.AntiForgeryToken()
 
-        <div class="table-responsive">
-            <form>
-                <table class="table" id="one" style="border-bottom: 1px solid; border-bottom-color: lightslategrey">
-                    <tr>
-                        <th>Item</th>
-                        <th>Dept</th>
-                        <th>HandOver Qty</th>
-                        <th>TakeOver Qty</th>
-                        <th>Reason</th>
-                    </tr>
-                    @for (int i = 0; i < Model.ROList.Count; i++)
-                    {
-                        @Html.HiddenFor(model => model.ROList[i].ID, new { htmlAttributes = new { @class = "form-control" }, })
-                    }
+<div class="table-responsive">
 
-                    @for (int i = 0; i < Model.rivmlist.Count; i++)
-                    //@for (int i = 0; i < vm.Count; i++)
-                    {
-                        //RetrievalItemViewModel Retrievalitem = [i];
-                        string index = "item" + (i + 1).ToString();
-                        int rowNo = Model.rivmlist[i].deptRetrievalItems.Count + 2;
-                        List<string> indexx = new List<string>();
-                        <tr>
-                            <td rowspan=@rowNo>
-                                <span onclick=hide("@index")>+</span>
-                                @Html.DisplayFor(model => model.rivmlist[i].item.Description)
-                                @Html.HiddenFor(model => model.rivmlist[i].item.ID, new { htmlAttributes = new { @class = "form-control" }, })
-                            </td>
-                        </tr>
-                        for (int j = 0; j < Model.rivmlist[i].deptRetrievalItems.Count; j++)
-                        {
-                            //DeptRetrievalItemViewModel drivm = Retrievalitem.deptRetrievalItems[j];
-                            string newindex = index + j;
-                            indexx.Add(newindex);
-                            <tr id="@newindex">
-                                <td>
-                                    @Html.DisplayFor(model => model.rivmlist[i].deptRetrievalItems[j].deptID)
-                                    @Html.HiddenFor(model => model.rivmlist[i].deptRetrievalItems[j].deptID, new { htmlAttributes = new { @class = "form-control" }, })
-                                    @Html.HiddenFor(model => model.rivmlist[i].deptRetrievalItems[j].transactionItem.Item.ID, new { htmlAttributes = new { @class = "form-control" }, })
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(model => model.rivmlist[i].deptRetrievalItems[j].transactionItem.HandOverQty)
-                                @Html.HiddenFor(model => model.rivmlist[i].deptRetrievalItems[j].transactionItem.HandOverQty, new { htmlAttributes = new { @class = "form-control" }, })
-                            </td>
-                            <td>
-                                @Html.EditorFor(model => model.rivmlist[i].deptRetrievalItems[j].transactionItem.TakeOverQty, new { htmlAttributes = new { @class = "form-control", max = @Model.rivmlist[i].deptRetrievalItems[j].transactionItem.HandOverQty }, min = 0 })
-                        </td>
-                        <td>
-                            @Html.EditorFor(model => model.rivmlist[i].deptRetrievalItems[j].transactionItem.Reason, new { htmlAttributes = new { @class = "form-control" }, })
+    <table class="table" id="one" style="border-bottom: 1px solid; border-bottom-color: lightslategrey">
+        <tr>
+            <th>Item</th>
+            <th>Dept</th>
+            <th>HandOver Qty</th>
+            <th>TakeOver Qty</th>
+            <th>Reason</th>
+        </tr>
+        @for (int i = 0; i < Model.ROList.Count; i++)
+        {
+            @Html.HiddenFor(model => model.ROList[i].ID, new { htmlAttributes = new { @class = "form-control" }, })
+        }
+
+        @for (int i = 0; i < Model.rivmlist.Count; i++)
+        //@for (int i = 0; i < vm.Count; i++)
+        {
+            //RetrievalItemViewModel Retrievalitem = [i];
+            string index = "item" + (i + 1).ToString();
+            int rowNo = Model.rivmlist[i].deptRetrievalItems.Count + 2;
+            List<string> indexx = new List<string>();
+            <tr>
+                <td rowspan=@rowNo>
+                    <span onclick=hide("@index")>+</span>
+                    @Html.DisplayFor(model => model.rivmlist[i].item.Description)
+                    @Html.HiddenFor(model => model.rivmlist[i].item.ID, new { htmlAttributes = new { @class = "form-control" }, })
+                </td>
+            </tr>
+            for (int j = 0; j < Model.rivmlist[i].deptRetrievalItems.Count; j++)
+            {
+                //DeptRetrievalItemViewModel drivm = Retrievalitem.deptRetrievalItems[j];
+                string newindex = index + j;
+                indexx.Add(newindex);
+                <tr id="@newindex">
+                    <td>
+                        @Html.DisplayFor(model => model.rivmlist[i].deptRetrievalItems[j].deptID)
+                        @Html.HiddenFor(model => model.rivmlist[i].deptRetrievalItems[j].deptID, new { htmlAttributes = new { @class = "form-control" }, })
+                        @Html.HiddenFor(model => model.rivmlist[i].deptRetrievalItems[j].transactionItem.Item.ID, new { htmlAttributes = new { @class = "form-control" }, })
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.rivmlist[i].deptRetrievalItems[j].transactionItem.HandOverQty)
+                        @Html.HiddenFor(model => model.rivmlist[i].deptRetrievalItems[j].transactionItem.HandOverQty, new { htmlAttributes = new { @class = "form-control" }, })
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.rivmlist[i].deptRetrievalItems[j].transactionItem.TakeOverQty, new { htmlAttributes = new { @class = "form-control", max = @Model.rivmlist[i].deptRetrievalItems[j].transactionItem.HandOverQty }, min = 0 })
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.rivmlist[i].deptRetrievalItems[j].transactionItem.Reason, new { htmlAttributes = new { @class = "form-control" }, })
                     </td>
                 </tr>
             }
@@ -107,16 +121,25 @@
                 <td>
                     <strong>
                         @Html.EditorFor(model => model.rivmlist[i].transactionItem.TakeOverQty, new { htmlAttributes = new { @class = "form-control" }, max = @Model.rivmlist[i].transactionItem.HandOverQty })
-                </strong>
-            </td>
-        </tr>
+                    </strong>
+                </td>
+            </tr>
 
-    }
-                    <tr>
-                        <td colspan="5" align="right"><button type="submit" value="Submit">Submit</button></td>
-                    </tr>
-                </table>
-
-            </form>
+        }
+    </table>
+    @if (Model.rivmlist.Count() == 0)
+    {
+        <div style="width:100%;height:50px">
+            <p class="text-empty">Empty</p>
         </div>
+    }
+    else
+    {
+        <div>
+            <button type="submit" value="Submit">Submit</button>
+        </div>
+    }
+
+
+</div>
 }
