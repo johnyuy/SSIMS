@@ -188,7 +188,7 @@ namespace SSIMS.Service
                 return true;
             return false;
         }
-        //not in interface yet
+
         public string UserDepartment
         {
             get

@@ -16,31 +16,30 @@
     string selected = ViewBag.SelectedRep;
 }
 
-    <script>
+<script>
     function update() {
-        var dr = document.getElementById("deptrep").value;
-        alert("Department Rep Updated!");
-        post("/departments/updatedeptrep", { "id": dr });
+        var dr = $("#deptrep").val();
+        $("RepForm").submit();
     }
 
-    function post(path, params, method='post') {
-      const form = document.createElement('form');
-      form.method = method;
-      form.action = path;
+    function post(path, params, method = 'post') {
+        const form = document.createElement('form');
+        form.method = method;
+        form.action = path;
 
-      for (const key in params) {
-        if (params.hasOwnProperty(key)) {
-          const hiddenField = document.createElement('input');
-          hiddenField.type = 'hidden';
-          hiddenField.name = key;
-          hiddenField.value = params[key];
-          form.appendChild(hiddenField);
+        for (const key in params) {
+            if (params.hasOwnProperty(key)) {
+                const hiddenField = document.createElement('input');
+                hiddenField.type = 'hidden';
+                hiddenField.name = key;
+                hiddenField.value = params[key];
+                form.appendChild(hiddenField);
+            }
         }
-      }
-      document.body.appendChild(form);
-      form.submit();
+        document.body.appendChild(form);
+        form.submit();
     }
-    </script>
+</script>
 
 
 @if (!isCurrent)
@@ -95,7 +94,7 @@
         </div>
 
     }
-    
+
 }
 else
 {
@@ -111,9 +110,9 @@ else
                 @using (Html.BeginForm("CancelAuthorization", "Departments", FormMethod.Post))
                 {
                     @Html.AntiForgeryToken()
-                <div>
-                    <input type="submit" value="Cancel" class="btn btn-default" />
-                </div>
+                    <div>
+                        <input type="submit" value="Cancel" class="btn btn-default" />
+                    </div>
                 }
             </td>
         </tr>
@@ -143,7 +142,6 @@ else
 }
 else
 {
-    <p>AUTH HISTORY IS HERE</p>
     <table>
         <tr>
             <th>
@@ -156,43 +154,55 @@ else
                 @Html.DisplayNameFor(Model => Model[0].EndDate)
             </th>
         </tr>
-        @for(int i = 0; i< Model.Count(); i++)
+        @for (int i = 0; i < Model.Count(); i++)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(Model => Model[i].StaffName)
-            </td>
-            <td>
-                @Html.DisplayFor(Model => Model[i].StartDate)
-            </td>
-            <td>
-                @Html.DisplayFor(Model => Model[i].EndDate)
-            </td>
-        </tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(Model => Model[i].StaffName)
+                </td>
+                <td>
+                    @Html.DisplayFor(Model => Model[i].StartDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(Model => Model[i].EndDate)
+                </td>
+            </tr>
         }
     </table>
 
 }
 
-<table>
-    <tr>
-        <th>Assigned Department Rep</th>
-        <td>
-            <select id="deptrep" onchange="update()">
-                <option selected value=@department.DeptRep.ID>@selected</option>
-                @foreach (Staff dr in staffonlylist)
-                {
-                    <option value=@dr.ID>@dr.Name</option>
-                }
-            </select>
-        </td>
-    </tr>
-</table>
+
+@using (Html.BeginForm("UpdateDeptRep", "Departments", FormMethod.Post, new {@id="RepForm" }))
+{
+    @Html.AntiForgeryToken()
+    <table>
+        <tr>
+            <th>Assigned Department Rep</th>
+            <td onchange="update()">
+                <select id="deptrep" name="id" >
+                    <option selected value=@department.DeptRep.ID>@selected</option>
+                    @foreach (Staff dr in staffonlylist)
+                    {
+                        <option value=@dr.ID>@dr.Name</option>
+                    }
+                </select>
+            </td>
+        </tr>
+    </table>
+    <button type="submit">Submit</button>
+}
 
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+
+@if (Session["role"].ToString() == "admin")
+{
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+}
+
+
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

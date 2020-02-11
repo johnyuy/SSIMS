@@ -16,19 +16,17 @@ namespace SSIMS.Controllers
     public class HomeController : Controller
     {
         ILoginService loginService = new LoginService();
-        [AuthorizationFilter]
+        //[AuthorizationFilter]
         public ActionResult Index()
         {
             Staff user = loginService.StaffFromSession;
             Debug.WriteLine("name of staff loggin in = " + user.Name);
             Debug.WriteLine("role of staff loggin in = " + user.StaffRole);
-            string dept = user.Department == null ? "no dept" : user.Department.DeptName;
-            Debug.WriteLine("dept of staff loggin in = " + dept);
+            Debug.WriteLine("dept of staff loggin in = " + user.DepartmentID);
             Debug.WriteLine("actual authorization role = " + Session["role"].ToString());
-
             RetrievalList RL = new RetrievalList(loginService.StaffFromSession, null);
-
-
+            
+            
             if (LoginService.IsAuthorizedRoles("staff"))
                 return RedirectToAction("Staff", "Home");
             if (LoginService.IsAuthorizedRoles("head"))

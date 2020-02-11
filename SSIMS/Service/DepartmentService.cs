@@ -27,7 +27,7 @@ namespace SSIMS.Service
 
         public bool IsActiveAuthExist(string deptID, out DeptHeadAuthorization activedept, UnitOfWork uow)
         {
-            activedept = uow.DeptHeadAuthorizationRepository.Get(filter: x => x.EndDate.CompareTo(DateTime.Now)==1 && x.DepartmentID==deptID).FirstOrDefault();
+            activedept = uow.DeptHeadAuthorizationRepository.Get(filter: x => x.EndDate.CompareTo(DateTime.Now)==1 && x.DepartmentID==deptID, includeProperties:"Staff").FirstOrDefault();
             if (activedept == null)
                 return false;
             else
