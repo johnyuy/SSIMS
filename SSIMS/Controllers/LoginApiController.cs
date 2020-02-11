@@ -31,7 +31,6 @@ namespace SSIMS.Controllers
                 account.Password = "";
                 return account;
             }
-
             return null;
         }
 
