@@ -9,27 +9,24 @@
 
 
 
-@*<script>
-        function search() {
-
-            var searchstr = document.getElementById('searchString').value;
-            post('/Requisition/Index', { 'searchString': searchstr });
-
-        }
-    </script>
-
-    <div style="float:right">
-        @Html.TextBox("searchString")
-        <input type="submit" value="search" onclick="search()" />
-    </div>*@
-
-<p style="margin:10px"></p>
-<p>
-    @Html.ActionLink("Create new requisition", "Create")
-</p>
 
 
-<p style="margin:30px">    </p>
+@*<p style="margin:10px"></p>*@
+
+
+<div>
+    <button onclick="window.location.href = '/Requisition/Create';">
+        Create New Request
+    </button>
+</div>
+
+<p style="margin:80px">    </p>
+
+@if (Model.Count() == 0)
+{
+    <h4>No requests</h4>
+}
+else {
 <table class="table">
     <tr>
 
@@ -38,7 +35,7 @@
         </th>
 
         <th>
-            @*Create Date*@
+           
             @Html.ActionLink("Created Date", "Index", new { sortOrder = ViewBag.CreDates })
         </th>
 
@@ -47,7 +44,7 @@
         </th>
 
         <th>
-            @*Response Date*@
+           
             @Html.ActionLink("Response Date", "Index", new { sortOrder = ViewBag.ResDates })
         </th>
 
@@ -82,11 +79,21 @@
 
             </td>
         </tr>
-    }
+}
 
 </table>
+}
 
 <br />
 Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
 @Html.PagedListPager(Model, page => Url.Action("Index",new { page,sortOrder = ViewBag.CurrentSort }))
+
+
+<style>
+    div button {
+        float: left;
+        margin-right: -50%;
+        margin-top: 2em;
+    }
+</style>

@@ -1,31 +1,72 @@
 ﻿@model SSIMS.ViewModels.UserLogin
 @{
     ViewBag.Title = "Login";
+    var errorMsg = ViewBag.ErrorMsg;
     Layout = "~/Views/Shared/_Login_Layout.cshtml";
 }
 @using (Html.BeginForm("Authenticate", "Login", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
-    <table>
+    <table class="align-mid"> 
 
         <tr>
-            <th align="center">@Html.LabelFor(x => x.Username)  </th>
-            <td>@Html.TextBoxFor(x => x.Username, new { placeholder = " username" })</td>
-            <td align="center">@Html.ValidationMessageFor(x => x.Username)</td>
+            <th class="column arial">@Html.LabelFor(x => x.Username)  </th>
+            <td class="ipt">@Html.TextBoxFor(x => x.Username, new { placeholder = " username" })</td>
+            <td class="err">@Html.ValidationMessageFor(x => x.Username)</td>
         </tr>
 
         <tr>
-            <td align="center">@Html.LabelFor(x => x.Password)  </td>
-            <td>@Html.PasswordFor(x => x.Password, new { placeholder = " password" })</td>
-            <td align="center">@Html.ValidationMessageFor(x => x.Password)</td>
+            <td class="column arial">@Html.LabelFor(x => x.Password)  </td>
+            <td class="ipt">@Html.PasswordFor(x => x.Password, new { placeholder = " password" })</td>
+            <td class="err">@Html.ValidationMessageFor(x => x.Password)</td>
         </tr>
 
         <tr>
             <td colspan="2" align="right"><input type="submit" value="Login" /></td>
-            <td><td>
+            <td>
+            <td>
         </tr>
-        
-    </table>
 
+    </table>
+    <div id="error">@errorMsg</div>
 }
 
+
+
+<style>
+  
+    table {
+        height: 120px;
+    }
+     .align-mid {
+            margin: 0px auto;
+            width: 700px;
+        }
+    .column {
+        text-align: right;
+        width: 50px;
+    }
+
+    .field-validation-error, #error {
+        color: red;
+        font-weight: bold;
+        font-size: 11px;
+    }
+
+    td, tr {
+        padding: 2px;
+        height: 34px;
+    }
+
+    .ipt {
+        width: 120px;
+    }
+
+    #error {
+        font-size: 10px;
+        color: red;
+        position: relative;
+        margin: 0 auto;
+        width: 100px;
+    }
+</style>
