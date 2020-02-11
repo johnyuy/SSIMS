@@ -298,9 +298,11 @@
     <Compile Include="Controllers\AnalyticsController.cs" />
     <Compile Include="Controllers\DeliveryOrdersAPIController.cs" />
     <Compile Include="Controllers\DeliveryOrdersController.cs" />
+    <Compile Include="Controllers\DepartmentAPIController.cs" />
     <Compile Include="Controllers\DepartmentsController.cs" />
     <Compile Include="Controllers\DisburesmentsAPIController.cs" />
     <Compile Include="Controllers\DisbursementController.cs" />
+    <Compile Include="Controllers\DisbursementsLogAPIController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InventoryController.cs" />
     <Compile Include="Controllers\ItemsAPIController.cs" />
@@ -309,7 +311,9 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\PurchaseItemsController.cs" />
+    <Compile Include="Controllers\PurchaseOrdersAPIController.cs" />
     <Compile Include="Controllers\PurchaseOrdersController.cs" />
+    <Compile Include="Controllers\RequisitionAPIController.cs" />
     <Compile Include="Controllers\RequisitionController.cs" />
     <Compile Include="Controllers\RetrievalController.cs" />
     <Compile Include="Controllers\StaffsController.cs" />
@@ -386,7 +390,14 @@
     <Compile Include="ViewModels\AdjustmentVoucherVM.cs" />
     <Compile Include="ViewModels\AnalyticsListViewModel.cs" />
     <Compile Include="ViewModels\ApiDisbursementListListView.cs" />
+    <Compile Include="ViewModels\ApiDisbursementListLogView.cs" />
     <Compile Include="ViewModels\ApiDisbursementListView.cs" />
+    <Compile Include="ViewModels\ApiDocumentItem.cs" />
+    <Compile Include="ViewModels\ApiPurchaseItemView.cs" />
+    <Compile Include="ViewModels\ApiPurchaseOrderDetails.cs" />
+    <Compile Include="ViewModels\ApiPurchaseOrdersListView.cs" />
+    <Compile Include="ViewModels\ApiRequisitionDetailsView.cs" />
+    <Compile Include="ViewModels\ApiRequisitionListView.cs" />
     <Compile Include="ViewModels\ApiTransactionItemView.cs" />
     <Compile Include="ViewModels\DeliveryOrderVM.cs" />
     <Compile Include="ViewModels\DeptDisbursementViewModel.cs" />

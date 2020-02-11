@@ -27,10 +27,12 @@ namespace SSIMS.Controllers
             }
             else
             {
-                disbursements = uow.DisbursementListRepository.Get(filter: x=> x.Status.ToString() == "Pending" && x.Department.CollectionPoint.Location == q, includeProperties: "Department").ToList();
+                disbursements = uow.DisbursementListRepository.Get(filter: x => x.Status.ToString() == "Pending" && x.Department.CollectionPoint.Location == q, includeProperties: "Department").ToList();
+
             }
 
-            foreach(DisbursementList dl in disbursements)
+
+            foreach (DisbursementList dl in disbursements)
             {
                 apiDisburementList.Add(new ApiDisbursementListListView(dl, uow));
             }
@@ -45,6 +47,30 @@ namespace SSIMS.Controllers
             DisbursementList dl = uow.DisbursementListRepository.Get(filter: x => x.ID == id, includeProperties: "Department, CreatedByStaff, RepliedByStaff").FirstOrDefault();
             ApiDisbursementListView apiDisbursementListView = new ApiDisbursementListView(dl);
             return apiDisbursementListView;
+        }
+
+        [HttpPost]
+        public bool CompleteDisbursement(ApiDisbursementListView apiDisbursementListView)
+        {
+            bool saved = false;
+
+            // validation of model etc
+
+            foreach(ApiTransactionItemView ati in apiDisbursementListView.transactionItemViewList)
+            {
+                TransactionItem ti = uow.TransactionItemRepository.GetByID(Guid.Parse(ati.ID));
+                if(ti == null)
+                {
+                    return saved;
+                }
+                ti.TakeOverQty = ati.TakeOverQty;
+                uow.TransactionItemRepository.Update(ti);
+            }
+            DisbursementList disbursementList = uow.DisbursementListRepository.GetByID(int.Parse(apiDisbursementListView.ID));
+            disbursementList.CompletedWithDate();
+            uow.Save();
+            saved = true;
+            return saved;
         }
 
     }
