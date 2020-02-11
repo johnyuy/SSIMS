@@ -15,15 +15,16 @@ using SSIMS.ViewModels;
 using SSIMS.Filters;
 using PagedList;
 using Rotativa;
+using System.Diagnostics;
 
 namespace SSIMS.Controllers
 {
-    //[AuthenticationFilter]
-   //[AuthorizationFilter]
+    [AuthenticationFilter]
+    [AuthorizationFilter]
     public class DisbursementController : Controller
     {
-        
 
+        
         private DatabaseContext db = new DatabaseContext();
         private UnitOfWork unitOfWork = new UnitOfWork();
         private DisbursementService ds = new DisbursementService();
@@ -62,16 +63,24 @@ namespace SSIMS.Controllers
 
         }
 
+        //[AllowAnonymous]
         public ActionResult Print(int? id)
         {
             UnitOfWork uow = new UnitOfWork();
+
+            DisbursementList disbursementList = uow.DisbursementListRepository.Get(filter: x => x.ID == id.Value, includeProperties: "CreatedByStaff, ItemTransactions.Item, Department.CollectionPoint").FirstOrDefault();
+
             
-            DisbursementList disbursementList = uow.DisbursementListRepository.Get(filter: x => x.ID == id, includeProperties: "CreatedByStaff, ItemTransactions.Item, Department.CollectionPoint").FirstOrDefault();
-            //DisbursementList disbursementList = unitOfWork.DisbursementListRepository.GetByID(id);
-            var pdfResult = new ActionAsPdf("Details", new { id = id });
-       
-           return pdfResult; 
+            var fff = new PartialViewAsPdf
+            {
+                ViewName = "Details",
+                Model = disbursementList
+            };
+
+            return fff; 
         }
+
+        
 
         [HttpGet]
         public ActionResult Disbursement(int? id)
