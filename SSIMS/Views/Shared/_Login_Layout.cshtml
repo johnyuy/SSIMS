@@ -8,11 +8,16 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
+    <link href="https://fonts.googleapis.com/css?family=Blinker:300&display=swap" rel="stylesheet">
     <title>Logic Stationery</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jqueryval")
     <style>
+        * {
+            font-family: 'Blinker', sans-serif;
+            font-size:medium;
+        }
         #topnav {
             height: 80px;
             background: linear-gradient(to right, #1a4a4a 0%, #ccffff 119%);
@@ -36,13 +41,13 @@
             position: relative;
             left: 150px;
         }
+
         .body-content {
-            width:700px;
+            width: 700px;
             margin: 100px auto;
-            position:relative;
-            left:100px;
+            position: relative;
+            left: 100px;
         }
-       
     </style>
 </head>
 <body>

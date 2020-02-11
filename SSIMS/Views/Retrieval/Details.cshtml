@@ -7,10 +7,27 @@
         Layout = "~/Views/Shared/_Layout.cshtml";
 
 }
+<style>
+    #top-bar button{
+        float:left;
+        margin-right:50px;
+        width:200px;
+        height:40px;
+        font-size: 15px;
+        font-weight:bold;
+        color:white;
+        background-color:#437373;
+    }
+    #top-bar{
+        width:100%;
+        height:50px;
+        margin: 5px 0px;
+    }
+</style>
 
     <div id="top-bar">
         <div>
-            <button onclick="window.location.href = '/Retrieval/Current';">Back</button>
+            <button onclick="window.location.href = '/Retrieval/Index';">Back</button>
         </div>
         <div style="float:right">
             @Html.ActionLink("Print", "Print", new { id = Model.ID })

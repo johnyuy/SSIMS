@@ -18,7 +18,7 @@ namespace SSIMS.Service
         static Random rnd = new Random();
         NotificationService ns = new NotificationService();
 
-        public int GenerateOTP()
+        public static int GenerateOTP()
         {
             int otp = rnd.Next(1000, 9999);
             return otp;
@@ -318,14 +318,14 @@ namespace SSIMS.Service
                 deptDL.CreatedByStaff = clerk;
                 uow.DisbursementListRepository.Insert(deptDL);
                 uow.Save();
-                bool isSent = sendOTPNotification(deptDL, uow);
+                bool isSent = SendOTPNotification(deptDL, uow);
 
             }
             return isSuccessful;
 
         } 
 
-        public bool sendOTPNotification(DisbursementList disbursementList, UnitOfWork uow)
+        public bool SendOTPNotification(DisbursementList disbursementList, UnitOfWork uow)
         {
             bool isSent = true;
             Staff deptRep = uow.StaffRepository.Get(filter: x => x.DepartmentID == disbursementList.Department.ID && x.StaffRole == "DeptRep", includeProperties:"Department.CollectionPoint").FirstOrDefault();
@@ -346,14 +346,12 @@ namespace SSIMS.Service
             return isSent; 
         }
 
-        public bool VerifyOTP (string otp, string otpEntered)
+        public bool VerifyOTP (int DisbursementID, string otpEntered, UnitOfWork uow)
         {
-            bool isVerified = false;
-            if (otp.Equals(otpEntered))
-            {
-                isVerified = true;
-            }
-            return isVerified;
+            DisbursementList dl = uow.DisbursementListRepository.GetByID(DisbursementID);
+            if (dl == null) return false;
+            if (dl.OTP.ToString().Equals(otpEntered)) return true;
+            return false;
         }
 
         public void InsertRetrievalList(List<RetrievalItemViewModel> rivmList)
