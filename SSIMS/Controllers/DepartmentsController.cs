@@ -73,24 +73,25 @@ namespace SSIMS.Controllers
                 return HttpNotFound();
             }
             ViewBag.Department = department;
-            Session["CurrentDepartmentID"] = department.ID;
+            //Session["CurrentDepartmentID"] = department.ID;
             return View();
         }
 
         [HttpPost]
         public ActionResult UpdateCollectionPoint(string id)
         {
+            UnitOfWork uow = new UnitOfWork();
             if (!LoginService.IsAuthorizedRoles("head","rep")) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            string deptId = Session["CurrentDepartmentID"].ToString();
-            Department department = unitOfWork.DepartmentRepository.GetByID(deptId);
-            CollectionPoint collectionPoint = unitOfWork.CollectionPointRepository.GetByID(int.Parse(id));
+            string deptId = loginService.StaffFromSession.DepartmentID;
+            Department department = uow.DepartmentRepository.GetByID(deptId);
+            CollectionPoint collectionPoint = uow.CollectionPointRepository.GetByID(int.Parse(id));
             if (collectionPoint != null) {
                 department.CollectionPoint = collectionPoint;
-                unitOfWork.DepartmentRepository.Update(department);
-                unitOfWork.Save();
-                Debug.WriteLine("Collection point for " + department.DeptName + " update to " + collectionPoint.Location);
+                uow.DepartmentRepository.Update(department);
+                uow.Save();
+                Debug.WriteLine("Collection point for " + department.DeptName + " updated to " + collectionPoint.Location);
             }
-            return RedirectToAction("Details", new { id = deptId });
+            return RedirectToAction("Dashboard", "Home");
         }
 
        
@@ -195,7 +196,14 @@ namespace SSIMS.Controllers
                 Debug.WriteLine(Server.UrlDecode(StaffName) + " " + StartDate + " " + EndDate);
                 string name = Server.UrlDecode(StaffName);
                 if(!departmentService.SubmitNewAuth(name, StartDate, EndDate, deptID))
+                {
                     TempData["delegateError"] = "Please try again";
+                }
+                else
+                {
+                    if(!loginService.StaffToAuthorizedHead(name,true))
+                        TempData["delegateError"] = "Failed to authorize!";
+                }
                 return RedirectToAction("DelegateAuthority");
             }
             return RedirectToAction("Details", new { id = deptID});
@@ -209,7 +217,10 @@ namespace SSIMS.Controllers
             if (!LoginService.IsAuthorizedRoles("head")) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             string deptID = loginService.StaffFromSession.DepartmentID;
             if (departmentService.CancelAuth(deptID))
+            {
                 Debug.WriteLine("Auth for" + deptID + "canceled");
+            }
+                
 
             return RedirectToAction("DelegateAuthority");
         }
@@ -227,16 +238,20 @@ namespace SSIMS.Controllers
             Staff NewRep = uow.StaffRepository.GetByID(id);
             NewRep.StaffRole = "DeptRep";
             uow.StaffRepository.Update(NewRep);
+            loginService.UpdateDeptAccessByRole(NewRep.Name, uow);
             Debug.WriteLine("Updating new department rep to " + NewRep.Name);
 
             Staff OldRep = department.DeptRep;
             OldRep.StaffRole = "Staff";
             uow.StaffRepository.Update(OldRep);
+            loginService.UpdateDeptAccessByRole(OldRep.Name, uow);
             Debug.WriteLine("Removed old department rep " + OldRep.Name);
 
             department.DeptRep = NewRep;
             uow.DepartmentRepository.Update(department);
             Debug.WriteLine("Updated department " + department.ID);
+
+            uow.Save();
 
             return RedirectToAction("DelegateAuthority", new { id = deptId });
         }

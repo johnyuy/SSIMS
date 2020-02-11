@@ -57,7 +57,8 @@ namespace SSIMS.Controllers
                 Debug.Write(dep.CollectionPoint.Location);
                 Debug.Write(dep.CollectionPoint.Time);
                 //Department dept = unitofwork.DepartmentRepository.Get(filter: x => x.DeptRep.ID == staff.ID,includeProperties:"Staff").First();
-
+                ViewBag.SelectedPoint = dep.CollectionPoint.Location;
+                ViewBag.OtherPoints = unitofwork.CollectionPointRepository.Get(filter: x => x.Location != dep.CollectionPoint.Location);
                 return View("DepRep",dep);
             }
             else if (LoginService.IsAuthorizedRoles("supervisor", "manager"))
