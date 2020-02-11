@@ -1,9 +1,33 @@
-﻿@model IEnumerable<SSIMS.Models.InventoryItem>
+﻿@model SSIMS.ViewModels.DashboardVM
+
 @{
     ViewBag.Title = "Clerk";
     ViewBag.Header = "Store Dashboard";
     ViewBag.Section = "Dashboard";
+    
 }
+
+<h3>Upcoming Disbursement</h3>
+<table class="table-bordered">
+    <tr>
+        <td>Location</td>
+        <td>Time</td>
+        <td>Department</td>
+    </tr>
+    @foreach (var dis in Model.disbursements)
+    {
+<tr>
+    <td>@Html.DisplayFor(modelItem => dis.Department.CollectionPoint.Location)</td>
+    <td>@Html.DisplayFor(modelItem => dis.Department.CollectionPoint.Time)</td>
+    <td>@Html.DisplayFor(modelItem => dis.Department.ID)</td>
+</tr>
+    }
+
+</table>
+<button onclick="window.location.href = '/Retrieval/Current';">Retrieval</button>
+<button onclick="window.location.href = '/Disbursement/Current';">Disbursement</button>
+
+
 
 
 <h3>Low Stock Inventory Items(Top3) <button onclick="window.location.href = '/Inventory/Index';">View All</button></h3>
@@ -16,7 +40,7 @@
 
         <td>Details</td>
     </tr>
-    @foreach (var it in Model)
+    @foreach (var it in Model.inventoryItems)
     {
         <tr>
             <td>@Html.DisplayFor(modelItem => it.Item.ID)</td>
@@ -29,3 +53,5 @@
     }
 
 </table>
+
+<button onclick="window.location.href = '/purchaseorders/Create';">Purchase Order</button>

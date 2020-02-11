@@ -393,6 +393,7 @@
     <Compile Include="ViewModels\ApiDisbursementListListView.cs" />
     <Compile Include="ViewModels\ApiDisbursementListView.cs" />
     <Compile Include="ViewModels\ApiTransactionItemView.cs" />
+    <Compile Include="ViewModels\DashboardVM.cs" />
     <Compile Include="ViewModels\DeliveryOrderVM.cs" />
     <Compile Include="ViewModels\DeptDisbursementViewModel.cs" />
     <Compile Include="ViewModels\DeptHeadAuthVM.cs" />

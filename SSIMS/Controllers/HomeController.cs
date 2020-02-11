@@ -8,6 +8,7 @@ using System.Diagnostics;
 using SSIMS.Service;
 using SSIMS.Models;
 using SSIMS.DAL;
+using SSIMS.ViewModels;
 
 namespace SSIMS.Controllers
 {
@@ -35,7 +36,7 @@ namespace SSIMS.Controllers
                 return RedirectToAction("DepHead", "Home");
             if (LoginService.IsAuthorizedRoles("rep"))
                 return RedirectToAction("DepRep", "Home");
-            if (LoginService.IsAuthorizedRoles("supervisor"))
+            if (LoginService.IsAuthorizedRoles("supervisor","manager"))
                 return RedirectToAction("Supervisor", "Home");
             if (LoginService.IsAuthorizedRoles("clerk"))
                 return RedirectToAction("Clerk", "Home");
@@ -65,7 +66,7 @@ namespace SSIMS.Controllers
 
 
             var unitofwork = new UnitOfWork();
-            List<RequisitionOrder> ros = unitofwork.RequisitionOrderRepository.Get(filter: x => x.CreatedByStaff.ID == staff.ID && (x.Status == Status.Pending || x.Status == Status.Approved)).ToList();
+            List<RequisitionOrder> ros = unitofwork.RequisitionOrderRepository.Get(filter: x => x.CreatedByStaff.ID == staff.ID && (x.Status == Models.Status.Pending || x.Status == Models.Status.Approved)).ToList();
 
             return View(ros);
 
@@ -77,7 +78,7 @@ namespace SSIMS.Controllers
             Staff staff = loginService.StaffFromSession;
 
             var unitofwork = new UnitOfWork();
-            List<RequisitionOrder> ros = unitofwork.RequisitionOrderRepository.Get(filter: x => x.CreatedByStaff.DepartmentID == staff.DepartmentID && x.Status == Status.Pending).ToList();
+            List<RequisitionOrder> ros = unitofwork.RequisitionOrderRepository.Get(filter: x => x.CreatedByStaff.DepartmentID == staff.DepartmentID && x.Status == Models.Status.Pending).ToList();
             var list = (ros.OrderBy(x => x.CreatedDate)).Take(5);
             return View(list);
 
@@ -109,11 +110,11 @@ namespace SSIMS.Controllers
         {
             
             var unitofwork = new UnitOfWork();
-            List<PurchaseOrder> pos = unitofwork.PurchaseOrderRepository.Get(x => x.Status == Status.Pending).ToList();
+            List<PurchaseOrder> pos = unitofwork.PurchaseOrderRepository.Get(x => x.Status == Models.Status.Pending).ToList();
             ViewBag.poscount = pos.Count;
             Debug.WriteLine(pos.Count);
 
-            List<AdjustmentVoucher> advs = unitofwork.AdjustmentVoucherRepository.Get(x => x.Status == Status.Pending).ToList();
+            List<AdjustmentVoucher> advs = unitofwork.AdjustmentVoucherRepository.Get(x => x.Status == Models.Status.Pending).ToList();
             ViewBag.advscount = advs.Count;
             Debug.WriteLine(advs.Count);
 
@@ -128,10 +129,15 @@ namespace SSIMS.Controllers
         {
             var unitofwork = new UnitOfWork();
 
-            List<InventoryItem> items = unitofwork.InventoryItemRepository.Get(includeProperties: "Item").ToList();
+            List<DisbursementList> dis = unitofwork.DisbursementListRepository.Get(x=>x.Status== Models.Status.Pending,includeProperties: "Department.collectionpoint").ToList();
+
+            IEnumerable<InventoryItem> items = unitofwork.InventoryItemRepository.Get(includeProperties: "Item").ToList();
             var itemslist = items.OrderBy(x => x.InStoreQty).Take(3);
 
-            return View(itemslist);
+            DashboardVM dbvm = new DashboardVM() { disbursements=dis, inventoryItems=itemslist};
+
+            
+            return View(dbvm);
         }
 
     }
