@@ -53,5 +53,21 @@ namespace SSIMS.ViewModels
         {
             return Qty + "/" + Category + "/" + Department + "/m" + Month + "/y" + Year + "/" + Count + "/" + Item + "/" + Staff + "/" + Cost.ToString($"${0:00}");
         }
+
+
+        public AnalyticsDetailsVM(int qty, string category, DateTime createdDate, string department, string itemdesc, string staffname)
+        {
+
+            //Document Item Level (item + qty)
+            Qty = qty;
+            Category = category;
+            CreatedDate = createdDate;
+            Department = department;
+            Month = createdDate.Month;
+            Year = createdDate.Year;
+            Count = 1;
+            Item = itemdesc;
+            Staff = staffname;
+        }
     }
 }

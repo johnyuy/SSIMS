@@ -50,7 +50,7 @@ namespace SSIMS.Database
             InitDeliveryOrders(context);
             context.SaveChanges();
             base.Seed(context);
-            Finishing();
+            Finishing(context);
             Debug.WriteLine("SEEDING COMPLETED!");
         }
 
@@ -97,24 +97,7 @@ namespace SSIMS.Database
 
         static void InitDepartments2(DatabaseContext context)
         {
-            Debug.WriteLine("\tInitializing Departments");
-            List<Department> departments = new List<Department>
-            {
-                new Department("ARCH", "Architecture","68901257","68921001", CollectionPointRepository.GetByID(1),DeptHeadAuthorizationRepository.GetByID(1),StaffRepository.GetStaffbyID(10006),StaffRepository.GetStaffbyID(10007)),
-                new Department("ARTS", "Arts","68901226", "68921011", CollectionPointRepository.GetByID(1),DeptHeadAuthorizationRepository.GetByID(2),StaffRepository.GetStaffbyID(10013),StaffRepository.GetStaffbyID(10014)),
-                new Department("COMM", "Commerce","68741284","68921256", CollectionPointRepository.GetByID(2),DeptHeadAuthorizationRepository.GetByID(3),StaffRepository.GetStaffbyID(10020),StaffRepository.GetStaffbyID(10021)),
-                new Department("CPSC", "Computer Science","68901235","68921457", CollectionPointRepository.GetByID(2),DeptHeadAuthorizationRepository.GetByID(4),StaffRepository.GetStaffbyID(10027),StaffRepository.GetStaffbyID(10028)),
-                new Department("ENGG", "Engineering","68901776","68922395", CollectionPointRepository.GetByID(3),DeptHeadAuthorizationRepository.GetByID(5),StaffRepository.GetStaffbyID(10034),StaffRepository.GetStaffbyID(10035)),
-                new Department("ENGL", "English","68742234","68921456", CollectionPointRepository.GetByID(3),DeptHeadAuthorizationRepository.GetByID(6),StaffRepository.GetStaffbyID(10041),StaffRepository.GetStaffbyID(10042)),
-                new Department("MEDI", "Medicine","67848808","68928106", CollectionPointRepository.GetByID(4),DeptHeadAuthorizationRepository.GetByID(7),StaffRepository.GetStaffbyID(10048),StaffRepository.GetStaffbyID(10049)),
-                new Department("REGR", "Registrar","68901266","68921465", CollectionPointRepository.GetByID(4),DeptHeadAuthorizationRepository.GetByID(8),StaffRepository.GetStaffbyID(10055),StaffRepository.GetStaffbyID(10056)),
-                new Department("SCIE", "Science","68907191","68921992", CollectionPointRepository.GetByID(5),DeptHeadAuthorizationRepository.GetByID(9),StaffRepository.GetStaffbyID(10062),StaffRepository.GetStaffbyID(10063)),
-                new Department("ZOOL", "Zoology","68901266","68921465", CollectionPointRepository.GetByID(5),DeptHeadAuthorizationRepository.GetByID(10),StaffRepository.GetStaffbyID(10069),StaffRepository.GetStaffbyID(10070)),
-                new Department("STOR", "Store","","",null,null,null,null)
-            };
-            foreach (Department dept in departments)
-                context.Departments.Add(dept);
-            context.SaveChanges();
+           
         }
 
         static void InitItems(DatabaseContext context)
@@ -1196,15 +1179,68 @@ namespace SSIMS.Database
             context.SaveChanges();
         }
 
-        static void Finishing()
+        static void Finishing(DatabaseContext context)
         {
+            Debug.WriteLine("\tFinishing..");
             InventoryService inventoryService = new InventoryService();
-            UnitOfWork uow = new UnitOfWork();
+            UnitOfWork uow = new UnitOfWork(context);
             IEnumerable<Item> items = uow.ItemRepository.Get();
             foreach(Item item in items)
             {
                 inventoryService.UpdateInStoreQty(item.ID);
             }
+
+            Department dep1 = uow.DepartmentRepository.GetByID("ARCH");
+            dep1.DeptHead = StaffRepository.GetStaffbyID(10006);
+            dep1.DeptRep = StaffRepository.GetStaffbyID(10007); ;
+            uow.DepartmentRepository.Update(dep1);
+
+            Department dep2 = uow.DepartmentRepository.GetByID("ARTS");
+            dep2.DeptHead = StaffRepository.GetStaffbyID(10013);
+            dep2.DeptRep = StaffRepository.GetStaffbyID(10014);
+            uow.DepartmentRepository.Update(dep2);
+
+            Department dep3 = uow.DepartmentRepository.GetByID("COMM");
+            dep3.DeptHead = StaffRepository.GetStaffbyID(10020);
+            dep3.DeptRep = StaffRepository.GetStaffbyID(10021);
+            uow.DepartmentRepository.Update(dep3);
+
+            Department dep4 = uow.DepartmentRepository.GetByID("CPSC");
+            dep4.DeptHead = StaffRepository.GetStaffbyID(10027);
+            dep4.DeptRep = StaffRepository.GetStaffbyID(10028);
+            uow.DepartmentRepository.Update(dep4);
+
+            Department dep5 = uow.DepartmentRepository.GetByID("ENGG");
+            dep5.DeptHead = StaffRepository.GetStaffbyID(10034);
+            dep5.DeptRep = StaffRepository.GetStaffbyID(10035);
+            uow.DepartmentRepository.Update(dep5);
+
+            Department dep6 = uow.DepartmentRepository.GetByID("ENGL");
+            dep6.DeptHead = StaffRepository.GetStaffbyID(10041);
+            dep6.DeptRep = StaffRepository.GetStaffbyID(10042);
+            uow.DepartmentRepository.Update(dep6);
+
+            Department dep7 = uow.DepartmentRepository.GetByID("MEDI");
+            dep7.DeptHead = StaffRepository.GetStaffbyID(10048);
+            dep7.DeptRep = StaffRepository.GetStaffbyID(10049);
+            uow.DepartmentRepository.Update(dep7);
+
+            Department dep8 = uow.DepartmentRepository.GetByID("REGR");
+            dep8.DeptHead = StaffRepository.GetStaffbyID(10055);
+            dep8.DeptRep = StaffRepository.GetStaffbyID(10056);
+            uow.DepartmentRepository.Update(dep8);
+
+            Department dep9 = uow.DepartmentRepository.GetByID("SCIE");
+            dep9.DeptHead = StaffRepository.GetStaffbyID(10062);
+            dep9.DeptRep = StaffRepository.GetStaffbyID(10063);
+            uow.DepartmentRepository.Update(dep9);
+
+            Department dep10 = uow.DepartmentRepository.GetByID("ZOOL");
+            dep10.DeptHead = StaffRepository.GetStaffbyID(10069);
+            dep10.DeptRep = StaffRepository.GetStaffbyID(10070);
+            uow.DepartmentRepository.Update(dep10);
+
+            uow.Save();
         }
     }
 }

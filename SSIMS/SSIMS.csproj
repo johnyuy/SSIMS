@@ -565,6 +565,8 @@
     <Content Include="Views\Home\Staff.cshtml" />
     <Content Include="Views\Home\DepHead.cshtml" />
     <Content Include="Views\Home\DepRep.cshtml" />
+    <Content Include="Views\Home\Supervisor.cshtml" />
+    <Content Include="Views\Home\Clerk.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

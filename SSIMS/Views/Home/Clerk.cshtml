@@ -1,0 +1,31 @@
+﻿@model IEnumerable<SSIMS.Models.InventoryItem>
+@{
+    ViewBag.Title = "Clerk";
+    ViewBag.Header = "Store Dashboard";
+    ViewBag.Section = "Dashboard";
+}
+
+
+<h3>Low Stock Inventory Items(Top3) <button onclick="window.location.href = '/Inventory/Index';">View All</button></h3>
+
+<table class="table">
+    <tr>
+        <td>Item Code</td>
+        <td>Item Description</td>
+        <td>Qty</td>
+
+        <td>Details</td>
+    </tr>
+    @foreach (var it in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => it.Item.ID)</td>
+            <td>@Html.DisplayFor(modelItem => it.Item.Description)</td>
+            <td>@Html.DisplayFor(modelItem => it.InStoreQty)</td>
+
+            <td>@Html.ActionLink("View", "Details", "Inventory", new { id = it.ID }, null)</td>
+
+        </tr>
+    }
+
+</table>
