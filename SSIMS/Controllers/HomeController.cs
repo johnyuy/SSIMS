@@ -33,6 +33,10 @@ namespace SSIMS.Controllers
                 return RedirectToAction("DepHead", "Home");
             if (LoginService.IsAuthorizedRoles("rep"))
                 return RedirectToAction("DepRep", "Home");
+            if (LoginService.IsAuthorizedRoles("supervisor"))
+                return RedirectToAction("Supervisor", "Home");
+            if (LoginService.IsAuthorizedRoles("clerk"))
+                return RedirectToAction("Clerk", "Home");
 
 
             return View();
@@ -97,5 +101,36 @@ namespace SSIMS.Controllers
 
             return View(dep);
         }
+
+
+        public ActionResult Supervisor()
+        {
+            
+            var unitofwork = new UnitOfWork();
+            List<PurchaseOrder> pos = unitofwork.PurchaseOrderRepository.Get(x => x.Status == Status.Pending).ToList();
+            ViewBag.poscount = pos.Count;
+            Debug.WriteLine(pos.Count);
+
+            List<AdjustmentVoucher> advs = unitofwork.AdjustmentVoucherRepository.Get(x => x.Status == Status.Pending).ToList();
+            ViewBag.advscount = advs.Count;
+            Debug.WriteLine(advs.Count);
+
+            List<InventoryItem> items = unitofwork.InventoryItemRepository.Get(includeProperties:"Item").ToList();
+            var itemslist = items.OrderBy(x => x.InStoreQty).Take(3);
+
+            return View(itemslist);
+
+        }
+
+        public ActionResult Clerk()
+        {
+            var unitofwork = new UnitOfWork();
+
+            List<InventoryItem> items = unitofwork.InventoryItemRepository.Get(includeProperties: "Item").ToList();
+            var itemslist = items.OrderBy(x => x.InStoreQty).Take(3);
+
+            return View(itemslist);
+        }
+
     }
 }
