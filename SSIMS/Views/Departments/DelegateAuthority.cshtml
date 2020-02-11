@@ -40,15 +40,54 @@
         form.submit();
     }
 </script>
+<style>
+    th, td{
+        padding:10px;
+        text-align:center;
+    }
+    #deprepbox, #newauthbox, #historybox{
+        background:linear-gradient(to right, rgba(146, 167, 154, 0.20) 0%, rgba(115, 147, 147, 0.31) 100%);
+        width:50%;
+        padding: 20px;
+    }
+</style>
 
 
+<div id="deprepbox">
+    @using (Html.BeginForm("UpdateDeptRep", "Departments", FormMethod.Post, new { @id = "RepForm" }))
+    {
+        @Html.AntiForgeryToken()
+        <table class="table-responsive">
+            <tr>
+                <th>Assigned Department Rep</th>
+                <td onchange="update()">
+                    <select id="deptrep" name="id">
+                        <option selected value=@department.DeptRep.ID>@selected</option>
+                        @foreach (Staff dr in staffonlylist)
+                        {
+                            <option value=@dr.ID>@dr.Name</option>
+                        }
+                    </select>
+                </td>
+                <td>
+                    <button type="submit">Submit</button>
+                </td>
+            </tr>
+        </table>
+
+    }
+</div>
+
+
+
+<div style="width:100%">
 @if (!isCurrent)
 {
     using (Html.BeginForm(FormMethod.Post))
     {
         @Html.AntiForgeryToken()
 
-        <div>
+        <div id="newauthbox">
             <table>
                 <tr>
                     <th>
@@ -98,7 +137,7 @@
 }
 else
 {
-    <table>
+    <table id="newauthbox">
         <tr>
             <th>
                 Current Authorized Head
@@ -142,7 +181,7 @@ else
 }
 else
 {
-    <table>
+    <table id="historybox">
         <tr>
             <th>
                 @Html.DisplayNameFor(Model => Model[0].StaffName)
@@ -173,27 +212,7 @@ else
 }
 
 
-@using (Html.BeginForm("UpdateDeptRep", "Departments", FormMethod.Post, new {@id="RepForm" }))
-{
-    @Html.AntiForgeryToken()
-    <table>
-        <tr>
-            <th>Assigned Department Rep</th>
-            <td onchange="update()">
-                <select id="deptrep" name="id" >
-                    <option selected value=@department.DeptRep.ID>@selected</option>
-                    @foreach (Staff dr in staffonlylist)
-                    {
-                        <option value=@dr.ID>@dr.Name</option>
-                    }
-                </select>
-            </td>
-        </tr>
-    </table>
-    <button type="submit">Submit</button>
-}
-
-
+</div>
 
 @if (Session["role"].ToString() == "admin")
 {
