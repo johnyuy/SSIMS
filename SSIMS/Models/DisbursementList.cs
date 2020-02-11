@@ -13,12 +13,11 @@ namespace SSIMS.Models
         public Department Department { get; set; }
         public int OTP { get; set; }
 
-        private DisbursementService ds = new DisbursementService();
 
         public DisbursementList(Staff creator, Department department) : base(creator)
         {
             Department = department;
-            OTP = ds.GenerateOTP();
+            OTP = DisbursementService.GenerateOTP();
         }
 
         public DisbursementList() : base() { }
@@ -28,7 +27,7 @@ namespace SSIMS.Models
             ItemTransactions = itemTransactions;
             Department = department;
 
-            OTP = ds.GenerateOTP();
+            OTP = DisbursementService.GenerateOTP();
         }
 
         public Boolean UpdateInventoryItem()
