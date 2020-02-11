@@ -12,19 +12,22 @@
     <title>Logic Stationery</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/css?family=Blinker:300&display=swap" rel="stylesheet">
+
     <style>
         * {
             font-family: 'Blinker', sans-serif;
-            font-size:medium;
+            font-size: medium;
         }
+
         #topnav {
             height: 80px;
-            min-width:1500px;
+            min-width: 1500px;
             background: linear-gradient(to right, #1a4a4a 0%, #ccffff 119%);
             border: none;
-            
         }
 
         #logicuicon {
@@ -65,7 +68,7 @@
             background: linear-gradient(to right, #1a4a4a 0%, #2F5F5F 100%);
             overflow-x: hidden;
             padding-top: 80px;
-            opacity:1;
+            opacity: 1;
         }
 
             .sidebar a {
@@ -112,69 +115,69 @@
             if (usertype == "admin")
             {
                 if (ViewBag.Section == "Home")
-                {<a class="active" href="~/home/index"><i class="fa fa-fw fa-home"></i> Home</a>}
+                {<a class="active" href="~/home/index"><i class="fa fa-list"></i> Dashboard</a>}
                 else
-                {<a href="~/home/index"><i class="fa fa-fw fa-home"></i> Home</a>}
+                {<a href="~/home/index"><i class="fa fa-list"></i> Home</a>}
 
                 if (ViewBag.Section == "Analytics")
-                {<a class="active" href="~/analytics/index"><i class=""></i> Analytics</a>}
+                {<a class="active" href="~/analytics/index"><i class="fa fa-bar-chart"></i> Analytics</a>}
                 else
-                {<a href="~/analytics/index"><i class=""></i> Analytics</a>}
+                {<a href="~/analytics/index"><i class="fa fa-bar-chart"></i> Analytics</a>}
 
                 if (ViewBag.Section == "Inventory")
-                {<a class="active" href="~/inventory"><i class="fa fa-fw fa-wrench"></i> Inventory</a>}
+                {<a class="active" href="~/inventory"><i class="fa fa-cubes"></i> Inventory</a>}
                 else
-                {<a href="~/inventory/index"><i class="fa fa-fw fa-wrench"></i> Inventory</a>}
+                {<a href="~/inventory/index"><i class="fa fa-cubes"></i> Inventory</a>}
 
                 if (ViewBag.Section == "Departments")
-                {<a class="active" href="~/departments/index"><i class="fa fa-fw fa-user"></i> Departments</a>}
+                {<a class="active" href="~/departments/index"><i class="fa fa-users"></i> Departments</a>}
                 else
-                {<a href="~/departments/index"><i class="fa fa-fw fa-user"></i> Departments</a>}
+                {<a href="~/departments/index"><i class="fa fa-users"></i> Departments</a>}
 
                 if (ViewBag.Section == "Requistions")
-                {<a class="active" href="~/requisition/index">Requisitions</a>}
+                {<a class="active" href="~/requisition/index"><i class="fa fa-check-circle"></i> Requisitions</a>}
                 else
-                {<a href="~/requisition/index"> Requisitions</a>}
+                {<a href="~/requisition/index"><i class="fa fa-check-circle"></i> Requisitions</a>}
 
                 if (ViewBag.Section == "Disbursements")
-                {<a class="active" href="~/disbursement/index">Disbursements</a>}
+                {<a class="active" href="~/disbursement/index"><i class="fa fa-exchange"></i> Disbursements</a>}
                 else
-                {<a href="~/disbursement/index"> Disbursements</a>}
+                {<a href="~/disbursement/index"><i class="fa fa-exchange"></i> Disbursements</a>}
 
                 if (ViewBag.Section == "Items")
-                {<a class="active" href="~/items/index">Items</a>}
+                {<a class="active" href="~/items/index"><i class="fas fa-pencil-alt"></i>Items</a>}
                 else
-                {<a href="~/items/index">Items</a>}
+                {<a href="~/items/index"><i class="fas fa-pencil-alt"></i>Items</a>}
 
                 if (ViewBag.Section == "Purchases")
-                {<a class="active" href="~/purchaseorders/index">Purchases</a>}
+                {<a class="active" href="~/purchaseorders/index"><i class="fa fa-truck"></i> Purchases</a>}
                 else
-                {<a href="~/purchaseorders/index">Purchases</a>}
+                {<a href="~/purchaseorders/index"><i class="fa fa-truck"></i> Purchases</a>}
             }
 
             if (usergroup == "dept")
             {
                 if (ViewBag.Section == "Dashboard")
-                {<a class="active" href="~/dashboard/index"><i class=""></i> Dashboard</a>}
+                {<a class="active" href="~/dashboard/index"><i class="fa fa-list"></i> Dashboard</a>}
                 else
-                {<a href="~/dashboard/index"><i class=""></i> Dashboard</a>}
+                {<a href="~/dashboard/index"><i class="fa fa-list"></i> Dashboard</a>}
 
                 if (ViewBag.Section == "Catalogue")
-                {<a class="active" href="~/items/index"><i class=""></i> Catalogue</a>}
+                {<a class="active" href="~/items/index"><i class="fas fa-pencil-alt"></i> Catalogue</a>}
                 else
-                {<a href="~/items/index"><i class=""></i> Catalogue</a>}
+                {<a href="~/items/index"><i class="fas fa-pencil-alt"></i> Catalogue</a>}
 
                 if (ViewBag.Section == "Requisitions")
-                {<a class="active" href="~/requisition/index"><i class=""></i> Requests</a>}
+                {<a class="active" href="~/requisition/index"><i class="fa fa-check-circle"></i> Requests</a>}
                 else
-                {<a href="~/requisition/index"><i class=""></i> Requests</a>}
+                {<a href="~/requisition/index"><i class="fa fa-check-circle"></i> Requests</a>}
 
                 if (usertype == "head")
                 {
                     if (ViewBag.Section == "Delegate")
-                    {<a class="active" href="~/departments/delegateauthority"><i class=""></i> Delegate</a>}
+                    {<a class="active" href="~/departments/delegateauthority"><i class="fas fa-hand-point-right"></i> Delegate</a>}
                     else
-                    {<a href="~/departments/delegateauthority"><i class=""></i> Delegate</a>}
+                    {<a href="~/departments/delegateauthority"><i class="fas fa-hand-point-right"></i> Delegate</a>}
                 }
                 else if (usertype == "rep")
                 {
@@ -187,39 +190,39 @@
             else if (usergroup == "store")
             {
                 if (ViewBag.Section == "Dashboard")
-                {<a class="active" href="~/dashboard/index"><i class=""></i> Dashboard</a>}
+                {<a class="active" href="~/dashboard/index"><i class="fa fa-list"></i> Dashboard</a>}
                 else
-                {<a href="~/dashboard/index"><i class=""></i> Dashboard</a>}
+                {<a href="~/dashboard/index"><i class="fa fa-list"></i> Dashboard</a>}
 
                 if (ViewBag.Section == "Inventory")
-                {<a class="active" href="~/inventory/index"><i class=""></i> Inventory</a>}
+                {<a class="active" href="~/inventory/index"><i class="fa fa-cubes"></i> Inventory</a>}
                 else
-                {<a href="~/inventory/index"><i class=""></i> Inventory</a>}
+                {<a href="~/inventory/index"><i class="fa fa-cubes"></i> Inventory</a>}
 
                 if (ViewBag.Section == "Requisitions")
-                {<a class="active" href="~/requisition/index"><i class=""></i> Requisitions</a>}
+                {<a class="active" href="~/requisition/index"><i class="fa fa-check-circle"></i> Requisitions</a>}
                 else
-                {<a href="~/requisition/index"><i class=""></i> Requisitions</a>}
+                {<a href="~/requisition/index"><i class="fa fa-check-circle"></i> Requisitions</a>}
 
                 if (ViewBag.Section == "Disbursements")
-                {<a class="active" href="~/disbursement/index">Disbursements</a>}
+                {<a class="active" href="~/disbursement/index"><i class="fa fa-exchange"></i> Disbursements</a>}
                 else
-                {<a href="~/disbursement/index"> Disbursements</a>}
+                {<a href="~/disbursement/index"><i class="fa fa-exchange"></i> Disbursements</a>}
 
                 if (ViewBag.Section == "Departments")
-                {<a class="active" href="~/departments/index"><i class="fa fa-fw fa-user"></i> Departments</a>}
+                {<a class="active" href="~/departments/index"><i class="fa fa-users"></i> Departments</a>}
                 else
-                {<a href="~/departments/index"><i class="fa fa-fw fa-user"></i> Departments</a>}
+                {<a href="~/departments/index"><i class="fa fa-users"></i> Departments</a>}
 
                 if (ViewBag.Section == "Purchases")
-                {<a class="active" href="~/purchaseorders/index"><i class=""></i> Purchases</a>}
+                {<a class="active" href="~/purchaseorders/index"><i class="fa fa-truck"></i> Purchases</a>}
                 else
-                {<a href="~/purchaseorders/index"><i class=""></i> Purchases</a>}
+                {<a href="~/purchaseorders/index"><i class="fa fa-truck"></i> Purchases</a>}
 
                 if (ViewBag.Section == "Analytics")
-                {<a class="active" href="~/analytics/index"><i class=""></i> Analytics</a>}
+                {<a class="active" href="~/analytics/index"><i class="fa fa-bar-chart"></i> Analytics</a>}
                 else
-                {<a href="~/analytics/index"><i class=""></i> Analytics</a>}
+                {<a href="~/analytics/index"><i class="fa fa-bar-chart"></i> Analytics</a>}
             }
         }
     </div>
