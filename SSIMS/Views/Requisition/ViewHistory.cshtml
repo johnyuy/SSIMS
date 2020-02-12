@@ -5,13 +5,14 @@
 @{
     ViewBag.Title = "ViewHistory";
     ViewBag.Header = "Requisition Order History";
-    ViewBag.Section="Requisitions";
-
+    ViewBag.Section = "Requisitions";
+    int pageno = Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber;
 }
 
-    <p style="margin:10px">    </p>
-@if (ViewBag.staffrole == "DeptHead") {
-<p>@Html.ActionLink("View Pending Requisition", "Manage")</p>
+<p style="margin:10px">    </p>
+@if (ViewBag.staffrole == "DeptHead")
+{
+    <p>@Html.ActionLink("View Pending Requisition", "Manage")</p>
 }
 
 <p style="margin:20px">    </p>
@@ -24,81 +25,80 @@
         <td>@Html.ActionLink("View All", "ViewHistory", new { status = "All" })</td>
     </tr>
 </table>
-
-
-
 <p style="margin:50px">    </p>
-<table class="table">
-    <tr>
-
-        <th>
-            Requisition ID
-            @*@Html.DisplayNameFor(model => model.ID)*@
-        </th>
-
-        <th>
-            
-            @Html.ActionLink("Created Date", "ViewHistory", new { sortOrder = ViewBag.CreDates })
-            @*@Html.DisplayNameFor(model => model.CreatedDate)*@
-        </th>
-
-        <th>
-            Status
-            @*@Html.DisplayNameFor(model => model.Status)*@
-        </th>
-
-        <th>
-            
-            @Html.ActionLink("Response Date", "ViewHistory", new { sortOrder = ViewBag.ResDates })
-            @*@Html.DisplayNameFor(model => model.ResponseDate)*@
-        </th>
-
-        <th>
-            Details
-        </th>
-
-        <th></th>
-    </tr>
-
-    @foreach (var ro in Model)
-    {
+@if (Model.Count == 0)
+{
+<p style="font-size:50px;color:lightgray">Empty</p>
+}
+else
+{
+    <table class="table">
         <tr>
 
-            <td>
-                @Html.DisplayFor(modelItem => ro.ID)
-            </td>
+            <th>
+                Requisition ID
+                @*@Html.DisplayNameFor(model => model.ID)*@
+            </th>
 
-            <td>
-                @Html.DisplayFor(modelItem => ro.CreatedDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => ro.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => ro.ResponseDate)
-            </td>
+            <th>
 
-            <td>
-                @if (ro.Status == SSIMS.Models.Status.Rejected)
-                {
-                    @Html.ActionLink("Details", "Reject", new { id = ro.ID })
-                }
-                else
-                {
-                    @Html.ActionLink("Details", "Approve", new { id = ro.ID })
+                @Html.ActionLink("Created Date", "ViewHistory", new { sortOrder = ViewBag.CreDates })
+                @*@Html.DisplayNameFor(model => model.CreatedDate)*@
+            </th>
 
-                }
+            <th>
+                Status
+                @*@Html.DisplayNameFor(model => model.Status)*@
+            </th>
 
-            </td>
+            <th>
+
+                @Html.ActionLink("Response Date", "ViewHistory", new { sortOrder = ViewBag.ResDates })
+                @*@Html.DisplayNameFor(model => model.ResponseDate)*@
+            </th>
+
+            <th>
+                Details
+            </th>
+
+            <th></th>
         </tr>
-    }
 
-</table>
+        @foreach (var ro in Model)
+        {
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => ro.ID)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => ro.CreatedDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => ro.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => ro.ResponseDate)
+                </td>
+
+                <td>
+                    @Html.ActionLink("Details", "Details", new { id = ro.ID })
+                </td>
+            </tr>
+        }
+
+    </table>
+
+    <br />
+
+    <p>Page @pageno of @Model.PageCount</p>
+
+    @Html.PagedListPager(Model, page => Url.Action("ViewHistory", new { page, sortOrder = ViewBag.CurrentSort, status = ViewBag.CurrentStatus }))
+}
 
 
 
 
-<br />
-Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
-@Html.PagedListPager(Model, page => Url.Action("ViewHistory", new { page, sortOrder = ViewBag.CurrentSort,status = ViewBag.CurrentStatus }))
+

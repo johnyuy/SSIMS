@@ -147,7 +147,8 @@
             </td>
 
             <td>
-                @Html.DisplayFor(modelItem => ro.Item.Description)
+                @Html.ActionLink(ro.Item.Description, "Details", "Items", new { id = ro.Item.ID }, new { })
+                
             </td>
 
             <td>

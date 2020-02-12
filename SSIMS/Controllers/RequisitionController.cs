@@ -183,7 +183,7 @@ namespace SSIMS.Controllers
         //}
 
         // GET: Requisition/ViewHistory
-        public ActionResult ViewHistory(int? page, string status, string sortOrder)
+        public ActionResult ViewHistory(int? page, string status="ALL", string sortOrder)
         {
             if (LoginService.IsAuthorizedRoles("staff"))
                 return RedirectToAction("Index", "Home");
@@ -584,7 +584,7 @@ namespace SSIMS.Controllers
         }
 
 
-        public ActionResult Approvequick(int? id)
+        public ActionResult Approvequick(int? id, bool dash=false)
         {
             if (id == null)
             {
@@ -603,10 +603,11 @@ namespace SSIMS.Controllers
             unitofwork.RequisitionOrderRepository.Update(requisitionOrder);
             unitofwork.Save();
 
-
+            if (dash)
+                return RedirectToAction("Dashboard", "Home");
             return RedirectToAction("Manage", "Requisition");
         }
-        public ActionResult Rejectquick(int? id)
+        public ActionResult Rejectquick(int? id, bool dash = false)
         {
             if (id == null)
             {
@@ -625,7 +626,8 @@ namespace SSIMS.Controllers
             unitofwork.RequisitionOrderRepository.Update(requisitionOrder);
             unitofwork.Save();
 
-
+            if (dash)
+                return RedirectToAction("Dashboard", "Home");
             return RedirectToAction("Manage", "Requisition");
         }
         [HttpPost]
