@@ -15,8 +15,8 @@
         hasPrev = int.Parse(cI) > 1 ? true : false;
         hasNext = int.Parse(cI) == int.Parse(mI) ? false : true;
     }
-    string searchString = Session["InventorySearchString"]==null? "":Session["InventorySearchString"].ToString();
-    string lowStock = Session["InventoryLowStockMode"]==null? "":Session["InventoryLowStockMode"].ToString();
+    string searchString = Session["InventorySearchString"] == null ? "" : Session["InventorySearchString"].ToString();
+    string lowStock = Session["InventoryLowStockMode"] == null ? "" : Session["InventoryLowStockMode"].ToString();
 }
 <script>
     function stockcard() {
@@ -55,20 +55,22 @@
     }
 </script>
 <style>
-    #full-container i{
-        color:dimgray;
+    #full-container i {
+        color: dimgray;
     }
-    .reorderbox{
-        width:100px;
-        height:30px;
-        margin:5px;
-        text-align:center;
-        text-indent:10px;
-        background-color:floralwhite;
+
+    .reorderbox {
+        width: 100px;
+        height: 30px;
+        margin: 5px;
+        text-align: center;
+        text-indent: 10px;
+        background-color: floralwhite;
         border: inset 0.5px lightgrey;
-        font-size:20px;
+        font-size: 20px;
     }
-    .rebtn{
+
+    .rebtn {
         width: 60px;
     }
 </style>
@@ -76,47 +78,49 @@
     @Html.ActionLink("Back to List", "Index", new { searchString = searchString, lowStock = lowStock })
 </div>
 
-<div id="full-container" style="height:700px;width:920px; box-shadow: 2px 4px 8px 0px rgba(47,79,79,0.2);">
-   <div id="item-information" style="margin:20px 0px 5px 10px;width:900px;">
-       <table style="font-size:17px">
-           <tr style="background-color:white">
-               <td colspan="2" align="left" height="50px" style="font-size:35px;text-indent:60px">@Model.ItemCode</td>
-               <td align="center" height="50px">
-                   @if (hasPrev)
-                   {
-                       <a style="text-decoration:none" href="~/inventory/details/@ViewBag.PrevItemID"><<</a>
-                   }
-                   &nbsp; @Index &nbsp;
-                   @if (hasNext)
-                   {
-                       <a style="text-decoration:none" href="~/inventory/details/@ViewBag.NextItemID">>></a>
-                   }
-               </td>
-           </tr>
-           <tr>
-                <td height="10px"></td><td></td><td rowspan="6" align="left" valign="middle" width="280px"><img src=@Url.Content(Model.ImageURL) style="width:280px;" /></td>
-           </tr>
-           <tr>
-               <td align="right" width="200px" height="15px">@Html.DisplayNameFor(model => model.ItemCode) :</td>
-               <td align="center" width="400px"><div style="width:300px;background-color:floralwhite;border:solid 1px lightgray">@Html.DisplayFor(model => model.ItemCode)</div></td>
-           </tr>
-           <tr>
-               <td align="right" height="15px">@Html.DisplayNameFor(model => model.Category) :</td>
-               <td align="center"><div style="width:300px;background-color:floralwhite;border:solid 1px lightgray">@Html.DisplayFor(model => model.Category)</div></td>
-           </tr>
-           <tr>
-               <td align="right" height="15px">@Html.DisplayNameFor(model => model.Description) :</td>
-               <td align="center"><div style="width:300px;background-color:floralwhite;border:solid 1px lightgray">@Html.DisplayFor(model => model.Description)</div></td>
-           </tr>
-           <tr>
-               <td align="right" height="15px">@Html.DisplayNameFor(model => model.UOM) :</td>
-               <td align="center"><div style="width:300px;background-color:floralwhite;border:solid 1px lightgray">@Html.DisplayFor(model => model.UOM)</div></td>
-           </tr>
-           <tr><td height="15px"></td><td></td></tr>
-       </table>
-   </div>
+<div id="full-container" style="height:720px;width:920px; box-shadow: 2px 4px 8px 0px rgba(47,79,79,0.2);">
+    <div id="item-information" style="margin:20px 0px 5px 10px;width:900px;">
+        <table style="font-size:17px">
+            <tr style="background-color:white">
+                <td colspan="2" align="left" height="60px" style="font-size:35px;text-indent:60px">@Model.ItemCode</td>
+                <td align="center" height="50px">
+                    @if (hasPrev)
+                    {
+                        <a style="text-decoration:none" href="~/inventory/details/@ViewBag.PrevItemID"><<</a>
+                    }
+                    &nbsp; @Index &nbsp;
+                    @if (hasNext)
+                    {
+                        <a style="text-decoration:none" href="~/inventory/details/@ViewBag.NextItemID">>></a>
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td height="10px"></td>
+                <td></td>
+                <td rowspan="6" align="left" valign="middle" width="280px"><img src=@Url.Content(Model.ImageURL) style="width:280px;" /></td>
+            </tr>
+            <tr>
+                <td align="right" width="200px" height="15px">@Html.DisplayNameFor(model => model.ItemCode) :</td>
+                <td align="center" width="400px"><div style="width:300px;background-color:floralwhite;border:solid 1px lightgray">@Html.DisplayFor(model => model.ItemCode)</div></td>
+            </tr>
+            <tr>
+                <td align="right" height="15px">@Html.DisplayNameFor(model => model.Category) :</td>
+                <td align="center"><div style="width:300px;background-color:floralwhite;border:solid 1px lightgray">@Html.DisplayFor(model => model.Category)</div></td>
+            </tr>
+            <tr>
+                <td align="right" height="15px">@Html.DisplayNameFor(model => model.Description) :</td>
+                <td align="center"><div style="width:300px;background-color:floralwhite;border:solid 1px lightgray">@Html.DisplayFor(model => model.Description)</div></td>
+            </tr>
+            <tr>
+                <td align="right" height="15px">@Html.DisplayNameFor(model => model.UOM) :</td>
+                <td align="center"><div style="width:300px;background-color:floralwhite;border:solid 1px lightgray">@Html.DisplayFor(model => model.UOM)</div></td>
+            </tr>
+            <tr><td height="15px"></td><td></td></tr>
+        </table>
+    </div>
     <div id="stock-information" style="width: 450px; margin-left: 10px; height: 350px; float: left; background-color: #efefef; padding-bottom: 40px">
-        <table style="font-size:17px;width:100%;" >
+        <table style="font-size:17px;width:100%;">
             <tr align="center">
                 <td colspan="2" height="70px" style="font-size: 22px ">Stock Information</td>
             </tr>
@@ -143,33 +147,72 @@
 
             </tr>
             <tr>
-                <td align="center" style="height: 50px"><div style="width:180px;" class="btn-success">@Html.ActionLink("Adjust", "Adjustment", new { command = "add", item = Model.ItemCode }, new {@style="text-decoration:none;font-color:white;" })</div></td>
-                <td align="center" style="height:50px"><div style="width:180px;" class="btn-primary" onclick="stockcard()">Stock Card</div></td>
+                @{
+                    string address = "/inventory/adjustment?command=add&item=" + Model.ItemCode;
+                }
+
+                <td align="center" style="height:50px">
+                    <button style="width:150px;" onclick="window.location.href = '@address';">
+                        <i class="fa fa-gears"></i> &nbsp; Adjust
+                    </button>
+                </td>
+                <td align="center" style="height:50px">
+                    <button style="width:150px;" onclick="stockcard()">
+                        <i class="fa fa-file"></i> &nbsp; Stock Card
+                    </button>
+                </td>
+
+
             </tr>
-            <tr align="center">
-                <td height="30px">@Html.DisplayNameFor(model => model.ReorderLvl)</td>
-                <td width="50%"><div><input class="reorderbox" id="lvlinput" type="number" min="0" value=@Model.ReorderLvl readonly/><button onclick="lvl()" id="buttonlvl" class="rebtn"><i class="fa fa-pencil"></i><span id="lvltext"> edit</span></button></div></td>
-            </tr>
-            <tr align="center">
-                <td height="30px">@Html.DisplayNameFor(model => model.ReorderQty)</td>
-                <td ><div><input class="reorderbox" id="qtyinput" type="number" min="0" value=@Model.ReorderQty readonly/><button onclick="qty()" id="buttonqty" type="submit" class="rebtn"><i class="fa fa-pencil"></i><span id="qtytext"> edit</span></button></div></td>
-            </tr>
+
+            @if (Session["role"].ToString() == "manager" || Session["role"].ToString() == "supervisor")
+            {
+                <tr align="center">
+                    <td height="30px">@Html.DisplayNameFor(model => model.ReorderLvl)</td>
+                    <td width="50%"><div><input class="reorderbox" id="lvlinput" type="number" min="0" value=@Model.ReorderLvl readonly /><button onclick="lvl()" id="buttonlvl" class="rebtn"><i class="fa fa-pencil"></i><span id="lvltext"> edit</span></button></div></td>
+                </tr>
+                <tr align="center">
+                    <td height="30px">@Html.DisplayNameFor(model => model.ReorderQty)</td>
+                    <td><div><input class="reorderbox" id="qtyinput" type="number" min="0" value=@Model.ReorderQty readonly /><button onclick="qty()" id="buttonqty" type="submit" class="rebtn"><i class="fa fa-pencil"></i><span id="qtytext"> edit</span></button></div></td>
+                </tr>
+            }
+            else
+            {
+                <tr align="center">
+                    <td height="30px">@Html.DisplayNameFor(model => model.ReorderLvl)</td>
+                    <td width="50%"><div><input class="reorderbox" id="lvlinput" type="number" min="0" value=@Model.ReorderLvl readonly /></div></td>
+                </tr>
+                <tr align="center">
+                    <td height="30px">@Html.DisplayNameFor(model => model.ReorderQty)</td>
+                    <td><div><input class="reorderbox" id="qtyinput" type="number" min="0" value=@Model.ReorderQty readonly /></div></td>
+                </tr>
+            }
         </table>
     </div>
     <div id="supplier-information" style="width:450px;height:350px;float:left;background-color:#efefef;padding-bottom:40px">
         <table style="font-size:18px;width:100%">
             <tr align="center"><td height="70px" style="font-size:22px">Purchase from Supplier</td></tr>
-            <tr align="center"><td height="15px" style="font-size:11px">Click to add @Html.DisplayFor(model=>model.ReorderQty) @Html.DisplayFor(model=>model.UnitDisplay) to Purchase Cart</td></tr>
+            <tr align="center"><td height="15px" style="font-size:12px">Click to add @Html.DisplayFor(model => model.ReorderQty) @Html.DisplayFor(model => model.UnitDisplay) to Purchase Cart</td></tr>
             <tr align="center"><td height="45px"><form action="~/PurchaseItems/AddPurchaseItem/@Model.Tender1"><button style="width:200px"><i class="fa fa-truck"> </i> @Html.DisplayFor(model => model.Supplier1) &nbsp;-&nbsp;  @Html.DisplayFor(model => model.Supplier1Tender)</button></form></td></tr>
             <tr align="center"><td height="45px"><form action="~/PurchaseItems/AddPurchaseItem/@Model.Tender2"><button style="width:200px"><i class="fa fa-truck"> </i> @Html.DisplayFor(model => model.Supplier2) &nbsp;-&nbsp;  @Html.DisplayFor(model => model.Supplier2Tender)</button></form></td></tr>
             <tr align="center"><td height="45px"><form action="~/PurchaseItems/AddPurchaseItem/@Model.Tender3"><button style="width:200px"><i class="fa fa-truck"> </i> @Html.DisplayFor(model => model.Supplier3) &nbsp;-&nbsp;  @Html.DisplayFor(model => model.Supplier3Tender)</button></form></td></tr>
-            <tr align="center"><td height="50px" valign="bottom"><form action="~/PurchaseItems/Index"><button style="width:200px;font-size:15px;"><i class="fas fa-shopping-cart">  </i>    View Purchase Cart</button></form></td></tr>
-            <tr align="center" style="font-size:11px"><td height="20px" valign="bottom">@Html.DisplayFor(model => model.LastOrderLine1)</td></tr>
-            <tr align="center" style="font-size:11px"><td height="15px">@Html.DisplayFor(model => model.LastOrderLine2)</td></tr>
+
+            @if (Session["role"].ToString() == "clerk")
+            {
+                <tr align="center">
+                    <td height="50px" valign="bottom">
+                        <form action="~/PurchaseItems/Index">
+                            <button style="width:200px;font-size:15px;"><i class="fas fa-shopping-cart">  </i>    View Purchase Cart</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            <tr align="center"><td height="20px" style="font-size:13px" valign="bottom">@Html.DisplayFor(model => model.LastOrderLine1)</td></tr>
+            <tr align="center"><td height="15px" style="font-size:13px">@Html.DisplayFor(model => model.LastOrderLine2)</td></tr>
         </table>
     </div>
     <div id="stock-card" style="height:350px;width:900px;" hidden>
-        <div style="width:150px;height:30px;text-align:center;padding:5px;position:relative;left:750px;margin-bottom:5px" class="btn-primary" onclick="stockcard()">Back</div>
+        <button style="width:150px;height:30px;text-align:center;position:relative;left:750px;margin-bottom:5px" onclick="stockcard()"><i class="fas fa-arrow-alt-circle-left"></i> &nbsp; Back</button>
         <table style="font-size:12px">
             <tr style="font-weight:bold;background: linear-gradient(to right, rgba(146, 167, 154, 0.20) 0%, rgba(115, 147, 147, 0.31) 100%);border-bottom: solid lightgrey 3px;height:20px">
                 <td align="center" width="150px">Date</td>
@@ -189,8 +232,11 @@
         </table>
     </div>
 </div>
+@if (Session["role"].ToString() == "manager" || Session["role"].ToString() == "supervisor")
+{
 
-<script>
+
+    <script>
     function lvl() {
         var code = '@Model.ItemCode';
         var oglvl = '@Model.ReorderLvl';
@@ -265,4 +311,7 @@
             }
         }
     }
-</script>
+    </script>
+
+
+}
