@@ -9,12 +9,18 @@ namespace SSIMS.ViewModels
 {
     public class DashboardVM
     {
-        public List<DisbursementList> disbursements { get; set; }
+        public List<DisbursementList> Disbursements { get; set; }
 
-        public IEnumerable<InventoryItem> inventoryItems { get; set; }
+        public IEnumerable<InventoryItem> InventoryItems { get; set; }
         public DashboardVM()
         {
 
+        }
+
+        public DashboardVM(List<DisbursementList> dl, IEnumerable<InventoryItem> inventoryItems)
+        {
+            Disbursements = dl;
+            InventoryItems = inventoryItems;
         }
     }
 }

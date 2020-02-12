@@ -13,7 +13,7 @@
         <td>Time</td>
         <td>Department</td>
     </tr>
-    @foreach (var dis in Model.disbursements)
+    @foreach (var dis in Model.Disbursements)
     {
 <tr>
     <td>@Html.DisplayFor(modelItem => dis.Department.CollectionPoint.Location)</td>
@@ -39,7 +39,7 @@
 
         <td>Details</td>
     </tr>
-    @foreach (var it in Model.inventoryItems)
+    @foreach (var it in Model.InventoryItems)
     {
         <tr>
             <td>@Html.DisplayFor(modelItem => it.Item.ID)</td>

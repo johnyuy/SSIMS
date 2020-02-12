@@ -40,12 +40,13 @@ namespace SSIMS.Controllers
             }
             if (LoginService.IsAuthorizedRoles("staff"))
             {
-                List<RequisitionOrder> ros = unitofwork.RequisitionOrderRepository.Get(filter: x => x.CreatedByStaff.ID == staff.ID && (x.Status == Status.Pending || x.Status == Status.Approved)).ToList();
+                
+                List<RequisitionOrder> ros = unitofwork.RequisitionOrderRepository.Get(filter: x => x.CreatedByStaff.ID == staff.ID && (x.Status == Models.Status.Pending || x.Status == Models.Status.Approved)).ToList();
                 return View("Staff",ros);
             }
             else if (LoginService.IsAuthorizedRoles("head"))
             {
-                List<RequisitionOrder> ros = unitofwork.RequisitionOrderRepository.Get(filter: x => x.CreatedByStaff.DepartmentID == staff.DepartmentID && x.Status == Status.Pending).ToList();
+                List<RequisitionOrder> ros = unitofwork.RequisitionOrderRepository.Get(filter: x => x.CreatedByStaff.DepartmentID == staff.DepartmentID && x.Status == Models.Status.Pending).ToList();
                 var list = (ros.OrderBy(x => x.CreatedDate)).Take(5);
                 return View("DepHead",list);
             }
@@ -64,11 +65,11 @@ namespace SSIMS.Controllers
             }
             else if (LoginService.IsAuthorizedRoles("supervisor", "manager"))
             {
-                List<PurchaseOrder> pos = unitofwork.PurchaseOrderRepository.Get(x => x.Status == Status.Pending).ToList();
+                List<PurchaseOrder> pos = unitofwork.PurchaseOrderRepository.Get(x => x.Status == Models.Status.Pending).ToList();
                 ViewBag.poscount = pos.Count;
                 Debug.WriteLine(pos.Count);
 
-                List<AdjustmentVoucher> advs = unitofwork.AdjustmentVoucherRepository.Get(x => x.Status == Status.Pending).ToList();
+                List<AdjustmentVoucher> advs = unitofwork.AdjustmentVoucherRepository.Get(x => x.Status == Models.Status.Pending).ToList();
                 ViewBag.advscount = advs.Count;
                 Debug.WriteLine(advs.Count);
 
@@ -79,10 +80,19 @@ namespace SSIMS.Controllers
             }
             else if (LoginService.IsAuthorizedRoles("clerk"))
             {
-                List<InventoryItem> items = unitofwork.InventoryItemRepository.Get(includeProperties: "Item").ToList();
+                //DashboardVM dashvm = new DashboardVM();
+
+                //List<InventoryItem> items = unitofwork.InventoryItemRepository.Get(includeProperties: "Item").ToList();
+                //var itemslist = items.OrderBy(x => x.InStoreQty).Take(3);
+
+                List<DisbursementList> dis = unitofwork.DisbursementListRepository.Get(x => x.Status == Models.Status.Pending, includeProperties: "Department.collectionpoint").ToList();
+
+                IEnumerable<InventoryItem> items = unitofwork.InventoryItemRepository.Get(includeProperties: "Item").ToList();
                 var itemslist = items.OrderBy(x => x.InStoreQty).Take(3);
 
-                return View("Clerk",itemslist);
+                DashboardVM dbvm = new DashboardVM( dis, itemslist) ;
+
+                return View("Clerk",dbvm);
             }
             return RedirectToAction("Authentication", "Login");
         }
