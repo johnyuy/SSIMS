@@ -22,35 +22,39 @@
     th {
         text-align: right;
         width: 200px;
-        font-weight:bold;
-        color:white;
+        font-weight: bold;
+        color: white;
     }
 
     button {
         width: 150px;
     }
+
     #chart-container {
         width: 100%;
-        height:1600px;
+        height: 1600px;
     }
-    .chart{
-        width:100%;
+
+    .chart {
+        width: 100%;
         margin: 10px auto;
     }
-    table{
-        margin:20px;
+
+    table {
+        margin: 20px;
     }
-    #table-container{
-        width:100%;
-        height:auto;
-        background:linear-gradient(to right, rgba(41, 89, 89, 0.85) 20%, rgba(1, 16, 16, 0.0) 80%);
+
+    #table-container {
+        width: 100%;
+        height: auto;
+        background: linear-gradient(to right, rgba(41, 89, 89, 0.85) 20%, rgba(1, 16, 16, 0.0) 80%);
     }
 </style>
 
 <button id="runbtn" onclick="runsample()">Run Sample</button>
-<button id="disbtn" onclick="rundisb()">Disbursement</button>
+<!--<button id="disbtn" onclick="rundisb()">Disbursement</button>-->
 <input id="isrun" hidden type="checkbox" />
-<input id="isdis" hidq type="checkbox" />
+<!--<input id="isdis" hidq type="checkbox" />-->
 <div id="table-container">
     <table>
         <tr>
@@ -66,7 +70,7 @@
                 </select>
             </td>
             <td style="width:300px;">
-                <button onclick="refresh(1500)">View</button>
+                <button onclick="refresh(2000)">View</button>
             </td>
         </tr>
         <tr>
@@ -100,16 +104,16 @@
         </tr>
 
     </table>
-</div> 
+</div>
 
 
-    <div id="chart-container">
-        <img id="chart1" src=" @Url.Action("GenerateChartQty")" alt="Chart"  class="chart"/>
-        <img id="chart2" src=" @Url.Action("GenerateChartCost")" alt="Chart"  class="chart"/>
-        <img id="chart3" src=" @Url.Action("GenerateChartCount")" alt="Chart"  class="chart"/>
-        
+<div id="chart-container">
+    <img id="chart1" src=" @Url.Action("GenerateChartQty")" alt="Chart" class="chart" />
+    <img id="chart2" src=" @Url.Action("GenerateChartCost")" alt="Chart" class="chart" />
+    <img id="chart3" src=" @Url.Action("GenerateChartCount")" alt="Chart" class="chart" />
 
-    </div>
+
+</div>
 
 
 @section Scripts {
@@ -126,7 +130,7 @@
              $("#filter2").fadeOut(100);
              //$("#label2").fadeOut(100);
             $("#value1").fadeOut(100);
-           
+
 
         } else {
             $("#filter2").fadeOut(50);
@@ -134,13 +138,13 @@
             $("#value1").fadeOut(50);
 
             $("#row2").show(1000).fadeIn(1000);
-            
+
             $("#filter2").delay(800).fadeIn(300);
             //$("#label2").delay(800).fadeIn(300);
             $("#value1").delay(100).fadeIn(300);
-            
+
         }
-        
+
 
 
         var filter1select = $("#filter1").val();
@@ -182,7 +186,7 @@
             });
         }
 
-        
+
     });
 
     $('#filter2').change(function () {
@@ -210,7 +214,7 @@
                 };
             });
         }
-        
+
     });
     </script>
 
@@ -258,7 +262,7 @@
                 $("#runbtn").css("background-color", "slategrey");
                 $("#runbtn").html("End Sample");
                 refresh(2000);
-                
+
             } else {
                 alert("unloading sample data");
                 $.getJSON('@Url.Action("EndSample")');
@@ -281,7 +285,7 @@
                 $("#runbtn").css("background-color", "slategrey");
                 $("#runbtn").html("End Sample");
                 refresh(2000);
-                
+
             } else {
                 alert("unloading sample data");
                 $.getJSON('@Url.Action("EndSample")');

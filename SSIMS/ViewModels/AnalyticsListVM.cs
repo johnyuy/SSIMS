@@ -42,7 +42,8 @@ namespace SSIMS.ViewModels
                 }
             }
             ROSummaryList = rosummaryList;
-            var disbitems = unitOfWork.DisbursementListRepository.
+
+            /*var disbitems = unitOfWork.DisbursementListRepository.
                 Get(filter:x=>x.Status == SSIMS.Models.Status.Completed, includeProperties: "CreatedByStaff.Department, ItemTransactions.Item");
             DLList = disbitems.ToList();
 
@@ -58,7 +59,7 @@ namespace SSIMS.ViewModels
 
                 }
             }
-            DLSummaryList = dlsummarylist;
+            DLSummaryList = dlsummarylist;*/
         }
     }
 }
