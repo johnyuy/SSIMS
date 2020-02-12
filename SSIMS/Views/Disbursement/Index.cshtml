@@ -38,6 +38,9 @@
             color: white;
             background-color: #437373;
         }
+    .special {
+        background: linear-gradient(to right, rgba(146, 167, 154, 0.20) 0%, rgba(115, 147, 147, 0.31) 100%);
+    }
 </style>
 
 @if(ViewBag.staffrole != "DeptRep")
@@ -59,7 +62,7 @@
     @Html.ActionLink("View All", "Index", new { status = "All" })
 
     <table class="table">
-        <tr>
+        <tr class="special">
             <th>Disbursement ID</th>
             <th>Created Date</th>
             <th>Department</th>

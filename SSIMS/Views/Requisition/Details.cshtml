@@ -1,10 +1,19 @@
 ﻿@model SSIMS.Models.RequisitionOrder
 
 @{
-    ViewBag.Title = "Details";
     ViewBag.Header = "Requisition Order Details";
     ViewBag.Section = "Requisitions";
 }
+
+<style>
+    th, td {
+        text-align: center;
+    }
+
+    .special {
+        background: linear-gradient(to right, rgba(146, 167, 154, 0.20) 0%, rgba(115, 147, 147, 0.31) 100%);
+    }
+</style>
 <script>
     function post(path, params, method = 'post') {
         const form = document.createElement('form');
@@ -35,92 +44,106 @@
     }
 </script>
 
-
-<table class="table table-bordered">
-    <tr>
-        <th>
-            Requisition ID
-        </th>
-        <td>
-            @Html.DisplayFor(x => x.ID)
-        </td>
-    </tr>
-
-    <tr>
-        <th>
-            Requesting Staff
-        </th>
-        <td>
-            @Html.DisplayFor(x => x.CreatedByStaff.Name) (@Html.DisplayFor(x => Model.CreatedByStaff.DepartmentID))
-        </td>
-    </tr>
-    <tr>
-        <th>
-            Status
-        </th>
-        @if (Model.Status == SSIMS.Models.Status.Rejected)
-        {
-            <td style="color:maroon;font-weight:bold">
-                @Html.DisplayFor(x => x.Status)
+<div style="width:100%">
+    @if (Session["role"].ToString() == "head")
+    {
+    <table style="width:100%">
+        <tr>
+            <td style="text-align:left">
+                @Html.ActionLink("Manage Pending Requests", "Manage")
             </td>
-        }
-        else if (Model.Status == SSIMS.Models.Status.Approved)
-        {
-            <td style="color:darkgreen;font-weight:bold">
-                @Html.DisplayFor(x => x.Status)
+            <td style="text-align:right">
+                @Html.ActionLink("View Request History", "ViewHistory")
             </td>
-        }
-        else
-        {
-            <td style="color:midnightblue;font-weight:bold">
-                @Html.DisplayFor(x => x.Status)
+        </tr>
+        
+    </table>
+    }
+    <br />
+    <table class="table table-bordered" style="width:50%;float:left">
+        <tr>
+            <th width="200px">
+                Requisition ID
+            </th>
+            <td>
+                @Html.DisplayFor(x => x.ID)
             </td>
-        }
-    </tr>
-    <tr>
-        <th>
-            Request Date
-        </th>
-        <td>
-            @Html.DisplayFor(x => x.CreatedDate)
-        </td>
-    </tr>
+        </tr>
 
+        <tr>
+            <th>
+                Requesting Staff
+            </th>
+            <td>
+                @Html.DisplayFor(x => x.CreatedByStaff.Name) (@Html.DisplayFor(x => Model.CreatedByStaff.DepartmentID))
+            </td>
+        </tr>
+
+        <tr>
+            <th>
+                Request Date
+            </th>
+            <td>
+                @Html.DisplayFor(x => x.CreatedDate)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                Status
+            </th>
+            @if (Model.Status == SSIMS.Models.Status.Rejected)
+            {
+                <td style="color:maroon;font-weight:bold">
+                    @Html.DisplayFor(x => x.Status)
+                </td>
+            }
+            else if (Model.Status == SSIMS.Models.Status.Approved)
+            {
+                <td style="color:darkgreen;font-weight:bold">
+                    @Html.DisplayFor(x => x.Status)
+                </td>
+            }
+            else
+            {
+                <td style="color:midnightblue;font-weight:bold">
+                    @Html.DisplayFor(x => x.Status)
+                </td>
+            }
+        </tr>
+
+    </table>
     @if (Model.Status != SSIMS.Models.Status.Pending)
     {
-
-        <tr style="background-color:lightgoldenrodyellow">
-            <th>
-                Replying Staff
-            </th>
-            <td>
-                @Html.DisplayFor(x => x.RepliedByStaff.Name) (@Html.DisplayFor(x => Model.RepliedByStaff.DepartmentID))
-            </td>
-        </tr>
-        <tr style="background-color:lightgoldenrodyellow">
-            <th>
-                Comments
-            </th>
-            <td>
-                @Html.DisplayFor(x => x.Comments)
-            </td>
-        </tr>
-        <tr style="background-color:lightgoldenrodyellow">
-            <th>
-                Response Date
-            </th>
-            <td>
-                @Html.DisplayFor(x => x.ResponseDate)
-            </td>
-        </tr>
-
-
+        <table class="table table-bordered" style="width:50%;float:left">
+            <tr style="background-color:lightgoldenrodyellow">
+                <th width="200px">
+                    Replying Staff
+                </th>
+                <td>
+                    @Html.DisplayFor(x => x.RepliedByStaff.Name) (@Html.DisplayFor(x => Model.RepliedByStaff.DepartmentID))
+                </td>
+            </tr>
+            <tr style="background-color:lightgoldenrodyellow">
+                <th>
+                    Response Date
+                </th>
+                <td>
+                    @Html.DisplayFor(x => x.ResponseDate)
+                </td>
+            </tr>
+            <tr style="background-color:lightgoldenrodyellow;height:75px">
+                <th>
+                    Comments
+                </th>
+                <td>
+                    @Html.DisplayFor(x => x.Comments)
+                </td>
+            </tr>
+        </table>
     }
-</table>
-
-
+</div>
 <table class="table">
-    <tr>
+    <tr class="special">
         <th>
             Category
         </th>
@@ -148,7 +171,7 @@
 
             <td>
                 @Html.ActionLink(ro.Item.Description, "Details", "Items", new { id = ro.Item.ID }, new { })
-                
+
             </td>
 
             <td>
@@ -182,7 +205,7 @@
             </p>
         }
     </div>
-    
+
 }
 else
 {
@@ -217,18 +240,8 @@ else
 
 
             </div>
-            }
-        <div style="margin:10px">
-            <p>
-                @Html.ActionLink("View Requisition History List", "ViewHistory")
-            </p>
+        }
 
-            <p>
-                @Html.ActionLink("Back to Pending List", "Manage")
-            </p>
-
-        </div>
-        
     }
 
 }

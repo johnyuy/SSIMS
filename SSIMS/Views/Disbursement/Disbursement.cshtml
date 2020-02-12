@@ -17,13 +17,18 @@
         text-align: center;
     }
 
-    #top-bar, #bottom-bar {
+    #top-bar {
         width: 100%;
         height: 50px;
         margin: 5px 0px;
     }
+    #bottom-bar {
+        width: 100%;
+        height: 80px;
+        margin: 5px 0px;
+    }
 
-        #top-bar button {
+        #back-button {
             float: left;
             margin-right: 50px;
             width: 200px;
@@ -56,12 +61,32 @@
 
     #table-bottom {
         float: right;
+        margin-bottom:20px;
     }
 
     #form-container {
         box-shadow: 2px 4px 8px 0px rgba(47,79,79,0.2);
         padding: 20px;
         background: linear-gradient(to right, rgba(146, 167, 154, 0.20) 0%, rgba(115, 147, 147, 0.31) 100%);
+    }
+    #print-button{
+        background:none;
+        border:lightgrey 1px solid;
+        color:grey;
+        margin:20px;
+        position:relative;
+        top:50px;
+    }
+    input.checkbox{
+        transform:scale(1.5);
+        left:33px;
+        top: 7px;
+    }
+    input.text-box{
+        height:25px;
+    }
+    input{
+        text-align:center;
     }
 </style>
 
@@ -70,11 +95,10 @@
 
 <div id="top-bar">
     <div>
-        <button onclick="window.location.href = '/Disbursement/Current';">Back</button>
+        <button id="back-button" onclick="window.location.href = '/Disbursement/Current';">Back</button>
     </div>
     <div style="float:right">
-        @Html.ActionLink("Print", "Print", new { id = Model.ID })
-        <button type="button" id=@Model.ID style="margin-right:0px" onclick="window.location.href = '/Disbursement/Print';">Print</button>
+        <Button id="print-button" onclick="toPrint()"><i class="fa fa-print"></i></Button>
     </div>
 </div>
 <div id="form-container">
@@ -162,7 +186,7 @@
                         <td>
                             @Html.EditorFor(model => model.ItemTransactions.ToList()[i].Reason, new { htmlAttributes = new { @class = "form-control" }, })
                         </td>
-                        <td onchange="oncheck()">@Html.CheckBox("checkbox", false, new { @id = cb })</td>
+                        <td onchange="oncheck()">@Html.CheckBox("checkbox", false, new { @id = cb, @class= "checkbox" })</td>
                     </tr>
                 }
             </table>
@@ -175,10 +199,10 @@
         <table id="table-bottom">
             <tr style="height:50px">
                 <td>
-                    Verification Code: &nbsp;
+                    Verification Code &nbsp;
                 </td>
                 <td>
-                    <input style="width:100px" id="otpEntered" value="" type="text" required />
+                    <input style="width:100px;text-align:center;font-weight:bold;font-family:Consolas" id="otpEntered" value="" type="text" required />
                 </td>
             </tr>
             <tr>
@@ -186,6 +210,7 @@
                 <td><button id="submit-button" disabled style="width:100px; color:lightgrey" type="submit" onclick="verify()">Complete</button></td>
             </tr>
         </table>
+        
     </div>
 </div>
 
@@ -252,6 +277,12 @@
 
     }
 
+
+    
+
+    function toPrint() {
+        window.open('/Disbursement/Print?id=@Model.ID'); 
+    }
 
 
 </script>

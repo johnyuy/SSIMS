@@ -2,96 +2,106 @@
 @model PagedList.IPagedList<SSIMS.Models.RequisitionOrder>
 @using PagedList.Mvc;
 @{
-    ViewBag.Title = "Manage";
-    ViewBag.Header = "Manage";
-    ViewBag.Section="Requisitions";
+    ViewBag.Header = "Manage Pending Requests";
+    ViewBag.Section = "Requisitions";
+    int pageno = Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber;
 }
+<style>
+    th, td {
+        text-align: center;
+    }
 
-    <p style="margin:10px">    </p>
+    .special {
+        background: linear-gradient(to right, rgba(146, 167, 154, 0.20) 0%, rgba(115, 147, 147, 0.31) 100%);
+    }
+</style>
+<p style="margin:10px">    </p>
 
 <p>
-    @Html.ActionLink("See Requisition History List", "ViewHistory")
+    @Html.ActionLink("View Request History", "ViewHistory")
 </p>
 
 <p style="margin:50px">    </p>
 
 @if (Model.Count() == 0)
 {
-    <h4> No pending request</h4>
+    <p style="font-size:50px;color:lightgray">No Pending Requests</p>
 }
-else {
+else
+{
 
-<table class="table">
-    <tr>
+    <table class="table">
+        <tr class="special">
 
-        <th>
-            Requisition ID
-            @*@Html.DisplayNameFor(model => model.ID)*@
-        </th>
+            <th>
+                Requisition ID
+                @*@Html.DisplayNameFor(model => model.ID)*@
+            </th>
 
-        <th>
-            Created by Staff
-            @*@Html.DisplayNameFor(model => model.CreatedByStaff)*@
-        </th>
+            <th>
+                Created by Staff
+                @*@Html.DisplayNameFor(model => model.CreatedByStaff)*@
+            </th>
 
-        <th>
-            Created Date
-            @*@Html.DisplayNameFor(model => model.CreatedDate)*@
-        </th>
+            <th>
+                Created Date
+                @*@Html.DisplayNameFor(model => model.CreatedDate)*@
+            </th>
 
-        <th>
-            Status
-            @*@Html.DisplayNameFor(model => model.Status)*@
-        </th>
+            <th>
+                Status
+                @*@Html.DisplayNameFor(model => model.Status)*@
+            </th>
 
-        <th>
-            Details
-        </th>
+            <th>
+                Details
+            </th>
 
-        <th>
-            Manage
-        </th>
+            <th>
+                Action
+            </th>
 
-        
-    </tr>
 
-    @foreach (var ro in Model)
-    {
-        <tr>
-
-            <td>
-                @Html.DisplayFor(modelItem => ro.ID)
-            </td>
-
-            <td>
-                @Html.DisplayFor(modelItem => ro.CreatedByStaff.Name)
-            </td>
-
-            <td>
-                @Html.DisplayFor(modelItem => ro.CreatedDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => ro.Status)
-            </td>
-
-            <td>
-
-                @Html.ActionLink("Details", "Details", new { id = ro.ID })
-
-            </td>
-            <td>
-                @Html.ActionLink("Approve", "Approvequick", new { id = ro.ID }) ||
-                @Html.ActionLink("Reject", "Rejectquick", new { id = ro.ID })
-            </td>
         </tr>
-    }
 
-</table>
+        @foreach (var ro in Model)
+        {
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => ro.ID)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => ro.CreatedByStaff.Name)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => ro.CreatedDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => ro.Status)
+                </td>
+
+                <td>
+
+                    @Html.ActionLink("Details", "Details", new { id = ro.ID })
+
+                </td>
+                <td>
+                    @Html.ActionLink("Approve", "Approvequick", new { id = ro.ID }) &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+                    @Html.ActionLink("Reject", "Rejectquick", new { id = ro.ID })
+                </td>
+            </tr>
+        }
+
+    </table>
 }
 
 
+@if (Model.Count() > 0) {
+    <br />
+    <p>Page @pageno of @Model.PageCount</p>
 
-<br />
-Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
-
-@Html.PagedListPager(Model, page => Url.Action("Manage", new { page }))
+    @Html.PagedListPager(Model, page => Url.Action("Manage", new { page }))
+}
