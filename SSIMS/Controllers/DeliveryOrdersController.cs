@@ -169,8 +169,8 @@ namespace SSIMS.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ID, CreatedByStaffID, RepliedByStaffID, Comments, Supplier, CreatedDate, ResponseDate, Status, PurchaseOrderID, TransactionItems")] DeliveryOrderVM deliveryOrderVM, int? id)
         {
-            if (ModelState.IsValid)
-            {
+            //if (ModelState.IsValid)
+            //{
 
                 List<DocumentItem> deliveredItems = new List<DocumentItem>();
                 List<TransactionItem> items = deliveryOrderVM.TransactionItems;
@@ -226,10 +226,10 @@ namespace SSIMS.Controllers
                     ViewBag.RepliedByStaffID = new SelectList(db.Staffs, "ID", "UserAccountID", deliveryOrderVM.RepliedByStaffID);
                     return View(deliveryOrderVM);
                 }
-            }
-            ViewBag.CreatedByStaffID = new SelectList(db.Staffs, "ID", "UserAccountID", deliveryOrderVM.CreatedByStaffID);
-            ViewBag.RepliedByStaffID = new SelectList(db.Staffs, "ID", "UserAccountID", deliveryOrderVM.RepliedByStaffID);
-            return View(deliveryOrderVM);
+            //}
+            //ViewBag.CreatedByStaffID = new SelectList(db.Staffs, "ID", "UserAccountID", deliveryOrderVM.CreatedByStaffID);
+            //ViewBag.RepliedByStaffID = new SelectList(db.Staffs, "ID", "UserAccountID", deliveryOrderVM.RepliedByStaffID);
+            //return View(deliveryOrderVM);
         }
 
         // GET: DeliveryOrders/Delete/5

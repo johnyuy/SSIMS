@@ -27,6 +27,9 @@ namespace SSIMS.Controllers
         // GET: PurchaseOrders
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
+            if (!LoginService.IsAuthorizedRoles("manager", "supervisor", "clerk"))
+                return RedirectToAction("Index", "Home");
+
             ViewBag.Dates = String.IsNullOrEmpty(sortOrder) ? "do_date" : "";
             ViewBag.Cost = sortOrder == "cost" ? "do_cost" : "cost";
 
@@ -46,7 +49,7 @@ namespace SSIMS.Controllers
             if (!String.IsNullOrEmpty(searchString))
             {
                 purchaseOrders = purchaseOrders.Where(i => i.ID.ToString().Contains(searchString.ToUpper())
-                                       || i.Supplier.ID.ToUpper().Contains(searchString.ToUpper()) 
+                                       || i.Supplier.ID.ToUpper().Contains(searchString.ToUpper())
                                        || i.CreatedDate.ToString().Contains(searchString.ToUpper())
                                        || i.TotalCost().ToString().Contains(searchString.ToUpper())
                                        || i.Status.ToString().ToUpper().Contains(searchString.ToUpper()));
@@ -83,6 +86,9 @@ namespace SSIMS.Controllers
 
         public ActionResult Approve(int? id)
         {
+            if (!LoginService.IsAuthorizedRoles("manager", "supervisor"))
+                return RedirectToAction("Index", "Home");
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -107,6 +113,9 @@ namespace SSIMS.Controllers
 
         public ActionResult Reject(int? id)
         {
+            if (!LoginService.IsAuthorizedRoles("manager", "supervisor"))
+                return RedirectToAction("Index", "Home");
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -131,6 +140,9 @@ namespace SSIMS.Controllers
 
         public ActionResult Cancel(int? id)
         {
+            if (!LoginService.IsAuthorizedRoles("clerk"))
+                return RedirectToAction("Index", "Home");
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -152,6 +164,9 @@ namespace SSIMS.Controllers
 
         public ActionResult DeliveryOrder(int? id)
         {
+            if (!LoginService.IsAuthorizedRoles("manager", "supervisor", "clerk"))
+                return RedirectToAction("Index", "Home");
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -172,6 +187,10 @@ namespace SSIMS.Controllers
 
         public ActionResult ViewDeliveryOrder(int? id)
         {
+            if (!LoginService.IsAuthorizedRoles("manager", "supervisor", "clerk"))
+                return RedirectToAction("Index", "Home");
+
+
             return RedirectToAction("Details", "DeliveryOrders", new { id = id });
         }
 
@@ -180,6 +199,10 @@ namespace SSIMS.Controllers
         // GET: PurchaseOrders/Details/5
         public ActionResult Details(int? id)
         {
+            if (!LoginService.IsAuthorizedRoles("manager", "supervisor", "clerk"))
+                return RedirectToAction("Index", "Home");
+
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -202,68 +225,6 @@ namespace SSIMS.Controllers
                 return HttpNotFound();
             }
             return View(vm);
-        }
-
-        // GET: PurchaseOrders/Create
-        public ActionResult Create()
-        {
-            ViewBag.CreatedByStaffID = new SelectList(db.Staffs, "ID", "UserAccountID");
-            ViewBag.RepliedByStaffID = new SelectList(db.Staffs, "ID", "UserAccountID");
-            return View();
-        }
-
-        // POST: PurchaseOrders/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,ExpectedDeliveryDate,CreatedByStaffID,RepliedByStaffID,Comments,CreatedDate,ResponseDate,Status")] PurchaseOrder purchaseOrder)
-        {
-            if (ModelState.IsValid)
-            {
-                db.PurchaseOrders.Add(purchaseOrder);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            ViewBag.CreatedByStaffID = new SelectList(db.Staffs, "ID", "UserAccountID", purchaseOrder.CreatedByStaffID);
-            ViewBag.RepliedByStaffID = new SelectList(db.Staffs, "ID", "UserAccountID", purchaseOrder.RepliedByStaffID);
-            return View(purchaseOrder);
-        }
-
-        // GET: PurchaseOrders/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            PurchaseOrder purchaseOrder = db.PurchaseOrders.Find(id);
-            if (purchaseOrder == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.CreatedByStaffID = new SelectList(db.Staffs, "ID", "UserAccountID", purchaseOrder.CreatedByStaffID);
-            ViewBag.RepliedByStaffID = new SelectList(db.Staffs, "ID", "UserAccountID", purchaseOrder.RepliedByStaffID);
-            return View(purchaseOrder);
-        }
-
-        // POST: PurchaseOrders/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,ExpectedDeliveryDate,CreatedByStaffID,RepliedByStaffID,Comments,CreatedDate,ResponseDate,Status")] PurchaseOrder purchaseOrder)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(purchaseOrder).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            ViewBag.CreatedByStaffID = new SelectList(db.Staffs, "ID", "UserAccountID", purchaseOrder.CreatedByStaffID);
-            ViewBag.RepliedByStaffID = new SelectList(db.Staffs, "ID", "UserAccountID", purchaseOrder.RepliedByStaffID);
-            return View(purchaseOrder);
         }
 
         // GET: PurchaseOrders/Delete/5
