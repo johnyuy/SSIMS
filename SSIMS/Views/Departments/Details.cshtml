@@ -78,7 +78,7 @@
 
 
         </tr>
-        @if (Session["role"].ToString() == "rep")
+        @if (Session["role"].ToString() == "head")
         {
         <tr>
             <th>  @Html.ActionLink("Delegate Authority", "DelegateAuthority", new { id = department.ID })</th>
