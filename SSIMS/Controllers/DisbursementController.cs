@@ -32,6 +32,9 @@ namespace SSIMS.Controllers
         // GET: DisbursementLists
         public ActionResult Index(int? page, string status="Pending")
         {
+            if (LoginService.IsAuthorizedRoles("staff"))
+                return RedirectToAction("Index", "Home");
+
             UnitOfWork uow = new UnitOfWork();
             
 
@@ -126,6 +129,9 @@ namespace SSIMS.Controllers
         [HttpGet]
         public ActionResult Disbursement(int? id)
         {
+            if (!LoginService.IsAuthorizedRoles("clerk", "supervisor","manager"))
+                return RedirectToAction("Index", "Home");
+
             DisbursementList DL = unitOfWork.DisbursementListRepository.Get(filter: x => x.ID == id, includeProperties: "CreatedByStaff, ItemTransactions.Item, Department.CollectionPoint").FirstOrDefault();
 
             if (DL == null)
@@ -190,6 +196,9 @@ namespace SSIMS.Controllers
 
         public ActionResult Current()
         {
+            if (!LoginService.IsAuthorizedRoles("clerk", "supervisor", "manager"))
+                return RedirectToAction("Index", "Home");
+
             var disbursementLists = unitOfWork.DisbursementListRepository.Get(filter: x => x.Status == Models.Status.Pending, includeProperties: "CreatedByStaff, ItemTransactions.Item, Department.CollectionPoint");
 
             return View("CurrentDisbursements",disbursementLists.ToList());
@@ -198,6 +207,9 @@ namespace SSIMS.Controllers
         // GET: DisbursementLists/Details/5
         public ActionResult Details(int? id)
         {
+            if (LoginService.IsAuthorizedRoles("staff"))
+                return RedirectToAction("Index", "Home");
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -214,6 +226,9 @@ namespace SSIMS.Controllers
         // GET: DisbursementLists/Create
         public ActionResult Create()
         {
+            if (!LoginService.IsAuthorizedRoles("clerk", "supervisor", "manager"))
+                return RedirectToAction("Index", "Home");
+
             ViewBag.CreatedByStaffID = new SelectList(db.Staffs, "ID", "UserAccountID");
             ViewBag.RepliedByStaffID = new SelectList(db.Staffs, "ID", "UserAccountID");
             return View();
@@ -237,6 +252,9 @@ namespace SSIMS.Controllers
 
         public ActionResult Return(int? id)
         {
+            if (!LoginService.IsAuthorizedRoles("clerk", "supervisor", "manager"))
+                return RedirectToAction("Index", "Home");
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
