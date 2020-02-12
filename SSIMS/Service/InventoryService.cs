@@ -212,5 +212,35 @@ namespace SSIMS.Service
             //Debug.WriteLine("InStore Qty for " + ItemID + "updated to" + balance);
             return true;
         }
+
+        public bool UpdateReorderLvl(string ItemID, int newlvl)
+        {
+            if (newlvl < 0) return false;
+
+            UnitOfWork uow = new UnitOfWork();
+            InventoryItem inventoryItem = uow.InventoryItemRepository.Get(filter: x => x.ItemID == ItemID).FirstOrDefault();
+            if (inventoryItem == null) return false;
+
+            inventoryItem.ReorderLvl = newlvl;
+            uow.InventoryItemRepository.Update(inventoryItem);
+            uow.Save();
+
+            return true;
+        }
+
+        public bool UpdateReorderQty(string ItemID, int newqty)
+        {
+            if (newqty < 1) return false;
+
+            UnitOfWork uow = new UnitOfWork();
+            InventoryItem inventoryItem = uow.InventoryItemRepository.Get(filter: x => x.ItemID == ItemID).FirstOrDefault();
+            if (inventoryItem == null) return false;
+
+            inventoryItem.ReorderQty = newqty;
+            uow.InventoryItemRepository.Update(inventoryItem);
+            uow.Save();
+
+            return true;
+        }
     }
 }

@@ -2,7 +2,7 @@
 @using SSIMS.ViewModels;
 @{
     ViewBag.Section = "Inventory";
-    ViewBag.Header = "Item Details";
+    ViewBag.Header = "Inventory Item Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
     bool isLow = Model.InStoreQty <= Model.ReorderLvl ? true : false;
     string cI = "", mI = "", Index = "";
@@ -54,17 +54,34 @@
         form.submit();
     }
 </script>
-
+<style>
+    #full-container i{
+        color:dimgray;
+    }
+    .reorderbox{
+        width:100px;
+        height:30px;
+        margin:5px;
+        text-align:center;
+        text-indent:10px;
+        background-color:floralwhite;
+        border: inset 0.5px lightgrey;
+        font-size:20px;
+    }
+    .rebtn{
+        width: 60px;
+    }
+</style>
 <div style="margin-left:15px;margin-top:10px;position:relative;top:10px">
     @Html.ActionLink("Back to List", "Index", new { searchString = searchString, lowStock = lowStock })
 </div>
 
-<div style="height:700px;width:920px; box-shadow: 2px 4px 8px 0px rgba(47,79,79,0.2);">
+<div id="full-container" style="height:700px;width:920px; box-shadow: 2px 4px 8px 0px rgba(47,79,79,0.2);">
    <div id="item-information" style="margin:20px 0px 5px 10px;width:900px;">
        <table style="font-size:17px">
            <tr style="background-color:white">
-               <td colspan="2" align="center" height="50px" style="font-size:22px">Item Information</td>
-               <td align="center">
+               <td colspan="2" align="left" height="50px" style="font-size:35px;text-indent:60px">@Model.ItemCode</td>
+               <td align="center" height="50px">
                    @if (hasPrev)
                    {
                        <a style="text-decoration:none" href="~/inventory/details/@ViewBag.PrevItemID"><<</a>
@@ -76,7 +93,9 @@
                    }
                </td>
            </tr>
-           <tr><td height="10px"></td><td></td><td rowspan="6" align="left" valign="middle" width="280px"><img src=@Url.Content(Model.ImageURL) style="width:280px;" /></td></tr>
+           <tr>
+                <td height="10px"></td><td></td><td rowspan="6" align="left" valign="middle" width="280px"><img src=@Url.Content(Model.ImageURL) style="width:280px;" /></td>
+           </tr>
            <tr>
                <td align="right" width="200px" height="15px">@Html.DisplayNameFor(model => model.ItemCode) :</td>
                <td align="center" width="400px"><div style="width:300px;background-color:floralwhite;border:solid 1px lightgray">@Html.DisplayFor(model => model.ItemCode)</div></td>
@@ -107,19 +126,19 @@
             <tr align="center">
                 @if (isLow)
                 {
-                    <td colspan="2" height="80px" style="font-size: 25px; color: maroon;"><div style="        width: 200px;
-        background-color: floralwhite;
-        font-weight: bold;
-        border: solid 1px lightgray;
-">@Html.DisplayFor(model => model.InStoreQty)</div></td>
+                    <td colspan="2" height="80px">
+                        <div id="instorelabel" style="height:50px; width: 150px; background-color: floralwhite;color: maroon; font-weight: bold;font-size:30px; border: solid 1px lightgray;">
+                            @Model.InStoreQty
+                        </div>
+                    </td>
                 }
                 else
                 {
-                    <td colspan="2" height="80px" style="font-size:25px;"><div style="        width: 200px;
-        background-color: floralwhite;
-        font-weight: bold;
-        border: solid 1px lightgray;
-">@Html.DisplayFor(model => model.InStoreQty)</div></td>
+                    <td colspan="2" height="80px">
+                        <div style="height:50px;width: 150px;background-color: floralwhite;font-weight: bold;font-size:30px;border: solid 1px lightgray;">
+                            @Html.DisplayFor(model => model.InStoreQty)
+                        </div>
+                    </td>
                 }
 
             </tr>
@@ -129,11 +148,11 @@
             </tr>
             <tr align="center">
                 <td height="30px">@Html.DisplayNameFor(model => model.ReorderLvl)</td>
-                <td width="50%"><div style="width:100px;background-color:floralwhite;border:solid 1px lightgray;">@Html.DisplayFor(model => model.ReorderLvl)</div></td>
+                <td width="50%"><div><input class="reorderbox" id="lvlinput" type="number" min="0" value=@Model.ReorderLvl readonly/><button onclick="lvl()" id="buttonlvl" class="rebtn"><i class="fa fa-pencil"></i><span id="lvltext"> edit</span></button></div></td>
             </tr>
             <tr align="center">
                 <td height="30px">@Html.DisplayNameFor(model => model.ReorderQty)</td>
-                <td ><div style="width:100px;background-color:floralwhite;border:solid 1px lightgray;">@Html.DisplayFor(model => model.ReorderQty)</div></td>
+                <td ><div><input class="reorderbox" id="qtyinput" type="number" min="0" value=@Model.ReorderQty readonly/><button onclick="qty()" id="buttonqty" type="submit" class="rebtn"><i class="fa fa-pencil"></i><span id="qtytext"> edit</span></button></div></td>
             </tr>
         </table>
     </div>
@@ -141,10 +160,10 @@
         <table style="font-size:18px;width:100%">
             <tr align="center"><td height="70px" style="font-size:22px">Purchase from Supplier</td></tr>
             <tr align="center"><td height="15px" style="font-size:11px">Click to add @Html.DisplayFor(model=>model.ReorderQty) @Html.DisplayFor(model=>model.UnitDisplay) to Purchase Cart</td></tr>
-            <tr align="center"><td height="45px"><form action="~/PurchaseItems/AddPurchaseItem/@Model.Tender1"><button style="width:200px">@Html.DisplayFor(model => model.Supplier1) &nbsp;-&nbsp;  @Html.DisplayFor(model => model.Supplier1Tender)</button></form></td></tr>
-            <tr align="center"><td height="45px"><form action="~/PurchaseItems/AddPurchaseItem/@Model.Tender2"><button style="width:200px">@Html.DisplayFor(model => model.Supplier2) &nbsp;-&nbsp;  @Html.DisplayFor(model => model.Supplier2Tender)</button></form></td></tr>
-            <tr align="center"><td height="45px"><form action="~/PurchaseItems/AddPurchaseItem/@Model.Tender3"><button style="width:200px">@Html.DisplayFor(model => model.Supplier3) &nbsp;-&nbsp;  @Html.DisplayFor(model => model.Supplier3Tender)</button></form></td></tr>
-            <tr align="center"><td height="50px" valign="bottom"><form action="~/PurchaseItems/Index"><button style="width:200px;font-size:15px;">View Purchase Cart</button></form></td></tr>
+            <tr align="center"><td height="45px"><form action="~/PurchaseItems/AddPurchaseItem/@Model.Tender1"><button style="width:200px"><i class="fa fa-truck"> </i> @Html.DisplayFor(model => model.Supplier1) &nbsp;-&nbsp;  @Html.DisplayFor(model => model.Supplier1Tender)</button></form></td></tr>
+            <tr align="center"><td height="45px"><form action="~/PurchaseItems/AddPurchaseItem/@Model.Tender2"><button style="width:200px"><i class="fa fa-truck"> </i> @Html.DisplayFor(model => model.Supplier2) &nbsp;-&nbsp;  @Html.DisplayFor(model => model.Supplier2Tender)</button></form></td></tr>
+            <tr align="center"><td height="45px"><form action="~/PurchaseItems/AddPurchaseItem/@Model.Tender3"><button style="width:200px"><i class="fa fa-truck"> </i> @Html.DisplayFor(model => model.Supplier3) &nbsp;-&nbsp;  @Html.DisplayFor(model => model.Supplier3Tender)</button></form></td></tr>
+            <tr align="center"><td height="50px" valign="bottom"><form action="~/PurchaseItems/Index"><button style="width:200px;font-size:15px;"><i class="fas fa-shopping-cart">  </i>    View Purchase Cart</button></form></td></tr>
             <tr align="center" style="font-size:11px"><td height="20px" valign="bottom">@Html.DisplayFor(model => model.LastOrderLine1)</td></tr>
             <tr align="center" style="font-size:11px"><td height="15px">@Html.DisplayFor(model => model.LastOrderLine2)</td></tr>
         </table>
@@ -171,3 +190,79 @@
     </div>
 </div>
 
+<script>
+    function lvl() {
+        var code = '@Model.ItemCode';
+        var oglvl = '@Model.ReorderLvl';
+        var inStore = '@Model.InStoreQty';
+        var text = $("#lvltext").html();
+        if (text == " edit") {
+            $("#lvlinput").attr("readonly", false);
+            $("#lvlinput").css("background-color", "white");
+            $("#lvlinput").css("font-weight", "bold");
+            $("#lvltext").html(" ok");
+        } else {
+            $("#lvlinput").attr("readonly", true);
+            $("#lvlinput").css("background-color", "floralwhite");
+            $("#lvlinput").css("font-weight", "");
+            $("#lvltext").html(" edit");
+
+            var newlvl = $("#lvlinput").val();
+            if (newlvl != oglvl) {
+                //getJSON call
+                $.getJSON('@Url.Action("UpdateReorderLvl")', { itemcode : code, newlvl: newlvl  }, function (response) {
+                    if (response) {
+                        alert("Update Success!");
+                        updatecolor();
+                    } else {
+                        alert("Update Failed!");
+                        $("#lvlinput").val(oglvl)
+                    };
+                });
+            }
+        }
+
+        function updatecolor() {
+            var lvl = $("#lvlinput").val();
+            if (inStore < lvl) {
+                //maroon
+                $("#instorelabel").css("color", "maroon");
+            } else {
+                //black
+                $("#instorelabel").css("color", "");
+            }
+        }
+    }
+
+
+    function qty() {
+        var code = '@Model.ItemCode';
+        var ogqty = '@Model.ReorderQty';
+        var text = $("#qtytext").html();
+        if (text == " edit") {
+            $("#qtyinput").attr("readonly", false);
+            $("#qtyinput").css("background-color", "white");
+            $("#qtyinput").css("font-weight", "bold");
+            $("#qtytext").html(" ok");
+        } else {
+            var newqty = $("#qtyinput").val();
+            $("#qtyinput").attr("readonly", true);
+            $("#qtyinput").css("background-color", "floralwhite");
+            $("#qtyinput").css("font-weight", "");
+            $("#qtytext").html(" edit");
+
+            var newqty = $("#qtyinput").val();
+            if (newqty != ogqty) {
+                //getJSON call
+                $.getJSON('@Url.Action("UpdateReorderQty")', { itemcode : code, newqty: newqty  }, function (response) {
+                    if (response) {
+                        alert("Update Success!");
+                    } else {
+                        alert("Update Failed!");
+                        $("#qtyinput").val(ogqty)
+                    };
+                });
+            }
+        }
+    }
+</script>

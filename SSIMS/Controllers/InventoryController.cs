@@ -236,6 +236,29 @@ namespace SSIMS.Controllers
             return Content("");
         }
 
+
+        [HttpGet]
+        public JsonResult UpdateReorderLvl(string itemcode, int newlvl)
+        {
+            Debug.WriteLine("item = " + itemcode + "change to new reorder lvl = " + newlvl);
+
+            if(InventoryService.UpdateReorderLvl(itemcode, newlvl))
+                return Json(true, JsonRequestBehavior.AllowGet);
+            else
+                return Json(false, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult UpdateReorderQty(string itemcode, int newqty)
+        {
+            Debug.WriteLine("item = " + itemcode + "change to new reorder qty = " + newqty);
+
+            if (InventoryService.UpdateReorderQty(itemcode, newqty))
+                return Json(true, JsonRequestBehavior.AllowGet);
+            else
+                return Json(false, JsonRequestBehavior.AllowGet);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
