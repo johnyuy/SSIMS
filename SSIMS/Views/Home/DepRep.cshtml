@@ -9,7 +9,7 @@
     DateTime today = DateTime.Today;
     int daysleft = ((int)DayOfWeek.Monday - (int)today.DayOfWeek + 7) % 7;
     DateTime nextMon = today.AddDays(daysleft);
-    string nextMonday = time.AddDays(daysleft+1).ToString("dd/MM/yyyy hh:mm tt");
+    string nextMonday = time.AddDays(daysleft).ToString("dd/MM/yyyy hh:mm tt");
 }
 
 <style>

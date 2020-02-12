@@ -20,10 +20,8 @@
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
     <IISExpressSSLPort>44386</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>
-    </IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>
-    </IISExpressWindowsAuthentication>
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
@@ -394,6 +392,7 @@
     <Compile Include="ViewModels\AdjustmentItemVM.cs" />
     <Compile Include="ViewModels\AdjustmentVoucherVM.cs" />
     <Compile Include="ViewModels\AnalyticsListVM.cs" />
+    <Compile Include="ViewModels\ApiDepartmentView.cs" />
     <Compile Include="ViewModels\ApiDisbursementListListView.cs" />
     <Compile Include="ViewModels\ApiDisbursementListLogView.cs" />
     <Compile Include="ViewModels\ApiDisbursementListView.cs" />
@@ -404,6 +403,7 @@
     <Compile Include="ViewModels\ApiRequisitionDetailsView.cs" />
     <Compile Include="ViewModels\ApiRequisitionListView.cs" />
     <Compile Include="ViewModels\ApiTransactionItemView.cs" />
+    <Compile Include="ViewModels\DashboardVM.cs" />
     <Compile Include="ViewModels\DeliveryOrderVM.cs" />
     <Compile Include="ViewModels\DeptDisbursementViewModel.cs" />
     <Compile Include="ViewModels\DeptHeadAuthVM.cs" />
@@ -551,8 +551,6 @@
     <Content Include="Views\Requisition\Edit.cshtml" />
     <Content Include="Views\Requisition\ViewHistory.cshtml" />
     <Content Include="Views\Requisition\Manage.cshtml" />
-    <Content Include="Views\Requisition\Approve.cshtml" />
-    <Content Include="Views\Requisition\Reject.cshtml" />
     <Content Include="Views\Requisition\Create.cshtml" />
     <Content Include="Views\Requisition\Index.cshtml" />
     <Content Include="Views\Requisition\Details.cshtml" />
