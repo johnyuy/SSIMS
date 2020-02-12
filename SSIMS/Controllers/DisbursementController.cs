@@ -37,6 +37,16 @@ namespace SSIMS.Controllers
             int pageSize = 15;
             int pageNumber = (page ?? 1);
 
+            //below for dep rep see disbursement history
+            Staff staff = loginService.StaffFromSession;
+            ViewBag.staffrole = staff.StaffRole;
+            if(staff.StaffRole== "DeptRep")
+            {
+                disbursementList = unitOfWork.DisbursementListRepository.Get(x => (x.Status == Models.Status.Completed) && (x.Department.ID == staff.DepartmentID), includeProperties: "CreatedByStaff, ItemTransactions.Item, Department").ToList();
+            }
+
+
+
             switch (status)
             {
 
