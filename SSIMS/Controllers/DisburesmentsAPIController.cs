@@ -43,10 +43,28 @@ namespace SSIMS.Controllers
         [HttpGet]
         public ApiDisbursementListView GetByID(int id)
         {
-
-            DisbursementList dl = uow.DisbursementListRepository.Get(filter: x => x.ID == id, includeProperties: "Department, CreatedByStaff, RepliedByStaff").FirstOrDefault();
+            DisbursementList dl = uow.DisbursementListRepository.Get(filter: x => x.ID == id, includeProperties: "Department, CreatedByStaff, RepliedByStaff, Department.CollectionPoint").FirstOrDefault();
             ApiDisbursementListView apiDisbursementListView = new ApiDisbursementListView(dl);
             return apiDisbursementListView;
+        }
+
+        [HttpGet]
+        public List<ApiDisbursementListListView> GetByDepartmentRepID(string departmentrepid)
+        {
+            List<ApiDisbursementListListView> apiDisburementList = new List<ApiDisbursementListListView>();
+
+            Staff deptrep = uow.StaffRepository.Get(filter: x => x.UserAccountID == departmentrepid, includeProperties: "Department").FirstOrDefault();
+            Department department = deptrep.Department;
+            List<DisbursementList> disbursementLists = uow.DisbursementListRepository.Get(filter: x => x.Department.ID == department.ID , includeProperties: "Department, CreatedByStaff, RepliedByStaff").ToList();
+
+
+
+            foreach (DisbursementList dl in disbursementLists)
+            {
+                apiDisburementList.Add(new ApiDisbursementListListView(dl, uow));
+            }
+
+            return apiDisburementList;
         }
 
         [HttpPost]

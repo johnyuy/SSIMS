@@ -15,11 +15,13 @@ namespace SSIMS.ViewModels
         public string RepliedByStaffID;
         public string RepliedByStaffName;
         public string DepartmentID;
-
+        public string CollectionPoint;
         public string Comments;
         public string CreatedDate;
         public string ResponseDate;
         public string Status;
+
+        public string OTP;
 
         public List<ApiTransactionItemView> transactionItemViewList;
 
@@ -36,6 +38,8 @@ namespace SSIMS.ViewModels
             RepliedByStaffID = dl.RepliedByStaff.ID.ToString();
             RepliedByStaffName = dl.RepliedByStaff.Name;
             DepartmentID = dl.Department.ID;
+            CollectionPoint = dl.Department.CollectionPoint.Location;
+            OTP = dl.OTP.ToString();
 
             Comments = dl.Comments;
             CreatedDate = dl.CreatedDate.ToString();
@@ -61,6 +65,7 @@ namespace SSIMS.ViewModels
             CreatedDate = createdDate;
             ResponseDate = responseDate;
             Status = status;
+            
             this.transactionItemViewList = transactionItemViewList;
         }
     }

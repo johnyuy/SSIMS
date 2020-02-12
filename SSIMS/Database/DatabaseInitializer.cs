@@ -9,8 +9,8 @@ using SSIMS.Service;
 
 namespace SSIMS.Database
 {
-    //public class DatabaseInitializer<T> : DropCreateDatabaseAlways<DatabaseContext>
-    public class DatabaseInitializer<T> : CreateDatabaseIfNotExists<DatabaseContext>
+    public class DatabaseInitializer<T> : DropCreateDatabaseAlways<DatabaseContext>
+    //public class DatabaseInitializer<T> : CreateDatabaseIfNotExists<DatabaseContext>
 
     {
         static StaffRepository StaffRepository;
@@ -832,7 +832,6 @@ namespace SSIMS.Database
             //APPROVED Requisition Orders
             Staff staff2 = StaffRepository.GetByID(10010); //ARCH dept
             RequisitionOrder reqform2 = new RequisitionOrder(staff2);
-            reqform2.RepliedByStaff = StaffRepository.GetByID(10006);
             List<DocumentItem> documentItems2 = new List<DocumentItem>
             {
                 new DocumentItem(ItemRepository.GetByID("C001"),10),
@@ -846,7 +845,6 @@ namespace SSIMS.Database
             //PENDING Requisition Orders
             Staff s1 = StaffRepository.GetByID(10007); //ARCH dept
             RequisitionOrder ro1 = new RequisitionOrder(s1);
-            ro1.RepliedByStaff = StaffRepository.GetByID(10006);
             List<DocumentItem> di1 = new List<DocumentItem>
             {
                 new DocumentItem(ItemRepository.GetByID("C001"),10),
@@ -858,7 +856,6 @@ namespace SSIMS.Database
 
             Staff s2 = StaffRepository.GetByID(10007); //ARCH dept
             RequisitionOrder ro2 = new RequisitionOrder(s2);
-            ro2.RepliedByStaff = StaffRepository.GetByID(10006);
             List<DocumentItem> di2 = new List<DocumentItem>
             {
                 new DocumentItem(ItemRepository.GetByID("C001"),10),
@@ -870,7 +867,6 @@ namespace SSIMS.Database
 
             Staff s3 = StaffRepository.GetByID(10012); //ARCH dept
             RequisitionOrder ro3 = new RequisitionOrder(s3);
-            ro3.RepliedByStaff = StaffRepository.GetByID(10006);
             List<DocumentItem> di3 = new List<DocumentItem>
             {
                 new DocumentItem(ItemRepository.GetByID("C001"),10),
@@ -882,7 +878,6 @@ namespace SSIMS.Database
 
             Staff s4 = StaffRepository.GetByID(10011); //ARCH dept
             RequisitionOrder ro4 = new RequisitionOrder(s4);
-            ro4.RepliedByStaff = StaffRepository.GetByID(10006);
             List<DocumentItem> di4 = new List<DocumentItem>
             {
                 new DocumentItem(ItemRepository.GetByID("C001"),10),
@@ -894,7 +889,6 @@ namespace SSIMS.Database
 
             Staff s5 = StaffRepository.GetByID(10010); //ARCH dept
             RequisitionOrder ro5 = new RequisitionOrder(s4);
-            ro5.RepliedByStaff = StaffRepository.GetByID(10006);
             List<DocumentItem> di5 = new List<DocumentItem>
             {
                 new DocumentItem(ItemRepository.GetByID("C001"),10),
@@ -906,7 +900,6 @@ namespace SSIMS.Database
 
             Staff s6 = StaffRepository.GetByID(10009); //ARCH dept
             RequisitionOrder ro6 = new RequisitionOrder(s6);
-            ro6.RepliedByStaff = StaffRepository.GetByID(10006);
             List<DocumentItem> di6 = new List<DocumentItem>
             {
                 new DocumentItem(ItemRepository.GetByID("C001"),10),
@@ -918,7 +911,6 @@ namespace SSIMS.Database
 
             Staff s7 = StaffRepository.GetByID(10008); //ARCH dept
             RequisitionOrder ro7 = new RequisitionOrder(s7);
-            ro7.RepliedByStaff = StaffRepository.GetByID(10006);
             List<DocumentItem> di7 = new List<DocumentItem>
             {
                 new DocumentItem(ItemRepository.GetByID("C001"),10),
@@ -930,7 +922,6 @@ namespace SSIMS.Database
 
             Staff s8 = StaffRepository.GetByID(10008); //ARCH dept
             RequisitionOrder ro8 = new RequisitionOrder(s7);
-            ro8.RepliedByStaff = StaffRepository.GetByID(10006);
             List<DocumentItem> di8 = new List<DocumentItem>
             {
                 new DocumentItem(ItemRepository.GetByID("C001"),10),
@@ -942,7 +933,6 @@ namespace SSIMS.Database
 
             Staff s9 = StaffRepository.GetByID(10007); //ARCH dept
             RequisitionOrder ro9 = new RequisitionOrder(s9);
-            ro9.RepliedByStaff = StaffRepository.GetByID(10006);
             List<DocumentItem> di9 = new List<DocumentItem>
             {
                 new DocumentItem(ItemRepository.GetByID("C001"),10),
@@ -954,7 +944,6 @@ namespace SSIMS.Database
 
             Staff s10 = StaffRepository.GetByID(10007); //ARCH dept
             RequisitionOrder ro10 = new RequisitionOrder(s10);
-            ro10.RepliedByStaff = StaffRepository.GetByID(10006);
             List<DocumentItem> di10 = new List<DocumentItem>
             {
                 new DocumentItem(ItemRepository.GetByID("C001"),10),
@@ -966,7 +955,6 @@ namespace SSIMS.Database
 
             Staff s11 = StaffRepository.GetByID(10007); //ARCH dept
             RequisitionOrder ro11 = new RequisitionOrder(s11);
-            ro11.RepliedByStaff = StaffRepository.GetByID(10006);
             List<DocumentItem> di11 = new List<DocumentItem>
             {
                 new DocumentItem(ItemRepository.GetByID("C001"),10),
@@ -978,7 +966,6 @@ namespace SSIMS.Database
 
             Staff s12 = StaffRepository.GetByID(10008); //ARCH dept
             RequisitionOrder ro12 = new RequisitionOrder(s12);
-            ro12.RepliedByStaff = StaffRepository.GetByID(10006);
             List<DocumentItem> di12 = new List<DocumentItem>
             {
                 new DocumentItem(ItemRepository.GetByID("C001"),10),
@@ -1093,7 +1080,7 @@ namespace SSIMS.Database
             context.DisbursementLists.Add(disbursementList1);
 
             DisbursementList disbursementList2 = new DisbursementList(staff1, DepartmentRepository.GetByID("ARCH"));
-            disbursementList2.RepliedByStaff = StaffRepository.GetByID(10014);
+            disbursementList2.RepliedByStaff = StaffRepository.GetByID(10007);
             List<TransactionItem> disbursedItems2 = new List<TransactionItem>
             {
                 new TransactionItem(2,2,"Disbursement",ItemRepository.GetByID("C001")),
