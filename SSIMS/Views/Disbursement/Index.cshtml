@@ -1,5 +1,7 @@
 ﻿@model PagedList.IPagedList<SSIMS.Models.DisbursementList>
 @using PagedList.Mvc;
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+
 
 @{
     ViewBag.Header = "Disbursements";
@@ -11,6 +13,7 @@
     th, td {
         text-align: center;
     }
+
     .text-empty {
         margin: 60px auto 10px auto;
         width: 100%;
@@ -18,8 +21,9 @@
         font-size: 100px;
         color: lightgray;
     }
-    .table-responsive{
-        min-height:700px;
+
+    .table-responsive {
+        min-height: 700px;
     }
 
     #top-bar {
@@ -38,21 +42,22 @@
             color: white;
             background-color: #437373;
         }
+
     .special {
         background: linear-gradient(to right, rgba(146, 167, 154, 0.20) 0%, rgba(115, 147, 147, 0.31) 100%);
     }
 </style>
 
-@if(ViewBag.staffrole != "DeptRep")
+@if (ViewBag.staffrole != "DeptRep")
 {
-<div id="top-bar">
-    <div>
-        <button onclick="window.location.href = '/Retrieval/Index';">Go to Retrievals</button>
+    <div id="top-bar">
+        <div>
+            <button onclick="window.location.href = '/Retrieval/Index';">Go to Retrievals</button>
+        </div>
+        <div>
+            <button onclick="window.location.href = '/Disbursement/Current';">Current Disbursements</button>
+        </div>
     </div>
-    <div>
-        <button onclick="window.location.href = '/Disbursement/Current';">Current Disbursements</button>
-    </div>
-</div>
 }
 <div class="table-responsive">
     <label> &nbsp;View by Status: &nbsp;</label>
@@ -102,7 +107,8 @@
                 @if (Model.Count > 0 && status == "Pending")
                 {
                     <td>
-                        @Html.ActionLink("Return to Store", "Return", new { id = dl.ID, })
+                        <a data_target="@dl.ID.ToString()" class="confirm">Return To Store</a>
+                        @*@Html.ActionLink("Return to Store", "Return", new { id = dl.ID, })*@
                     </td>
                 }
 
@@ -117,12 +123,40 @@
     }
 </div>
 
-    <br />
-    <table class="table">
-        <tr>
-            <td align="center">Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount</td>
-        </tr>
-        <tr>
-            <td align="center">@Html.PagedListPager(Model, page => Url.Action("NextPage", new { page }))</td>
-        </tr>
-    </table>
+<br />
+<table class="table">
+    <tr>
+        <td align="center">Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount</td>
+    </tr>
+    <tr>
+        <td align="center">@Html.PagedListPager(Model, page => Url.Action("NextPage", new { page }))</td>
+    </tr>
+</table>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+    <script type="text/javascript">
+        $('.confirm').on('click', function () {
+            var itemid = $(this).data("target");
+            console.log(itemid);
+            $.confirm({
+                title: 'Generate Purchase Orders',
+                content: "This will clear the current Purchase Cart and submit the respective Purchase Orders!",
+                buttons: {
+                    confirm: function () {
+                        console.log('Confirm');
+                        console.log(itemid);
+                        //window.location.href = "/Disbursement/Return/" + target;
+                    },
+                    cancel: function () {
+                        console.log('Do Nothing');
+                    }
+                }
+            });
+        })
+
+
+    </script>
+}

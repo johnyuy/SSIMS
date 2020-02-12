@@ -22,22 +22,23 @@
         height: 50px;
         margin: 5px 0px;
     }
+
     #bottom-bar {
         width: 100%;
         height: 80px;
         margin: 5px 0px;
     }
 
-        #back-button {
-            float: left;
-            margin-right: 50px;
-            width: 200px;
-            height: 40px;
-            font-size: 15px;
-            font-weight: bold;
-            color: white;
-            background-color: #437373;
-        }
+    #back-button {
+        float: left;
+        margin-right: 50px;
+        width: 200px;
+        height: 40px;
+        font-size: 15px;
+        font-weight: bold;
+        color: white;
+        background-color: #437373;
+    }
 
     #info-table-container {
         width: 100%;
@@ -61,7 +62,7 @@
 
     #table-bottom {
         float: right;
-        margin-bottom:20px;
+        margin-bottom: 20px;
     }
 
     #form-container {
@@ -69,24 +70,28 @@
         padding: 20px;
         background: linear-gradient(to right, rgba(146, 167, 154, 0.20) 0%, rgba(115, 147, 147, 0.31) 100%);
     }
-    #print-button{
-        background:none;
-        border:lightgrey 1px solid;
-        color:grey;
-        margin:20px;
-        position:relative;
-        top:50px;
+
+    #print-button {
+        background: none;
+        border: lightgrey 1px solid;
+        color: grey;
+        margin: 20px;
+        position: relative;
+        top: 50px;
     }
-    input.checkbox{
-        transform:scale(1.5);
-        left:33px;
+
+    input.checkbox {
+        transform: scale(1.5);
+        left: 33px;
         top: 7px;
     }
-    input.text-box{
-        height:25px;
+
+    input.text-box {
+        height: 25px;
     }
-    input{
-        text-align:center;
+
+    input {
+        text-align: center;
     }
 </style>
 
@@ -186,7 +191,7 @@
                         <td>
                             @Html.EditorFor(model => model.ItemTransactions.ToList()[i].Reason, new { htmlAttributes = new { @class = "form-control" }, })
                         </td>
-                        <td onchange="oncheck()">@Html.CheckBox("checkbox", false, new { @id = cb, @class= "checkbox" })</td>
+                        <td onchange="oncheck()">@Html.CheckBox("checkbox", false, new { @id = cb, @class = "checkbox" })</td>
                     </tr>
                 }
             </table>
@@ -210,11 +215,11 @@
                 <td><button id="submit-button" disabled style="width:100px; color:lightgrey" type="submit" onclick="verify()">Complete</button></td>
             </tr>
         </table>
-        
+
     </div>
 </div>
 
-@using (Html.BeginForm("CompleteDisbursement", "Disbursement", FormMethod.Post,new { @id = "complete" }))
+@using (Html.BeginForm("CompleteDisbursement", "Disbursement", FormMethod.Post, new { @id = "complete" }))
 {
     @Html.AntiForgeryToken()
     <input id="reply" name="reply" type="hidden" value="" />
@@ -223,7 +228,8 @@
 
 
 
-
+@Scripts.Render("~/bundles/jqueryval"){
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 <script>
     function oncheck() {
         var boxes = document.getElementsByName("checkbox");
@@ -278,11 +284,29 @@
     }
 
 
-    
+
 
     function toPrint() {
-        window.open('/Disbursement/Print?id=@Model.ID'); 
+        window.open('/Disbursement/Print?id=@Model.ID');
     }
 
+    $('.confirm').on('click', function () {
+        $.confirm({
+            title: 'Generate Purchase Orders',
+            content: "This will clear the current Purchase Cart and submit the respective Purchase Orders!",
+            buttons: {
+                confirm: function () {
+
+                    window.location.href = "/PurchaseItems/GeneratePurchaseOrders"
+                },
+                cancel: function () {
+
+                }
+            }
+        });
+    })
 
 </script>
+}
+
+
