@@ -63,14 +63,15 @@ namespace SSIMS.Controllers
             List<AnalyticsDetailsVM> data;
 
             AnalyticsListVM analytics = (AnalyticsListVM)Session["Analytics"];
-            if(Session["AnalyticsMode"] == null || Session["AnalyticsMode"].ToString() == "req")
+            /*if (Session["AnalyticsMode"] == null || Session["AnalyticsMode"].ToString() == "req")
             {
                 data = analytics.ROSummaryList;
             }
             else
             {
                 data = analytics.DLSummaryList;
-            }
+            }*/
+            data = analytics.ROSummaryList;
 
             data = AnalyticsService.ApplyFilter(data, filter1, value1);
             data = AnalyticsService.ApplyFilter(data, filter2, value2);
@@ -103,14 +104,15 @@ namespace SSIMS.Controllers
             string value2 = Session["AValue2"] == null ? "" : Session["AValue2"].ToString();
             List<AnalyticsDetailsVM> data;
             AnalyticsListVM analytics = (AnalyticsListVM)Session["Analytics"];
-            if (Session["AnalyticsMode"] == null || Session["AnalyticsMode"].ToString() == "req")
+            /*if (Session["AnalyticsMode"] == null || Session["AnalyticsMode"].ToString() == "req")
             {
                 data = analytics.ROSummaryList;
             }
             else
             {
                 data = analytics.DLSummaryList;
-            }
+            }*/
+            data = analytics.ROSummaryList;
             data = AnalyticsService.ApplyFilter(data, filter1, value1);
             data = AnalyticsService.ApplyFilter(data, filter2, value2);
             data = AnalyticsService.ApplyGroup(data, group);
@@ -143,14 +145,15 @@ namespace SSIMS.Controllers
             string value2 = Session["AValue2"] == null ? "" : Session["AValue2"].ToString();
             List<AnalyticsDetailsVM> data;
             AnalyticsListVM analytics = (AnalyticsListVM)Session["Analytics"];
-            if (Session["AnalyticsMode"] == null || Session["AnalyticsMode"].ToString() == "req")
+            /*if (Session["AnalyticsMode"] == null || Session["AnalyticsMode"].ToString() == "req")
             {
                 data = analytics.ROSummaryList;
             }
             else
             {
                 data = analytics.DLSummaryList;
-            }
+            }*/
+            data = analytics.ROSummaryList;
             data = AnalyticsService.ApplyFilter(data, filter1, value1);
             data = AnalyticsService.ApplyFilter(data, filter2, value2);
             data = AnalyticsService.ApplyGroup(data, group);
