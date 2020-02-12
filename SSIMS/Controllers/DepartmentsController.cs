@@ -29,7 +29,7 @@ namespace SSIMS.Controllers
         // GET: Departments
         public ActionResult Index()
         {
-            if (!LoginService.IsAuthorizedRoles(""))
+            if (!LoginService.IsAuthorizedRoles("clerk", "supervisor", "manager"))
                 return RedirectToAction("Index", "Home");
 
             var departments = unitOfWork.DepartmentRepository.Get(includeProperties: "CollectionPoint");
