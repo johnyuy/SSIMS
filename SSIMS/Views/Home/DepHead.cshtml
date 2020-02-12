@@ -27,10 +27,10 @@ else
             <td>@Html.DisplayFor(model => ro.CreatedDate)</td>
             <td>@Html.DisplayFor(model => ro.CreatedByStaff.Name)</td>
             <td>@Html.DisplayFor(model => ro.Status)</td>
-            <td>@Html.ActionLink("View", "Details","Requisition" ,  new { id = ro.ID }, new{ @id="det"})</td>
+            <td>@Html.ActionLink("View", "Details","Requisition" ,  new { id = ro.ID }, new{ })</td>
             <td>
-                @Html.ActionLink("Approve", "Approvequick", "Requisition", new { id = ro.ID, dash = true }, new{ @id="app"}) &nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;
-                @Html.ActionLink("Reject", "Rejectquick", "Requisition ", new { id = ro.ID,  dash = true }, new{ @id="rej"})
+                @Html.ActionLink("Approve", "Approvequick", "Requisition", new { id = ro.ID, dash = true }, new{ }) &nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;
+                @Html.ActionLink("Reject", "Rejectquick", "Requisition", new { id = ro.ID,  dash = true }, new{ })
             </td>
         </tr>
 }

@@ -6,10 +6,9 @@
     string selected = ViewBag.SelectedPoint;
     List<CollectionPoint> options = ViewBag.OtherPoints;
     DateTime time = Model.CollectionPoint.Time;
-    DateTime today = DateTime.Today;
+    DateTime today = DateTime.Today.ToLocalTime();
     int daysleft = ((int)DayOfWeek.Monday - (int)today.DayOfWeek + 7) % 7;
-    DateTime nextMon = today.AddDays(daysleft);
-    string nextMonday = time.AddDays(daysleft).ToString("dd/MM/yyyy hh:mm tt");
+    string nextMonday = today.AddDays(daysleft).AddHours(time.Hour).AddMinutes(time.Minute).ToString("dd/MM/yyyy hh:mm tt");
 }
 
 <style>
