@@ -87,7 +87,7 @@ namespace SSIMS.Controllers
                     titlesub += " - " + value2; 
             }
 
-            new Chart(width: 900, height: 200, theme: ChartTheme.Vanilla)
+            new Chart(width: 1200, height: 400, theme: ChartTheme.Vanilla)
                 .AddTitle("Item Quantity" + titlesub + " by " + group)
                 .AddSeries("Qty1", chartType: "Column", xValue: xValue, yValues: yValueQty)
                 .Write("bmp");
@@ -126,9 +126,9 @@ namespace SSIMS.Controllers
                     titlesub += " - " + value2;
             }
 
-            new Chart(width: 900, height: 200, theme: ChartTheme.Vanilla)
+            new Chart(width: 1200, height: 400, ChartTheme.Vanilla)
                 .AddTitle("Requisition Cost($)" + titlesub + " by " + group)
-                .AddSeries("Cost1", chartType: "Column", xValue: xValue, yValues: yValueCost)
+                .AddSeries(name: "Cost1", chartType: "Column", xValue: xValue, yValues: yValueCost)
                 .Write("bmp");
             return null;
         }
@@ -165,10 +165,11 @@ namespace SSIMS.Controllers
                     titlesub += " - " + value2;
             }
 
-            new Chart(width: 900, height: 200, theme: ChartTheme.Vanilla)
+            new Chart(width: 1200, height: 400, theme: ChartTheme.Vanilla)
                 .AddTitle("Requisition Volume" + titlesub + " by " + group)
                 .AddSeries("Count1", chartType: "Column", xValue: xValue, yValues: yValueCount)
                 .Write("bmp");
+            
             return null;
         }
 

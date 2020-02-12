@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Globalization;
 using System.Linq;
 using System.Web;
 using SSIMS.DAL;
@@ -63,7 +62,7 @@ namespace SSIMS.ViewModels
             //Document Item Level (item + qty)
             Qty = qty;
             Category = category;
-            CreatedDate = DateTime.ParseExact(createdDate,"dd-MM-yyyyy", CultureInfo.InvariantCulture);
+            CreatedDate = DateTime.Parse(createdDate);
             Department = department;
             Month = CreatedDate.Month;
             Year = CreatedDate.Year;
