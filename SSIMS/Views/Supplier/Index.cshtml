@@ -22,9 +22,9 @@
         <th>Fax Number</th>
         @*<th>GstReg</th>
         <th>Contact Name</th>*@
+        <th>Details</th>
         <th></th>
-        <th></th>
-        <th></th>
+        @*<th></th>*@
     </tr>
     @foreach (var supplier in Model)
     {
@@ -45,12 +45,12 @@
             @Html.ActionLink("Edit", "Edit", new { id = supplier.ID })
         } 
         </td>
-        <td>
+        @*<td>
         @if (ViewBag.staffrole == "Supervisor" || ViewBag.staffrole == "Manager")
          {
             @Html.ActionLink("Delete", "Delete", new { id = supplier.ID })
          }
-        </td>
+        </td>*@
     </tr>
     }
     </table>
