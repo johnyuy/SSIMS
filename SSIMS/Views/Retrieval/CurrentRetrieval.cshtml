@@ -110,7 +110,7 @@
                         @Html.HiddenFor(model => model.rivmlist[i].deptRetrievalItems[j].transactionItem.HandOverQty, new { htmlAttributes = new { @class = "form-control" }, })
                     </td>
                     <td>
-                        @Html.EditorFor(model => model.rivmlist[i].deptRetrievalItems[j].transactionItem.TakeOverQty, new { htmlAttributes = new { @class = "form-control", max = @Model.rivmlist[i].deptRetrievalItems[j].transactionItem.HandOverQty }, min = 0 })
+                        @Html.EditorFor(model => model.rivmlist[i].deptRetrievalItems[j].transactionItem.TakeOverQty, new { htmlAttributes = new { @class = "form-control", data_target = "element" + i.ToString(), max = @Model.rivmlist[i].deptRetrievalItems[j].transactionItem.HandOverQty }, min = 0 })
                     </td>
                     <td>
                         @Html.EditorFor(model => model.rivmlist[i].deptRetrievalItems[j].transactionItem.Reason, new { htmlAttributes = new { @class = "form-control" }, })
@@ -121,8 +121,10 @@
                 <td><strong>Total</strong></td>
                 <td><strong>@Html.DisplayFor(model => model.rivmlist[i].transactionItem.HandOverQty)</strong></td>
                 <td>
-                    <strong>
-                        @Html.EditorFor(model => model.rivmlist[i].transactionItem.TakeOverQty, new { htmlAttributes = new { @class = "form-control" }, max = @Model.rivmlist[i].transactionItem.HandOverQty })
+                    <strong id=@("element" + i.ToString())>
+                        @Html.DisplayFor(model => model.rivmlist[i].transactionItem.TakeOverQty)
+
+                        @*@Html.DisplayFor(model => model.rivmlist[i].transactionItem.TakeOverQty, new { htmlAttributes = new { @class = "form-control", id = "element" + i.ToString() }, max = @Model.rivmlist[i].transactionItem.HandOverQty })*@
                     </strong>
                 </td>
             </tr>
@@ -142,6 +144,100 @@
         </div>
     }
 
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+        <script type="text/javascript">
+
+            $("input").change(function () {
+                var total = 0;
+                var elementid = $(this).data("target");
+                console.log(elementid);
+                $("input").each(function () {
+                    if ($(this).data("target") == elementid) {
+                        total = total + parseInt($(this).val());
+                    }
+
+                });
+                    console.log('here me');
+                console.log(total.toString());
+                $('#' + elementid).text(total);
+            });
+        //    var guid = $(this).data("target");
+        //    var handOverQty = parseInt($('#'+"HandOverQty" + guid).val());
+        //    var takeOverQty = parseInt($(this).val());
+        //    if (handOverQty < takeOverQty) {
+        //        $('#' + guid).css('display', 'block');
+        //        console.log(handOverQty);
+        //        console.log(takeOverQty);
+        //        console.log('true');
+        //        disableSave();
+        //    }
+        //    else {
+        //        $('#' + guid).css('display', 'none');
+        //        console.log(handOverQty);
+        //        console.log(takeOverQty);
+        //        console.log('false');
+        //        disableSave();
+        //    }
+        //});
+
+        function disableSave() {
+            if (notValid()) {
+                $("#save").attr("disabled", true);
+            }
+            else {
+                $("#save").attr("disabled", false);
+            }
+        }
+
+        function notValid() {
+            var result = false;
+             $('.text-danger').each(function (i, obj) {
+                if ($(this).css('display') == 'block') {
+                    console.log('not valid');
+                    result = true;
+                    return;
+                }
+             });
+            return result;
+        }
+
+        $("#save").on('click', function () {
+            if (notValid()) {
+                console.log('here ' + notValid());
+                return false;
+            }
+            console.log('out ' + notValid());
+        });
+
+
+        $('.Home').change(function () {
+            var takeOverQty = ($(this).val());
+            var identity = ($(this).attr("id"));
+            var handOverQty = ($(this).id('targetelement'));
+                var selectedCategory = $("#Category").val();
+                var descriptionSelect = $('#Description');
+                descriptionSelect.empty();
+                if ( selectedCategory != null &&  selectedCategory != '') {
+                    $.getJSON('@Url.Action("GetDescription")', { category:  selectedCategory }, function (descriptions) {
+                        if (descriptions != null && !jQuery.isEmptyObject(descriptions))
+                        {
+                            descriptionSelect.append($('<option/>', {
+                                value: null,
+                                text: ""
+                            }));
+                            $.each(descriptions, function (index, description) {
+                                descriptionSelect.append($('<option/>', {
+                                    value: description.Value,
+                                    text: description.Text
+                                }));
+                            });
+                        };
+                    });
+                }
+            });
+        </script>
+    }
 
 </div>
 }
