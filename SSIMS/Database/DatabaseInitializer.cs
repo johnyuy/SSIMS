@@ -9,8 +9,8 @@ using SSIMS.Service;
 
 namespace SSIMS.Database
 {
-    public class DatabaseInitializer<T> : DropCreateDatabaseAlways<DatabaseContext>
-    //public class DatabaseInitializer<T> : CreateDatabaseIfNotExists<DatabaseContext>
+    //public class DatabaseInitializer<T> : DropCreateDatabaseAlways<DatabaseContext>
+    public class DatabaseInitializer<T> : CreateDatabaseIfNotExists<DatabaseContext>
 
     {
         static StaffRepository StaffRepository;
@@ -640,7 +640,7 @@ namespace SSIMS.Database
 
                 //Architecture Department Dept 1
                 new Staff("Prof. Kian Bong Kee", "81210001", "kianbongkee@u.logic.edu", DepartmentRepository.GetByID("ARCH"), "DeptHead"),
-                new Staff("Mr. Wan Lau En", "91211002","wanlauen@u.logic.edu",DepartmentRepository.GetByID("ARCH"),"DeptRep"),
+                new Staff("Mr. Wan Lau En", "91211002","wanlauen@gmail.com",DepartmentRepository.GetByID("ARCH"),"DeptRep"),
                 new Staff("Mr. Timmy Ting","81213003","timmyting@u.logic.edu",DepartmentRepository.GetByID("ARCH"),"Staff"),
                 new Staff("Mr. Patrick Coy","81215005","patrickcoy@u.logic.edu",DepartmentRepository.GetByID("ARCH"),"Staff"),
                 new Staff("Mr. Ye Yint Hein", "91214004","yeyinthein@u.logic.edu",DepartmentRepository.GetByID("ARCH"),"Staff"),
@@ -1068,7 +1068,7 @@ namespace SSIMS.Database
 
 
 
-            DisbursementList disbursementList1 = new DisbursementList(staff1, DepartmentRepository.GetByID("COMM"));
+            DisbursementList disbursementList1 = new DisbursementList(clerk1, DepartmentRepository.GetByID("COMM"));
             List<TransactionItem> disbursedItems1 = new List<TransactionItem>
             {
                 new TransactionItem(2,2,"Disbursement",ItemRepository.GetByID("C001")),
@@ -1078,7 +1078,7 @@ namespace SSIMS.Database
             disbursementList1.ItemTransactions = disbursedItems1;
             context.DisbursementLists.Add(disbursementList1);
 
-            DisbursementList disbursementList2 = new DisbursementList(staff1, DepartmentRepository.GetByID("ARCH"));
+            DisbursementList disbursementList2 = new DisbursementList(clerk1, DepartmentRepository.GetByID("ARCH"));
             List<TransactionItem> disbursedItems2 = new List<TransactionItem>
             {
                 new TransactionItem(2,2,"Disbursement",ItemRepository.GetByID("C001")),
@@ -1088,7 +1088,7 @@ namespace SSIMS.Database
             disbursementList2.ItemTransactions = disbursedItems2;
             context.DisbursementLists.Add(disbursementList2);
 
-            DisbursementList disbursementList3 = new DisbursementList(staff1, DepartmentRepository.GetByID("ENGL"));
+            DisbursementList disbursementList3 = new DisbursementList(clerk1, DepartmentRepository.GetByID("ENGL"));
             List<TransactionItem> disbursedItems3 = new List<TransactionItem>
             {
                 new TransactionItem(2,2,"Disbursement",ItemRepository.GetByID("C001")),
@@ -1099,7 +1099,7 @@ namespace SSIMS.Database
             context.DisbursementLists.Add(disbursementList3);
 
 
-            DisbursementList disbursementList4 = new DisbursementList(staff1, DepartmentRepository.GetByID("MEDI"));
+            DisbursementList disbursementList4 = new DisbursementList(clerk1, DepartmentRepository.GetByID("MEDI"));
             List<TransactionItem> disbursedItems4 = new List<TransactionItem>
             {
                 new TransactionItem(2,2,"Disbursement",ItemRepository.GetByID("C001")),
@@ -1109,7 +1109,7 @@ namespace SSIMS.Database
             disbursementList4.ItemTransactions = disbursedItems4;
             context.DisbursementLists.Add(disbursementList4);
 
-            DisbursementList disbursementList5 = new DisbursementList(staff1, DepartmentRepository.GetByID("ENGL"));
+            DisbursementList disbursementList5 = new DisbursementList(clerk1, DepartmentRepository.GetByID("ENGL"));
             disbursementList5.Completed(StaffRepository.GetByID(10041));
             List<TransactionItem> disbursedItems5 = new List<TransactionItem>
             {
@@ -1121,7 +1121,7 @@ namespace SSIMS.Database
             disbursementList5.CompletedWithDate();
             context.DisbursementLists.Add(disbursementList5);
 
-            DisbursementList disbursementList6 = new DisbursementList(staff1, DepartmentRepository.GetByID("ZOOL"));
+            DisbursementList disbursementList6 = new DisbursementList(clerk1, DepartmentRepository.GetByID("ZOOL"));
             disbursementList6.Completed(StaffRepository.GetByID(10069));
             List<TransactionItem> disbursedItems6 = new List<TransactionItem>
             {
