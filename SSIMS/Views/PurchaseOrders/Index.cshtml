@@ -13,10 +13,15 @@
 
 @using (Html.BeginForm("Index", "PurchaseOrders", FormMethod.Get))
 {
-    <p>
-        Search: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
-        <input type="submit" value="Search" />
-    </p>
+<p>
+    Search: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+    <input type="submit" value="Search" />
+
+
+    <div align="left"><button>@Html.ActionLink("View Purchase Cart", "Index", "PurchaseItems")</button></div>
+
+
+</p>
 }
 
 <table class="table">

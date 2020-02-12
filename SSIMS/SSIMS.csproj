@@ -308,6 +308,7 @@
     <Compile Include="Controllers\DisbursementController.cs" />
     <Compile Include="Controllers\DisbursementsLogAPIController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InventoryAPIController.cs" />
     <Compile Include="Controllers\InventoryController.cs" />
     <Compile Include="Controllers\ItemsAPIController.cs" />
     <Compile Include="Controllers\ItemsController.cs" />
@@ -399,11 +400,14 @@
     <Compile Include="ViewModels\ApiDisbursementListLogView.cs" />
     <Compile Include="ViewModels\ApiDisbursementListView.cs" />
     <Compile Include="ViewModels\ApiDocumentItem.cs" />
+    <Compile Include="ViewModels\ApiInventoryDetails.cs" />
+    <Compile Include="ViewModels\ApiInventoryView.cs" />
     <Compile Include="ViewModels\ApiPurchaseItemView.cs" />
     <Compile Include="ViewModels\ApiPurchaseOrderDetails.cs" />
     <Compile Include="ViewModels\ApiPurchaseOrdersListView.cs" />
     <Compile Include="ViewModels\ApiRequisitionDetailsView.cs" />
     <Compile Include="ViewModels\ApiRequisitionListView.cs" />
+    <Compile Include="ViewModels\ApiStockCard.cs" />
     <Compile Include="ViewModels\ApiTransactionItemView.cs" />
     <Compile Include="ViewModels\DeliveryOrderVM.cs" />
     <Compile Include="ViewModels\DeptDisbursementViewModel.cs" />
@@ -421,6 +425,7 @@
     <Compile Include="ViewModels\RetrievalVM.cs" />
     <Compile Include="ViewModels\UserLogin.cs" />
     <Compile Include="ViewModels\RetrievalItemViewModel.cs" />
+    <Content Include="Content\PopUp.css" />
     <Content Include="Rotativa\help-wkhtmltoimage.txt" />
     <Content Include="Rotativa\help-wkhtmltopdf.txt" />
     <Content Include="Rotativa\wkhtmltoimage.exe" />

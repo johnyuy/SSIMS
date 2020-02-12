@@ -64,7 +64,7 @@ namespace SSIMS.ViewModels
             CreatedDate = PO.CreatedDate.ToString();
             ResponseDate = PO.ResponseDate.ToString();
             Status = PO.Status.ToString();
-            TotalCost = PO.TotalCost().ToString();
+            TotalCost = "$"+ string.Format("{0:#.00}", Convert.ToDecimal(PO.TotalCost().ToString())); 
             SupplierID = PO.Supplier.ID;
 
             List<ApiPurchaseItemView> purchaseItemViews = new List<ApiPurchaseItemView>();
