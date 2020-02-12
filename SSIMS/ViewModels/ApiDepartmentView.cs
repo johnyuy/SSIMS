@@ -24,7 +24,15 @@ namespace SSIMS.ViewModels
         {
             ID = department.ID;
             DepartmentName = department.DeptName;
-            DeptHead = department.DeptHead.Name;
+            if(department.DeptHead != null)
+            {
+                DeptHead = department.DeptHead.Name;
+            }
+            else
+            {
+                DeptHead = "";
+            }
+
         }
 
         public ApiDepartmentView()

@@ -35,8 +35,16 @@ namespace SSIMS.ViewModels
             ID = dl.ID.ToString();
             CreatedByStaffID = dl.CreatedByStaff.ID.ToString();
             CreatedByStaffName = dl.CreatedByStaff.Name;
-            RepliedByStaffID = dl.RepliedByStaff.ID.ToString();
-            RepliedByStaffName = dl.RepliedByStaff.Name;
+            if (dl.RepliedByStaff != null)
+            {
+                RepliedByStaffID = dl.RepliedByStaff.ID.ToString();
+                RepliedByStaffName = dl.RepliedByStaff.Name;
+            }
+            else
+            {
+                RepliedByStaffID = "";
+                RepliedByStaffName = "";
+            }
             DepartmentID = dl.Department.ID;
             CollectionPoint = dl.Department.CollectionPoint.Location;
             OTP = dl.OTP.ToString();

@@ -36,8 +36,8 @@ namespace SSIMS.ViewModels
             ItemID = pi.Tender.Item.ID;
             ItemDesc = pi.Tender.Item.Description;
             Qty = pi.Qty.ToString();
-            UnitPrice = pi.Tender.Price.ToString();
-            Subtotal = (pi.Tender.Price*pi.Qty).ToString();
+            UnitPrice = "$" + string.Format("{0:#.00}", Convert.ToDecimal(pi.Tender.Price.ToString()));
+            Subtotal = "$" + string.Format("{0:#.00}", Convert.ToDecimal((pi.Tender.Price * pi.Qty).ToString()));
         }
 
 

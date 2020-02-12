@@ -1,0 +1,47 @@
+﻿@model SSIMS.Models.Department
+
+
+@{
+    ViewBag.Header = "Department Details";
+    ViewBag.Section = "Departments";
+}
+
+    <table class="table">
+        <tr>
+            <th>Department</th>
+            <td colspan="2">@Html.DisplayFor(x => x.ID)</td>
+        </tr>
+        <tr>
+            <th>Department Head</th>
+            <td>@Html.DisplayFor(x => x.DeptHead.Name)</td>
+            <td>@Html.DisplayFor(x => x.DeptHead.Email)</td>
+        </tr>
+      
+        <tr>
+            <th>Department Rep</th>
+            <td>@Html.DisplayFor(x => x.DeptRep.Name)</td>
+            <td>@Html.DisplayFor(x => x.DeptRep.Email)</td>
+        </tr>
+       
+        <tr>
+            <th>Department Authority</th>
+           
+            @if (Model.DeptHeadAuthorization== null)
+            {
+            <td colspan="2">None</td>
+            }
+            else
+            {
+                <td>@Html.DisplayFor(x => x.DeptHeadAuthorization.Staff.Name)</td>
+                <td>@Html.DisplayFor(x => x.DeptHeadAuthorization.Staff.Email)</td>
+            }
+        </tr>
+        <tr>
+            <th>Collection Point</th>
+            <td>@Html.DisplayFor(x => x.CollectionPoint.Location)</td>
+            <td>@Html.ActionLink("Manage Collection Point", "Details", new { id = Model.ID })</td>
+        </tr>
+        
+
+
+    </table>

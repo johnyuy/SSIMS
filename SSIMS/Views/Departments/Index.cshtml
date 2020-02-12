@@ -1,13 +1,15 @@
 ﻿@using SSIMS.Models
 
 @{
-    ViewBag.Header = "Departments";
+    ViewBag.Header = "Department List";
     Layout = "~/Views/Shared/_Layout.cshtml";
     List<Department> departments = ViewBag.Departments;
     List<Staff> heads = ViewBag.HeadList;
     List<Staff> reps = ViewBag.RepList;
     List<string> auths = ViewBag.Auth;
     int count = ViewBag.DeptCount;
+
+    ViewBag.Section = "Departments";
 }
 
 <table class="table">
@@ -33,7 +35,7 @@
         <th>
            Fax
         </th>
-        <th></th>
+        <th>Details</th>
     </tr>
 
 @for (int i=0; i < count-1;i++) {
@@ -60,7 +62,7 @@
             @departments[i].FaxNumber
         </td>
         <td>
-            @Html.ActionLink("Details", "Details", new { id=departments[i].ID }) |
+            @Html.ActionLink("Details", "Details2", new { id=departments[i].ID }) 
         </td>
     </tr>
 }
