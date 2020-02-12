@@ -183,7 +183,7 @@ namespace SSIMS.Controllers
         //}
 
         // GET: Requisition/ViewHistory
-        public ActionResult ViewHistory(int? page, string status="ALL", string sortOrder)
+        public ActionResult ViewHistory(int? page, string sortOrder, string status = "ALL")
         {
             if (LoginService.IsAuthorizedRoles("staff"))
                 return RedirectToAction("Index", "Home");
@@ -228,12 +228,10 @@ namespace SSIMS.Controllers
                     case "All":
                         //reqList = (List<RequisitionOrder>)reqList.Where(x => x.Status == Models.Status.Approved || x.Status == Models.Status.Rejected || x.Status == Models.Status.Completed);
                         //reqList = unitofwork.RequisitionOrderRepository.Get(filter: x => (x.Status == Models.Status.Approved || x.Status == Models.Status.Rejected || x.Status == Models.Status.Completed) && x.CreatedByStaff.DepartmentID == staff.DepartmentID).ToList();
-                        reqList=reqList;
                         break;
                     default:
                         //reqList = (List<RequisitionOrder>)reqList.Where(x => x.Status == Models.Status.Approved || x.Status == Models.Status.Rejected || x.Status == Models.Status.Completed);
                         //reqList = unitofwork.RequisitionOrderRepository.Get(filter: x => (x.Status == Models.Status.Approved || x.Status == Models.Status.Rejected || x.Status == Models.Status.Completed) && x.CreatedByStaff.DepartmentID == staff.DepartmentID).ToList();
-                        reqList = reqList;
                         break;
                 }
                 switch (sortOrder)
