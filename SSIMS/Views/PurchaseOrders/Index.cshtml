@@ -17,9 +17,10 @@
     Search: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
     <input type="submit" value="Search" />
 
-
-    <div align="left"><button>@Html.ActionLink("View Purchase Cart", "Index", "PurchaseItems")</button></div>
-
+    @if (Session["role"].ToString() == "clerk")
+    {
+        <div align="left"><button>@Html.ActionLink("View Purchase Cart", "Index", "PurchaseItems")</button></div>
+    }
 
 </p>
 }
