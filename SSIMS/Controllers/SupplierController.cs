@@ -21,6 +21,9 @@ namespace SSIMS.Controllers
         // GET: Supplier
         public ActionResult Index()
         {
+            if (!LoginService.IsAuthorizedRoles("supervisor", "manager"))
+                return RedirectToAction("Index", "Home");
+
             Staff staff = loginService.StaffFromSession;
             ViewBag.staffrole = staff.StaffRole;
 
@@ -32,6 +35,9 @@ namespace SSIMS.Controllers
         // GET: Supplier/Create
         public ActionResult Create()
         {
+            if (!LoginService.IsAuthorizedRoles("supervisor", "manager"))
+                return RedirectToAction("Index", "Home");
+
             return View();
         }
 
@@ -53,6 +59,9 @@ namespace SSIMS.Controllers
         // GET: Supplier/Edit/ID
         public ActionResult Edit(string id)
         {
+            if (!LoginService.IsAuthorizedRoles("supervisor", "manager"))
+                return RedirectToAction("Index", "Home");
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -113,6 +122,9 @@ namespace SSIMS.Controllers
         // GET: Supplier/Details/id
         public ActionResult Details(string id)
         {
+            if (!LoginService.IsAuthorizedRoles("supervisor", "manager"))
+                return RedirectToAction("Index", "Home");
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
