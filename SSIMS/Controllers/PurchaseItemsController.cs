@@ -29,6 +29,9 @@ namespace SSIMS.Controllers
         // GET: PurchaseItems
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
+            if (!LoginService.IsAuthorizedRoles( "clerk"))
+                return RedirectToAction("Index", "Home");
+
             ViewBag.ItemIDSortParm = String.IsNullOrEmpty(sortOrder) ? "Item_ID" : "";
             ViewBag.ItemDescSortParm = sortOrder == "Desc" ? "Item_desc" : "Desc";
             //ViewBag.ItemSupplierSortParm = sortOrder == "Supplier" ? "Item_Supplier" : "Supplier";
@@ -83,6 +86,9 @@ namespace SSIMS.Controllers
         // GET: PurchaseItems/Details/5
         public ActionResult Details(int? id)
         {
+            if (!LoginService.IsAuthorizedRoles("clerk"))
+                return RedirectToAction("Index", "Home");
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -98,6 +104,9 @@ namespace SSIMS.Controllers
         // GET: PurchaseItems/GeneratePurchaseOrders
         public ActionResult GeneratePurchaseOrders()
         {
+            if (!LoginService.IsAuthorizedRoles("clerk"))
+                return RedirectToAction("Index", "Home");
+
             var suppliers = uow.SupplierRepository.GetWithRawSql("Select DISTINCT Suppliers.ID, Suppliers.SupplierName, " +
                 "Suppliers.Address, Suppliers.PhoneNumber, Suppliers.FaxNumber, Suppliers.GstReg, Suppliers.ContactName " +
                 "From Suppliers, Tenders, PurchaseItems where Suppliers.ID = Tenders.Supplier_ID AND PurchaseItems.Tender_ID = Tenders.ID AND PurchaseItems.PurchaseOrder_ID IS NULL");
@@ -124,6 +133,8 @@ namespace SSIMS.Controllers
 
         public ActionResult AddPurchaseItem(int id)
         {
+            if (!LoginService.IsAuthorizedRoles("clerk"))
+                return RedirectToAction("Index", "Home");
 
             Tender tender = uow.TenderRepository.Get(filter: x => x.ID == id, includeProperties: "Item, Supplier").FirstOrDefault();
             InventoryItem inventoryItem = uow.InventoryItemRepository.Get(filter: x => x.Item.ID == tender.Item.ID).FirstOrDefault();
@@ -148,6 +159,9 @@ namespace SSIMS.Controllers
         // GET: PurchaseItems/AddAllLowStockToPurchaseItems
         public ActionResult AddAllLowStockToPurchaseItems()
         {
+            if (!LoginService.IsAuthorizedRoles("clerk"))
+                return RedirectToAction("Index", "Home");
+
             var lowstockitems = uow.InventoryItemRepository.Get(filter: i => i.InStoreQty < i.ReorderLvl, includeProperties: "Item");
             // need to change later
             Supplier s = uow.SupplierRepository.GetByID("ALPA");
@@ -182,63 +196,12 @@ namespace SSIMS.Controllers
             return RedirectToAction("Index");
         }
 
-        // GET: PurchaseItems/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: PurchaseItems/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Qty")] PurchaseItem purchaseItem)
-        {
-            if (ModelState.IsValid)
-            {
-                db.PurchaseItems.Add(purchaseItem);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            return View(purchaseItem);
-        }
-
-        // GET: PurchaseItems/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            PurchaseItem purchaseItem = db.PurchaseItems.Find(id);
-            if (purchaseItem == null)
-            {
-                return HttpNotFound();
-            }
-            return View(purchaseItem);
-        }
-
-        // POST: PurchaseItems/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Qty")] PurchaseItem purchaseItem)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(purchaseItem).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(purchaseItem);
-        }
-
         // GET: PurchaseItems/Delete/5
         public ActionResult Delete(int? id)
         {
+            if (!LoginService.IsAuthorizedRoles("clerk"))
+                return RedirectToAction("Index", "Home");
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -256,6 +219,9 @@ namespace SSIMS.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            if (!LoginService.IsAuthorizedRoles("clerk"))
+                return RedirectToAction("Index", "Home");
+
             PurchaseItem purchaseItem = db.PurchaseItems.Find(id);
             db.PurchaseItems.Remove(purchaseItem);
             db.SaveChanges();
