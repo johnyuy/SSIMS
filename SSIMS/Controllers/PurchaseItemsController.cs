@@ -13,9 +13,13 @@ using SSIMS.DAL;
 using SSIMS.Service;
 using SSIMS.ViewModels;
 using PagedList;
+using SSIMS.Filters;
 
 namespace SSIMS.Controllers
 {
+
+    [AuthenticationFilter]
+    [AuthorizationFilter]
     public class PurchaseItemsController : Controller
     {
         private DatabaseContext db = new DatabaseContext();
@@ -63,7 +67,7 @@ namespace SSIMS.Controllers
                     purchaseItems = purchaseItems.OrderBy(i => i.Tender.Item.ID);
                     break;
             }
-            int pageSize = 15;
+            int pageSize = 10;
             int pageNumber = (page ?? 1);
             List<PurchaseItemVM> mv = new List<PurchaseItemVM>();
 

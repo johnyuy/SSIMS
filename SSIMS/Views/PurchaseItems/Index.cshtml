@@ -1,18 +1,26 @@
 ﻿@model PagedList.IPagedList<SSIMS.ViewModels.PurchaseItemVM>
 @using PagedList.Mvc;
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+<link href="~/Content/PopUp.css" rel="stylesheet" type="text/css" />
 
 @{
     ViewBag.Title = "Purchase Cart";
+    ViewBag.Header = "Purchase Cart";
+    ViewBag.Section="Purchases";
 }
-
 <h2>Purchase Cart</h2>
 
 @using (Html.BeginForm("Index", "PurchaseItems", FormMethod.Get))
 {
-    <p>
-        Search: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
-        <input type="submit" value="Search" />
+<p>
+    Search: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+    <input type="submit" value="Search" />
+
+    @if (Session["role"].ToString() == "clerk")
+    {
+        <div align="left"><button>@Html.ActionLink("View Purchase Orders", "Index", "PurchaseOrders")</button></div>
+
+    }
     </p>
 }
 <table class="table">
@@ -62,12 +70,26 @@
 
     }
     <tr>
-        <th>@Html.ActionLink("Add All Low Stock", "AddAllLowStockToPurchaseItems")</th>
+
+        <th>
+            @if (Session["role"].ToString() == "clerk")
+            {
+            <button>@Html.ActionLink("Add All Low Stock", "AddAllLowStockToPurchaseItems")</button>
+            }
+            
+
+        </th>
+        
         <th></th>
         <th></th>
         <th></th>
         <th></th>
-        <th>@Html.ActionLink("Generate Purchase Orders", "GeneratePurchaseOrders")</th>
+        <th>
+            @if (Session["role"].ToString() == "clerk")
+            {
+                <button>@Html.ActionLink("Generate Purchase Orders", "GeneratePurchaseOrders")</button>
+            }
+        </th>
     </tr>
 
 </table>
@@ -76,5 +98,4 @@
 Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
 @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
-
 
