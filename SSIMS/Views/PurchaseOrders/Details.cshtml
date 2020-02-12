@@ -197,10 +197,10 @@
                 }
             </td>
             <td>
-                @if (Html.ValueFor(model => model.Status).ToString() == "Pending")
+                @*@if (Html.ValueFor(model => model.Status).ToString() == "Pending")
                 {
                     @Html.ActionLink("Cancel", "Cancel", new { id = Model.ID })
-                }
+                }*@
             </td>
             <td>
                 @if (Html.ValueFor(model => model.Status).ToString() == "Pending")
@@ -215,11 +215,11 @@
     </table>
 </div>
 <p>
-    @if (Html.ValueFor(model => model.Status).ToString() == "Pending")
+    @*@if (Html.ValueFor(model => model.Status).ToString() == "Pending")
     {
         @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) 
      }
-    </p>
+    </p>*@
 <p>
         @Html.ActionLink("Back to List", "Index")
 </p>

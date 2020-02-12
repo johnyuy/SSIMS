@@ -9,8 +9,8 @@ using SSIMS.Service;
 
 namespace SSIMS.Database
 {
-    //public class DatabaseInitializer<T> : DropCreateDatabaseAlways<DatabaseContext>
-    public class DatabaseInitializer<T> : CreateDatabaseIfNotExists<DatabaseContext>
+    public class DatabaseInitializer<T> : DropCreateDatabaseAlways<DatabaseContext>
+    //public class DatabaseInitializer<T> : CreateDatabaseIfNotExists<DatabaseContext>
 
     {
         static StaffRepository StaffRepository;
@@ -1110,6 +1110,7 @@ namespace SSIMS.Database
             context.DisbursementLists.Add(disbursementList4);
 
             DisbursementList disbursementList5 = new DisbursementList(staff1, DepartmentRepository.GetByID("ENGL"));
+            disbursementList5.Completed(StaffRepository.GetByID(10041));
             List<TransactionItem> disbursedItems5 = new List<TransactionItem>
             {
                 new TransactionItem(2,2,"Disbursement",ItemRepository.GetByID("C001")),
@@ -1121,6 +1122,7 @@ namespace SSIMS.Database
             context.DisbursementLists.Add(disbursementList5);
 
             DisbursementList disbursementList6 = new DisbursementList(staff1, DepartmentRepository.GetByID("ZOOL"));
+            disbursementList6.Completed(StaffRepository.GetByID(10069));
             List<TransactionItem> disbursedItems6 = new List<TransactionItem>
             {
                 new TransactionItem(2,2,"Disbursement",ItemRepository.GetByID("C001")),

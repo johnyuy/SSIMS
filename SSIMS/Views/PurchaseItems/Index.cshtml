@@ -2,23 +2,24 @@
 @using PagedList.Mvc;
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 <link href="~/Content/PopUp.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 
 @{
     ViewBag.Header = "Purchase Cart";
-    ViewBag.Section="Purchases";
+    ViewBag.Section = "Purchases";
 }
 
 @using (Html.BeginForm("Index", "PurchaseItems", FormMethod.Get))
 {
-<p>
-    Search: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
-    <input type="submit" value="Search" />
+    <p>
+        Search: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+        <input type="submit" value="Search" />
 
-    @if (Session["role"].ToString() == "clerk")
-    {
-        <div align="left"><button>@Html.ActionLink("View Purchase Orders", "Index", "PurchaseOrders")</button></div>
+        @if (Session["role"].ToString() == "clerk")
+        {
+            <div align="left"><button>@Html.ActionLink("View Purchase Orders", "Index", "PurchaseOrders")</button></div>
 
-    }
+        }
     </p>
 }
 <table class="table">
@@ -62,7 +63,7 @@
             </td>
 
             <td>
-                @Html.ActionLink("Remove", "Delete", new { id = item.ID }) 
+                @Html.ActionLink("Remove", "Delete", new { id = item.ID })
             </td>
         </tr>
 
@@ -72,20 +73,22 @@
         <th>
             @if (Session["role"].ToString() == "clerk")
             {
-            <button>@Html.ActionLink("Add All Low Stock", "AddAllLowStockToPurchaseItems")</button>
+                <button>@Html.ActionLink("Add All Low Stock", "AddAllLowStockToPurchaseItems")</button>
             }
-            
+
 
         </th>
-        
-        <th></th>
+
         <th></th>
         <th></th>
         <th></th>
         <th>
+            @*@Html.ActionLink("Generate Purchase Orders", "GeneratePurchaseOrders")*@
+        </th>
+        <th>
             @if (Session["role"].ToString() == "clerk")
             {
-                <button>@Html.ActionLink("Generate Purchase Orders", "GeneratePurchaseOrders")</button>
+                <button class="confirm">Generate Purchase Orders</button>
             }
         </th>
     </tr>
@@ -97,3 +100,26 @@ Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.Page
 
 @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
 
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+    <script type="text/javascript">
+        $('.confirm').on('click', function () {
+            $.confirm({
+                title: 'Generate Purchase Orders',
+                content: "This will clear the current Purchase Cart and submit the respective Purchase Orders!",
+                buttons: {
+                    confirm: function () {
+                        
+                        window.location.href = "/PurchaseItems/GeneratePurchaseOrders"
+                    },
+                    cancel: function () {
+                        
+                    }
+                }
+            });
+        })
+
+    </script>
+}
