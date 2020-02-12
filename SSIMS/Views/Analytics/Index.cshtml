@@ -48,9 +48,10 @@
 </style>
 
 <button id="runbtn" onclick="runsample()">Run Sample</button>
+<button id="disbtn" onclick="rundisb()">Disbursement</button>
 <input id="isrun" hidden type="checkbox" />
+<input id="isdis" hidq type="checkbox" />
 <div id="table-container">
-    
     <table>
         <tr>
             <th style="width:200px;">View Statistics By </th>
@@ -220,7 +221,6 @@
             $("#chart2").fadeOut(200);
             $("#chart3").fadeOut(200);
 
-
             var group = $("#group").val();
             var filter1 = $("#filter1").val();
             var filter2 = $("#filter2").val();
@@ -239,16 +239,13 @@
 
             });
 
-
             $("#chart1").attr("src", "@Url.Action("GenerateChartQty")?" + new Date().getTime());
             $("#chart2").attr("src", "@Url.Action("GenerateChartCost")?" + new Date().getTime());
             $("#chart3").attr("src", "@Url.Action("GenerateChartCount")?" + new Date().getTime());
 
-
             $("#chart1").delay(x).fadeIn();
             $("#chart2").delay(x).fadeIn();
             $("#chart3").delay(x).fadeIn();
-
         }
 
         function runsample() {
@@ -271,9 +268,30 @@
                 $("#runbtn").html("Run Sample");
                 refresh(3000);
             }
-
             refresh(1000);
+        }
 
+        function rundisb() {
+            var chk = document.getElementById("isdis");
+            if (chk.checked == false) {
+                alert("disbursments");
+                $.getJSON('@Url.Action("Toggle")', {});
+                chk.checked = true;
+                $("#runbtn").css("color","white");
+                $("#runbtn").css("background-color", "slategrey");
+                $("#runbtn").html("End Sample");
+                refresh(2000);
+                
+            } else {
+                alert("unloading sample data");
+                $.getJSON('@Url.Action("EndSample")');
+                chk.checked = false;
+                $("#runbtn").css("color","");
+                $("#runbtn").css("background-color", "");
+                $("#runbtn").html("Run Sample");
+                refresh(3000);
+            }
+            refresh(1000);
         }
 
     </script>

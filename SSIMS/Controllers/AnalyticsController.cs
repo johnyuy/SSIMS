@@ -30,9 +30,7 @@ namespace SSIMS.Controllers
                 UnitOfWork uow = new UnitOfWork();
                 analytics = new AnalyticsListVM(uow);
                 Session["Analytics"] = analytics;
-            } else
-            {
-                analytics = (AnalyticsListVM)Session["Analytics"];
+                Session["AnalyticsMode"] = "req";
             }
 
             return View();
@@ -51,7 +49,6 @@ namespace SSIMS.Controllers
             Session["AValue2"] = value2;
 
             return null;
-            //return RedirectToAction("Index");
         }
 
         //RIGHT NOW EACH CHART ONLY HAS REQUISITION/CAN HAVE A SERIES FOR ACTUAL DISBURSED
@@ -64,18 +61,21 @@ namespace SSIMS.Controllers
             string value1 = Session["AValue1"] == null ? "" : Session["AValue1"].ToString();
             string value2 = Session["AValue2"] == null ? "" : Session["AValue2"].ToString();
             List<AnalyticsDetailsVM> data;
-            if (Session["AData"] == null)
+
+            AnalyticsListVM analytics = (AnalyticsListVM)Session["Analytics"];
+            if(Session["AnalyticsMode"] == null || Session["AnalyticsMode"].ToString() == "req")
             {
-                //AnalyticsService.GetAnalyticsData(group, filter1, filter2, value1, value2);
-                AnalyticsListVM analytics = (AnalyticsListVM)Session["Analytics"];
-                data = analytics.SummaryList;
-                data = AnalyticsService.ApplyFilter(data, filter1, value1);
-                data = AnalyticsService.ApplyFilter(data, filter2, value2);
-                data = AnalyticsService.ApplyGroup(data, group);
-            } else
-            {
-                data = (List<AnalyticsDetailsVM>)Session["AData"];
+                data = analytics.ROSummaryList;
             }
+            else
+            {
+                data = analytics.DLSummaryList;
+            }
+
+            data = AnalyticsService.ApplyFilter(data, filter1, value1);
+            data = AnalyticsService.ApplyFilter(data, filter2, value2);
+            data = AnalyticsService.ApplyGroup(data, group);
+
             ArrayList yValueQty = AnalyticsService.YAxisQty(data);
             ArrayList xValue = AnalyticsService.XAxis(data,group);
 
@@ -102,19 +102,20 @@ namespace SSIMS.Controllers
             string value1 = Session["AValue1"] == null ? "" : Session["AValue1"].ToString();
             string value2 = Session["AValue2"] == null ? "" : Session["AValue2"].ToString();
             List<AnalyticsDetailsVM> data;
-            if (Session["AData"] == null)
+            AnalyticsListVM analytics = (AnalyticsListVM)Session["Analytics"];
+            if (Session["AnalyticsMode"] == null || Session["AnalyticsMode"].ToString() == "req")
             {
-                //AnalyticsService.GetAnalyticsData(group, filter1, filter2, value1, value2);
-                AnalyticsListVM analytics = (AnalyticsListVM)Session["Analytics"];
-                data = analytics.SummaryList;
-                data = AnalyticsService.ApplyFilter(data, filter1, value1);
-                data = AnalyticsService.ApplyFilter(data, filter2, value2);
-                data = AnalyticsService.ApplyGroup(data, group);
+                data = analytics.ROSummaryList;
             }
             else
             {
-                data = (List<AnalyticsDetailsVM>)Session["AData"];
+                data = analytics.DLSummaryList;
             }
+            data = AnalyticsService.ApplyFilter(data, filter1, value1);
+            data = AnalyticsService.ApplyFilter(data, filter2, value2);
+            data = AnalyticsService.ApplyGroup(data, group);
+            
+
             ArrayList yValueCost = AnalyticsService.YAxisCost(data);
             ArrayList xValue = AnalyticsService.XAxis(data, group);
 
@@ -141,19 +142,19 @@ namespace SSIMS.Controllers
             string value1 = Session["AValue1"] == null ? "" : Session["AValue1"].ToString();
             string value2 = Session["AValue2"] == null ? "" : Session["AValue2"].ToString();
             List<AnalyticsDetailsVM> data;
-            if (Session["AData"] == null)
+            AnalyticsListVM analytics = (AnalyticsListVM)Session["Analytics"];
+            if (Session["AnalyticsMode"] == null || Session["AnalyticsMode"].ToString() == "req")
             {
-                //AnalyticsService.GetAnalyticsData(group, filter1, filter2, value1, value2);
-                AnalyticsListVM analytics = (AnalyticsListVM)Session["Analytics"];
-                data = analytics.SummaryList;
-                data = AnalyticsService.ApplyFilter(data, filter1, value1);
-                data = AnalyticsService.ApplyFilter(data, filter2, value2);
-                data = AnalyticsService.ApplyGroup(data, group);
+                data = analytics.ROSummaryList;
             }
             else
             {
-                data = (List<AnalyticsDetailsVM>)Session["AData"];
+                data = analytics.DLSummaryList;
             }
+            data = AnalyticsService.ApplyFilter(data, filter1, value1);
+            data = AnalyticsService.ApplyFilter(data, filter2, value2);
+            data = AnalyticsService.ApplyGroup(data, group);
+
             ArrayList yValueCount = AnalyticsService.YAxisCount(data);
             ArrayList xValue = AnalyticsService.XAxis(data, group);
 
@@ -173,32 +174,12 @@ namespace SSIMS.Controllers
             return null;
         }
 
-        public ActionResult Index2()
-        {
-            AnalyticsListVM analytics;
-            if (Session["Analytics"] == null)
-            {
-                UnitOfWork uow = new UnitOfWork();
-                List<RequisitionOrder> requisitionOrderList = (List<RequisitionOrder>)uow.RequisitionOrderRepository.Get(includeProperties: "CreatedByStaff.Department,DocumentItems.Item");
-                analytics = new AnalyticsListVM(uow);
-                Session["Analytics"] = analytics;
-            }
-            else
-            {
-                analytics = (AnalyticsListVM)Session["Analytics"];
-            }
-
-            List<AnalyticsDetailsVM> categorylist2 = AnalyticsService.GroupByDepartment(analytics.SummaryList);
-            // Debug.WriteLine("hello :" + categorylist.First().CreatedDate.ToString("yyyy"));
-            ViewBag.Summarylist1 = categorylist2;
-
-            return View("AnalyticsList2", categorylist2);
-        }
+        
         public ActionResult Chart1()
         {
             UnitOfWork uow = new UnitOfWork();
             AnalyticsListVM analyticsListViewModel = new AnalyticsListVM(uow);
-            List<AnalyticsDetailsVM> categorylist = AnalyticsService.GroupByCategory(analyticsListViewModel.SummaryList);
+            List<AnalyticsDetailsVM> categorylist = AnalyticsService.GroupByCategory(analyticsListViewModel.ROSummaryList);
              
           // RequisitionSummaryViewModel clipCategory = AnalyticsService.GroupByCategory("Clip", summaryList);
 
@@ -216,7 +197,7 @@ namespace SSIMS.Controllers
         {
             UnitOfWork uow = new UnitOfWork();
             AnalyticsListVM analyticsListViewModel = new AnalyticsListVM(uow);
-            List<AnalyticsDetailsVM> categorylist = AnalyticsService.GroupByDepartment(analyticsListViewModel.SummaryList);
+            List<AnalyticsDetailsVM> categorylist = AnalyticsService.GroupByDepartment(analyticsListViewModel.ROSummaryList);
 
             ArrayList xValue = AnalyticsService.QtyCategoryChart2X(categorylist);
             ArrayList yValue = AnalyticsService.QtyCategoryChart2Y(categorylist);
@@ -266,7 +247,7 @@ namespace SSIMS.Controllers
         public JsonResult RunSample()
         {
             AnalyticsListVM model = (AnalyticsListVM)Session["Analytics"];
-            model.SummaryList = AnalyticsService.GetAnalyticsSampleData();
+            model.ROSummaryList = AnalyticsService.GetAnalyticsSampleData();
             Session["Analytics"] = model;
             return null;
         }
@@ -277,6 +258,21 @@ namespace SSIMS.Controllers
             UnitOfWork uow = new UnitOfWork();
             AnalyticsListVM analytics = new AnalyticsListVM(uow);
             Session["Analytics"] = analytics;
+            return null;
+        }
+
+
+        [HttpGet]
+        public JsonResult Toggle(string mode)
+        {
+
+            Session["AnalyticsMode"] = null;
+            if (mode == "d")
+            {
+                Debug.WriteLine("disbursement mode detected");
+                Session["AnalyticsMode"] = "dis";
+            }
+
             return null;
         }
     }

@@ -402,6 +402,12 @@ namespace SSIMS.Service
                     unitOfWork.RetrievalListRepository.Insert(rl);
                     unitOfWork.Save();
                     Debug.WriteLine("Retrieval List is inserted into database successfully.");
+                    InventoryService inventoryService = new InventoryService();
+                    foreach(TransactionItem ti in rl.ItemTransactions)
+                    {
+                        inventoryService.UpdateInStoreQty(ti.Item.ID);
+                    }
+                    
                 }
 
                 
