@@ -32,34 +32,72 @@ namespace SSIMS.Controllers
         // GET: DisbursementLists
         public ActionResult Index(int? page, string status="Pending")
         {
-            var disbursementList = unitOfWork.DisbursementListRepository.Get(includeProperties: "CreatedByStaff, ItemTransactions.Item, Department");
+            UnitOfWork uow = new UnitOfWork();
+            
 
             int pageSize = 15;
             int pageNumber = (page ?? 1);
+            var disbursementList = new List<DisbursementList>();
 
-            switch (status)
+
+            Staff staff = loginService.StaffFromSession;
+            ViewBag.staffrole = staff.StaffRole;
+
+            if (staff.StaffRole == "DeptHead" || staff.StaffRole == "DeptRep")
             {
+                disbursementList = uow.DisbursementListRepository.Get(filter: x => x.Department.ID == staff.DepartmentID).ToList();
+                switch (status)
+                {
 
-                case "Pending":
-                    disbursementList = disbursementList.Where(x => x.Status == Models.Status.Pending).ToList();
-                    break;
-                case "Completed":
-                    disbursementList = disbursementList.Where(x => x.Status == Models.Status.Completed).ToList();
-                    break;
-                case "Rejected":
-                    disbursementList = disbursementList.Where(x => x.Status == Models.Status.Rejected).ToList();
-                    break;
+                    case "Pending":
+                        disbursementList = disbursementList.Where(x => x.Status == Models.Status.Pending).ToList();
+                        break;
+                    case "Completed":
+                        disbursementList = disbursementList.Where(x => x.Status == Models.Status.Completed).ToList();
+                        break;
+                    case "Rejected":
+                        disbursementList = disbursementList.Where(x => x.Status == Models.Status.Rejected).ToList();
+                        break;
 
-                case "All":
-                    disbursementList = disbursementList.ToList();
-                    break;
+                    case "All":
+                        disbursementList = disbursementList.ToList();
+                        break;
+                }
+
+                if (disbursementList == null)
+                {
+                    return HttpNotFound();
+                }
+                //ViewBag.DisbursementStatus = status;
             }
 
-            if (disbursementList == null)
+            if (staff.StaffRole == "Manager" || staff.StaffRole == "Supervisor" || staff.StaffRole == "Clerk")
             {
-                return HttpNotFound();
+                disbursementList = uow.DisbursementListRepository.Get(includeProperties: "CreatedByStaff, ItemTransactions.Item, Department").ToList();
+                switch (status)
+                {
+                    case "Pending":
+                        disbursementList = disbursementList.Where(x => x.Status == Models.Status.Pending).ToList();
+                        break;
+                    case "Completed":
+                        disbursementList = disbursementList.Where(x => x.Status == Models.Status.Completed).ToList();
+                        break;
+                    case "Rejected":
+                        disbursementList = disbursementList.Where(x => x.Status == Models.Status.Rejected).ToList();
+                        break;
+
+                    case "All":
+                        disbursementList = disbursementList.ToList();
+                        break;
+                }
+
+                if (disbursementList == null)
+                {
+                    return HttpNotFound();
+                }
+                ViewBag.DisbursementStatus = status;
             }
-            ViewBag.DisbursementStatus = status;
+
             return View(disbursementList.ToPagedList(pageNumber, pageSize));
 
         }
