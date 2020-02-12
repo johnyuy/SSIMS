@@ -403,6 +403,7 @@
     <Compile Include="ViewModels\ApiRequisitionDetailsView.cs" />
     <Compile Include="ViewModels\ApiRequisitionListView.cs" />
     <Compile Include="ViewModels\ApiTransactionItemView.cs" />
+    <Compile Include="ViewModels\DashboardVM.cs" />
     <Compile Include="ViewModels\DeliveryOrderVM.cs" />
     <Compile Include="ViewModels\DeptDisbursementViewModel.cs" />
     <Compile Include="ViewModels\DeptHeadAuthVM.cs" />
