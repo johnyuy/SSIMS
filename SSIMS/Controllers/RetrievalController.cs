@@ -17,8 +17,8 @@ using Rotativa;
 
 namespace SSIMS.Controllers
 {
-    //[AuthenticationFilter]
-    //[AuthorizationFilter]
+    [AuthenticationFilter]
+    [AuthorizationFilter]
     public class RetrievalController : Controller
     {
         private DatabaseContext db = new DatabaseContext();

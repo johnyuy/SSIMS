@@ -5,38 +5,41 @@
 
 }
 
-<h2>Pending Department Request</h2>
-
+<h2>Pending Department Requests</h2>
+<br/>
 @if (Model.Count() == 0)
 {
-    <h4>No pending request</h4>
+    <p style="font-size:50px;color:lightgray">Empty</p>
 }
 else
 {
 <table >
     <tr>
-        <th>Requests ID</th>
         <th>Date Submitted</th>
         <th>Submitted by Staff</th>
         <th>Status</th>
-
+        <th>Details</th>
+        <th>Action</th>
     </tr>
     @foreach (var ro in Model)
     {
         <tr>
-            <td>@Html.DisplayFor(model => ro.ID)</td>
             <td>@Html.DisplayFor(model => ro.CreatedDate)</td>
             <td>@Html.DisplayFor(model => ro.CreatedByStaff.Name)</td>
             <td>@Html.DisplayFor(model => ro.Status)</td>
-
+            <td>@Html.ActionLink("View", "Details","Requisition" ,  new { id = ro.ID }, new{ @id="det"})</td>
+            <td>
+                @Html.ActionLink("Approve", "Approvequick", "Requisition", new { id = ro.ID, dash = true }, new{ @id="app"}) &nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;
+                @Html.ActionLink("Reject", "Rejectquick", "Requisition ", new { id = ro.ID,  dash = true }, new{ @id="rej"})
+            </td>
         </tr>
 }
 </table>
 }
 
 <div>
-    <button onclick="window.location.href = '/Requisition/Manage';">
-        View More And Manage
+    <button onclick="window.location.href = '/Requisition/ViewHistory';">
+        View All Requests
     </button>
 </div>
 
@@ -61,8 +64,9 @@ else
         background-color: #f2f2f2
     }
 
-    th {
+    th, td {
         color: black;
+        text-align:center;
     }
 
 </style>

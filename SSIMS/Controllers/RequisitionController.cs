@@ -183,7 +183,7 @@ namespace SSIMS.Controllers
         //}
 
         // GET: Requisition/ViewHistory
-        public ActionResult ViewHistory(int? page, string status, string sortOrder)
+        public ActionResult ViewHistory(int? page, string sortOrder, string status = "ALL")
         {
             if (LoginService.IsAuthorizedRoles("staff"))
                 return RedirectToAction("Index", "Home");
@@ -228,12 +228,10 @@ namespace SSIMS.Controllers
                     case "All":
                         //reqList = (List<RequisitionOrder>)reqList.Where(x => x.Status == Models.Status.Approved || x.Status == Models.Status.Rejected || x.Status == Models.Status.Completed);
                         //reqList = unitofwork.RequisitionOrderRepository.Get(filter: x => (x.Status == Models.Status.Approved || x.Status == Models.Status.Rejected || x.Status == Models.Status.Completed) && x.CreatedByStaff.DepartmentID == staff.DepartmentID).ToList();
-                        reqList=reqList;
                         break;
                     default:
                         //reqList = (List<RequisitionOrder>)reqList.Where(x => x.Status == Models.Status.Approved || x.Status == Models.Status.Rejected || x.Status == Models.Status.Completed);
                         //reqList = unitofwork.RequisitionOrderRepository.Get(filter: x => (x.Status == Models.Status.Approved || x.Status == Models.Status.Rejected || x.Status == Models.Status.Completed) && x.CreatedByStaff.DepartmentID == staff.DepartmentID).ToList();
-                        reqList = reqList;
                         break;
                 }
                 switch (sortOrder)
@@ -365,7 +363,7 @@ namespace SSIMS.Controllers
 
 
         // GET: Requisition/Details/4
-        public ActionResult Details(int id)
+        public ActionResult Details(int? id)
         {
             //return documentitem by input requisitionOrder ID
             if (id == null)
@@ -374,8 +372,6 @@ namespace SSIMS.Controllers
             }
 
             Staff staff = loginService.StaffFromSession;
-            ViewBag.staffrole = staff.StaffRole;
-            //Debug.WriteLine(ViewBag.staffrole);
 
             var unitofwork = new UnitOfWork();
 
@@ -393,7 +389,7 @@ namespace SSIMS.Controllers
         }
 
         // GET: Requisition/Edit/4
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int? id)
         {
             if (id == null)
             {
@@ -418,7 +414,7 @@ namespace SSIMS.Controllers
             //Session["RequestList"]=reitems;
             //ViewBag.RequisitionItems = reitems;
 
-            vm.ROID = id;
+            vm.ROID = id.Value;
             vm.DocumentItems = ro.DocumentItems.ToList();
             return View(vm);
         }
@@ -564,7 +560,7 @@ namespace SSIMS.Controllers
         }
 
         //GET: Requisition/Cancel/4
-        public ActionResult Cancel(int id)
+        public ActionResult Cancel(int? id)
         {
             if (id == null)
             {
@@ -585,14 +581,14 @@ namespace SSIMS.Controllers
 
         }
 
-        //GET: Requisition/Approve/4
-        public ActionResult Approve(int id,string comment)
+
+        public ActionResult Approvequick(int? id, bool dash=false)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Debug.WriteLine("comment = " + comment);
+           
             var unitofwork = new UnitOfWork();
 
             RequisitionOrder requisitionOrder = unitofwork.RequisitionOrderRepository.Get(filter: x => x.ID == id, includeProperties: "DocumentItems.Item").FirstOrDefault();
@@ -600,25 +596,47 @@ namespace SSIMS.Controllers
             {
                 return HttpNotFound();
             }
-            Staff staff= loginService.StaffFromSession;
-            ViewBag.staffrole = staff.StaffRole;
             requisitionOrder.Approve(loginService.StaffFromSession);
-            requisitionOrder.Comments = comment;
+           
             unitofwork.RequisitionOrderRepository.Update(requisitionOrder);
             unitofwork.Save();
 
-            
-            return View(requisitionOrder);
+            if (dash)
+                return RedirectToAction("Dashboard", "Home");
+            return RedirectToAction("Manage", "Requisition");
         }
-
-        //GET: Requisition/Reject/4
-        public ActionResult Reject(int id, string comment)
+        public ActionResult Rejectquick(int? id, bool dash = false)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Debug.WriteLine("comment = " + comment);
+
+            var unitofwork = new UnitOfWork();
+
+            RequisitionOrder requisitionOrder = unitofwork.RequisitionOrderRepository.Get(filter: x => x.ID == id, includeProperties: "DocumentItems.Item").FirstOrDefault();
+            if (requisitionOrder == null)
+            {
+                return HttpNotFound();
+            }
+            requisitionOrder.Rejected(loginService.StaffFromSession);
+
+            unitofwork.RequisitionOrderRepository.Update(requisitionOrder);
+            unitofwork.Save();
+
+            if (dash)
+                return RedirectToAction("Dashboard", "Home");
+            return RedirectToAction("Manage", "Requisition");
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Reply(int? id, string comment, bool isApprove)
+        {
+            Debug.WriteLine(comment + "  " + isApprove);
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
             var unitofwork = new UnitOfWork();
 
             RequisitionOrder requisitionOrder = unitofwork.RequisitionOrderRepository.Get(filter: x => x.ID == id, includeProperties: "DocumentItems.Item").FirstOrDefault();
@@ -627,107 +645,20 @@ namespace SSIMS.Controllers
                 return HttpNotFound();
             }
             Staff staff = loginService.StaffFromSession;
-            ViewBag.staffrole = staff.StaffRole;
-            requisitionOrder.Rejected(loginService.StaffFromSession);
+            if (isApprove)
+            {
+                requisitionOrder.Approve(loginService.StaffFromSession);
+            }
+            else
+            {
+                requisitionOrder.Rejected(loginService.StaffFromSession);
+            }
             requisitionOrder.Comments = comment;
             unitofwork.RequisitionOrderRepository.Update(requisitionOrder);
             unitofwork.Save();
 
-
-            return View(requisitionOrder);
+            return RedirectToAction("Details", new { id = id.Value });
         }
-
-        public ActionResult Approvequick(int id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-           
-            var unitofwork = new UnitOfWork();
-
-            RequisitionOrder requisitionOrder = unitofwork.RequisitionOrderRepository.Get(filter: x => x.ID == id, includeProperties: "DocumentItems.Item").FirstOrDefault();
-            if (requisitionOrder == null)
-            {
-                return HttpNotFound();
-            }
-            requisitionOrder.Approve(loginService.StaffFromSession);
-           
-            unitofwork.RequisitionOrderRepository.Update(requisitionOrder);
-            unitofwork.Save();
-
-
-            return RedirectToAction("Manage", "Requisition");
-        }
-        public ActionResult Rejectquick(int id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var unitofwork = new UnitOfWork();
-
-            RequisitionOrder requisitionOrder = unitofwork.RequisitionOrderRepository.Get(filter: x => x.ID == id, includeProperties: "DocumentItems.Item").FirstOrDefault();
-            if (requisitionOrder == null)
-            {
-                return HttpNotFound();
-            }
-            requisitionOrder.Rejected(loginService.StaffFromSession);
-
-            unitofwork.RequisitionOrderRepository.Update(requisitionOrder);
-            unitofwork.Save();
-
-
-            return RedirectToAction("Manage", "Requisition");
-        }
-
-
-
-        //public ActionResult SendEmail()
-        //{
-        //    return View();
-        //}
-
-
-        //[HttpPost]
-        //public ActionResult SendEmail(string receiver, string subject, string message)
-        //{
-        //    try
-        //    {
-        //        if (ModelState.IsValid)
-        //        {
-        //            var senderEmail = new MailAddress("logicssims@outlook.com", "Logic University SSIMS");
-        //            var receiverEmail = new MailAddress(receiver, "Receiver");
-        //            var password = "ss1msadm1np@sswOrd";
-        //            var sub = subject;
-        //            var body = message;
-        //            var smtp = new SmtpClient
-        //            {
-        //                Host = "smtp.outlook.com",
-        //                Port = 587,
-        //                EnableSsl = true,
-        //                DeliveryMethod = SmtpDeliveryMethod.Network,
-        //                UseDefaultCredentials = false,
-        //                Credentials = new NetworkCredential(senderEmail.Address, password)
-        //            };
-        //            using (var mess = new MailMessage(senderEmail, receiverEmail)
-        //            {
-        //                Subject = subject,
-        //                Body = body
-        //            })
-        //            {
-        //                smtp.Send(mess);
-        //            }
-        //            return View();
-        //        }
-        //    }
-        //    catch (Exception)
-        //    {
-        //        ViewBag.Error = "Some Error";
-        //    }
-        //    return View();
-        //}
 
 
 

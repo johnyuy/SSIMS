@@ -1,10 +1,19 @@
 ﻿@model SSIMS.Models.RequisitionOrder
 
 @{
-    ViewBag.Title = "Details";
     ViewBag.Header = "Requisition Order Details";
-    ViewBag.Section="Requisitions";
+    ViewBag.Section = "Requisitions";
 }
+
+<style>
+    th, td {
+        text-align: center;
+    }
+
+    .special {
+        background: linear-gradient(to right, rgba(146, 167, 154, 0.20) 0%, rgba(115, 147, 147, 0.31) 100%);
+    }
+</style>
 <script>
     function post(path, params, method = 'post') {
         const form = document.createElement('form');
@@ -35,76 +44,120 @@
     }
 </script>
 
+<div style="width:100%">
+    @if (Session["role"].ToString() == "head")
+    {
+    <table style="width:100%">
+        <tr>
+            <td style="text-align:left">
+                @Html.ActionLink("Manage Pending Requests", "Manage")
+            </td>
+            <td style="text-align:right">
+                @Html.ActionLink("View Request History", "ViewHistory")
+            </td>
+        </tr>
+        
+    </table>
+    }
+    <br />
+    <table class="table table-bordered" style="width:50%;float:left">
+        <tr>
+            <th width="200px">
+                Requisition ID
+            </th>
+            <td>
+                @Html.DisplayFor(x => x.ID)
+            </td>
+        </tr>
 
-<table  class="table table-bordered" >
-    <tr>
-        <th>
-            Requisition ID
-            @*@Html.LabelFor(x => x.ID, htmlAttributes: new { @class = "control-label col-md-2" })*@
-        </th>
-        <td>
-            @Html.DisplayFor(x => x.ID)
-        </td>
-    </tr>
+        <tr>
+            <th>
+                Requesting Staff
+            </th>
+            <td>
+                @Html.DisplayFor(x => x.CreatedByStaff.Name) (@Html.DisplayFor(x => Model.CreatedByStaff.DepartmentID))
+            </td>
+        </tr>
 
-    <tr>
-        <th>
-            Department
-            @*@Html.LabelFor(x => Model.CreatedByStaff.Department, htmlAttributes: new { @class = "control-label col-md-2" })*@
-        </th>
-        <td>
-            @Html.DisplayFor(x => Model.CreatedByStaff.DepartmentID)
-        </td>
-    </tr>
+        <tr>
+            <th>
+                Request Date
+            </th>
+            <td>
+                @Html.DisplayFor(x => x.CreatedDate)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                Status
+            </th>
+            @if (Model.Status == SSIMS.Models.Status.Rejected)
+            {
+                <td style="color:maroon;font-weight:bold">
+                    @Html.DisplayFor(x => x.Status)
+                </td>
+            }
+            else if (Model.Status == SSIMS.Models.Status.Approved)
+            {
+                <td style="color:darkgreen;font-weight:bold">
+                    @Html.DisplayFor(x => x.Status)
+                </td>
+            }
+            else
+            {
+                <td style="color:midnightblue;font-weight:bold">
+                    @Html.DisplayFor(x => x.Status)
+                </td>
+            }
+        </tr>
 
-    <tr>
-        <th>Staff Name
-            @*@Html.LabelFor(x => x.CreatedByStaff.Name, htmlAttributes: new { @class = "control-label col-md-2" })*@
-        </th>
-        <td>
-            @Html.DisplayFor(x => x.CreatedByStaff.Name)
-
-        </td>
-    </tr>
-
-    <tr>
-        <th>Created Date
-            @*@Html.LabelFor(x => x.CreatedDate, htmlAttributes: new { @class = "control-label col-md-2" })*@
-        </th>
-        <td>
-            @Html.DisplayFor(x => x.CreatedDate)
-        </td>
-    </tr>
-    <tr>
-        <th>Status
-            @*@Html.LabelFor(x => x.Status, htmlAttributes: new { @class = "control-label col-md-2" })*@
-        </th>
-        <td>
-            @Html.DisplayFor(x => x.Status)
-        </td>
-    </tr>
-</table>
-
-
+    </table>
+    @if (Model.Status != SSIMS.Models.Status.Pending)
+    {
+        <table class="table table-bordered" style="width:50%;float:left">
+            <tr style="background-color:lightgoldenrodyellow">
+                <th width="200px">
+                    Replying Staff
+                </th>
+                <td>
+                    @Html.DisplayFor(x => x.RepliedByStaff.Name) (@Html.DisplayFor(x => Model.RepliedByStaff.DepartmentID))
+                </td>
+            </tr>
+            <tr style="background-color:lightgoldenrodyellow">
+                <th>
+                    Response Date
+                </th>
+                <td>
+                    @Html.DisplayFor(x => x.ResponseDate)
+                </td>
+            </tr>
+            <tr style="background-color:lightgoldenrodyellow;height:75px">
+                <th>
+                    Comments
+                </th>
+                <td>
+                    @Html.DisplayFor(x => x.Comments)
+                </td>
+            </tr>
+        </table>
+    }
+</div>
 <table class="table">
-    <tr>
+    <tr class="special">
         <th>
             Category
         </th>
 
         <th>
             Description
-            @*@Html.DisplayNameFor(model => model.Item.Description)*@
         </th>
 
         <th>
             Unit of Measure
-            @*@Html.DisplayNameFor(model => model.Item.UnitOfMeasure)*@
         </th>
 
         <th>
             Qty
-            @*@Html.DisplayNameFor(model => model.Qty)*@
         </th>
 
     </tr>
@@ -117,7 +170,8 @@
             </td>
 
             <td>
-                @Html.DisplayFor(modelItem => ro.Item.Description)
+                @Html.ActionLink(ro.Item.Description, "Details", "Items", new { id = ro.Item.ID }, new { })
+
             </td>
 
             <td>
@@ -133,60 +187,62 @@
 </table>
 
 @*staff see below*@
-@if (ViewBag.staffrole == "Staff")
+@if (Session["role"].ToString() == "staff" || Session["role"].ToString() == "rep")
 {
-    <p>
-        @Html.ActionLink("Back to List", "Index")
-    </p>
-    @*staff see below when status=pending*@
-
-    if (Model.Status == SSIMS.Models.Status.Pending)
-    {
+    <div style="margin:10px">
         <p>
-            @Html.ActionLink("Edit", "Edit", new { id = Model.ID })
+            @Html.ActionLink("Back to List", "Index")
         </p>
-        <p>
-            @Html.ActionLink("Cancel", "Cancel", new { id = Model.ID })
-        </p>
+        @*staff see below when status=pending*@
 
-    }
+        @if (Model.Status == SSIMS.Models.Status.Pending)
+        {
+            <p>
+                @Html.ActionLink("Edit", "Edit", new { id = Model.ID })
+            </p>
+            <p>
+                @Html.ActionLink("Cancel", "Cancel", new { id = Model.ID })
+            </p>
+        }
+    </div>
+
 }
 else
 {
     @*Dep head see below *@
-    <p>
-        @Html.ActionLink("View Requisition History List", "ViewHistory")
-    </p>
 
-    <p>
-        @Html.ActionLink("Back to Pending List", "Manage")
-    </p>
-
-    if (Model.Status == SSIMS.Models.Status.Pending)
+    if (Session["role"].ToString() == "head")
     {
-        @*<p>
-            @Html.ActionLink("Approve", "Approve", new { id = Model.ID })
-        </p>
+        if (Model.Status == SSIMS.Models.Status.Pending)
+        {
 
-        <p>
-            @Html.ActionLink("Reject", "Reject", new { id = Model.ID })
-        </p>*@
-        <p style="text-align:left">
-            <form action="/requisition/approve">
-                <input type="text" name="comment" value=@Model.Comments />
-                <input type="hidden" name="id" value="@Model.ID" />
-                <button>Approve</button>
-            </form>
-        </p>
+            <div>
+                @using (Html.BeginForm("Reply", "Requisition", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <table>
+                        <tr>
+                            <td><button name="isApprove" value="true">Approve</button></td>
+                        </tr>
+                        <tr>
+                            <td><button name="isApprove" value="false">Reject</button></td>
+                        </tr>
+                        <tr>
+                            <td>Comments <input type="text" name="comment" value=@Model.Comments /></td>
+                        </tr>
+                    </table>
+                    <input type="hidden" name="id" value="@Model.ID" />
 
-        <p style="text-align:right">
-            <form action="/requisition/reject">
-                <input type="text" name="comment" value=@Model.Comments />
-                <input type="hidden" name="id" value="@Model.ID" />
-                <button>Reject</button>
-            </form>
-        </p>
+                }
+
+
+
+
+
+            </div>
+        }
 
     }
+
 }
 

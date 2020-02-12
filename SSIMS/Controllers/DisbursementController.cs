@@ -32,34 +32,77 @@ namespace SSIMS.Controllers
         // GET: DisbursementLists
         public ActionResult Index(int? page, string status="Pending")
         {
-            var disbursementList = unitOfWork.DisbursementListRepository.Get(includeProperties: "CreatedByStaff, ItemTransactions.Item, Department");
+            if (LoginService.IsAuthorizedRoles("staff"))
+                return RedirectToAction("Index", "Home");
+
+            UnitOfWork uow = new UnitOfWork();
+            
 
             int pageSize = 15;
             int pageNumber = (page ?? 1);
+            var disbursementList = new List<DisbursementList>();
 
-            switch (status)
+
+            Staff staff = loginService.StaffFromSession;
+            ViewBag.staffrole = staff.StaffRole;
+
+            if (staff.StaffRole == "DeptHead" || staff.StaffRole == "DeptRep")
             {
+                disbursementList = uow.DisbursementListRepository.Get(filter: x => x.Department.ID == staff.DepartmentID, includeProperties: "CreatedByStaff, ItemTransactions.Item, Department").ToList();
+                Debug.WriteLine(disbursementList.Count());
+                switch (status)
+                {
 
-                case "Pending":
-                    disbursementList = disbursementList.Where(x => x.Status == Models.Status.Pending).ToList();
-                    break;
-                case "Completed":
-                    disbursementList = disbursementList.Where(x => x.Status == Models.Status.Completed).ToList();
-                    break;
-                case "Rejected":
-                    disbursementList = disbursementList.Where(x => x.Status == Models.Status.Rejected).ToList();
-                    break;
+                    case "Pending":
+                        disbursementList = disbursementList.Where(x => x.Status == Models.Status.Pending).ToList();
+                        break;
+                    case "Completed":
+                        disbursementList = disbursementList.Where(x => x.Status == Models.Status.Completed).ToList();
+                        break;
+                    case "Rejected":
+                        disbursementList = disbursementList.Where(x => x.Status == Models.Status.Rejected).ToList();
+                        break;
 
-                case "All":
-                    disbursementList = disbursementList.ToList();
-                    break;
+                    case "All":
+                        disbursementList = disbursementList.ToList();
+                        break;
+                }
+
+                if (disbursementList == null)
+                {
+                    return HttpNotFound();
+                }
+                //ViewBag.DisbursementStatus = status;
             }
 
-            if (disbursementList == null)
+            if (staff.StaffRole == "Manager" || staff.StaffRole == "Supervisor" || staff.StaffRole == "Clerk")
             {
-                return HttpNotFound();
+                disbursementList = uow.DisbursementListRepository.Get(includeProperties: "CreatedByStaff, ItemTransactions.Item, Department").ToList();
+                Debug.WriteLine(disbursementList.Count());
+                switch (status)
+                {
+                    case "Pending":
+                        disbursementList = disbursementList.Where(x => x.Status == Models.Status.Pending).ToList();
+                        break;
+                    case "Completed":
+                        disbursementList = disbursementList.Where(x => x.Status == Models.Status.Completed).ToList();
+                        break;
+                    case "Rejected":
+                        disbursementList = disbursementList.Where(x => x.Status == Models.Status.Rejected).ToList();
+                        break;
+
+                    case "All":
+                        disbursementList = disbursementList.ToList();
+                        break;
+                }
+
+                if (disbursementList == null)
+                {
+                    return HttpNotFound();
+                }
+                ViewBag.DisbursementStatus = status;
             }
-            ViewBag.DisbursementStatus = status;
+
             return View(disbursementList.ToPagedList(pageNumber, pageSize));
 
         }
@@ -86,6 +129,9 @@ namespace SSIMS.Controllers
         [HttpGet]
         public ActionResult Disbursement(int? id)
         {
+            if (!LoginService.IsAuthorizedRoles("clerk", "supervisor","manager"))
+                return RedirectToAction("Index", "Home");
+
             DisbursementList DL = unitOfWork.DisbursementListRepository.Get(filter: x => x.ID == id, includeProperties: "CreatedByStaff, ItemTransactions.Item, Department.CollectionPoint").FirstOrDefault();
 
             if (DL == null)
@@ -150,6 +196,9 @@ namespace SSIMS.Controllers
 
         public ActionResult Current()
         {
+            if (!LoginService.IsAuthorizedRoles("clerk", "supervisor", "manager"))
+                return RedirectToAction("Index", "Home");
+
             var disbursementLists = unitOfWork.DisbursementListRepository.Get(filter: x => x.Status == Models.Status.Pending, includeProperties: "CreatedByStaff, ItemTransactions.Item, Department.CollectionPoint");
 
             return View("CurrentDisbursements",disbursementLists.ToList());
@@ -158,6 +207,9 @@ namespace SSIMS.Controllers
         // GET: DisbursementLists/Details/5
         public ActionResult Details(int? id)
         {
+            if (LoginService.IsAuthorizedRoles("staff"))
+                return RedirectToAction("Index", "Home");
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -174,6 +226,9 @@ namespace SSIMS.Controllers
         // GET: DisbursementLists/Create
         public ActionResult Create()
         {
+            if (!LoginService.IsAuthorizedRoles("clerk", "supervisor", "manager"))
+                return RedirectToAction("Index", "Home");
+
             ViewBag.CreatedByStaffID = new SelectList(db.Staffs, "ID", "UserAccountID");
             ViewBag.RepliedByStaffID = new SelectList(db.Staffs, "ID", "UserAccountID");
             return View();
@@ -197,6 +252,9 @@ namespace SSIMS.Controllers
 
         public ActionResult Return(int? id)
         {
+            if (!LoginService.IsAuthorizedRoles("clerk", "supervisor", "manager"))
+                return RedirectToAction("Index", "Home");
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
