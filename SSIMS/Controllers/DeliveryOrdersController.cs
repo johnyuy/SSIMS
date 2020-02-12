@@ -214,6 +214,12 @@ namespace SSIMS.Controllers
                 DeliveryOrder deliveryOrder = new DeliveryOrder(currentUser, PO.Supplier, PO);
                 deliveryOrder.DocumentItems = deliveredItems;
                 bool result = uow.StockCardEntryRepository.ProcessDeliveryOrderAcceptance(deliveryOrder);
+                //update inventory
+                InventoryService inventoryService = new InventoryService();
+                foreach(DocumentItem di in deliveredItems)
+                {
+                    inventoryService.UpdateInStoreQty(di.Item.ID);
+                }
 
                 if (result){
                     uow.DeliveryOrderRepository.Insert(deliveryOrder);

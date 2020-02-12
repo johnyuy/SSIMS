@@ -209,7 +209,7 @@ namespace SSIMS.Service
 
             uow.InventoryItemRepository.Update(item);
             uow.Save();
-            //Debug.WriteLine("InStore Qty for " + ItemID + "updated to" + balance);
+            Debug.WriteLine("InStore Qty for " + ItemID + "updated to" + balance);
             return true;
         }
 

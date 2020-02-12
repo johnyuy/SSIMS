@@ -71,5 +71,8 @@ namespace SSIMS.ViewModels
             Staff = staffname;
             Cost = uow.TenderRepository.GetSampleTenderPrice(itemdesc);
         }
+
+
+        
     }
 }
