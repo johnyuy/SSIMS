@@ -582,9 +582,9 @@ namespace SSIMS.Controllers
         }
 
 
-        public ActionResult Approvequick(int? id, bool dash=false)
+        public ActionResult Approvequick(int id, bool dash=false)
         {
-            if (id == null)
+            if (id == 0)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
@@ -605,9 +605,9 @@ namespace SSIMS.Controllers
                 return RedirectToAction("Dashboard", "Home");
             return RedirectToAction("Manage", "Requisition");
         }
-        public ActionResult Rejectquick(int? id, bool dash = false)
+        public ActionResult Rejectquick(int id, bool dash = false)
         {
-            if (id == null)
+            if (id == 0)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }

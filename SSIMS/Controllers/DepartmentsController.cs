@@ -54,13 +54,18 @@ namespace SSIMS.Controllers
         // GET: Departments/Details/5
         public ActionResult Details(string id)
         {
-            if (!LoginService.IsAuthorizedRoles("head", "rep")) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+
+            Staff staff = loginService.StaffFromSession;
+
+            if (!LoginService.IsAuthorizedRoles("head", "rep"))
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             Debug.WriteLine("welcome to department details, routevalue id = " + id);
             if (String.IsNullOrEmpty(id))
                 return RedirectToAction("Index");
-            
+
             Department department = unitOfWork.DepartmentRepository.Get(filter: x => x.ID == id, includeProperties: "CollectionPoint").First();
-                
+
             CollectionPoint selected = department.CollectionPoint;
             ViewBag.SelectedPoint = selected.Location;
             ViewBag.OtherPoints = unitOfWork.CollectionPointRepository.Get(filter: x => x.Location != selected.Location);
@@ -77,11 +82,28 @@ namespace SSIMS.Controllers
             return View();
         }
 
+
+
+        // GET: Departments/Details/id
+        public ActionResult Details2(String id)
+        {
+            if (!LoginService.IsAuthorizedRoles("clerk", "supervisor", "manager"))
+                return RedirectToAction("Index", "Home");
+
+            var department = unitOfWork.DepartmentRepository.Get(filter: x => x.ID == id, includeProperties: "DeptRep,DeptHead,CollectionPoint,DeptHeadAuthorization.Staff").First();
+
+            
+            return View(department);
+        }
+
+
         [HttpPost]
         public ActionResult UpdateCollectionPoint(string id)
         {
             UnitOfWork uow = new UnitOfWork();
-            if (!LoginService.IsAuthorizedRoles("head","rep")) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            if (!LoginService.IsAuthorizedRoles("head","rep"))
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
             string deptId = loginService.StaffFromSession.DepartmentID;
             Department department = uow.DepartmentRepository.GetByID(deptId);
             CollectionPoint collectionPoint = uow.CollectionPointRepository.GetByID(int.Parse(id));
@@ -125,7 +147,8 @@ namespace SSIMS.Controllers
         //Go to view for dep head only to select staff for delegation
         public ActionResult DelegateAuthority()
         {
-            if (!LoginService.IsAuthorizedRoles("head")) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            if (!LoginService.IsAuthorizedRoles("head"))
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
             UnitOfWork uow = new UnitOfWork();
             string dept = loginService.StaffFromSession.DepartmentID;
@@ -188,7 +211,8 @@ namespace SSIMS.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DelegateAuthority(string StaffName, string StartDate, string EndDate)
         {
-            if (!LoginService.IsAuthorizedRoles("head")) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            if (!LoginService.IsAuthorizedRoles("head"))
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
             string deptID = loginService.StaffFromSession.DepartmentID;
             if (ModelState.IsValid)
@@ -214,7 +238,8 @@ namespace SSIMS.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CancelAuthorization()
         {
-            if (!LoginService.IsAuthorizedRoles("head")) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            if (!LoginService.IsAuthorizedRoles("head"))
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             string deptID = loginService.StaffFromSession.DepartmentID;
             if (departmentService.CancelAuth(deptID))
             {
@@ -229,7 +254,8 @@ namespace SSIMS.Controllers
         [HttpPost]
         public ActionResult UpdateDeptRep(int id)
         {
-            if(!LoginService.IsAuthorizedRoles("head")) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            if(!LoginService.IsAuthorizedRoles("head"))
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             string deptId = loginService.StaffFromSession.DepartmentID;
             
             UnitOfWork uow = new UnitOfWork();

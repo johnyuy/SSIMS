@@ -31,7 +31,7 @@
     }
     #chart-container {
         width: 100%;
-        height:1000px;
+        height:1600px;
     }
     .chart{
         width:100%;
@@ -47,8 +47,10 @@
     }
 </style>
 
-
+<button id="runbtn" onclick="runsample()">Run Sample</button>
+<input id="isrun" hidden type="checkbox" />
 <div id="table-container">
+    
     <table>
         <tr>
             <th style="width:200px;">View Statistics By </th>
@@ -63,7 +65,7 @@
                 </select>
             </td>
             <td style="width:300px;">
-                <button onclick="refresh()">View</button>
+                <button onclick="refresh(1500)">View</button>
             </td>
         </tr>
         <tr>
@@ -213,7 +215,7 @@
 
 
     <script>
-        function refresh() {
+        function refresh(x) {
             $("#chart1").fadeOut(200);
             $("#chart2").fadeOut(200);
             $("#chart3").fadeOut(200);
@@ -242,13 +244,37 @@
             $("#chart2").attr("src", "@Url.Action("GenerateChartCost")?" + new Date().getTime());
             $("#chart3").attr("src", "@Url.Action("GenerateChartCount")?" + new Date().getTime());
 
-            $("#chart1").delay(1500).fadeIn();
-            $("#chart2").delay(1500).fadeIn();
-            $("#chart3").delay(1500).fadeIn();
+
+            $("#chart1").delay(x).fadeIn();
+            $("#chart2").delay(x).fadeIn();
+            $("#chart3").delay(x).fadeIn();
 
         }
 
-        
+        function runsample() {
+            var chk = document.getElementById("isrun");
+            if (chk.checked == false) {
+                alert("loading sample data..pls wait");
+                $.getJSON('@Url.Action("RunSample")');
+                chk.checked = true;
+                $("#runbtn").css("color","white");
+                $("#runbtn").css("background-color", "slategrey");
+                $("#runbtn").html("End Sample");
+                refresh(2000);
+                
+            } else {
+                alert("unloading sample data");
+                $.getJSON('@Url.Action("EndSample")');
+                chk.checked = false;
+                $("#runbtn").css("color","");
+                $("#runbtn").css("background-color", "");
+                $("#runbtn").html("Run Sample");
+                refresh(3000);
+            }
+
+            refresh(1000);
+
+        }
 
     </script>
 }

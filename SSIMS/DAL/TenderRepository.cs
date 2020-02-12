@@ -27,5 +27,17 @@ namespace SSIMS.DAL
             return tender.Price;
         }
 
+        public double GetSampleTenderPrice(string itemdesc)
+        {
+            IEnumerable<Tender> tenders = Get(filter: x => x.Item.Description == itemdesc, includeProperties: "Item");
+
+            if (tenders == null || tenders.Count() == 0)
+                return 0;
+
+            Tender tender = tenders.OrderByDescending(x => x.Price).LastOrDefault();
+
+            return tender.Price;
+        }
+
     }
 }

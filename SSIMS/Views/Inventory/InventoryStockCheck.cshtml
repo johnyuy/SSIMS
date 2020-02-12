@@ -21,16 +21,19 @@
         background: linear-gradient(to right, rgba(146, 167, 154, 0.20) 0%, rgba(115, 147, 147, 0.31) 100%);
         border-bottom: solid lightgrey 3px;
     }
-    #form-container{
-        width:auto;
+    #form-container {
+        width: auto;
+        margin-top:80px;
     }
-    input{
-        width:80px;
-        text-indent:12px;
+
+    input {
+        width: 80px;
+        text-indent: 12px;
     }
-    input.checkbox{
-        transform:scale(1.5);
-    }
+
+        input.checkbox {
+            transform: scale(1.5);
+        }
     input.textbox{
         border:lightgrey solid 0.5px;
         width:200px;
@@ -42,7 +45,28 @@
     table{
         box-shadow: 2px 4px 8px 0px rgba(47,79,79,0.2);
     }
+    button{
+        height:40px;
+        font-size: 15px;
+        font-weight:bold;
+        color:white;
+        background-color:#437373;
+    }
 </style>
+<div style="height:60px;margin:10px 0px;width:1140px;; position:fixed;background-color:#f1f1f1;z-index:100;border:solid lightgrey 2px">
+
+        <p style="float:left;margin:15px 10px;font-size:20px">
+            Changes to each item's quantity will be saved to <a style="font-size:20px;text-decoration:none" href="/inventory/adjustment?command=view">New Adjustments</a> when checked
+        </p>
+        <button style="width:250px;float:right;margin:10px" onclick="window.location.href = '/inventory/index';">
+            Back to Inventory
+        </button>
+    <table>
+
+    </table>
+
+</div>
+
 <div id="form-container">
 
 
@@ -112,8 +136,8 @@
         </tr>
             }
         </table>
-        <div>
-            <button>Submit</button>
+        <div style="margin-top:10px;width:100%;justify-content:center;display:flex">
+            <button style="width:150px" onclick="window.location.href = '/Inventory/adjustment?command=view';">Complete</button>
         </div>
     
 </div>
@@ -198,5 +222,9 @@
                 console.log("check updated");
             }
         })
+    }
+
+    function toadjustment() {
+
     }
 </script>

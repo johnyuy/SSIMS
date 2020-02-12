@@ -81,135 +81,138 @@
 
 
 <div style="width:100%">
-@if (!isCurrent)
-{
-    using (Html.BeginForm(FormMethod.Post))
+    @if (!isCurrent)
     {
-        @Html.AntiForgeryToken()
+        using (Html.BeginForm(FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
 
-        <div id="newauthbox">
-            <table>
-                <tr>
-                    <th>
-                        Staff
-                    </th>
-                    <td>
-                        <select name="StaffName">
-                            <option selected value="">select</option>
-                            @for (int i = 0; i < staffwoheadlist.Count(); i++)
-                            {
-                                string name = Server.UrlEncode(staffwoheadlist[i].Name);
-                                <option value=@name>@staffwoheadlist[i].Name</option>
-                            }
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        Start Date
-                    </th>
-                    <td>
-                        <input name="StartDate" type="date" />
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        End Date
-                    </th>
-                    <td>
-                        <input name="EndDate" type="date" />
-                    </td>
-                </tr>
-            </table>
+            <h4>Delegate Authority:</h4>
 
-            <div>
+            <div id="newauthbox">
+                <table>
+                    <tr>
+                        <th>
+                            Staff
+                        </th>
+                        <td>
+                            <select name="StaffName">
+                                <option selected value="">select</option>
+                                @for (int i = 0; i < staffwoheadlist.Count(); i++)
+                                {
+                                    string name = Server.UrlEncode(staffwoheadlist[i].Name);
+                                    <option value=@name>@staffwoheadlist[i].Name</option>
+                                }
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Start Date
+                        </th>
+                        <td>
+                            <input name="StartDate" type="date" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            End Date
+                        </th>
+                        <td>
+                            <input name="EndDate" type="date" />
+                        </td>
+                    </tr>
+                </table>
+
                 <div>
-                    <p class="text-danger">@error</p>
-                </div>
-                <div>
-                    <input type="submit" value="Delegate" class="btn btn-default" />
+                    <div>
+                        <p class="text-danger">@error</p>
+                    </div>
+                    <div>
+                        <input type="submit" value="Delegate" class="btn btn-default" />
+                    </div>
                 </div>
             </div>
-        </div>
+
+        }
 
     }
+    else
+    {
 
-}
-else
-{
-    <table id="newauthbox">
-        <tr>
-            <th>
-                Current Authorized Head
-            </th>
-            <td>
-                @currentDelegation.StaffName
-            </td>
-            <td rowspan="3">
-                @using (Html.BeginForm("CancelAuthorization", "Departments", FormMethod.Post))
-                {
-                    @Html.AntiForgeryToken()
-                    <div>
-                        <input type="submit" value="Cancel" class="btn btn-default" />
-                    </div>
-                }
-            </td>
-        </tr>
-        <tr>
-            <th>
-                Start Date
-            </th>
-            <td>
-                @currentDelegation.StartDate
-            </td>
-        </tr>
-        <tr>
-            <th>
-                End Date
-            </th>
-            <td>
-                @currentDelegation.EndDate
-            </td>
-        </tr>
-    </table>
-}
-
-
-@if (Model.Count == 0 || Model == null)
-{
-    <p style="font-size:50px">NO AUTH IN RECORD</p>
-}
-else
-{
-    <table id="historybox">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(Model => Model[0].StaffName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(Model => Model[0].StartDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(Model => Model[0].EndDate)
-            </th>
-        </tr>
-        @for (int i = 0; i < Model.Count(); i++)
-        {
+        <table id="newauthbox">
             <tr>
+                <th>
+                    Current Authorized Head
+                </th>
                 <td>
-                    @Html.DisplayFor(Model => Model[i].StaffName)
+                    @currentDelegation.StaffName
                 </td>
-                <td>
-                    @Html.DisplayFor(Model => Model[i].StartDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(Model => Model[i].EndDate)
+                <td rowspan="3">
+                    @using (Html.BeginForm("CancelAuthorization", "Departments", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div>
+                            <input type="submit" value="Cancel" class="btn btn-default" />
+                        </div>
+                    }
                 </td>
             </tr>
-        }
-    </table>
+            <tr>
+                <th>
+                    Start Date
+                </th>
+                <td>
+                    @currentDelegation.StartDate
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    End Date
+                </th>
+                <td>
+                    @currentDelegation.EndDate
+                </td>
+            </tr>
+        </table>
+    }
 
-}
+
+    @if (Model.Count == 0 || Model == null)
+    {
+        <p style="font-size:50px;color:lightgray">Empty</p>
+    }
+    else
+    {
+        <table id="historybox">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(Model => Model[0].StaffName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(Model => Model[0].StartDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(Model => Model[0].EndDate)
+                </th>
+            </tr>
+            @for (int i = 0; i < Model.Count(); i++)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(Model => Model[i].StaffName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(Model => Model[i].StartDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(Model => Model[i].EndDate)
+                    </td>
+                </tr>
+            }
+        </table>
+
+    }
 
 
 </div>
