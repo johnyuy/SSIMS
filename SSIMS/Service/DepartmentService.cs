@@ -27,7 +27,7 @@ namespace SSIMS.Service
 
         public bool IsActiveAuthExist(string deptID, out DeptHeadAuthorization activedept, UnitOfWork uow)
         {
-            activedept = uow.DeptHeadAuthorizationRepository.Get(filter: x => x.EndDate.CompareTo(DateTime.Now)==1 && x.DepartmentID==deptID).FirstOrDefault();
+            activedept = uow.DeptHeadAuthorizationRepository.Get(filter: x => x.EndDate.CompareTo(DateTime.Now)==1 && x.DepartmentID==deptID, includeProperties:"Staff").FirstOrDefault();
             if (activedept == null)
                 return false;
             else
@@ -40,14 +40,12 @@ namespace SSIMS.Service
             //check start is today or future
             if (DateTime.Parse(startDate).CompareTo(DateTime.Now) < 0)
                 return false;
-
             //check enddate is after startdate
             if (DateTime.Parse(startDate).CompareTo(DateTime.Parse(endDate)) >= 0)
                 return false;
             //check current auth exist
             if(IsActiveAuthExist(deptID, out _, uow))
                 return false;
-
 
             //check if there is a staff selected
             if (name == "")
@@ -57,6 +55,8 @@ namespace SSIMS.Service
             uow.Save();
             Debug.WriteLine("Dep Head Auth for " + deptID + " : " + name + " was inserted into db");
 
+            
+
             return true;
         }
 
@@ -65,11 +65,16 @@ namespace SSIMS.Service
             UnitOfWork uow = new UnitOfWork();
             if (!IsActiveAuthExist(deptID, out DeptHeadAuthorization auth, uow))
                 return false;
-            auth.EndDate = DateTime.Now;
-            uow.DeptHeadAuthorizationRepository.Update(auth);
-            uow.Save();
-
-            return true;
+            
+            ILoginService loginService = new LoginService();
+            if (loginService.StaffToAuthorizedHead(auth.Staff.Name, false))
+            {
+                auth.EndDate = DateTime.Now;
+                uow.DeptHeadAuthorizationRepository.Update(auth);
+                uow.Save();
+                return true;
+            }
+            return false;
         }
     }
 }

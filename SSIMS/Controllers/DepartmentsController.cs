@@ -29,11 +29,11 @@ namespace SSIMS.Controllers
         // GET: Departments
         public ActionResult Index()
         {
-            Debug.WriteLine("Hey drake , user type = " + Session["usertype"]);
-            Debug.WriteLine("Hey drake , user group = " + Session["usergroup"]);
+            if (!LoginService.IsAuthorizedRoles(""))
+                return RedirectToAction("Index", "Home");
+
             var departments = unitOfWork.DepartmentRepository.Get(includeProperties: "CollectionPoint");
             ViewBag.RepList = unitOfWork.StaffRepository.GetDeptRepList();
-            Debug.WriteLine("number of heads: " + unitOfWork.StaffRepository.GetDeptHeadList().Count());
             var Deps = unitOfWork.DepartmentRepository.Get(filter: x => x.ID != "STOR", includeProperties: "DeptHeadAuthorization.Staff");
             ViewBag.Departments = Deps;
             List<string> authNames = new List<string>();
@@ -54,6 +54,7 @@ namespace SSIMS.Controllers
         // GET: Departments/Details/5
         public ActionResult Details(string id)
         {
+            if (!LoginService.IsAuthorizedRoles("head", "rep")) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             Debug.WriteLine("welcome to department details, routevalue id = " + id);
             if (String.IsNullOrEmpty(id))
                 return RedirectToAction("Index");
@@ -72,23 +73,25 @@ namespace SSIMS.Controllers
                 return HttpNotFound();
             }
             ViewBag.Department = department;
-            Session["CurrentDepartmentID"] = department.ID;
+            //Session["CurrentDepartmentID"] = department.ID;
             return View();
         }
 
         [HttpPost]
         public ActionResult UpdateCollectionPoint(string id)
         {
-            string deptId = Session["CurrentDepartmentID"].ToString();
-            Department department = unitOfWork.DepartmentRepository.GetByID(deptId);
-            CollectionPoint collectionPoint = unitOfWork.CollectionPointRepository.GetByID(int.Parse(id));
+            UnitOfWork uow = new UnitOfWork();
+            if (!LoginService.IsAuthorizedRoles("head","rep")) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            string deptId = loginService.StaffFromSession.DepartmentID;
+            Department department = uow.DepartmentRepository.GetByID(deptId);
+            CollectionPoint collectionPoint = uow.CollectionPointRepository.GetByID(int.Parse(id));
             if (collectionPoint != null) {
                 department.CollectionPoint = collectionPoint;
-                unitOfWork.DepartmentRepository.Update(department);
-                unitOfWork.Save();
-                Debug.WriteLine("Collection point for " + department.DeptName + " update to " + collectionPoint.Location);
+                uow.DepartmentRepository.Update(department);
+                uow.Save();
+                Debug.WriteLine("Collection point for " + department.DeptName + " updated to " + collectionPoint.Location);
             }
-            return RedirectToAction("Details", new { id = deptId });
+            return RedirectToAction("Dashboard", "Home");
         }
 
        
@@ -104,7 +107,7 @@ namespace SSIMS.Controllers
 
         public ActionResult SelectCollectionPoint (string id)
         {
-            
+            if (!LoginService.IsAuthorizedRoles("head", "rep")) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -120,13 +123,21 @@ namespace SSIMS.Controllers
 
 
         //Go to view for dep head only to select staff for delegation
-        public ActionResult DelegateAuthority(string id)
+        public ActionResult DelegateAuthority()
         {
+            if (!LoginService.IsAuthorizedRoles("head")) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
             UnitOfWork uow = new UnitOfWork();
             string dept = loginService.StaffFromSession.DepartmentID;
 
-            if (String.IsNullOrEmpty(id))
-                return RedirectToAction("Index");
+            Debug.WriteLine("Staff is from " + dept);
+            Department department = uow.DepartmentRepository.Get(filter: x => x.ID == dept, includeProperties: "DeptRep").First();
+
+            //get current active delegation (if exists)
+            ViewBag.CurrentDelegation = departmentService.IsActiveAuthExist(dept, out DeptHeadAuthorization auth, uow) ? (new DeptHeadAuthVM(auth)) : null;
+
+            ViewBag.DelegateError = TempData["delegateError"];
+
 
             //show history and form together
             //get a list of auths (history)
@@ -137,43 +148,32 @@ namespace SSIMS.Controllers
             }
 
             //get a list of staff (new delegation)
-            List<Staff> stafflist = staffService.GetStaffByDeptID(dept);
+            List<Staff> stafflistfull = staffService.GetStaffByDeptID(dept);
 
             //get a list of staff without head
-            var staffwoheadlist = new List<Staff>();
-            foreach(Staff s in stafflist)
+            var stafflistnohead = new List<Staff>();
+            foreach (Staff s in stafflistfull)
             {
                 if(s.StaffRole != "DeptHead")
-                {
-                    staffwoheadlist.Add(s);
-                }
+                    stafflistnohead.Add(s);
             }
 
             //get a list of staff without head/rep
-            var staffonlylist = new List<Staff>();
-            foreach (Staff s in stafflist)
+            var stafflistordinary = new List<Staff>();
+            foreach (Staff s in stafflistfull)
             {
                 if(s.StaffRole == "Staff")
-                {
-                    staffonlylist.Add(s);
-                }
+                    stafflistordinary.Add(s);
             }
 
-            ViewBag.StaffList = stafflist;
-            ViewBag.StaffWOHeadList = staffwoheadlist;
-            ViewBag.StaffOnlyList = staffonlylist;
+            ViewBag.StaffList = stafflistfull;
+            ViewBag.StaffWOHeadList = stafflistnohead;
+            ViewBag.StaffOnlyList = stafflistordinary;
 
-            //get current active delegation (if exists)
-            ViewBag.CurrentDelegation = departmentService.IsActiveAuthExist(dept, out DeptHeadAuthorization auth, uow) ? (new DeptHeadAuthVM(auth)) : null;
-
-            ViewBag.DelegateError = TempData["delegateError"];
-
-            Department department = uow.DepartmentRepository.Get(filter: x => x.ID == id, includeProperties: "Staff").First();
 
             Staff selected = department.DeptRep;
             ViewBag.SelectedRep = selected.Name;
-            if (id == null)
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                
             if (department == null)
                 return HttpNotFound();
             ViewBag.Department = department;
@@ -188,69 +188,74 @@ namespace SSIMS.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DelegateAuthority(string StaffName, string StartDate, string EndDate)
         {
-            UnitOfWork uow = new UnitOfWork();
+            if (!LoginService.IsAuthorizedRoles("head")) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
             string deptID = loginService.StaffFromSession.DepartmentID;
             if (ModelState.IsValid)
             {
                 Debug.WriteLine(Server.UrlDecode(StaffName) + " " + StartDate + " " + EndDate);
                 string name = Server.UrlDecode(StaffName);
                 if(!departmentService.SubmitNewAuth(name, StartDate, EndDate, deptID))
+                {
                     TempData["delegateError"] = "Please try again";
+                }
+                else
+                {
+                    if(!loginService.StaffToAuthorizedHead(name,true))
+                        TempData["delegateError"] = "Failed to authorize!";
+                }
                 return RedirectToAction("DelegateAuthority");
             }
             return RedirectToAction("Details", new { id = deptID});
         }
-
-
-
 
         //End Delegation
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult CancelAuthorization()
         {
+            if (!LoginService.IsAuthorizedRoles("head")) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             string deptID = loginService.StaffFromSession.DepartmentID;
             if (departmentService.CancelAuth(deptID))
+            {
                 Debug.WriteLine("Auth for" + deptID + "canceled");
+            }
+                
 
             return RedirectToAction("DelegateAuthority");
         }
 
 
         [HttpPost]
-        public ActionResult UpdateDeptRep(string id)
+        public ActionResult UpdateDeptRep(int id)
         {
-            string deptId = Session["CurrentDepartmentID"].ToString();
-            Department department = unitOfWork.DepartmentRepository.GetByID(deptId);
-            Staff staff = unitOfWork.StaffRepository.GetByID(int.Parse(id));
+            if(!LoginService.IsAuthorizedRoles("head")) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            string deptId = loginService.StaffFromSession.DepartmentID;
+            
+            UnitOfWork uow = new UnitOfWork();
+            Department department = uow.DepartmentRepository.Get(filter: x=> x.ID == deptId, includeProperties:"DeptRep").FirstOrDefault();
+            
+            Staff NewRep = uow.StaffRepository.GetByID(id);
+            NewRep.StaffRole = "DeptRep";
+            uow.StaffRepository.Update(NewRep);
+            loginService.UpdateDeptAccessByRole(NewRep.Name, uow);
+            Debug.WriteLine("Updating new department rep to " + NewRep.Name);
 
-            if (staff.StaffRole == "DeptRep")
-            {
-                Staff deptRep = staff;
-                if (deptRep != null)
-                {
-                    department.DeptRep = deptRep;
-                    unitOfWork.DepartmentRepository.Update(department);
-                    unitOfWork.Save();
-                    Debug.WriteLine("Dept Rep for " + department.DeptName + " update to " + department.DeptRep);
-                }
-            }
+            Staff OldRep = department.DeptRep;
+            OldRep.StaffRole = "Staff";
+            uow.StaffRepository.Update(OldRep);
+            loginService.UpdateDeptAccessByRole(OldRep.Name, uow);
+            Debug.WriteLine("Removed old department rep " + OldRep.Name);
+
+            department.DeptRep = NewRep;
+            uow.DepartmentRepository.Update(department);
+            Debug.WriteLine("Updated department " + department.ID);
+
+            uow.Save();
+
             return RedirectToAction("DelegateAuthority", new { id = deptId });
         }
-        public ActionResult SelectDeptRep(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Department department = unitOfWork.DepartmentRepository.GetByID(id);
-            if (department == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.DeptRepID = new SelectList(unitOfWork.DepartmentRepository.Get(), "ID", "Name", department.DeptRep.ID);
-            return View(department);
-        }
+
 
     }
 }

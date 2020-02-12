@@ -26,6 +26,7 @@
         #topnav {
             height: 80px;
             min-width: 1500px;
+            max-width: 3000px;
             background: linear-gradient(to right, #1a4a4a 0%, #ccffff 119%);
             border: none;
         }
@@ -52,12 +53,16 @@
         #username {
             color: black;
             width: 150px;
-            margin: 10px;
             position: absolute;
-            right: 250px;
-            top: 20px;
+            right: 280px;
+            top: 30px;
         }
-
+        #logout{
+            color: grey;
+            position: absolute;
+            right: 200px;
+            top: 30px;
+        }
         .sidebar {
             height: 100%;
             width: 200px;
@@ -108,7 +113,8 @@
     <div id="topnav" class="navbar navbar-inverse navbar-fixed-top">
         <img src=@Url.Content("~/Resources/LogicUIcon.png") id="logicuicon" />
         <div id="header"><h1>@ViewBag.Header</h1></div>
-        <div id="username"><b>@user.ToUpper()</b>&nbsp;&nbsp;&nbsp;@Html.ActionLink("Logout", "Logout", "Login", new { username = user }, null)</div>
+        <div id="username"><i class="fa fa-user"></i><b> @user.ToUpper()</b></div>
+        <div id="logout">@Html.ActionLink("Logout", "Logout", "Login", new { username = user }, null)</div>
     </div>
     <div class="sidebar">
         @{
@@ -144,7 +150,7 @@
                 else
                 {<a href="~/disbursement/index"><i class="fa fa-exchange"></i> Disbursements</a>}
 
-                if (ViewBag.Section == "Items")
+                if (ViewBag.Section == "Catalogue")
                 {<a class="active" href="~/items/index"><i class="fas fa-pencil-alt"></i>Items</a>}
                 else
                 {<a href="~/items/index"><i class="fas fa-pencil-alt"></i>Items</a>}
@@ -158,9 +164,9 @@
             if (usergroup == "dept")
             {
                 if (ViewBag.Section == "Dashboard")
-                {<a class="active" href="~/Home/index"><i class=""></i> Dashboard</a>}
+                {<a class="active" href="~/Home/Dashboard"><i class="fa fa-list"></i> Dashboard</a>}
                 else
-                {<a href="~/Home/index"><i class=""></i> Dashboard</a>}
+                {<a href="~/Home/Dashboard"><i class="fa fa-list"></i> Dashboard</a>}
 
                 if (ViewBag.Section == "Catalogue")
                 {<a class="active" href="~/items/index"><i class="fas fa-pencil-alt"></i> Catalogue</a>}
@@ -179,20 +185,14 @@
                     else
                     {<a href="~/departments/delegateauthority"><i class="fas fa-hand-point-right"></i> Delegate</a>}
                 }
-                else if (usertype == "rep")
-                {
-                    if (ViewBag.Section == "Collections")
-                    {<a class="active" href="~/collection/index"><i class=""></i> Collections</a>}
-                    else
-                    {<a href="~/collection/index"><i class=""></i> Collections</a>}
-                }
+                
             }
             else if (usergroup == "store")
             {
                 if (ViewBag.Section == "Dashboard")
-                {<a class="active" href="~/dashboard/index"><i class="fa fa-list"></i> Dashboard</a>}
+                {<a class="active" href="~/Home/Dashboard"><i class="fa fa-list"></i> Dashboard</a>}
                 else
-                {<a href="~/dashboard/index"><i class="fa fa-list"></i> Dashboard</a>}
+                {<a href="~/Home/Dashboard"><i class="fa fa-list"></i> Dashboard</a>}
 
                 if (ViewBag.Section == "Inventory")
                 {<a class="active" href="~/inventory/index"><i class="fa fa-cubes"></i> Inventory</a>}

@@ -1,59 +1,123 @@
 ﻿@model SSIMS.Models.Department
+@using SSIMS.Models;
 @{
-    ViewBag.Title = "DepRep";
-    ViewBag.Header = "Dept Rep Dashboard";
+    ViewBag.Header = "Dashboard";
     ViewBag.Section = "Dashboard";
-
+    string selected = ViewBag.SelectedPoint;
+    List<CollectionPoint> options = ViewBag.OtherPoints;
+    DateTime time = Model.CollectionPoint.Time;
+    DateTime today = DateTime.Today;
+    int daysleft = ((int)DayOfWeek.Monday - (int)today.DayOfWeek + 7) % 7;
+    DateTime nextMon = today.AddDays(daysleft);
+    string nextMonday = time.AddDays(daysleft+1).ToString("dd/MM/yyyy hh:mm tt");
 }
-<h2>Your Department Upcoming Collection</h2>
 
-<table class="table">
-    <tr>
-        <th>
-            Collection Point:
-        </th>
-        <td> @Html.DisplayFor(x => x.CollectionPoint.Location)</td>
-        <td rowspan="2">
-            @if (Model.CollectionPoint.ID == 1)
-            {
-                <img src=@Url.Content("~/Resources/Maps/SelectedStore.png") id="collectionmap" width=450 height=300 />
-            }
-            @if (Model.CollectionPoint.ID == 2)
-            {
-                <img src=@Url.Content("~/Resources/Maps/SelectedMgmt.png") id="collectionmap" width=450 height=300 />
-            }
-            @if (Model.CollectionPoint.ID == 3)
-            {
-                <img src=@Url.Content("~/Resources/Maps/SelectedMedi.png") id="collectionmap" width=450 height=300 />
-            }
-            @if (Model.CollectionPoint.ID == 4)
-            {
-                <img src=@Url.Content("~/Resources/Maps/SelectedENGG.png") id="collectionmap" width=450 height=300 />
-            }
-            @if (Model.CollectionPoint.ID == 5)
-            {
-                <img src=@Url.Content("~/Resources/Maps/SelectedScience.png") id="collectionmap" width=450 height=300 />
-            }
-            @if (Model.CollectionPoint.ID == 6)
-            {
-                <img src=@Url.Content("~/Resources/Maps/SelectedHosp.png") id="collectionmap" width=450 height=300 />
-            }
-        </td>
-    </tr>
-    <tr>
-        <th>
-            Collection Date:
-        </th>
-        <td> @Html.DisplayFor(x => x.CollectionPoint.Time)</td>
-    </tr>
-</table>
+<style>
+    #full-container{
+        width:100%;
+    }
+    table{
+        width:30%;
+    }
+    td{
+        padding:10px;
+    }
+    h2{
+        margin-left:10px;
+    }
+    img{
+        box-shadow: 2px 4px 8px 0px rgba(47,79,79,0.2);
+    }
+</style>
 
-<div>
-    <button onclick="window.location.href = '/Requisition/Index';">
-        View My Requests
-    </button>
+
+
+<h2>Upcoming Collection in @daysleft Days</h2>
+<div id="full-container">
+    <table class="table-responsive">
+
+        <tr>
+            <td style="width:200px">Collection Point:</td>
+            <td>
+                <select id="collectionpoint" onchange="update()">
+                    <option selected value=@Model.CollectionPoint.ID>@selected</option>
+                    @foreach (CollectionPoint cp in options)
+                    {
+                        <option value=@cp.ID>@cp.Location</option>
+                    }
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                Collection Date:
+            </td>
+
+            <td>
+                @nextMonday
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="2">
+                @if (Model.CollectionPoint.ID == 1)
+                {
+                    <img src=@Url.Content("~/Resources/Maps/SelectedStore.png") id="collectionmap" width=450 height=300 />
+                }
+                @if (Model.CollectionPoint.ID == 2)
+                {
+                    <img src=@Url.Content("~/Resources/Maps/SelectedMgmt.png") id="collectionmap" width=450 height=300 />
+                }
+                @if (Model.CollectionPoint.ID == 3)
+                {
+                    <img src=@Url.Content("~/Resources/Maps/SelectedMedi.png") id="collectionmap" width=450 height=300 />
+                }
+                @if (Model.CollectionPoint.ID == 4)
+                {
+                    <img src=@Url.Content("~/Resources/Maps/SelectedENGG.png") id="collectionmap" width=450 height=300 />
+                }
+                @if (Model.CollectionPoint.ID == 5)
+                {
+                    <img src=@Url.Content("~/Resources/Maps/SelectedScience.png") id="collectionmap" width=450 height=300 />
+                }
+                @if (Model.CollectionPoint.ID == 6)
+                {
+                    <img src=@Url.Content("~/Resources/Maps/SelectedHosp.png") id="collectionmap" width=450 height=300 />
+                }
+            </td>
+        </tr>
+
+    </table>
+</div>
+<div style="margin-left:10px;">
+    <p style="font-size:small">Contact Logic University Store Department <a href="mailto:logicssims@outlook.com?subject=Enquiry">logicssims@outlook.com</a> for enquiries</p>
 </div>
 
+<script>
+    function update() {
+        var cp = document.getElementById("collectionpoint").value;
+        alert("Collection Point Updated!");
+        post("/departments/updatecollectionpoint", { "id": cp });
+    }
 
+    function post(path, params, method='post') {
+      const form = document.createElement('form');
+      form.method = method;
+      form.action = path;
+
+      for (const key in params) {
+        if (params.hasOwnProperty(key)) {
+          const hiddenField = document.createElement('input');
+          hiddenField.type = 'hidden';
+          hiddenField.name = key;
+          hiddenField.value = params[key];
+          form.appendChild(hiddenField);
+        }
+      }
+      document.body.appendChild(form);
+      form.submit();
+    }
+</script>
 
 

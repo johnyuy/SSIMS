@@ -12,7 +12,7 @@ namespace SSIMS.ViewModels
         public int ID { get; set; }
         [Display(Name="Start Date")]
         public string StartDate { get; set; }
-        [Display(Name = "Start Date")]
+        [Display(Name = "End Date")]
         public string EndDate { get; set; }
         public string DeptID { get; set; }
         [Display(Name = "Staff")]

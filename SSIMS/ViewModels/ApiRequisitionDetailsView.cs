@@ -46,8 +46,11 @@ namespace SSIMS.ViewModels
             ID = RO.ID.ToString();
             CreatedByStaffID = RO.CreatedByStaff.ID.ToString();
             CreatedByStaffName = RO.CreatedByStaff.Name.ToString();
-            RepliedByStaffID = RO.RepliedByStaff.ID.ToString();
-            RepliedByStaffName = RO.RepliedByStaff.Name.ToString();
+            if (RO.RepliedByStaff != null)
+            {
+                RepliedByStaffID = RO.RepliedByStaff.ID.ToString();
+                RepliedByStaffName = RO.RepliedByStaff.Name.ToString();
+            }
             Comments = RO.Comments;
             CreatedDate = RO.CreatedDate.ToString();
             ResponseDate = RO.ResponseDate.ToString();

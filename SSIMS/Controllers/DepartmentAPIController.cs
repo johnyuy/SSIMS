@@ -17,12 +17,12 @@ namespace SSIMS.Controllers
         UnitOfWork uow = new UnitOfWork();
 
         [HttpGet]
-        public Department Get(string username)
+        public ApiDepartmentView Get(string username)
         {
-            Staff currentstaff = uow.StaffRepository.Get(filter: x => x.UserAccountID == username, includeProperties: "Department").FirstOrDefault();
+            Staff currentstaff = uow.StaffRepository.Get(filter: x => x.UserAccountID == username, includeProperties: "Department, Department.DeptHead").FirstOrDefault();
             Department department = currentstaff.Department;
-
-            return department;
+            ApiDepartmentView apiDepartmentView = new ApiDepartmentView(department);
+            return apiDepartmentView;
         }
 
     }

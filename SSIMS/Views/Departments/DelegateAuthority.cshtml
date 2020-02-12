@@ -16,40 +16,78 @@
     string selected = ViewBag.SelectedRep;
 }
 
-    <script>
+<script>
     function update() {
-        var dr = document.getElementById("deptrep").value;
-        alert("Department Rep Updated!");
-        post("/departments/updatedeptrep", { "id": dr });
+        var dr = $("#deptrep").val();
+        $("RepForm").submit();
     }
 
-    function post(path, params, method='post') {
-      const form = document.createElement('form');
-      form.method = method;
-      form.action = path;
+    function post(path, params, method = 'post') {
+        const form = document.createElement('form');
+        form.method = method;
+        form.action = path;
 
-      for (const key in params) {
-        if (params.hasOwnProperty(key)) {
-          const hiddenField = document.createElement('input');
-          hiddenField.type = 'hidden';
-          hiddenField.name = key;
-          hiddenField.value = params[key];
-          form.appendChild(hiddenField);
+        for (const key in params) {
+            if (params.hasOwnProperty(key)) {
+                const hiddenField = document.createElement('input');
+                hiddenField.type = 'hidden';
+                hiddenField.name = key;
+                hiddenField.value = params[key];
+                form.appendChild(hiddenField);
+            }
         }
-      }
-      document.body.appendChild(form);
-      form.submit();
+        document.body.appendChild(form);
+        form.submit();
     }
-    </script>
+</script>
+<style>
+    th, td{
+        padding:10px;
+        text-align:center;
+    }
+    #deprepbox, #newauthbox, #historybox{
+        background:linear-gradient(to right, rgba(146, 167, 154, 0.20) 0%, rgba(115, 147, 147, 0.31) 100%);
+        width:50%;
+        padding: 20px;
+    }
+</style>
 
 
+<div id="deprepbox">
+    @using (Html.BeginForm("UpdateDeptRep", "Departments", FormMethod.Post, new { @id = "RepForm" }))
+    {
+        @Html.AntiForgeryToken()
+        <table class="table-responsive">
+            <tr>
+                <th>Assigned Department Rep</th>
+                <td onchange="update()">
+                    <select id="deptrep" name="id">
+                        <option selected value=@department.DeptRep.ID>@selected</option>
+                        @foreach (Staff dr in staffonlylist)
+                        {
+                            <option value=@dr.ID>@dr.Name</option>
+                        }
+                    </select>
+                </td>
+                <td>
+                    <button type="submit">Submit</button>
+                </td>
+            </tr>
+        </table>
+
+    }
+</div>
+
+
+
+<div style="width:100%">
 @if (!isCurrent)
 {
     using (Html.BeginForm(FormMethod.Post))
     {
         @Html.AntiForgeryToken()
 
-        <div>
+        <div id="newauthbox">
             <table>
                 <tr>
                     <th>
@@ -95,11 +133,11 @@
         </div>
 
     }
-    
+
 }
 else
 {
-    <table>
+    <table id="newauthbox">
         <tr>
             <th>
                 Current Authorized Head
@@ -111,9 +149,9 @@ else
                 @using (Html.BeginForm("CancelAuthorization", "Departments", FormMethod.Post))
                 {
                     @Html.AntiForgeryToken()
-                <div>
-                    <input type="submit" value="Cancel" class="btn btn-default" />
-                </div>
+                    <div>
+                        <input type="submit" value="Cancel" class="btn btn-default" />
+                    </div>
                 }
             </td>
         </tr>
@@ -143,8 +181,7 @@ else
 }
 else
 {
-    <p>AUTH HISTORY IS HERE</p>
-    <table>
+    <table id="historybox">
         <tr>
             <th>
                 @Html.DisplayNameFor(Model => Model[0].StaffName)
@@ -156,43 +193,35 @@ else
                 @Html.DisplayNameFor(Model => Model[0].EndDate)
             </th>
         </tr>
-        @for(int i = 0; i< Model.Count(); i++)
+        @for (int i = 0; i < Model.Count(); i++)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(Model => Model[i].StaffName)
-            </td>
-            <td>
-                @Html.DisplayFor(Model => Model[i].StartDate)
-            </td>
-            <td>
-                @Html.DisplayFor(Model => Model[i].EndDate)
-            </td>
-        </tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(Model => Model[i].StaffName)
+                </td>
+                <td>
+                    @Html.DisplayFor(Model => Model[i].StartDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(Model => Model[i].EndDate)
+                </td>
+            </tr>
         }
     </table>
 
 }
 
-<table>
-    <tr>
-        <th>Assigned Department Rep</th>
-        <td>
-            <select id="deptrep" onchange="update()">
-                <option selected value=@department.DeptRep.ID>@selected</option>
-                @foreach (Staff dr in staffonlylist)
-                {
-                    <option value=@dr.ID>@dr.Name</option>
-                }
-            </select>
-        </td>
-    </tr>
-</table>
 
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
 </div>
+
+@if (Session["role"].ToString() == "admin")
+{
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+}
+
+
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

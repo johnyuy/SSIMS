@@ -161,8 +161,8 @@ namespace SSIMS.Service
         {
             string actualrole = HttpContext.Current.Session["role"].ToString();
             if (actualrole.Equals(authorizedRole)
-                || actualrole.Equals("Admin")
-                || authorizedRole.Equals("All"))
+                || actualrole.Equals("admin")
+                || authorizedRole.Equals("all"))
                 return true;
 
             return false;
@@ -173,7 +173,7 @@ namespace SSIMS.Service
             string actualrole = HttpContext.Current.Session["role"].ToString();
             if (actualrole.Equals(authorizedRole1)
                 || actualrole.Equals(authorizedRole2)
-                || actualrole.Equals("Admin"))
+                || actualrole.Equals("admin"))
                 return true;
             return false;
         }
@@ -184,11 +184,11 @@ namespace SSIMS.Service
             if (actualrole.Equals(authorizedRole1)
                 || actualrole.Equals(authorizedRole2)
                 || actualrole.Equals(authorizedRole3)
-                || actualrole.Equals("Admin"))
+                || actualrole.Equals("admin"))
                 return true;
             return false;
         }
-        //not in interface yet
+
         public string UserDepartment
         {
             get
@@ -200,6 +200,53 @@ namespace SSIMS.Service
 
                 return staff.DepartmentID;
             }
+        }
+
+
+        public bool StaffToAuthorizedHead(string staffname, bool isAuth)
+        {
+            UnitOfWork uow = new UnitOfWork();
+            Staff staff = uow.StaffRepository.Get(filter: x => x.Name == staffname).FirstOrDefault();
+            if (staff == null) return false;
+            if (staff.StaffRole != "DeptRep" && staff.StaffRole != "Staff")
+                return false;
+            string acc = staff.UserAccountID;
+            UserAccount account = uow.UserAccountRepository.GetByID(acc);
+            if(account == null) return false;
+            if(isAuth)
+            {
+                account.DeptAccess = 3;
+            }
+            else
+            {
+                if (staff.StaffRole == "DeptRep")
+                    account.DeptAccess = 2;
+                else
+                    account.DeptAccess = 1;
+            }
+            uow.UserAccountRepository.Update(account);
+            uow.Save();
+            return true;
+        }
+
+        public void UpdateDeptAccessByRole(string staffname, UnitOfWork uow)
+        {
+            Staff staff = uow.StaffRepository.Get(filter: x => x.Name == staffname).FirstOrDefault();
+            if (staff == null) return;
+            Debug.WriteLine("Updating by role for " + staff.Name);
+            string acc = staff.UserAccountID;
+            UserAccount account = uow.UserAccountRepository.GetByID(acc);
+            if (account == null) return;
+            if (staff.StaffRole == "DeptRep")
+            {
+                account.DeptAccess = 2;
+            }
+            else if (staff.StaffRole == "Staff")
+            {
+                account.DeptAccess = 1;
+            }
+            uow.UserAccountRepository.Update(account);
+            uow.Save();
         }
     }
 }

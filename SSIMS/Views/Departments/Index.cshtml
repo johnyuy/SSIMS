@@ -10,11 +10,6 @@
     int count = ViewBag.DeptCount;
 }
 
-
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 <table class="table">
     <tr>
         <th>
@@ -65,9 +60,7 @@
             @departments[i].FaxNumber
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=departments[i].ID }) |
             @Html.ActionLink("Details", "Details", new { id=departments[i].ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=departments[i].ID })
         </td>
     </tr>
 }
