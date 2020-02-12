@@ -45,7 +45,8 @@ namespace SSIMS.Controllers
 
             if (staff.StaffRole == "DeptHead" || staff.StaffRole == "DeptRep")
             {
-                disbursementList = uow.DisbursementListRepository.Get(filter: x => x.Department.ID == staff.DepartmentID).ToList();
+                disbursementList = uow.DisbursementListRepository.Get(filter: x => x.Department.ID == staff.DepartmentID, includeProperties: "CreatedByStaff, ItemTransactions.Item, Department").ToList();
+                Debug.WriteLine(disbursementList.Count());
                 switch (status)
                 {
 
@@ -74,6 +75,7 @@ namespace SSIMS.Controllers
             if (staff.StaffRole == "Manager" || staff.StaffRole == "Supervisor" || staff.StaffRole == "Clerk")
             {
                 disbursementList = uow.DisbursementListRepository.Get(includeProperties: "CreatedByStaff, ItemTransactions.Item, Department").ToList();
+                Debug.WriteLine(disbursementList.Count());
                 switch (status)
                 {
                     case "Pending":

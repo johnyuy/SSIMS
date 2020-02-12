@@ -42,9 +42,6 @@
 
 @if(ViewBag.staffrole != "DeptRep")
 {
-
-
-
 <div id="top-bar">
     <div>
         <button onclick="window.location.href = '/Retrieval/Index';">Go to Retrievals</button>
@@ -53,17 +50,14 @@
         <button onclick="window.location.href = '/Disbursement/Current';">Current Disbursements</button>
     </div>
 </div>
-    }
+}
 <div class="table-responsive">
     <label> &nbsp;View by Status: &nbsp;</label>
     &nbsp; @Html.ActionLink("Pending", "Index", new { status = "Pending" }) &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
     @Html.ActionLink("Completed", "Index", new { status = "Completed" }) &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
     @Html.ActionLink("Rejected", "Index", new { status = "Rejected" }) &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
     @Html.ActionLink("View All", "Index", new { status = "All" })
-    </div>
- 
 
-<div class="table-responsive">
     <table class="table">
         <tr>
             <th>Disbursement ID</th>
