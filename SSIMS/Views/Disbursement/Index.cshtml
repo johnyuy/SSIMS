@@ -53,6 +53,7 @@
         <button onclick="window.location.href = '/Disbursement/Current';">Current Disbursements</button>
     </div>
 </div>
+    }
 <div class="table-responsive">
     <label> &nbsp;View by Status: &nbsp;</label>
     &nbsp; @Html.ActionLink("Pending", "Index", new { status = "Pending" }) &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
@@ -60,7 +61,7 @@
     @Html.ActionLink("Rejected", "Index", new { status = "Rejected" }) &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
     @Html.ActionLink("View All", "Index", new { status = "All" })
     </div>
- }
+ 
 
 <div class="table-responsive">
     <table class="table">

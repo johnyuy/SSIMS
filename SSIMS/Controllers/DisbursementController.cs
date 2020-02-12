@@ -38,8 +38,11 @@ namespace SSIMS.Controllers
             int pageSize = 15;
             int pageNumber = (page ?? 1);
             var disbursementList = new List<DisbursementList>();
+
+
             Staff staff = loginService.StaffFromSession;
             ViewBag.staffrole = staff.StaffRole;
+
             if (staff.StaffRole == "DeptHead" || staff.StaffRole == "DeptRep")
             {
                 disbursementList = uow.DisbursementListRepository.Get(filter: x => x.Department.ID == staff.DepartmentID).ToList();
@@ -73,19 +76,6 @@ namespace SSIMS.Controllers
                 disbursementList = uow.DisbursementListRepository.Get(includeProperties: "CreatedByStaff, ItemTransactions.Item, Department").ToList();
                 switch (status)
                 {
-            //below for dep rep see disbursement history
-            Staff staff = loginService.StaffFromSession;
-            ViewBag.staffrole = staff.StaffRole;
-            if(staff.StaffRole== "DeptRep")
-            {
-                disbursementList = unitOfWork.DisbursementListRepository.Get(x => (x.Status == Models.Status.Completed) && (x.Department.ID == staff.DepartmentID), includeProperties: "CreatedByStaff, ItemTransactions.Item, Department").ToList();
-            }
-
-
-
-            switch (status)
-            {
-
                     case "Pending":
                         disbursementList = disbursementList.Where(x => x.Status == Models.Status.Pending).ToList();
                         break;
