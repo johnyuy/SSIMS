@@ -27,11 +27,20 @@
     img{
         box-shadow: 2px 4px 8px 0px rgba(47,79,79,0.2);
     }
+    button{
+        height:40px;
+        width:200px;
+        font-size: 15px;
+        font-weight:bold;
+        color:white;
+        background-color:#ca5100;
+        margin:10px;
+    }
 </style>
 
 
 
-<h2>Upcoming Collection in @daysleft Days</h2>
+<h3> &nbsp; <i class="fa fa-clock"></i> &nbsp; Upcoming Collection in @daysleft Days</h3>
 <div id="full-container">
     <table class="table-responsive">
 
@@ -94,7 +103,7 @@
 </div>
 
 
-<button style="background-color:aqua" onclick="window.location.href = '/disbursement/index';">See Disbursement History</button>
+<button onclick="window.location.href = '/disbursement/index';">Disbursement History</button>
 
 <script>
     function update() {

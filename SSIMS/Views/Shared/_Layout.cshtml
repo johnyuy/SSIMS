@@ -185,7 +185,7 @@
                     else
                     {<a href="~/departments/delegateauthority"><i class="fas fa-hand-point-right"></i> Delegate</a>}
                 }
-                
+
             }
             else if (usergroup == "store")
             {
@@ -218,11 +218,13 @@
                 {<a class="active" href="~/purchaseorders/index"><i class="fa fa-truck"></i> Purchases</a>}
                 else
                 {<a href="~/purchaseorders/index"><i class="fa fa-truck"></i> Purchases</a>}
-
-                if (ViewBag.Section == "Analytics")
-                {<a class="active" href="~/analytics/index"><i class="fa fa-bar-chart"></i> Analytics</a>}
-                else
-                {<a href="~/analytics/index"><i class="fa fa-bar-chart"></i> Analytics</a>}
+                if (usertype != "clerk")
+                {
+                    if (ViewBag.Section == "Analytics")
+                    {<a class="active" href="~/analytics/index"><i class="fa fa-bar-chart"></i> Analytics</a>}
+                    else
+                    {<a href="~/analytics/index"><i class="fa fa-bar-chart"></i> Analytics</a>}
+                }
             }
         }
     </div>

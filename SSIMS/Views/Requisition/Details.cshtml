@@ -223,19 +223,20 @@ else
         if (Model.Status == SSIMS.Models.Status.Pending)
         {
 
-            <div>
+            <div style="width:100%">
                 @using (Html.BeginForm("Reply", "Requisition", FormMethod.Post))
                 {
                     @Html.AntiForgeryToken()
                     <table>
                         <tr>
-                            <td><button name="isApprove" value="true">Approve</button></td>
+                            <td style="height:50px; width:150px"></td>
+                            <td style="width:200px" ><button style="width:130px;float:right;background-color:#520b0b;color:white" name="isApprove" value="false">Reject</button> </td>
+                            <td style="width:200px"><button style="width:130px;float:left;margin:0 10px;background-color:#366666;color:white" name="isApprove" value="true">Approve</button></td>
                         </tr>
+
                         <tr>
-                            <td><button name="isApprove" value="false">Reject</button></td>
-                        </tr>
-                        <tr>
-                            <td>Comments <input type="text" name="comment" value=@Model.Comments /></td>
+                            <td style="text-align:right">Comments </td>
+                            <td colspan="2"><input style="width:270px;height:50px" type="text" name="comment" value=@Model.Comments /></td>
                         </tr>
                     </table>
                     <input type="hidden" name="id" value="@Model.ID" />
