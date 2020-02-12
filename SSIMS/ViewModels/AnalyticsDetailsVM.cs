@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Web;
+using SSIMS.DAL;
 
 namespace SSIMS.ViewModels
 {
@@ -55,19 +57,20 @@ namespace SSIMS.ViewModels
         }
 
 
-        public AnalyticsDetailsVM(int qty, string category, DateTime createdDate, string department, string itemdesc, string staffname)
+        public AnalyticsDetailsVM(int qty, string category, string createdDate, string department, string itemdesc, string staffname, UnitOfWork uow)
         {
 
             //Document Item Level (item + qty)
             Qty = qty;
             Category = category;
-            CreatedDate = createdDate;
+            CreatedDate = DateTime.ParseExact(createdDate,"dd-MM-yyyyy", CultureInfo.InvariantCulture);
             Department = department;
-            Month = createdDate.Month;
-            Year = createdDate.Year;
+            Month = CreatedDate.Month;
+            Year = CreatedDate.Year;
             Count = 1;
             Item = itemdesc;
             Staff = staffname;
+            Cost = uow.TenderRepository.GetSampleTenderPrice(itemdesc);
         }
     }
 }

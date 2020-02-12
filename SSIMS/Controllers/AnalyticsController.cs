@@ -259,6 +259,25 @@ namespace SSIMS.Controllers
 
             return Json(valueslist, JsonRequestBehavior.AllowGet);
         }
+
+
+        [HttpGet]
+        public JsonResult RunSample()
+        {
+            AnalyticsListVM model = (AnalyticsListVM)Session["Analytics"];
+            model.SummaryList = AnalyticsService.GetAnalyticsSampleData();
+            Session["Analytics"] = model;
+            return null;
+        }
+
+        [HttpGet]
+        public JsonResult EndSample()
+        {
+            UnitOfWork uow = new UnitOfWork();
+            AnalyticsListVM analytics = new AnalyticsListVM(uow);
+            Session["Analytics"] = analytics;
+            return null;
+        }
     }
     
 }

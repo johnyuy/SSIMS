@@ -147,7 +147,10 @@
     else
     {
         <p class="text-empty">Empty</p>
-        <div id="back-link"> @Html.ActionLink("Add from Inventory", "index", "inventory")</div>
+        <div style="width:100%;justify-content:center;display:flex">
+            <button style="margin:10px" onclick="window.location.href = '/Inventory/InventoryStockCheck';">New Stock Check</button>
+            <button style="margin:10px" onclick="window.location.href = '/Inventory/Index';">Add from Inventory</button>
+        </div>
     }
 
 
