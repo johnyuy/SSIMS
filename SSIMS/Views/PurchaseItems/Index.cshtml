@@ -68,30 +68,30 @@
         </tr>
 
     }
-    <tr>
+<tr>
 
-        <th>
-            @if (Session["role"].ToString() == "clerk")
-            {
-                <button>@Html.ActionLink("Add All Low Stock", "AddAllLowStockToPurchaseItems")</button>
-            }
+    <th>
 
+        @if (Session["role"].ToString() == "clerk")
+        {
+            <button class="confirm2">Add All Low Stock</button>
+        }
 
-        </th>
+    </th>
 
-        <th></th>
-        <th></th>
-        <th></th>
-        <th>
-            @*@Html.ActionLink("Generate Purchase Orders", "GeneratePurchaseOrders")*@
-        </th>
-        <th>
-            @if (Session["role"].ToString() == "clerk")
-            {
-                <button class="confirm">Generate Purchase Orders</button>
-            }
-        </th>
-    </tr>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th>
+        @*@Html.ActionLink("Generate Purchase Orders", "GeneratePurchaseOrders")*@
+    </th>
+    <th>
+        @if (Session["role"].ToString() == "clerk")
+        {
+            <button class="confirm">Generate Purchase Orders</button>
+        }
+    </th>
+</tr>
 
 </table>
 
@@ -105,7 +105,23 @@ Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.Page
     @Scripts.Render("~/bundles/jqueryval")
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
     <script type="text/javascript">
-        $('.confirm').on('click', function () {
+        $('.confirm2').on('click', function () {
+            $.confirm({
+                title: "Add all 'Low Stock'",
+                content: "This will add ALL 'Low Stock' item with their corresponding restock quantity to the purchase cart. ",
+                buttons: {
+                    confirm: function () {
+                        
+                        window.location.href = "/PurchaseItems/AddAllLowStockToPurchaseItems"
+                    },
+                    cancel: function () {
+                        
+                    }
+                }
+            });
+        })
+
+                $('.confirm').on('click', function () {
             $.confirm({
                 title: 'Generate Purchase Orders',
                 content: "This will clear the current Purchase Cart and submit the respective Purchase Orders!",
