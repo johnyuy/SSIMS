@@ -4,11 +4,9 @@
 <link href="~/Content/PopUp.css" rel="stylesheet" type="text/css" />
 
 @{
-    ViewBag.Title = "Purchase Cart";
     ViewBag.Header = "Purchase Cart";
     ViewBag.Section="Purchases";
 }
-<h2>Purchase Cart</h2>
 
 @using (Html.BeginForm("Index", "PurchaseItems", FormMethod.Get))
 {

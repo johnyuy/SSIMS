@@ -6,47 +6,73 @@
     var advscount = ViewBag.advscount;
 
 }
-
-<h3>Attention Required</h3>
-<table class="table-condensed">
-    <tr>
-        <th>Purchase Orders</th>
-        <td>@poscount</td>
-        <td>
-            <button onclick="window.location.href = '/purchaseorders/index'">View</button>
-        </td>
-    </tr>
-    <tr>
-        <th>Adjustment Forms</th>
-        <td>@advscount </td>
-        <td>
-            <button onclick="window.location.href = '/Inventory/Adjustment';">View</button>
-        </td>
-    </tr>
-</table>
-
-<p></p>
-
-<h3>Low Stock Inventory Items(Top3) <button onclick="window.location.href = '/Inventory/Index';">View All</button></h3>
-
-<table class="table">
-    <tr>
-        <td>Item Code</td>
-        <td>Item Description</td>
-        <td>Qty</td>
-        
-        <td>Details</td>
-    </tr>
-    @foreach (var it in Model)
-    {
-        <tr>
-            <td>@Html.DisplayFor(modelItem => it.Item.ID)</td>
-            <td>@Html.DisplayFor(modelItem => it.Item.Description)</td>
-            <td>@Html.DisplayFor(modelItem => it.InStoreQty)</td>
-           
-        <td>@Html.ActionLink("View", "Details","Inventory", new { id = it.ID },null)</td>
-           
-        </tr>
+<style>
+    #panel-top, #panel-bottom{
+        margin:20px;
+        width:800px;
     }
+    #panel-top td, #panel-bottom td{
+        text-align:center;
+        padding: 5px 0px;
+    }
+    #panel-top button{
+        margin: 10px 20px 10px 0px;
+        width: 50px;
+    }
+    .special {
+        background: linear-gradient(to right, rgba(146, 167, 154, 0.20) 0%, rgba(115, 147, 147, 0.31) 100%);
+    }
+    button{
+        color:white;
+        background-color:#437373;
+    }
+</style>
 
-</table>
+<div id="panel-top">
+    <h3><i class="fa fa-flag"></i> &nbsp; Attention Required</h3>
+    <table class="table-condensed">
+        <tr class="special">
+            <th>Purchase Orders</th>
+            <td style="width:50px;font-size:20px">@poscount</td>
+            <td width="100px">
+                <button onclick="window.location.href = '/purchaseorders/index'">View</button>
+            </td>
+        </tr>
+        <tr>
+            <th>Adjustment Vouchers</th>
+            <td style="width:50px;font-size:20px">@advscount</td>
+            <td>
+                <button onclick="window.location.href = '/Inventory/Adjustment';">View</button>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div id="panel-bottom">
+    <div style="float:left">
+        <h3><i class="fa fa-warning" style="color:maroon"></i> &nbsp; Low Stock Inventory Items (Top 3) </h3>
+    </div>
+    <button style="position:relative;top:20px;left:30px" onclick="window.location.href = '/Inventory/Index';">View All</button>
+
+    <table class="table">
+        <tr class="special">
+            <td>Item Code</td>
+            <td>Item Description</td>
+            <td>Qty</td>
+
+            <td>Details</td>
+        </tr>
+        @foreach (var it in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => it.Item.ID)</td>
+                <td>@Html.DisplayFor(modelItem => it.Item.Description)</td>
+                <td>@Html.DisplayFor(modelItem => it.InStoreQty)</td>
+
+                <td>@Html.ActionLink("View", "Details", "Inventory", new { id = it.ID }, null)</td>
+
+            </tr>
+        }
+
+    </table>
+</div>

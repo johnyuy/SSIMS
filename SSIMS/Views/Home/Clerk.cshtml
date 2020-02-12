@@ -7,19 +7,31 @@
     int daysleft = ((int)DayOfWeek.Monday - (int)today.DayOfWeek + 7) % 7;
 }
 <style>
-    #panel-top{
+    #panel-top, #panel-bottom{
         margin:20px;
+        width:800px;
     }
-    #panel-top td{
+    #panel-top td, #panel-bottom td{
         text-align:center;
-        
+        padding: 5px 0px;
+    }
+    #panel-top button{
+        margin: 10px 20px 10px 0px;
+        width: 150px;
+    }
+    .special {
+        background: linear-gradient(to right, rgba(146, 167, 154, 0.20) 0%, rgba(115, 147, 147, 0.31) 100%);
+    }
+    button{
+        color:white;
+        background-color:#437373;
     }
 </style>
 <div id="panel-top">
 
-    <h3>Upcoming Disbursements in @daysleft Days</h3>
+    <h3><i class="fa fa-clock"></i> &nbsp; Upcoming Disbursements in @daysleft Days</h3>
     <table class="table-bordered">
-        <tr>
+        <tr class="special">
             <td style="width:300px">Location</td>
             <td style="width:300px">Time</td>
             <td style="width:200px">Department</td>
@@ -45,29 +57,33 @@
 
 
 
+<div id="panel-bottom">
+    <div style="float:left">
+        <h3><i class="fa fa-warning" style="color:maroon"></i> &nbsp; Low Stock Inventory Items (Top 3) </h3>
+    </div>
+    <button style="position:relative;top:20px;left:30px" onclick="window.location.href = '/Inventory/Index';">View All</button>
 
-<h3>Low Stock Inventory Items(Top3) <button onclick="window.location.href = '/Inventory/Index';">View All</button></h3>
+    <table class="table">
+        <tr class="special">
+            <td>Item Code</td>
+            <td>Item Description</td>
+            <td>Qty</td>
 
-<table class="table">
-    <tr>
-        <td>Item Code</td>
-        <td>Item Description</td>
-        <td>Qty</td>
-
-        <td>Details</td>
-    </tr>
-    @foreach (var it in Model.InventoryItems)
-    {
-        <tr>
-            <td>@Html.DisplayFor(modelItem => it.Item.ID)</td>
-            <td>@Html.DisplayFor(modelItem => it.Item.Description)</td>
-            <td>@Html.DisplayFor(modelItem => it.InStoreQty)</td>
-
-            <td>@Html.ActionLink("View", "Details", "Inventory", new { id = it.ID }, null)</td>
-
+            <td>Details</td>
         </tr>
-    }
+        @foreach (var it in Model.InventoryItems)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => it.Item.ID)</td>
+                <td>@Html.DisplayFor(modelItem => it.Item.Description)</td>
+                <td>@Html.DisplayFor(modelItem => it.InStoreQty)</td>
 
-</table>
+                <td>@Html.ActionLink("View", "Details", "Inventory", new { id = it.ID }, null)</td>
 
-<button onclick="window.location.href = '/purchaseorders/Create';">Purchase Order</button>
+            </tr>
+        }
+
+    </table>
+</div>
+
+
