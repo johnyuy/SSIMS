@@ -3,6 +3,7 @@
     ViewBag.Header = "Trend Analysis";
     ViewBag.Section = "Analytics";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    string source = ViewBag.Mode;
 }
 
 <style>
@@ -27,7 +28,7 @@
     }
 
     button {
-        width: 150px;
+        width: 100px;
     }
 
     #chart-container {
@@ -50,11 +51,32 @@
         background: linear-gradient(to right, rgba(41, 89, 89, 0.85) 20%, rgba(1, 16, 16, 0.0) 80%);
     }
 </style>
+<script>
+    function change() {
+        var mode = $("#mode").val();
+        if (mode == "Requisition Orders") {
+            window.location.href = '/Analytics/Disbursements';
+        } else {
+            window.location.href = '/Analytics/Requisitions';
+        }
+    }
+    function chargeback() {
+        window.location.href = '/Analytics/Chargeback';
+    }
+</script>
+<div>
+    <div style="height:40px;margin:10px;">
+        <h3 style="float:left">Data Source : @source </h3>
+        <button style="position:relative;top:22px;left:20px;font-size:13px" onclick="change()">Change</button>
+        <button style="position:relative;top:22px;left:50px;font-size:13px" id="runbtn" onclick="runsample()">Run Sample</button>
+        <button style="position:relative;top:22px;left:220px;font-size:13px" onclick="chargeback()"><i class="fa fa-dollar"></i> Chargeback</button>
+    </div>
+    
+    <input id="isrun" hidden type="checkbox" />
+    <input id="mode" hidden value="@source" />
+</div>
 
-<button id="runbtn" onclick="runsample()">Run Sample</button>
-<!--<button id="disbtn" onclick="rundisb()">Disbursement</button>-->
-<input id="isrun" hidden type="checkbox" />
-<!--<input id="isdis" hidq type="checkbox" />-->
+
 <div id="table-container">
     <table>
         <tr>
@@ -70,7 +92,7 @@
                 </select>
             </td>
             <td style="width:300px;">
-                <button onclick="refresh(2000)">View</button>
+                <button onclick="refresh(2000)">Refresh</button>
             </td>
         </tr>
         <tr>
@@ -264,39 +286,10 @@
                 refresh(2000);
 
             } else {
-                alert("unloading sample data");
-                $.getJSON('@Url.Action("EndSample")');
-                chk.checked = false;
-                $("#runbtn").css("color","");
-                $("#runbtn").css("background-color", "");
-                $("#runbtn").html("Run Sample");
-                refresh(3000);
+                window.location.href = '/analytics/requisitions';
             }
-            refresh(1000);
         }
 
-        function rundisb() {
-            var chk = document.getElementById("isdis");
-            if (chk.checked == false) {
-                alert("disbursments");
-                $.getJSON('@Url.Action("Toggle")', {});
-                chk.checked = true;
-                $("#runbtn").css("color","white");
-                $("#runbtn").css("background-color", "slategrey");
-                $("#runbtn").html("End Sample");
-                refresh(2000);
-
-            } else {
-                alert("unloading sample data");
-                $.getJSON('@Url.Action("EndSample")');
-                chk.checked = false;
-                $("#runbtn").css("color","");
-                $("#runbtn").css("background-color", "");
-                $("#runbtn").html("Run Sample");
-                refresh(3000);
-            }
-            refresh(1000);
-        }
 
     </script>
 }

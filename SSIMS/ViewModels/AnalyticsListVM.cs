@@ -30,7 +30,6 @@ namespace SSIMS.ViewModels
                 .Get(includeProperties: "CreatedByStaff.Department, DocumentItems.Item");
             ROList = items.ToList();
 
-            //Debug.WriteLine("Number of items = " + ROList.Count());
             foreach (RequisitionOrder ro in ROList)
             {
                 foreach (DocumentItem di in ro.DocumentItems)
@@ -43,10 +42,11 @@ namespace SSIMS.ViewModels
             }
             ROSummaryList = rosummaryList;
 
-            /*var disbitems = unitOfWork.DisbursementListRepository.
-                Get(filter:x=>x.Status == SSIMS.Models.Status.Completed, includeProperties: "CreatedByStaff.Department, ItemTransactions.Item");
+            var disbitems = unitOfWork.DisbursementListRepository.
+                Get(filter: x => x.Status == SSIMS.Models.Status.Completed, includeProperties: "CreatedByStaff.Department, ItemTransactions.Item");
+            if (disbitems == null || disbitems.Count() == 0)
+                return;
             DLList = disbitems.ToList();
-
             List<AnalyticsDetailsVM> dlsummarylist = new List<AnalyticsDetailsVM>();
 
             foreach (DisbursementList dl in DLList)
@@ -59,7 +59,7 @@ namespace SSIMS.ViewModels
 
                 }
             }
-            DLSummaryList = dlsummarylist;*/
+            DLSummaryList = dlsummarylist;
         }
     }
 }

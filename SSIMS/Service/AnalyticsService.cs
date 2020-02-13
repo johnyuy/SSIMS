@@ -14,10 +14,6 @@ namespace SSIMS.Service
     public class AnalyticsService
     {
         UnitOfWork uow = new UnitOfWork();
-        
-        
-
-
 
         public static List<AnalyticsDetailsVM> ApplyFilter(List<AnalyticsDetailsVM> data, string filter, string value)
         {

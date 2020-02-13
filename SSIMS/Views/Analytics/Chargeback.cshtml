@@ -1,0 +1,111 @@
+﻿@model List<SSIMS.ViewModels.AnalyticsDetailsVM>
+@using SSIMS.DAL;
+@{
+    ViewBag.Header = "Chargeback";
+    ViewBag.Section = "Analytics";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    UnitOfWork uow = new UnitOfWork();
+    List<SelectListItem> listcat = uow.ItemRepository.GetCategories().ToList();
+    listcat.RemoveAt(0);
+}
+<style>
+    td, th {
+        text-align: center;
+    }
+
+    td {
+        height: 20px;
+    }
+
+    select {
+        width: 50%;
+    }
+
+    #cbtable {
+        width: 800px;
+    }
+
+    .text-empty {
+        width: 800px;
+        text-align: center;
+        font-size: 100px;
+        color: lightgray;
+    }
+</style>
+
+@using (Html.BeginForm())
+{
+    <table class="table table-striped" style="width:800px">
+        <tr>
+            <th>Year</th>
+            <th>Month</th>
+            <th>Category</th>
+            <th></th>
+        </tr>
+        <tr>
+            <td>
+                <select required name="year">
+                    <option selected value="2018">2018</option>
+                    <option value="2019">2019</option>
+                    <option value="2020">2020</option>
+                </select>
+            </td>
+            <td>
+                <select required name="month">
+                    <option value="all">All</option>
+                    <option value="1">Jan</option>
+                    <option value="2">Feb</option>
+                    <option value="3">Mar</option>
+                    <option value="4">Apr</option>
+                    <option value="5">May</option>
+                    <option value="6">Jun</option>
+                    <option value="7">Jul</option>
+                    <option value="8">Aug</option>
+                    <option value="9">Sep</option>
+                    <option value="10">Oct</option>
+                    <option value="11">Nov</option>
+                    <option value="12">Dec</option>
+                </select>
+            </td>
+
+            <td>
+                <select required name="category">
+                    <option selected value="all">All</option>
+                    @foreach (SelectListItem item in listcat)
+                    {
+                        <option value="@item.Value">@item.Text</option>
+                    }
+                </select>
+            </td>
+            <td>
+                <button type="submit">Fetch</button>
+            </td>
+        </tr>
+    </table>
+}
+
+@if (Model != null && Model.Count() > 0)
+{
+    <h4>Results for @ViewBag.Result</h4>
+    <table id="cbtable" class="table table-responsive">
+        <tr>
+            <th>Department</th>
+            <th>Chargeback</th>
+        </tr>
+        @foreach (var dep in Model)
+        {
+            <tr>
+                <td>
+                    @dep.Department
+                </td>
+                <td>
+                    @dep.Cost.ToString($"${0:0.00}")
+                </td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <div class="text-empty">Empty</div>
+}

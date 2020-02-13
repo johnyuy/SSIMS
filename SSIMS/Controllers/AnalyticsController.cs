@@ -20,8 +20,13 @@ namespace SSIMS.Controllers
     [AuthorizationFilter]
     public class AnalyticsController : Controller
     {
-        // GET: Analytics
         public ActionResult Index()
+        {
+            return RedirectToAction("Requisitions");
+        }
+
+        // GET: Analytics
+        public ActionResult Requisitions()
         {
             AnalyticsListVM analytics;
 
@@ -30,19 +35,44 @@ namespace SSIMS.Controllers
                 UnitOfWork uow = new UnitOfWork();
                 analytics = new AnalyticsListVM(uow);
                 Session["Analytics"] = analytics;
-                Session["AnalyticsMode"] = "req";
             }
+            else
+            {
+                analytics = (AnalyticsListVM)Session["Analytics"];
+            }
+            Session["Data"] = analytics.ROSummaryList;
+            ViewBag.Mode = "Requisition Orders";
 
-            return View();
+            return View("Index");
         }
 
+        public ActionResult Disbursements()
+        {
+
+            AnalyticsListVM analytics;
+
+            if (Session["Analytics"] == null)
+            {
+                UnitOfWork uow = new UnitOfWork();
+                analytics = new AnalyticsListVM(uow);
+                Session["Analytics"] = analytics;
+            }
+            else
+            {
+                analytics = (AnalyticsListVM)Session["Analytics"];
+            }
+
+            Session["Data"] = analytics.DLSummaryList;
+            ViewBag.Mode = "Completed Disbursements";
+            return View("Index");
+        }
 
         [HttpPost]
-        public ActionResult Index(string group,string filter1="None", string filter2 ="",  string value1="", string value2="")
+        public ActionResult Index(string group, string filter1 = "None", string filter2 = "", string value1 = "", string value2 = "")
         {
             Debug.WriteLine("group by: " + group + ", " + filter1 + " = " + value1 + ", " + filter2 + " = " + value2);
 
-            Session["AGroup"] = group==""?"Category":group;
+            Session["AGroup"] = group == "" ? "Category" : group;
             Session["AFilter1"] = filter1;
             Session["AFilter2"] = filter2;
             Session["AValue1"] = value1;
@@ -51,7 +81,6 @@ namespace SSIMS.Controllers
             return null;
         }
 
-        //RIGHT NOW EACH CHART ONLY HAS REQUISITION/CAN HAVE A SERIES FOR ACTUAL DISBURSED
         public ActionResult GenerateChartQty(string t)
         {
             Debug.WriteLine("Called");
@@ -60,32 +89,22 @@ namespace SSIMS.Controllers
             string filter2 = Session["AFilter2"] == null ? "" : Session["AFilter2"].ToString();
             string value1 = Session["AValue1"] == null ? "" : Session["AValue1"].ToString();
             string value2 = Session["AValue2"] == null ? "" : Session["AValue2"].ToString();
-            List<AnalyticsDetailsVM> data;
 
-            AnalyticsListVM analytics = (AnalyticsListVM)Session["Analytics"];
-            /*if (Session["AnalyticsMode"] == null || Session["AnalyticsMode"].ToString() == "req")
-            {
-                data = analytics.ROSummaryList;
-            }
-            else
-            {
-                data = analytics.DLSummaryList;
-            }*/
-            data = analytics.ROSummaryList;
+            List<AnalyticsDetailsVM> data = (List<AnalyticsDetailsVM>)Session["Data"];
 
             data = AnalyticsService.ApplyFilter(data, filter1, value1);
             data = AnalyticsService.ApplyFilter(data, filter2, value2);
             data = AnalyticsService.ApplyGroup(data, group);
 
             ArrayList yValueQty = AnalyticsService.YAxisQty(data);
-            ArrayList xValue = AnalyticsService.XAxis(data,group);
+            ArrayList xValue = AnalyticsService.XAxis(data, group);
 
             string titlesub = "";
-            if(value1 != "")
+            if (value1 != "")
             {
                 titlesub += " for " + value1;
                 if (value2 != "")
-                    titlesub += " - " + value2; 
+                    titlesub += " - " + value2;
             }
 
             new Chart(width: 1200, height: 400, theme: ChartTheme.Vanilla)
@@ -102,21 +121,13 @@ namespace SSIMS.Controllers
             string filter2 = Session["AFilter2"] == null ? "" : Session["AFilter2"].ToString();
             string value1 = Session["AValue1"] == null ? "" : Session["AValue1"].ToString();
             string value2 = Session["AValue2"] == null ? "" : Session["AValue2"].ToString();
-            List<AnalyticsDetailsVM> data;
-            AnalyticsListVM analytics = (AnalyticsListVM)Session["Analytics"];
-            /*if (Session["AnalyticsMode"] == null || Session["AnalyticsMode"].ToString() == "req")
-            {
-                data = analytics.ROSummaryList;
-            }
-            else
-            {
-                data = analytics.DLSummaryList;
-            }*/
-            data = analytics.ROSummaryList;
+
+            List<AnalyticsDetailsVM> data = (List<AnalyticsDetailsVM>)Session["Data"];
+
             data = AnalyticsService.ApplyFilter(data, filter1, value1);
             data = AnalyticsService.ApplyFilter(data, filter2, value2);
             data = AnalyticsService.ApplyGroup(data, group);
-            
+
 
             ArrayList yValueCost = AnalyticsService.YAxisCost(data);
             ArrayList xValue = AnalyticsService.XAxis(data, group);
@@ -143,17 +154,9 @@ namespace SSIMS.Controllers
             string filter2 = Session["AFilter2"] == null ? "" : Session["AFilter2"].ToString();
             string value1 = Session["AValue1"] == null ? "" : Session["AValue1"].ToString();
             string value2 = Session["AValue2"] == null ? "" : Session["AValue2"].ToString();
-            List<AnalyticsDetailsVM> data;
-            AnalyticsListVM analytics = (AnalyticsListVM)Session["Analytics"];
-            /*if (Session["AnalyticsMode"] == null || Session["AnalyticsMode"].ToString() == "req")
-            {
-                data = analytics.ROSummaryList;
-            }
-            else
-            {
-                data = analytics.DLSummaryList;
-            }*/
-            data = analytics.ROSummaryList;
+
+            List<AnalyticsDetailsVM> data = (List<AnalyticsDetailsVM>)Session["Data"];
+
             data = AnalyticsService.ApplyFilter(data, filter1, value1);
             data = AnalyticsService.ApplyFilter(data, filter2, value2);
             data = AnalyticsService.ApplyGroup(data, group);
@@ -173,51 +176,14 @@ namespace SSIMS.Controllers
                 .AddTitle("Requisition Volume" + titlesub + " by " + group)
                 .AddSeries("Count1", chartType: "Column", xValue: xValue, yValues: yValueCount)
                 .Write("bmp");
-            
+
             return null;
         }
-
-        
-        public ActionResult Chart1()
-        {
-            UnitOfWork uow = new UnitOfWork();
-            AnalyticsListVM analyticsListViewModel = new AnalyticsListVM(uow);
-            List<AnalyticsDetailsVM> categorylist = AnalyticsService.GroupByCategory(analyticsListViewModel.ROSummaryList);
-             
-          // RequisitionSummaryViewModel clipCategory = AnalyticsService.GroupByCategory("Clip", summaryList);
-
-
-            ArrayList xValue = AnalyticsService.QtyCategoryChart1X(categorylist);
-            ArrayList yValue = AnalyticsService.QtyCategoryChart1Y(categorylist);
-            new Chart(width: 1000, height: 400, theme: ChartTheme.Green)
-                .AddTitle("Chart for Quantity and Category")
-                .AddSeries("Default", chartType: "Column", xValue: xValue, yValues: yValue)
-                .Write("bmp");
-            return null;
-           
-        }
-        public ActionResult Chart2()
-        {
-            UnitOfWork uow = new UnitOfWork();
-            AnalyticsListVM analyticsListViewModel = new AnalyticsListVM(uow);
-            List<AnalyticsDetailsVM> categorylist = AnalyticsService.GroupByDepartment(analyticsListViewModel.ROSummaryList);
-
-            ArrayList xValue = AnalyticsService.QtyCategoryChart2X(categorylist);
-            ArrayList yValue = AnalyticsService.QtyCategoryChart2Y(categorylist);
-            new Chart(width: 600, height: 400, theme: ChartTheme.Green)
-                .AddTitle("Chart for Quantity and Category")
-                .AddSeries("Default", chartType: "Column", xValue: xValue, yValues: yValue)
-                .Write("bmp");
-            return null;
-
-        }
-
-
 
         [HttpGet]
         public JsonResult GetFilter2(string filter1)
         {
-            IEnumerable<SelectListItem> filter2List = new List<SelectListItem>() ;
+            IEnumerable<SelectListItem> filter2List = new List<SelectListItem>();
 
             if (!String.IsNullOrWhiteSpace(filter1))
             {
@@ -228,7 +194,6 @@ namespace SSIMS.Controllers
 
             return Json(filter2List, JsonRequestBehavior.AllowGet);
         }
-
 
         [HttpGet]
         public JsonResult GetFilterValues(string filter)
@@ -245,39 +210,61 @@ namespace SSIMS.Controllers
             return Json(valueslist, JsonRequestBehavior.AllowGet);
         }
 
-
         [HttpGet]
         public JsonResult RunSample()
         {
-            AnalyticsListVM model = (AnalyticsListVM)Session["Analytics"];
-            model.ROSummaryList = AnalyticsService.GetAnalyticsSampleData();
-            Session["Analytics"] = model;
+            Session["Data"] = AnalyticsService.GetAnalyticsSampleData();
             return null;
         }
 
         [HttpGet]
-        public JsonResult EndSample()
+        public ActionResult EndSample()
         {
-            UnitOfWork uow = new UnitOfWork();
-            AnalyticsListVM analytics = new AnalyticsListVM(uow);
-            Session["Analytics"] = analytics;
-            return null;
+
+            Session["Analytics"] = null;
+            return RedirectToAction("Requisition");
         }
 
-
-        [HttpGet]
-        public JsonResult Toggle(string mode)
+        public ActionResult Chargeback()
         {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Chargeback(string year, string month, string category)
+        {
+            AnalyticsListVM analytics;
 
-            Session["AnalyticsMode"] = null;
-            if (mode == "d")
+            if (Session["Analytics"] == null)
             {
-                Debug.WriteLine("disbursement mode detected");
-                Session["AnalyticsMode"] = "dis";
+                UnitOfWork uow = new UnitOfWork();
+                analytics = new AnalyticsListVM(uow);
+                Session["Analytics"] = analytics;
             }
-
-            return null;
+            else
+            {
+                analytics = (AnalyticsListVM)Session["Analytics"];
+            }
+            //List<AnalyticsDetailsVM> data = analytics.DLSummaryList;
+            List<AnalyticsDetailsVM> data = (List<AnalyticsDetailsVM>)Session["Data"];
+            string result = year;
+            //filter by year
+            data = AnalyticsService.ApplyFilter(data, "Year", year);
+            
+            if (month != "all")
+            {
+                result = int.Parse(month).ToString($"{0:00}") + "/" + result;
+                data = AnalyticsService.ApplyFilter(data, "Month", month);
+            }
+            if (category != "all")
+            {
+                result = " Category " + category + " in " + result;
+                data = AnalyticsService.ApplyFilter(data, "Category", category);
+            }
+            data = AnalyticsService.ApplyGroup(data, "Department");
+            ViewBag.Result = result;
+            return View(data);
         }
     }
-    
+
 }
+
