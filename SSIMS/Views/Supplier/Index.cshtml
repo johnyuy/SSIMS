@@ -2,11 +2,16 @@
 
 @{
     ViewBag.Title = "Suppliers";
-    ViewBag.Header = "Supplier List";
+    ViewBag.Header = "Suppliers";
     ViewBag.Section = "Suppliers";
 }
+<style>
+    th,td{
+        text-align:center;
+    }
+</style>
 
-@if (ViewBag.staffrole == "Supervisor"||ViewBag.staffrole == "Manager")
+@if (ViewBag.staffrole == "Supervisor" || ViewBag.staffrole == "Manager")
 {
     <p>
         @Html.ActionLink("Create New", "Create")
@@ -15,42 +20,29 @@
 
 <table class="table">
     <tr>
-        <th>ID</th>
-        <th>Supplier Name</th>
-        @*<th>Address</th>*@
-        <th>Phone Number</th>
-        <th>Fax Number</th>
-        @*<th>GstReg</th>
-        <th>Contact Name</th>*@
+        <th>Supplier ID</th>
+        <th><i class="fas fa-store-alt"></i> &nbsp; Supplier Name</th>
+        <th><i class="fa fa-phone"></i> &nbsp; Phone Number</th>
+        <th><i class="fas fa-fax"></i> &nbsp; Fax Number</th>
         <th>Details</th>
-        <th></th>
-        @*<th></th>*@
+        <th>Action</th>
     </tr>
     @foreach (var supplier in Model)
     {
-    <tr>
-        <td> @Html.DisplayFor(x =>supplier.ID )</td>
-        <td> @Html.DisplayFor(x => supplier.SupplierName)</td>
-        @*<td> @Html.DisplayFor(x => supplier.Address)</td>*@
-        <td> @Html.DisplayFor(x => supplier.PhoneNumber)</td>
-        <td> @Html.DisplayFor(x => supplier.FaxNumber)</td>
-        @*<td> @Html.DisplayFor(x => supplier.GstReg)</td>
-        <td> @Html.DisplayFor(x => supplier.ContactName)</td>*@
-        <td>
-        @Html.ActionLink("Details", "Details", new { id = supplier.ID }) 
-        </td>
-        <td>
-        @if (ViewBag.staffrole == "Supervisor" || ViewBag.staffrole == "Manager")
-        {
-            @Html.ActionLink("Edit", "Edit", new { id = supplier.ID })
-        } 
-        </td>
-        @*<td>
-        @if (ViewBag.staffrole == "Supervisor" || ViewBag.staffrole == "Manager")
-         {
-            @Html.ActionLink("Delete", "Delete", new { id = supplier.ID })
-         }
-        </td>*@
-    </tr>
+        <tr>
+            <td> @Html.DisplayFor(x => supplier.ID)</td>
+            <td> @Html.DisplayFor(x => supplier.SupplierName)</td>
+            <td> @Html.DisplayFor(x => supplier.PhoneNumber)</td>
+            <td> @Html.DisplayFor(x => supplier.FaxNumber)</td>
+            <td>
+                @Html.ActionLink("Details", "Details", new { id = supplier.ID })
+            </td>
+            <td>
+                @if (ViewBag.staffrole == "Supervisor" || ViewBag.staffrole == "Manager")
+                {
+                    @Html.ActionLink("Edit", "Edit", new { id = supplier.ID })
+                }
+            </td>
+        </tr>
     }
-    </table>
+</table>

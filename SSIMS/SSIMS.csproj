@@ -297,7 +297,6 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AnalyticsController.cs" />
-    <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\DeliveryOrdersAPIController.cs" />
     <Compile Include="Controllers\DeliveryOrdersController.cs" />
     <Compile Include="Controllers\DepartmentAPIController.cs" />
