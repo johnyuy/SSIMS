@@ -218,6 +218,15 @@
                 {<a class="active" href="~/purchaseorders/index"><i class="fa fa-truck"></i> Purchases</a>}
                 else
                 {<a href="~/purchaseorders/index"><i class="fa fa-truck"></i> Purchases</a>}
+
+                if (usertype != "clerk")
+                {
+                    if (ViewBag.Section == "Suppliers")
+                    {<a class="active" href="~/Supplier/Index"><i class="fa fa-hand-point-right"></i> Suppliers</a>}
+                    else
+                    {<a href="~/Supplier/Index"><i class="fa fa-hand-point-right"></i> Suppliers</a>}
+                }
+
                 if (usertype != "clerk")
                 {
                     if (ViewBag.Section == "Analytics")
