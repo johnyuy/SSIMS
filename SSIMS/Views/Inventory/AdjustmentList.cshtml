@@ -6,59 +6,74 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <style>
-    button{
-        height:40px;
+    button {
+        height: 40px;
         font-size: 15px;
-        font-weight:bold;
-        color:white;
-        padding:0px 15px;
-        background-color:#558686;
-        margin:auto;
+        font-weight: bold;
+        color: white;
+        padding: 0px 15px;
+        background-color: #558686;
+        margin: auto;
     }
-    
+    .text-empty {
+        margin: 60px auto 10px auto;
+        text-align: center;
+        font-size: 100px;
+        color: lightgray;
+    }
+    .special {
+        background: linear-gradient(to right, rgba(146, 167, 154, 0.20) 0%, rgba(115, 147, 147, 0.31) 100%);
+    }
 </style>
-<div style="width: 1000px; height: 40px; margin:10px 0px">
-    <div style="height:40px;float:left"><button onclick="window.location.href = '/inventory/index';">Back to Inventory</button></div>
-    <div style="height:40px;float:right"><button onclick="window.location.href = '/inventory/adjustment?command=view';" style="background-color:#835800;">New Adjustments</button></div>
-</div>
-<table class="table" style="width:1000px;">
-    <tr style="font-weight:bold;background-color:#4c7d7d;color:white">
-        <td align="center">
-            @Html.DisplayNameFor(Model => Model[0].AdjustmentID)
-        </td>
-        <td align="center">
-            @Html.DisplayNameFor(Model => Model[0].ReportedByStaffName)
-        </td>
-        <td align="center">
-            @Html.DisplayNameFor(Model => Model[0].DateCreated)
-        </td>
-        <td align="center">
-            @Html.DisplayNameFor(Model => Model[0].Status)
-        </td>
-        <td align="center">
-            Action
-        </td>
-    </tr>
-    @for (int i = 0; i < Model.Count(); i++)
-    {
-<tr @if (Model[i].Status == "Pending") { @Html.Raw("style='background-color:#fff4e1'") ; } else { @Html.Raw("style ='background:linear-gradient(to right, rgba(146, 167, 154, 0.20) 0%, rgba(115, 147, 147, 0.31) 100%)'") }>
-    <td align="center">
-        @Html.DisplayFor(Model => Model[i].AdjustmentID)
-    </td>
-    <td align="center">
-        @Html.DisplayFor(Model => Model[i].ReportedByStaffName)
-    </td>
-    <td align="center">
-        @Html.DisplayFor(Model => Model[0].DateCreated)
-    </td>
-    <td align="center">
-        @Html.DisplayFor(Model => Model[i].Status)
-    </td>
-    <td align="center">
-        @Html.ActionLink("View", "Adjustment", new { id = Model[i].AdjustmentID })
-    </td>
-</tr>
-    }
+<div style="min-height:700px;">
+    <div style="width: 1000px; height: 40px; margin:10px 0px">
+        <div style="height:40px;float:left"><button onclick="window.location.href = '/inventory/index';">Back to Inventory</button></div>
+        <div style="height:40px;float:right"><button onclick="window.location.href = '/inventory/adjustment?command=view';" style="background-color:#835800;width:200px">New</button></div>
+    </div>
+    <table class="table" style="width:1000px">
+        <tr class="special">
+            <td align="center">
+                @Html.DisplayNameFor(Model => Model[0].AdjustmentID)
+            </td>
+            <td align="center">
+                @Html.DisplayNameFor(Model => Model[0].ReportedByStaffName)
+            </td>
+            <td align="center">
+                @Html.DisplayNameFor(Model => Model[0].DateCreated)
+            </td>
+            <td align="center">
+                @Html.DisplayNameFor(Model => Model[0].Status)
+            </td>
+            <td align="center">
+                Action
+            </td>
+        </tr>
+        @for (int i = 0; i < Model.Count(); i++)
+        {
+            <tr @if (Model[i].Status == "Pending") { @Html.Raw("style='background-color:#fff4e1'")  ; } else { @Html.Raw("style ='background:linear-gradient(to right, rgba(146, 167, 154, 0.20) 0%, rgba(115, 147, 147, 0.31) 100%)'") }>
+                <td align="center">
+                    @Html.DisplayFor(Model => Model[i].AdjustmentID)
+                </td>
+                <td align="center">
+                    @Html.DisplayFor(Model => Model[i].ReportedByStaffName)
+                </td>
+                <td align="center">
+                    @Html.DisplayFor(Model => Model[0].DateCreated)
+                </td>
+                <td align="center">
+                    @Html.DisplayFor(Model => Model[i].Status)
+                </td>
+                <td align="center">
+                    @Html.ActionLink("View", "Adjustment", new { id = Model[i].AdjustmentID })
+                </td>
+            </tr>
+        }
 
-</table>
-<span style="color:#fff4e1"></span>
+    </table>
+    @if (Model.Count() == 0)
+    {
+        <div style="width:1000px;height:50px">
+            <p class="text-empty">Empty</p>
+        </div>
+    }
+</div>

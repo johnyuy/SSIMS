@@ -9,26 +9,32 @@
     ViewBag.Section = "Purchases";
 }
 
-@using (Html.BeginForm("Index", "PurchaseItems", FormMethod.Get))
-{
-    <p>
-        Search: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
-        <input type="submit" value="Search" />
+<style>
+    th, td{
+        text-align:center;
+    }
+</style>
 
-        @if (Session["role"].ToString() == "clerk")
-        {
-            <div align="left"><button>@Html.ActionLink("View Purchase Orders", "Index", "PurchaseOrders")</button></div>
-
-        }
-    </p>
-}
+<div align="left" style="margin:10px">
+    @using (Html.BeginForm("Index", "PurchaseItems", FormMethod.Get))
+    {
+        <p style="float:left">
+            Search: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+            <input type="submit" value="Search" />
+        </p>
+    }
+    @if (Session["role"].ToString() == "clerk")
+    {
+        <button style="float:right" onclick="window.location.href='/purchaseorders/index';"><i class="fas fa-file-alt"></i> &nbsp; View Purchase Orders</button>
+    }
+</div>
 <table class="table">
     <tr>
         <th>
             @Html.ActionLink("Item ID", "Index", new { sortOrder = ViewBag.ItemIDSortParm })
         </th>
         <th>
-            @Html.ActionLink("Discription", "Index", new { sortOrder = ViewBag.ItemDescSortParm })
+            @Html.ActionLink("Description", "Index", new { sortOrder = ViewBag.ItemDescSortParm })
 
         </th>
         <th>
@@ -40,7 +46,7 @@
         <th>
             Purchasing Qty
         </th>
-        <th></th>
+        <th>Action</th>
     </tr>
 
     @foreach (var item in Model)
@@ -68,30 +74,30 @@
         </tr>
 
     }
-<tr>
+    <tr>
 
-    <th>
+        <th>
 
-        @if (Session["role"].ToString() == "clerk")
-        {
-            <button class="confirm2">Add All Low Stock</button>
-        }
+            @if (Session["role"].ToString() == "clerk")
+            {
+                <button class="confirm2">Add All Low Stock</button>
+            }
 
-    </th>
+        </th>
 
-    <th></th>
-    <th></th>
-    <th></th>
-    <th>
-        @*@Html.ActionLink("Generate Purchase Orders", "GeneratePurchaseOrders")*@
-    </th>
-    <th>
-        @if (Session["role"].ToString() == "clerk")
-        {
-            <button class="confirm">Generate Purchase Orders</button>
-        }
-    </th>
-</tr>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th>
+            @*@Html.ActionLink("Generate Purchase Orders", "GeneratePurchaseOrders")*@
+        </th>
+        <th>
+            @if (Session["role"].ToString() == "clerk")
+            {
+                <button class="confirm">Generate Purchase Orders</button>
+            }
+        </th>
+    </tr>
 
 </table>
 
@@ -111,27 +117,27 @@ Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.Page
                 content: "This will add ALL 'Low Stock' item with their corresponding restock quantity to the purchase cart. ",
                 buttons: {
                     confirm: function () {
-                        
+
                         window.location.href = "/PurchaseItems/AddAllLowStockToPurchaseItems"
                     },
                     cancel: function () {
-                        
+
                     }
                 }
             });
         })
 
-                $('.confirm').on('click', function () {
+        $('.confirm').on('click', function () {
             $.confirm({
                 title: 'Generate Purchase Orders',
                 content: "This will clear the current Purchase Cart and submit the respective Purchase Orders!",
                 buttons: {
                     confirm: function () {
-                        
+
                         window.location.href = "/PurchaseItems/GeneratePurchaseOrders"
                     },
                     cancel: function () {
-                        
+
                     }
                 }
             });

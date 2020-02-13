@@ -6,25 +6,28 @@
 @{
     ViewBag.Title = "Purchase Orders";
     ViewBag.Header = "Purchase Orders";
-    ViewBag.Section="Purchases";
+    ViewBag.Section = "Purchases";
 }
 
-@*<h2>Purchase Orders</h2>*@
-
-@using (Html.BeginForm("Index", "PurchaseOrders", FormMethod.Get))
-{
-<p>
-    Search: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
-    <input type="submit" value="Search" />
-
-    @if (Session["role"].ToString() == "clerk")
-    {
-        <div align="left"><button>@Html.ActionLink("View Purchase Cart", "Index", "PurchaseItems")</button></div>
+<style>
+    th, td{
+        text-align:center;
     }
 
-</p>
-}
-
+</style>
+<div align="left" style="margin:10px">
+    @using (Html.BeginForm("Index", "PurchaseOrders", FormMethod.Get))
+    {
+        <p style="float:left">
+            Search: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+            <input type="submit" value="Search" />
+        </p>
+    }
+    @if (Session["role"].ToString() == "clerk")
+    {
+        <button style="float:right" onclick="window.location.href='/purchaseitems/index';"><i class="fas fa-shopping-cart"></i> &nbsp; View Purchase Cart</button>
+    }
+</div>
 <table class="table">
     <tr>
         <th>
@@ -42,7 +45,9 @@
         <th>
             Status
         </th>
-        <th></th>
+        <th>
+            Details
+        </th>
     </tr>
 
     @foreach (var item in Model)
@@ -64,7 +69,7 @@
                 @Html.DisplayFor(modelItem => item.Status)
             </td>
             <td>
-                @Html.ActionLink("Details", "Details", new { id = item.ID })
+                @Html.ActionLink("View", "Details", new { id = item.ID })
             </td>
         </tr>
     }

@@ -49,7 +49,7 @@
         <button onclick="window.location.href = '/Disbursement/Index';">Go to Disbursements</button>
     </div>
     <div>
-        <button onclick="window.location.href = '/Retrieval/Current';">New Retrieval</button>
+        <button style="background-color:#3c2a51" onclick="window.location.href = '/Retrieval/Current';">New Retrieval</button>
     </div>
 
 </div>
@@ -64,10 +64,10 @@
     <tr class="special">
         <th>Retrieval ID</th>
         <th>Created Date</th>
-        <th>Department</th>
+        <th><i class="fa fa-user"></i> &nbsp; Department</th>
         <th>Status</th>
         <th>Created By</th>
-        <th>View Details</th>
+        <th>Details</th>
     </tr>
 
     @foreach (var rl in Model)
@@ -81,7 +81,7 @@
                 @Html.DisplayFor(modelItem => rl.CreatedDate)
             </td>
             <td style="width:180px">
-                @Html.DisplayFor(modelItem => rl.Department.ID)
+                @Html.DisplayFor(modelItem => rl.Department.DeptName)
             </td>
             <td style="width:180px">
                 @Html.DisplayFor(modelItem => rl.Status)
@@ -90,7 +90,7 @@
                 @Html.DisplayFor(modelItem => rl.CreatedByStaff.Name)
             </td>
             <td style="width:150px">
-                @Html.ActionLink("Details", "Details", new { id = rl.ID })
+                @Html.ActionLink("View", "Details", new { id = rl.ID })
             </td>
         </tr>
 

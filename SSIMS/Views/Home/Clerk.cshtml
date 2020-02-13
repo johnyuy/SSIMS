@@ -7,24 +7,28 @@
     int daysleft = ((int)DayOfWeek.Monday - (int)today.DayOfWeek + 7) % 7;
 }
 <style>
-    #panel-top, #panel-bottom{
-        margin:20px;
-        width:800px;
+    #panel-top, #panel-bottom {
+        margin: 20px;
+        width: 800px;
     }
-    #panel-top td, #panel-bottom td{
-        text-align:center;
-        padding: 5px 0px;
-    }
-    #panel-top button{
-        margin: 10px 20px 10px 0px;
-        width: 150px;
-    }
+
+        #panel-top td, #panel-bottom td {
+            text-align: center;
+            padding: 5px 0px;
+        }
+
+        #panel-top button {
+            margin: 10px 20px 10px 0px;
+            width: 150px;
+        }
+
     .special {
         background: linear-gradient(to right, rgba(146, 167, 154, 0.20) 0%, rgba(115, 147, 147, 0.31) 100%);
     }
-    button{
-        color:white;
-        background-color:#437373;
+
+    button {
+        color: white;
+        background-color: #437373;
     }
 </style>
 <div id="panel-top">
@@ -32,9 +36,9 @@
     <h3><i class="fa fa-clock"></i> &nbsp; Upcoming Disbursements in @daysleft Days</h3>
     <table class="table-bordered">
         <tr class="special">
-            <td style="width:300px">Location</td>
-            <td style="width:300px">Time</td>
-            <td style="width:200px">Department</td>
+            <td style="width:300px"><i class="fas fa-map-marked-alt"></i> &nbsp; Location</td>
+            <td style="width:300px"><i class="fa fa-clock"></i>&nbsp; Time</td>
+            <td style="width:200px"><i class="fa fa-user"></i>&nbsp; Department</td>
         </tr>
         @foreach (var dis in Model.Disbursements)
         {
@@ -44,7 +48,7 @@
             <tr>
                 <td>@Html.DisplayFor(modelItem => dis.Department.CollectionPoint.Location)</td>
                 <td>@nextMonday</td>
-                <td>@Html.DisplayFor(modelItem => dis.Department.ID)</td>
+                <td>@Html.DisplayFor(modelItem => dis.Department.DeptName)</td>
             </tr>
         }
 

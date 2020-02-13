@@ -803,7 +803,7 @@ namespace SSIMS.Database
                 if (inventoryItem.Item.ID.Contains("3"))
                 {
                     inventoryItem.InStoreQty /= 5;
-                    inventoryItem.InStoreQty += rnd.Next(0, 20);
+                    inventoryItem.InStoreQty += rnd.Next(15, 50);
                 }
                     
 

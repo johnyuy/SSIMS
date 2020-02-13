@@ -38,8 +38,8 @@ namespace SSIMS.Service
             //filter by department
             foreach (RequisitionOrder RO in approvedRO)
             {
-                Debug.WriteLine("RO ID: " + RO.ID);
-                Debug.WriteLine("RO is created by: " + RO.CreatedByStaff.Name + " from " + RO.CreatedByStaff.Department.ID);
+                //Debug.WriteLine("RO ID: " + RO.ID);
+                //Debug.WriteLine("RO is created by: " + RO.CreatedByStaff.Name + " from " + RO.CreatedByStaff.Department.ID);
                 string deptRO = RO.CreatedByStaff.Department.ID;
                 Debug.WriteLine("RO is from dept: " + deptRO);
                 if (deptRO.Equals(deptID))
@@ -47,7 +47,7 @@ namespace SSIMS.Service
 
                     if (toSave == true)
                     {
-                        Debug.WriteLine("Setting RO status to Completed...");
+                        //Debug.WriteLine("Setting RO status to Completed...");
                         UpdateRequestionOrderStatus(RO, 4); //Set Status to "Completed"
                     }
                     ROList.Add(RO);
@@ -73,7 +73,7 @@ namespace SSIMS.Service
             {
                 TransactionItem item = new TransactionItem(0, 0, null, combinedDocList[0].Item);
                 tempTransItems.Add(item);
-                Debug.WriteLine("first temp trans item");
+                //Debug.WriteLine("first temp trans item");
             }
             //group all DI by item.ID, construct TI with sum of qty in DIs
             //add TI into a list
@@ -105,10 +105,10 @@ namespace SSIMS.Service
                 }
             }
 
-            foreach (TransactionItem item in transItemList)
+/*            foreach (TransactionItem item in transItemList)
             {
                 Debug.WriteLine("TransItem List: " + item.Item.Description + " " + item.HandOverQty);
-            }
+            }*/
 
             return transItemList;
         }
@@ -175,7 +175,7 @@ namespace SSIMS.Service
                     {
                         if (drivm.transactionItem.Item.Equals(rivm.item))
                         {
-                            Debug.WriteLine("Adding into RIVM: " + drivm.deptID + " " + drivm.transactionItem.Item.Description + " " + drivm.transactionItem.HandOverQty);
+                            //Debug.WriteLine("Adding into RIVM: " + drivm.deptID + " " + drivm.transactionItem.Item.Description + " " + drivm.transactionItem.HandOverQty);
                             rivm.deptRetrievalItems.Add(drivm);
                         }
                     }
@@ -184,7 +184,7 @@ namespace SSIMS.Service
 
             List<RequisitionOrder> requisitionOrderList = (List<RequisitionOrder>)unitOfWork.RequisitionOrderRepository.Get(filter: x => x.Status == Models.Status.Approved);
 
-            Debug.WriteLine("Number of Approved ROs: " + requisitionOrderList.Count);
+            //Debug.WriteLine("Number of Approved ROs: " + requisitionOrderList.Count);
             RetrievalVM retrivalVM = new RetrievalVM();
             retrivalVM.ROList = requisitionOrderList;
             retrivalVM.rivmlist = rivmList;
@@ -204,7 +204,7 @@ namespace SSIMS.Service
 
         public List<TransactionItem> ViewCombinedRetrievalList()
         {
-            Debug.WriteLine("In ViewCombinedRetrievalList");
+            //Debug.WriteLine("In ViewCombinedRetrievalList");
             List<TransactionItem> combinedRetrievalList = new List<TransactionItem>();
             List<TransactionItem> tempTransItems = new List<TransactionItem>();
             var deptList = unitOfWork.DepartmentRepository.Get();
@@ -216,7 +216,7 @@ namespace SSIMS.Service
                     foreach (TransactionItem item in deptRetrievalList)
                     {
                         tempTransItems.Add(item);
-                        Debug.WriteLine("GenerateCombinedRetrievalList temptransItems contains: " + tempTransItems.Count);
+                        //Debug.WriteLine("GenerateCombinedRetrievalList temptransItems contains: " + tempTransItems.Count);
                     }
                 }
 
@@ -247,11 +247,11 @@ namespace SSIMS.Service
                     }
                 }
             }
-            foreach (TransactionItem item in combinedRetrievalList)
+/*            foreach (TransactionItem item in combinedRetrievalList)
             {
                 Debug.WriteLine("Combined Retrieval List contains: " + item.Item.Description + " " + item.HandOverQty);
-            }
-            Debug.WriteLine("Exiting ViewCombinedRetrievalList");
+            }*/
+            //Debug.WriteLine("Exiting ViewCombinedRetrievalList");
             return combinedRetrievalList;
         }
 
@@ -367,12 +367,12 @@ namespace SSIMS.Service
             foreach (RetrievalItemViewModel rivm in rivmList)
             {
                 // find item from database
-                Debug.WriteLine("rivm items are: " + rivm.item.Description);
+                //Debug.WriteLine("rivm items are: " + rivm.item.Description);
                 foreach (DeptRetrievalItemViewModel drvm in rivm.deptRetrievalItems)
                 {
                     //construct full transactionitem with referencee to db 
                     
-                    Debug.WriteLine("drvm items are: " + drvm.transactionItem.Item.ID);
+                    //Debug.WriteLine("drvm items are: " + drvm.transactionItem.Item.ID);
                     deptRetrievalItemViewModel.Add(drvm);
                 }
             }

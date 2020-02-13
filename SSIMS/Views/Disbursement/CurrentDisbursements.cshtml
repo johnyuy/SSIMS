@@ -4,13 +4,23 @@
     ViewBag.Header = "Current Disbursements";
     ViewBag.Section = "Disbursements";
     Layout = "~/Views/Shared/_Layout.cshtml";
-
+    DateTime today = DateTime.Today.ToLocalTime();
+    int daysleft = ((int)DayOfWeek.Monday - (int)today.DayOfWeek + 7) % 7;
 }
 
 <style>
-    th, td{
-        text-align:center;
+    .empty {
+        font-size: 100px;
+        color: lightgray;
+        position: relative;
+        left: 450px;
+        width: 400px;
     }
+
+    th, td {
+        text-align: center;
+    }
+
     .special {
         background: linear-gradient(to right, rgba(146, 167, 154, 0.20) 0%, rgba(115, 147, 147, 0.31) 100%);
     }
@@ -34,36 +44,50 @@
 <script>
     function update() {
         var cp = document.getElementById("collectionpoint").value;
-        
+
         post("/disbursement/GetDisbursementListForCollectionPoint", { "id": cp });
     }
 </script>
 <div id="top-bar">
     <div>
-        <button onclick="window.location.href = '/Disbursement/Index';">Back</button>
+        <div>
+            <button onclick="window.location.href = '/Retrieval/Index';">Go to Retrievals</button>
+        </div>
+        <button style="background-color:darkblue" onclick="window.location.href = '/Disbursement/Index';">All Disbursements</button>
     </div>
 </div>
-<div class="table-responsive">
+<div class="table-responsive" style="min-width:1000px;margin-top:30px;">
     <table class="table">
         <tr class="special">
-            <th>Dept Code</th>
-            <th>Department Name</th>
             <th>Disbursement ID</th>
-            <th>Collection Location</th>
+            <th><i class="fa fa-user"></i>&nbsp; Department Name</th>
+            <th><i class="fas fa-map-marked-alt"></i> &nbsp; Collection Location</th>
+            <th><i class="fa fa-clock"></i>&nbsp; Collection Time</th>
             <th>Details</th>
         </tr>
-        @foreach (var dl in Model)
+        @if (Model.Count() > 0)
         {
-            string fullid = dl.ID.ToString($"DL{0:1000000}");
-            <tr>
-                <td>@dl.Department.ID</td>
-                <td>@dl.Department.DeptName</td>
-                <td>@fullid </td>
-                <td>@dl.Department.CollectionPoint.Location</td>
-                <td>@Html.ActionLink("View", "Disbursement", new { id = dl.ID })</td>
-            </tr>
+            foreach (var dl in Model)
+            {
+                DateTime time = dl.Department.CollectionPoint.Time;
+                string nextMonday = today.AddDays(daysleft).AddHours(time.Hour).AddMinutes(time.Minute).ToString("dd/MM/yyyy hh:mm tt");
+                string fullid = dl.ID.ToString($"DL{0:1000000}");
+                <tr>
+                    <td>@fullid </td>
+                    <td>@dl.Department.DeptName</td>
+                    <td>@dl.Department.CollectionPoint.Location</td>
+                    <td>@nextMonday</td>
+                    <td>@Html.ActionLink("View", "Disbursement", new { id = dl.ID })</td>
+                </tr>
+            }
         }
-
     </table>
+
+    @if (Model.Count() == 0)
+    {
+        <p class="empty">Empty</p>
+
+
+    }
 
 </div>

@@ -8,6 +8,10 @@
     ViewBag.Section = "Disbursements";
     Layout = "~/Views/Shared/_Layout.cshtml";
     string status = ViewBag.DisbursementStatus ?? "";
+    bool isApproved = status == "Approved" ? true : false;
+    bool isRejected = status == "Rejected" ? true : false;
+    bool isCompleted = status == "Completed" ? true : false;
+    bool isViewAll = status == "ALL" ? true : false;
 }
 <style>
     th, td {
@@ -55,7 +59,7 @@
             <button onclick="window.location.href = '/Retrieval/Index';">Go to Retrievals</button>
         </div>
         <div>
-            <button onclick="window.location.href = '/Disbursement/Current';">Current Disbursements</button>
+            <button style="background-color:#ca5100" onclick="window.location.href = '/Disbursement/Current';">Current Disbursements</button>
         </div>
     </div>
 }
@@ -70,14 +74,14 @@
         <tr class="special">
             <th>Disbursement ID</th>
             <th>Created Date</th>
-            <th>Department</th>
+            <th><i class="fa fa-user"></i>&nbsp; Department</th>
             <th>Status</th>
             <th>Created By</th>
             <th>View Details</th>
             @if (Model.Count > 0 && status == "Pending")
             {
                 <th>
-                    Return
+                    <i class="fas fa-warehouse"></i> &nbsp; Return To Store
                 </th>
             }
         </tr>
@@ -93,7 +97,7 @@
                     @Html.DisplayFor(modelItem => dl.CreatedDate)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => dl.Department.ID)
+                    @Html.DisplayFor(modelItem => dl.Department.DeptName)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => dl.Status)
@@ -118,7 +122,7 @@
     </table>
     @if (Model.Count() == 0)
     {
-        <div style="width:100%;height:50px">
+        <div style="width:100%;height:40px">
             <p class="text-empty">Empty</p>
         </div>
     }
