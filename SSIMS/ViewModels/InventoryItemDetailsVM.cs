@@ -136,14 +136,18 @@ namespace SSIMS.ViewModels
                     ID = entries[i].DeliveryOrder.ID.ToString($"DO{0:1000000}");
                     date = (DateTime)entries[i].DeliveryOrder.CreatedDate;
                     dateString = date.ToString("dd/MM/yyyy");
-                    movement = "Delivery " + ID + " from " + entries[i].DeliveryOrder.Supplier.ID;
+                    movement = "Delivery " + ID;
+                    if (entries[i].DeliveryOrder.Supplier != null)
+                        movement += " from " + entries[i].DeliveryOrder.Supplier.ID;
                 }
                 else if (entries[i].RetrievalList != null)
                 {
                     ID = entries[i].RetrievalList.ID.ToString($"RL{0:1000000}");
                     date = (DateTime)entries[i].RetrievalList.ResponseDate;
                     dateString = date.ToString("dd/MM/yyyy");
-                    movement = "Retrieval " + ID + " - " + entries[i].RetrievalList.RepliedByStaff.Name;
+                    movement = "Retrieval " + ID;
+                    if (entries[i].RetrievalList.CreatedByStaff!=null)
+                        movement += " by " + entries[i].RetrievalList.CreatedByStaff.Name;
                 } else
                 {
                     dateString = "na";
