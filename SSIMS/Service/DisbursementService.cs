@@ -335,7 +335,12 @@ namespace SSIMS.Service
             }
 
             string collectionTime = deptRep.Department.CollectionPoint.Time.ToString("hh:mm tt");
+
+            //CHANGE TO RepEmail0 for actual use;
+            string RepEmail0 = deptRep.Email;
             string RepEmail = "wanlauen@gmail.com";
+
+
             string subject = "Verification Code";
             string msg = "Stationary Disbursement " + disbursementList.ID.ToString($"DL{ 0:1000000}") + " for " + disbursementList.Department.DeptName + " Department is ready for collection." +
                 "\nCollection Point: " + deptRep.Department.CollectionPoint.Location +

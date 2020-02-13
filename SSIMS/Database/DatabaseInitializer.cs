@@ -20,7 +20,7 @@ namespace SSIMS.Database
         static RequisitionOrderRepository RequisitionOrderRepository;
         static DocumentItemRepository DocumentItemRepository;
         static DeptHeadAuthorizationRepository DeptHeadAuthorizationRepository;
-
+        static Random rnd = new Random();
         protected override void Seed(DatabaseContext context)
         {
             Debug.WriteLine("\nSEEDING DATABASE...");
@@ -93,11 +93,6 @@ namespace SSIMS.Database
             foreach (Department dept in departments)
                 context.Departments.Add(dept);
             context.SaveChanges();
-        }
-
-        static void InitDepartments2(DatabaseContext context)
-        {
-           
         }
 
         static void InitItems(DatabaseContext context)
@@ -806,7 +801,13 @@ namespace SSIMS.Database
             foreach (InventoryItem inventoryItem in inv)
             {
                 if (inventoryItem.Item.ID.Contains("3"))
+                {
                     inventoryItem.InStoreQty /= 5;
+                    inventoryItem.InStoreQty += rnd.Next(0, 20);
+                }
+                    
+
+                inventoryItem.InStoreQty += rnd.Next(-5, 5);
                 context.InventoryItems.Add(inventoryItem);
                 context.StockCardEntries.Add(new StockCardEntry(inventoryItem.Item, inventoryItem.InStoreQty));
             }
@@ -839,7 +840,6 @@ namespace SSIMS.Database
                 new DocumentItem(ItemRepository.GetByID("F033"),20),
             };
             reqform2.DocumentItems = documentItems2;
-            reqform2.Approve(StaffRepository.GetByID(10006));
             context.RequisitionOrders.Add(reqform2);
 
             //PENDING Requisition Orders
@@ -847,14 +847,13 @@ namespace SSIMS.Database
             RequisitionOrder ro1 = new RequisitionOrder(s1);
             List<DocumentItem> di1 = new List<DocumentItem>
             {
-                new DocumentItem(ItemRepository.GetByID("C001"),10),
-                new DocumentItem(ItemRepository.GetByID("H014"),4),
-                new DocumentItem(ItemRepository.GetByID("F033"),20),
+                new DocumentItem(ItemRepository.GetByID("P021"),10),
+                new DocumentItem(ItemRepository.GetByID("F032"),12),
             };
             ro1.DocumentItems = di1;
             context.RequisitionOrders.Add(ro1);
 
-            Staff s2 = StaffRepository.GetByID(10007); //ARCH dept
+            Staff s2 = StaffRepository.GetByID(10071); //ZOOL dept
             RequisitionOrder ro2 = new RequisitionOrder(s2);
             List<DocumentItem> di2 = new List<DocumentItem>
             {
@@ -865,24 +864,23 @@ namespace SSIMS.Database
             ro2.DocumentItems = di2;
             context.RequisitionOrders.Add(ro2);
 
-            Staff s3 = StaffRepository.GetByID(10012); //ARCH dept
+            Staff s3 = StaffRepository.GetByID(10067); //SCIE dept
             RequisitionOrder ro3 = new RequisitionOrder(s3);
             List<DocumentItem> di3 = new List<DocumentItem>
             {
-                new DocumentItem(ItemRepository.GetByID("C001"),10),
-                new DocumentItem(ItemRepository.GetByID("H014"),4),
-                new DocumentItem(ItemRepository.GetByID("F033"),20),
+                new DocumentItem(ItemRepository.GetByID("R001"),5),
+                new DocumentItem(ItemRepository.GetByID("F024"),6),
+                new DocumentItem(ItemRepository.GetByID("P039"),12),
             };
             ro2.DocumentItems = di3;
             context.RequisitionOrders.Add(ro3);
 
-            Staff s4 = StaffRepository.GetByID(10011); //ARCH dept
+            Staff s4 = StaffRepository.GetByID(10068); //SCIE dept
             RequisitionOrder ro4 = new RequisitionOrder(s4);
             List<DocumentItem> di4 = new List<DocumentItem>
             {
-                new DocumentItem(ItemRepository.GetByID("C001"),10),
-                new DocumentItem(ItemRepository.GetByID("H014"),4),
-                new DocumentItem(ItemRepository.GetByID("F033"),20),
+                new DocumentItem(ItemRepository.GetByID("P020"),8),
+                new DocumentItem(ItemRepository.GetByID("S011"),25),
             };
             ro4.DocumentItems = di4;
             context.RequisitionOrders.Add(ro4);
@@ -898,113 +896,53 @@ namespace SSIMS.Database
             ro5.DocumentItems = di5;
             context.RequisitionOrders.Add(ro5);
 
-            Staff s6 = StaffRepository.GetByID(10009); //ARCH dept
-            RequisitionOrder ro6 = new RequisitionOrder(s6);
-            List<DocumentItem> di6 = new List<DocumentItem>
-            {
-                new DocumentItem(ItemRepository.GetByID("C001"),10),
-                new DocumentItem(ItemRepository.GetByID("H014"),4),
-                new DocumentItem(ItemRepository.GetByID("F033"),20),
-            };
-            ro6.DocumentItems = di6;
-            context.RequisitionOrders.Add(ro6);
 
-            Staff s7 = StaffRepository.GetByID(10008); //ARCH dept
-            RequisitionOrder ro7 = new RequisitionOrder(s7);
-            List<DocumentItem> di7 = new List<DocumentItem>
-            {
-                new DocumentItem(ItemRepository.GetByID("C001"),10),
-                new DocumentItem(ItemRepository.GetByID("H014"),4),
-                new DocumentItem(ItemRepository.GetByID("F033"),20),
-            };
-            ro7.DocumentItems = di7;
-            context.RequisitionOrders.Add(ro7);
 
-            Staff s8 = StaffRepository.GetByID(10008); //ARCH dept
-            RequisitionOrder ro8 = new RequisitionOrder(s7);
+            Staff s8 = StaffRepository.GetByID(10045); //ENGL dept
+            RequisitionOrder ro8 = new RequisitionOrder(s8);
             List<DocumentItem> di8 = new List<DocumentItem>
             {
-                new DocumentItem(ItemRepository.GetByID("C001"),10),
-                new DocumentItem(ItemRepository.GetByID("H014"),4),
-                new DocumentItem(ItemRepository.GetByID("F033"),20),
+                new DocumentItem(ItemRepository.GetByID("P038"),5),
+                new DocumentItem(ItemRepository.GetByID("P039"),5),
             };
             ro8.DocumentItems = di8;
             context.RequisitionOrders.Add(ro8);
 
-            Staff s9 = StaffRepository.GetByID(10007); //ARCH dept
+            Staff s9 = StaffRepository.GetByID(10032); //CPSC dept
             RequisitionOrder ro9 = new RequisitionOrder(s9);
             List<DocumentItem> di9 = new List<DocumentItem>
             {
-                new DocumentItem(ItemRepository.GetByID("C001"),10),
-                new DocumentItem(ItemRepository.GetByID("H014"),4),
-                new DocumentItem(ItemRepository.GetByID("F033"),20),
+                new DocumentItem(ItemRepository.GetByID("P039"),1),
             };
             ro9.DocumentItems = di9;
             context.RequisitionOrders.Add(ro9);
 
-            Staff s10 = StaffRepository.GetByID(10007); //ARCH dept
-            RequisitionOrder ro10 = new RequisitionOrder(s10);
-            List<DocumentItem> di10 = new List<DocumentItem>
-            {
-                new DocumentItem(ItemRepository.GetByID("C001"),10),
-                new DocumentItem(ItemRepository.GetByID("H014"),4),
-                new DocumentItem(ItemRepository.GetByID("F033"),20),
-            };
-            ro10.DocumentItems = di10;
-            context.RequisitionOrders.Add(ro10);
-
-            Staff s11 = StaffRepository.GetByID(10007); //ARCH dept
-            RequisitionOrder ro11 = new RequisitionOrder(s11);
-            List<DocumentItem> di11 = new List<DocumentItem>
-            {
-                new DocumentItem(ItemRepository.GetByID("C001"),10),
-                new DocumentItem(ItemRepository.GetByID("H014"),4),
-                new DocumentItem(ItemRepository.GetByID("F033"),20),
-            };
-            ro11.DocumentItems = di11;
-            context.RequisitionOrders.Add(ro11);
-
-            Staff s12 = StaffRepository.GetByID(10008); //ARCH dept
-            RequisitionOrder ro12 = new RequisitionOrder(s12);
-            List<DocumentItem> di12 = new List<DocumentItem>
-            {
-                new DocumentItem(ItemRepository.GetByID("C001"),10),
-                new DocumentItem(ItemRepository.GetByID("H014"),4),
-                new DocumentItem(ItemRepository.GetByID("F033"),20),
-            };
-            ro12.DocumentItems = di12;
-            context.RequisitionOrders.Add(ro12);
-
+            //APPROVED
             Staff staff3 = StaffRepository.GetByID(10044); //ENGL dept
             RequisitionOrder reqform3 = new RequisitionOrder(staff3);
-            reqform3.RepliedByStaff = StaffRepository.GetByID(10041);
             List<DocumentItem> documentItems3 = new List<DocumentItem>
             {
-                new DocumentItem(ItemRepository.GetByID("C001"),10),
-                new DocumentItem(ItemRepository.GetByID("H014"),5),
+                new DocumentItem(ItemRepository.GetByID("E021"),10),
                 new DocumentItem(ItemRepository.GetByID("F033"),20),
             };
             reqform3.DocumentItems = documentItems3;
-            reqform3.Status = (Status)1;
+            reqform3.Approve(StaffRepository.GetByID(10041));
             context.RequisitionOrders.Add(reqform3);
 
             Staff staff4 = StaffRepository.GetByID(10023); //COMM dept
             RequisitionOrder reqform4 = new RequisitionOrder(staff4);
-            reqform4.RepliedByStaff = StaffRepository.GetByID(10020);
             List<DocumentItem> documentItems4 = new List<DocumentItem>
             {
-                new DocumentItem(ItemRepository.GetByID("C001"),5),
+                new DocumentItem(ItemRepository.GetByID("F035"),5),
                 new DocumentItem(ItemRepository.GetByID("H014"),15),
-                new DocumentItem(ItemRepository.GetByID("P010"),20),
             };
             reqform4.DocumentItems = documentItems4;
-            reqform4.Status = (Status)1;
+            reqform4.Approve(StaffRepository.GetByID(10020));
             context.RequisitionOrders.Add(reqform4);
 
 
             Staff staff5 = StaffRepository.GetByID(10024); //COMM dept
             RequisitionOrder reqform5 = new RequisitionOrder(staff5);
-            reqform5.RepliedByStaff = StaffRepository.GetByID(10023);
             List<DocumentItem> documentItems5 = new List<DocumentItem>
             {
                 new DocumentItem(ItemRepository.GetByID("C001"),1),
@@ -1012,12 +950,12 @@ namespace SSIMS.Database
                 new DocumentItem(ItemRepository.GetByID("F033"),12),
             };
             reqform5.DocumentItems = documentItems5;
-            reqform5.Status = (Status)1;
+            reqform5.Approve(StaffRepository.GetByID(10023));
             context.RequisitionOrders.Add(reqform5);
 
             //Completed Retrieval Lists
             Staff clerk1 = StaffRepository.GetByID(10003);
-            RetrievalList retrievalList = new RetrievalList(staff1, DepartmentRepository.GetByID("ARTS"));
+            RetrievalList retrievalList = new RetrievalList(clerk1, DepartmentRepository.GetByID("ARTS"));
             List<TransactionItem> transactionItems = new List<TransactionItem>
             {
                 new TransactionItem(2,2,"Retrieval",ItemRepository.GetByID("C001")),
@@ -1029,7 +967,7 @@ namespace SSIMS.Database
             context.RetrievalLists.Add(retrievalList);
 
             //InProgress Retrieval Lists
-            RetrievalList retrievalList2 = new RetrievalList(staff3, DepartmentRepository.GetByID("ENGL"));
+            RetrievalList retrievalList2 = new RetrievalList(clerk1, DepartmentRepository.GetByID("ENGL"));
             List<TransactionItem> transactionItems2 = new List<TransactionItem>
             {
                 new TransactionItem(5,4,"Retrieval",ItemRepository.GetByID("C003")),
@@ -1041,7 +979,7 @@ namespace SSIMS.Database
             retrievalList2.InProgress(clerk1);
             context.RetrievalLists.Add(retrievalList2);
 
-            RetrievalList retrievalList3 = new RetrievalList(staff4, DepartmentRepository.GetByID("COMM"));
+            RetrievalList retrievalList3 = new RetrievalList(clerk1, DepartmentRepository.GetByID("COMM"));
             List<TransactionItem> transactionItems3 = new List<TransactionItem>
             {
                 new TransactionItem(5,5,"Retrieval",ItemRepository.GetByID("C001")),
@@ -1054,7 +992,7 @@ namespace SSIMS.Database
             context.RetrievalLists.Add(retrievalList3);
 
 
-            RetrievalList retrievalList4 = new RetrievalList(staff5, DepartmentRepository.GetByID("COMM"));
+            RetrievalList retrievalList4 = new RetrievalList(clerk1, DepartmentRepository.GetByID("COMM"));
             List<TransactionItem> transactionItems4 = new List<TransactionItem>
             {
                 new TransactionItem(5,5,"Retrieval",ItemRepository.GetByID("T001")),
@@ -1067,8 +1005,9 @@ namespace SSIMS.Database
             context.RetrievalLists.Add(retrievalList4);
 
 
-
-            DisbursementList disbursementList1 = new DisbursementList(clerk1, DepartmentRepository.GetByID("COMM"));
+            //DISBURSEMENT
+            
+           /* DisbursementList disbursementList1 = new DisbursementList(clerk1, DepartmentRepository.GetByID("COMM"));
             List<TransactionItem> disbursedItems1 = new List<TransactionItem>
             {
                 new TransactionItem(2,2,"Disbursement",ItemRepository.GetByID("C001")),
@@ -1107,8 +1046,10 @@ namespace SSIMS.Database
                 new TransactionItem(7,7,"Disbursement",ItemRepository.GetByID("P039")),
             };
             disbursementList4.ItemTransactions = disbursedItems4;
-            context.DisbursementLists.Add(disbursementList4);
+            context.DisbursementLists.Add(disbursementList4);*/
 
+
+            //COMPLETED DISBURSEMENTS HERE
             DisbursementList disbursementList5 = new DisbursementList(clerk1, DepartmentRepository.GetByID("ENGL"));
             disbursementList5.Completed(StaffRepository.GetByID(10041));
             List<TransactionItem> disbursedItems5 = new List<TransactionItem>
