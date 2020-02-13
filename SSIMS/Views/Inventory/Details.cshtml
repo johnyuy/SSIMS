@@ -191,11 +191,23 @@
     </div>
     <div id="supplier-information" style="width:450px;height:350px;float:left;background-color:#efefef;padding-bottom:40px">
         <table style="font-size:18px;width:100%">
-            <tr align="center"><td height="70px" style="font-size:22px">Purchase from Supplier</td></tr>
-            <tr align="center"><td height="15px" style="font-size:12px">Click to add @Html.DisplayFor(model => model.ReorderQty) @Html.DisplayFor(model => model.UnitDisplay) to Purchase Cart</td></tr>
-            <tr align="center"><td height="45px"><form action="~/PurchaseItems/AddPurchaseItem/@Model.Tender1"><button style="width:200px"><i class="fa fa-truck"> </i> @Html.DisplayFor(model => model.Supplier1) &nbsp;-&nbsp;  @Html.DisplayFor(model => model.Supplier1Tender)</button></form></td></tr>
-            <tr align="center"><td height="45px"><form action="~/PurchaseItems/AddPurchaseItem/@Model.Tender2"><button style="width:200px"><i class="fa fa-truck"> </i> @Html.DisplayFor(model => model.Supplier2) &nbsp;-&nbsp;  @Html.DisplayFor(model => model.Supplier2Tender)</button></form></td></tr>
-            <tr align="center"><td height="45px"><form action="~/PurchaseItems/AddPurchaseItem/@Model.Tender3"><button style="width:200px"><i class="fa fa-truck"> </i> @Html.DisplayFor(model => model.Supplier3) &nbsp;-&nbsp;  @Html.DisplayFor(model => model.Supplier3Tender)</button></form></td></tr>
+            @if (Session["role"].ToString() == "clerk")
+            {
+                <tr align="center"><td height="70px" style="font-size:22px">Purchase from Supplier</td></tr>
+                <tr align="center"><td height="15px" style="font-size:12px">Click to add @Html.DisplayFor(model => model.ReorderQty) @Html.DisplayFor(model => model.UnitDisplay) to Purchase Cart</td></tr>
+                <tr align="center"><td height="45px"><form action="~/PurchaseItems/AddPurchaseItem/@Model.Tender1"><button style="width:200px"><i class="fa fa-truck"> </i> @Html.DisplayFor(model => model.Supplier1) &nbsp;-&nbsp;  @Html.DisplayFor(model => model.Supplier1Tender)</button></form></td></tr>
+                <tr align="center"><td height="45px"><form action="~/PurchaseItems/AddPurchaseItem/@Model.Tender2"><button style="width:200px"><i class="fa fa-truck"> </i> @Html.DisplayFor(model => model.Supplier2) &nbsp;-&nbsp;  @Html.DisplayFor(model => model.Supplier2Tender)</button></form></td></tr>
+                <tr align="center"><td height="45px"><form action="~/PurchaseItems/AddPurchaseItem/@Model.Tender3"><button style="width:200px"><i class="fa fa-truck"> </i> @Html.DisplayFor(model => model.Supplier3) &nbsp;-&nbsp;  @Html.DisplayFor(model => model.Supplier3Tender)</button></form></td></tr>
+            }
+            else
+            {
+                <tr align="center"><td height="70px" style="font-size:22px">Supplier Information</td></tr>
+                <tr align="center"><td height="15px" style="font-size:12px">Top 3 Tenders</td></tr>
+                <tr align="center"><td height="45px"><button style="width:200px" disabled><i class="fa fa-truck"> </i> @Html.DisplayFor(model => model.Supplier1) &nbsp;-&nbsp;  @Html.DisplayFor(model => model.Supplier1Tender)</button></td></tr>
+                <tr align="center"><td height="45px"><button style="width:200px" disabled><i class="fa fa-truck"> </i> @Html.DisplayFor(model => model.Supplier2) &nbsp;-&nbsp;  @Html.DisplayFor(model => model.Supplier2Tender)</button></td></tr>
+                <tr align="center"><td height="45px"><button style="width:200px" disabled><i class="fa fa-truck"> </i> @Html.DisplayFor(model => model.Supplier3) &nbsp;-&nbsp;  @Html.DisplayFor(model => model.Supplier3Tender)</button></td></tr>
+            }
+
 
             @if (Session["role"].ToString() == "clerk")
             {
