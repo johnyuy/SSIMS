@@ -548,7 +548,6 @@
     <Content Include="Views\Inventory\Details.cshtml" />
     <Content Include="Views\Inventory\Edit.cshtml" />
     <Content Include="Views\Inventory\Index.cshtml" />
-    <Content Include="Views\Analytics\AnalyticsList.cshtml" />
     <Content Include="Views\Login\Authentication.cshtml" />
     <Content Include="Views\DeliveryOrders\Create.cshtml" />
     <Content Include="Views\DeliveryOrders\Delete.cshtml" />
@@ -564,7 +563,6 @@
     <Content Include="Views\Requisition\Details.cshtml" />
     <Content Include="Views\Retrieval\Details.cshtml" />
     <Content Include="Views\Retrieval\Index.cshtml" />
-    <Content Include="Views\Analytics\AnalyticsList2.cshtml" />
     <Content Include="Views\Inventory\AdjustmentVoucherNew.cshtml" />
     <Content Include="Views\Inventory\AdjustmentList.cshtml" />
     <Content Include="Views\Inventory\AdjustmentVoucher.cshtml" />
