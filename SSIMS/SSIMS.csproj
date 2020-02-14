@@ -424,6 +424,10 @@
     <Compile Include="ViewModels\UserLogin.cs" />
     <Compile Include="ViewModels\RetrievalItemViewModel.cs" />
     <Content Include="Content\PopUp.css" />
+    <Content Include="Resources\ChartCost.xml" />
+    <Content Include="Resources\ChartCount.xml" />
+    <Content Include="Resources\ChartQty.xml" />
+    <Content Include="Resources\newChart.xml" />
     <Content Include="Rotativa\help-wkhtmltoimage.txt" />
     <Content Include="Rotativa\help-wkhtmltopdf.txt" />
     <Content Include="Rotativa\wkhtmltoimage.exe" />

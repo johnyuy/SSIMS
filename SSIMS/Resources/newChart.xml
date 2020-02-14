@@ -1,0 +1,30 @@
+<Chart Palette="SemiTransparent" Width="1200" Height="400" BorderColor="0, 0, 0, 0" BorderWidth="2" BorderlineDashStyle="Solid">
+  <Series>
+    <Series _Template_="All" XValueType="String" YValueType="Double" ChartArea="Default">
+      <Points>
+        <DataPoint YValues="9.8" AxisLabel="Clip" />
+        <DataPoint YValues="0.3" AxisLabel="Exercise" />
+        <DataPoint YValues="159.65" AxisLabel="Pen" />
+        <DataPoint YValues="6.39" AxisLabel="File" />
+        <DataPoint YValues="15.7" AxisLabel="Paper" />
+        <DataPoint YValues="7.15" AxisLabel="Ruler" />
+        <DataPoint YValues="1" AxisLabel="Shorthand" />
+        <DataPoint YValues="0.25" AxisLabel="Eraser" />
+      </Points>
+    </Series>
+  </Series>
+  <ChartAreas>
+    <ChartArea _Template_="All">
+      <AxisY>
+        <MajorGrid Enabled="False" />
+      </AxisY>
+      <AxisX>
+        <MajorGrid Enabled="False" />
+      </AxisX>
+    </ChartArea>
+  </ChartAreas>
+  <Titles>
+    <Title _Template_="All" Text="Requisition Cost($) by Category">
+    </Title>
+  </Titles>
+</Chart>

@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Chart BackColor="#d1dddd"
+    BackGradientStyle="TopBottom"
+    BorderColor="#B8860B"
+    BorderWidth="2"
+    BorderlineDashStyle="Solid"
+    Palette="SemiTransparent">
+  <Series>
+    <Series Name="Qty1" IsValueShownAsLabel="True">
+    </Series>
+  </Series>
+  <ChartAreas>
+    <ChartArea
+        Name="Default"
+        _Template_="All"
+        BackColor="Transparent"
+        BackSecondaryColor="White"
+        BorderColor="64, 64, 64, 64"
+        BorderDashStyle="Solid"
+        ShadowColor="Transparent">
+      <AxisY>
+        <LabelStyle Font="Trebuchet MS, 8.25pt" />
+        <MajorGrid Enabled="false" />
+      </AxisY>
+      <AxisX LineColor="64, 64, 64, 64">
+        <LabelStyle Interval="1" Font="Trebuchet MS, 8.25pt" />
+        <MajorGrid Enabled="false" />
+      </AxisX>
+    </ChartArea>
+  </ChartAreas>
+  <Legends>
+    <Legend _Template_="All" BackColor="Transparent" Docking="Bottom" Font="Trebuchet MS, 8.25pt, style=Bold" LegendStyle="Row">
+    </Legend>
+  </Legends>
+  <BorderSkin SkinStyle="Emboss" />
+</Chart>

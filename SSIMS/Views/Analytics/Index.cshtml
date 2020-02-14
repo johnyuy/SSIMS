@@ -37,7 +37,6 @@
     }
 
     .chart {
-        width: 100%;
         margin: 10px auto;
     }
 
@@ -71,7 +70,7 @@
         <button style="position:relative;top:22px;left:50px;font-size:13px" id="runbtn" onclick="runsample()">Run Sample</button>
         <button style="position:relative;top:22px;left:220px;font-size:13px" onclick="chargeback()"><i class="fa fa-dollar"></i> Chargeback</button>
     </div>
-    
+
     <input id="isrun" hidden type="checkbox" />
     <input id="mode" hidden value="@source" />
 </div>
@@ -130,9 +129,11 @@
 
 
 <div id="chart-container">
-    <img id="chart1" src=" @Url.Action("GenerateChartQty")" alt="Chart" class="chart" />
-    <img id="chart2" src=" @Url.Action("GenerateChartCost")" alt="Chart" class="chart" />
-    <img id="chart3" src=" @Url.Action("GenerateChartCount")" alt="Chart" class="chart" />
+    <div style="width:4000px"><img id="chart1" src=" @Url.Action("GenerateChartQty")" alt="Chart" class="chart" /></div>
+
+    <div style="width:4000px"><img id="chart2" src=" @Url.Action("GenerateChartCost")" alt="Chart" class="chart" /></div>
+
+    <div style="width:4000px"><img id="chart3" src=" @Url.Action("GenerateChartCount")" alt="Chart" class="chart" /></div>
 
 
 </div>

@@ -1066,9 +1066,9 @@ namespace SSIMS.Database
             disbursementList6.Completed(StaffRepository.GetByID(10069));
             List<TransactionItem> disbursedItems6 = new List<TransactionItem>
             {
-                new TransactionItem(2,2,"Disbursement",ItemRepository.GetByID("C001")),
-                new TransactionItem(5,5,"Disbursement",ItemRepository.GetByID("E031")),
-                new TransactionItem(7,7,"Disbursement",ItemRepository.GetByID("P039")),
+                new TransactionItem(9,9,"Disbursement",ItemRepository.GetByID("H014")),
+                new TransactionItem(3,3,"Disbursement",ItemRepository.GetByID("F032")),
+                new TransactionItem(6,6,"Disbursement",ItemRepository.GetByID("P038")),
             };
             disbursementList6.ItemTransactions = disbursedItems6;
             disbursementList6.CompletedWithDate();

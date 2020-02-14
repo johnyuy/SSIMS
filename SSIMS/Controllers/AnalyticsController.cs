@@ -81,7 +81,7 @@ namespace SSIMS.Controllers
             return null;
         }
 
-        public ActionResult GenerateChartQty(string t)
+        public ActionResult GenerateChartQty2(string t)
         {
             Debug.WriteLine("Called");
             string group = Session["AGroup"] == null ? "Category" : Session["AGroup"].ToString();
@@ -107,10 +107,11 @@ namespace SSIMS.Controllers
                     titlesub += " - " + value2;
             }
 
-            new Chart(width: 1200, height: 400, theme: ChartTheme.Vanilla)
+            int w = xValue.Count * 30;
+            new Chart(width: w, height: 400, theme: ChartTheme.Vanilla)
                 .AddTitle("Item Quantity" + titlesub + " by " + group)
-                .AddSeries("Qty1", chartType: "Column", xValue: xValue, yValues: yValueQty)
-                .Write("bmp");
+                .AddSeries("Qty1", chartType: "Line", xValue: xValue, yValues: yValueQty)
+                .Write();
             return null;
         }
 
@@ -139,10 +140,11 @@ namespace SSIMS.Controllers
                 if (value2 != "")
                     titlesub += " - " + value2;
             }
-
-            new Chart(width: 1200, height: 400, ChartTheme.Vanilla)
-                .AddTitle("Requisition Cost($)" + titlesub + " by " + group)
-                .AddSeries(name: "Cost1", chartType: "Column", xValue: xValue, yValues: yValueCost)
+            int w = xValue.Count * 20 + 500;
+            string charttype = "Column";
+            new Chart(width: w, height: 400, themePath: "~/Resources/ChartCost.xml")
+                .AddTitle("Cost($)" + titlesub + " by " + group)
+                .AddSeries(name: "Cost1", chartType: charttype, xValue: xValue, yValues: yValueCost)
                 .Write("bmp");
             return null;
         }
@@ -171,10 +173,11 @@ namespace SSIMS.Controllers
                 if (value2 != "")
                     titlesub += " - " + value2;
             }
-
-            new Chart(width: 1200, height: 400, theme: ChartTheme.Vanilla)
-                .AddTitle("Requisition Volume" + titlesub + " by " + group)
-                .AddSeries("Count1", chartType: "Column", xValue: xValue, yValues: yValueCount)
+            int w = xValue.Count * 20 + 500;
+            string charttype = "Column";
+            new Chart(width: w, height: 400, themePath: "~/Resources/ChartCount.xml")
+                .AddTitle("Volume" + titlesub + " by " + group)
+                .AddSeries("Count1", chartType: charttype, xValue: xValue, yValues: yValueCount)
                 .Write("bmp");
 
             return null;
@@ -249,7 +252,7 @@ namespace SSIMS.Controllers
             string result = year;
             //filter by year
             data = AnalyticsService.ApplyFilter(data, "Year", year);
-            
+
             if (month != "all")
             {
                 result = int.Parse(month).ToString($"{0:00}") + "/" + result;
@@ -263,6 +266,44 @@ namespace SSIMS.Controllers
             data = AnalyticsService.ApplyGroup(data, "Department");
             ViewBag.Result = result;
             return View(data);
+        }
+
+
+        public ActionResult GenerateChartQty(string t)
+        {
+            Debug.WriteLine("Called");
+            string group = Session["AGroup"] == null ? "Category" : Session["AGroup"].ToString();
+            string filter1 = Session["AFilter1"] == null ? "" : Session["AFilter1"].ToString();
+            string filter2 = Session["AFilter2"] == null ? "" : Session["AFilter2"].ToString();
+            string value1 = Session["AValue1"] == null ? "" : Session["AValue1"].ToString();
+            string value2 = Session["AValue2"] == null ? "" : Session["AValue2"].ToString();
+
+            List<AnalyticsDetailsVM> data = (List<AnalyticsDetailsVM>)Session["Data"];
+
+            data = AnalyticsService.ApplyFilter(data, filter1, value1);
+            data = AnalyticsService.ApplyFilter(data, filter2, value2);
+            data = AnalyticsService.ApplyGroup(data, group);
+
+            ArrayList yValueQty = AnalyticsService.YAxisQty(data);
+            ArrayList xValue = AnalyticsService.XAxis(data, group);
+
+            string titlesub = "";
+            if (value1 != "")
+            {
+                titlesub += " for " + value1;
+                if (value2 != "")
+                    titlesub += " - " + value2;
+            }
+
+            int w = xValue.Count * 20 + 500;
+            string charttype = "Column";
+            new Chart(width: w, height: 400, themePath: "~/Resources/ChartQty.xml")
+                .AddTitle("Item Quantity" + titlesub + " by " + group)
+                 .AddSeries("Qty1", chartType: charttype, xValue: xValue, yValues: yValueQty)
+                 .Write("bmp");
+
+            return null;
+
         }
     }
 
